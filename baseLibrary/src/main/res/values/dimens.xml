@@ -26,7 +26,6 @@
     <dimen name="spacing_medium_large">20dp</dimen>
 
 
-
     <!-- 加载动画图片 宽度 高度 -->
     <dimen name="load_anim">60dip</dimen>
 

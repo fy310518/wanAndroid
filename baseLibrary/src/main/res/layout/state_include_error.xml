@@ -17,7 +17,7 @@
         android:singleLine="true"
         android:text="点击空白区域重试"
         android:textColor="@color/txtLight"
-        android:textSize="@dimen/textSize_small" />
+        android:textSize="@dimen/txt_small" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,6 +27,6 @@
         android:paddingBottom="@dimen/spacing_small"
         android:text="访问出错"
         android:textColor="@color/txtSuperColor"
-        android:textSize="@dimen/textSize_large" />
+        android:textSize="@dimen/txt_large" />
 
 </RelativeLayout>

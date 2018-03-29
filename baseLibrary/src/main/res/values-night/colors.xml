@@ -15,11 +15,11 @@
     <color name="lineColor">#13181c</color>
 
     <!-- 界面字体颜色 深色-->
-    <color name="txtSuperColor">#333333</color>
+    <color name="txtSuperColor">#666666</color>
     <!-- 界面字体颜色 浅色-->
-    <color name="txtSecondColor">#666666</color>
+    <color name="txtSecondColor">#999999</color>
     <!-- 界面字体颜色 超浅色-->
-    <color name="txtLight">#999999</color>
+    <color name="txtLight">#cccccc</color>
     <!-- 界面字体颜色 高亮 -->
     <color name="txtSuperLight">#bffedc32</color>
 

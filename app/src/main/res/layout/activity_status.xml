@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="12dp"
-        android:textSize="@dimen/textSize_medium"
+        android:textSize="@dimen/txt_medium"
         android:text="大王叫我来巡山"
         android:textColor="@color/red"
         android:background="@color/button_normal"

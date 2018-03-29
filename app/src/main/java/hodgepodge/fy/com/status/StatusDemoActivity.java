@@ -62,17 +62,17 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tvKing:
-//                NightModeUtils.switchNightMode(this);
-                slManager.showNetWorkError();
-                Observable.timer(3000, TimeUnit.MILLISECONDS)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<Long>() {
-                            @Override
-                            public void accept(Long aLong) throws Exception {
-                                slManager.showError();
-                            }
-                        });
+                NightModeUtils.switchNightMode(this);
+//                slManager.showNetWorkError();
+//                Observable.timer(3000, TimeUnit.MILLISECONDS)
+//                        .subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe(new Consumer<Long>() {
+//                            @Override
+//                            public void accept(Long aLong) throws Exception {
+//                                slManager.showError();
+//                            }
+//                        });
                 break;
         }
     }

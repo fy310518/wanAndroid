@@ -27,9 +27,9 @@
 
 
     <!-- 状态栏颜色 -->
-    <color name="statusBar">#a054ff</color>
+    <color name="statusBar">#5b70d3</color>
     <!-- 界面头部背景色 -->
-    <color name="appHeadBg">#a054ff</color>
+    <color name="appHeadBg">#5b70d3</color>
     <!-- 界面背景色 -->
     <color name="BgColor">#5a69be</color>
     <!-- 分割线颜色 -->
@@ -44,12 +44,21 @@
     <!-- 界面字体颜色 高亮 -->
     <color name="txtHighlight">#ffa4a3</color>
 
+    <!-- 界面提示字体颜色 输入正确 -->
+    <color name="colorTextCorrect">#00ff00</color>
+    <!-- 界面提示字体颜色 输入错误 -->
+    <color name="colorHintError">#FF0000</color>
+
+
     <!-- 统一按钮背景色  -->
     <color name="button_normal">#ffa4a3</color>
     <!-- 统一按钮点击效果色 -->
     <color name="button_pressed">#fd69b7</color>
     <!-- 点击  背景变化 颜色 -->
     <color name="selection">#ffffff</color>
+
+
+
 
 
     <!-- shape 描边颜色-->

@@ -34,15 +34,6 @@ public class FragmentOne extends BaseFragment {
     @Override
     protected void baseInit() {
 
-        Drawable drawable = TintUtils.getDrawable(R.drawable.vector_mainfive_normal);
-        int[][] states = new int[2][];
-        int[] colors = new int[]{ResourceUtils.getColor(R.color.pink),
-                ResourceUtils.getColor(R.color.colorPrimaryDark)};
-
-        states[0] = new int[]{android.R.attr.state_pressed};
-        states[1] = new int[]{};
-        Drawable drawable2 = TintUtils.tintSelector(drawable, colors, states);
-        TintUtils.setTxtIconLocal(tvImgPicker, drawable2, 1);
     }
 
 

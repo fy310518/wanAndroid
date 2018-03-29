@@ -34,7 +34,7 @@
                 android:singleLine="true"
                 android:text="@string/back"
                 android:textColor="@color/white"
-                android:textSize="@dimen/textSize_medium_small" />
+                android:textSize="@dimen/txt_small" />
 
             <TextView
                 android:id="@+id/tvTitle"
@@ -46,7 +46,7 @@
                 android:singleLine="true"
                 android:text="标题"
                 android:textColor="@color/white"
-                android:textSize="@dimen/textSize_medium" />
+                android:textSize="@dimen/txt_small" />
 
             <TextView
                 android:id="@+id/tvMenu"
@@ -59,7 +59,7 @@
                 android:singleLine="true"
                 android:text="注销"
                 android:textColor="@color/white"
-                android:textSize="@dimen/textSize_medium_small" />
+                android:textSize="@dimen/txt_small" />
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.CollapsingToolbarLayout>

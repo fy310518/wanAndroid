@@ -25,31 +25,26 @@
         <RadioButton
             android:id="@+id/rBtnOne"
             style="@style/mainBottomBtnStyle"
-            android:drawableTop="@drawable/selector_main_one"
             android:text="@string/mainTabOne" />
 
         <RadioButton
             android:id="@+id/rBtnTwo"
             style="@style/mainBottomBtnStyle"
-            android:drawableTop="@drawable/selector_main_two"
             android:text="@string/mainTabTwo" />
 
         <RadioButton
             android:id="@+id/rBtnThree"
             style="@style/mainBottomBtnStyle"
-            android:drawableTop="@drawable/selector_main_three"
             android:text="@string/mainTabThree" />
 
         <RadioButton
             android:id="@+id/rBtnFour"
             style="@style/mainBottomBtnStyle"
-            android:drawableTop="@drawable/selector_main_four"
             android:text="@string/mainTabFour" />
 
         <RadioButton
             android:id="@+id/rBtnFive"
             style="@style/mainBottomBtnStyle"
-            android:drawableTop="@drawable/selector_main_five"
             android:text="@string/mainTabFive" />
         <!-- 底部导航end -->
     </RadioGroup>
