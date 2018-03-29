@@ -25,9 +25,8 @@
 
         <activity
             android:name=".main.MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
-            android:screenOrientation="sensor">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="hodgepodge.fy.com.main.MainActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -36,13 +35,15 @@
 
         <activity
             android:name=".login.LoginActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor" />
+            android:label="@string/logingTitle"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".status.StatusDemoActivity"
             android:label="@string/statusTitle"
             android:screenOrientation="portrait" />
+
+
     </application>
 
     <!-- 在SDCard中创建与删除文件权限 -->

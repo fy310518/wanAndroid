@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
@@ -65,16 +64,6 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
         //设置 黄油刀 简化 Android 样板代码
         activityBean.setUnbinder(ButterKnife.bind(activity));
-
-//        注册屏幕旋转监听
-        BaseOrientoinListener orientoinListener = new BaseOrientoinListener(activity);
-        boolean autoRotateOn =
-                (android.provider.Settings.System
-                        .getInt(activity.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0) == 1);
-        //检查系统是否开启自动旋转
-        if (autoRotateOn) orientoinListener.enable();
-
-        activityBean.setOrientoinListener(orientoinListener);
 
         activity.getIntent().putExtra("ActivityBean", activityBean);
 

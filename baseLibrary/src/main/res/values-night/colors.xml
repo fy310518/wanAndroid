@@ -6,15 +6,30 @@
 
 
     <!-- 状态栏颜色 -->
-    <color name="statusBar">#61B8Fb</color>
+    <color name="statusBar">#233659</color>
     <!-- 界面头部背景色 -->
-    <color name="appHeadBg">#4061B8Fb</color>
+    <color name="appHeadBg">#233659</color>
     <!-- 界面背景色 -->
-    <color name="BgColor">#40f7f7f7</color>
+    <color name="BgColor">#222f44</color>
     <!-- 分割线颜色 -->
-    <color name="lineColor">#40ececec</color>
+    <color name="lineColor">#13181c</color>
+
+    <!-- 界面字体颜色 深色-->
+    <color name="txtSuperColor">#333333</color>
+    <!-- 界面字体颜色 浅色-->
+    <color name="txtSecondColor">#666666</color>
+    <!-- 界面字体颜色 超浅色-->
+    <color name="txtLight">#999999</color>
+    <!-- 界面字体颜色 高亮 -->
+    <color name="txtSuperLight">#bffedc32</color>
 
     <!-- 统一按钮背景色  -->
-    <color name="button_normal">#40169fff</color>
+    <color name="button_normal">#775f59</color>
+    <!-- 统一按钮点击效果色 -->
+    <color name="button_pressed">#362d2c</color>
+    <!-- 点击  背景变化 颜色 -->
+    <color name="selection">#ffffff</color>
+
+
 
 </resources>

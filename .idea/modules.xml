@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Hodgepodge.iml" filepath="$PROJECT_DIR$/Hodgepodge.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/baseLibrary/baseLibrary.iml" filepath="$PROJECT_DIR$/baseLibrary/baseLibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wanAndroid.iml" filepath="$PROJECT_DIR$/wanAndroid.iml" />
     </modules>
   </component>
 </project>
