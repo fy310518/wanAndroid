@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><!--  视图状态管理界面 之 请求数据错误  -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/shape_stroke">
+
+    <TextView
+        android:id="@+id/tvTry"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/tvHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:singleLine="true"
+        android:text="点击空白区域重试"
+        android:textColor="@color/txtLight"
+        android:textSize="@dimen/textSize_small" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/tvHint"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="@dimen/spacing_small"
+        android:text="访问出错"
+        android:textColor="@color/txtSuperColor"
+        android:textSize="@dimen/textSize_large" />
+
+</RelativeLayout>

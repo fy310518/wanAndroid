@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/app_bar"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:background="@color/statusBar"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.CollapsingToolbarLayout
+        android:id="@+id/toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed"
+        app:statusBarScrim="@android:color/transparent"
+        app:titleEnabled="false">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_collapseMode="pin"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <TextView
+                android:id="@+id/tvBack"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:background="@drawable/selector"
+                android:drawableLeft="@drawable/ic_back"
+                android:drawablePadding="4dp"
+                android:gravity="center"
+                android:padding="@dimen/spacing_medium_small"
+                android:singleLine="true"
+                android:text="@string/back"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSize_medium_small" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="@dimen/spacing_medium_small"
+                android:singleLine="true"
+                android:text="标题"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSize_medium" />
+
+            <TextView
+                android:id="@+id/tvMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_gravity="right"
+                android:background="@drawable/selector"
+                android:gravity="center"
+                android:padding="@dimen/spacing_medium_small"
+                android:singleLine="true"
+                android:text="注销"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSize_medium_small" />
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.CollapsingToolbarLayout>
+</android.support.design.widget.AppBarLayout>

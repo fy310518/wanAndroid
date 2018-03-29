@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#403F51B5</color>
+    <color name="colorPrimaryDark">#401976D2</color>
+    <color name="colorAccent">#40FF4081</color>
+
+
+    <!-- 状态栏颜色 -->
+    <color name="statusBar">#61B8Fb</color>
+    <!-- 界面头部背景色 -->
+    <color name="appHeadBg">#4061B8Fb</color>
+    <!-- 界面背景色 -->
+    <color name="BgColor">#40f7f7f7</color>
+    <!-- 分割线颜色 -->
+    <color name="lineColor">#40ececec</color>
+
+    <!-- 统一按钮背景色  -->
+    <color name="button_normal">#40169fff</color>
+
+</resources>

@@ -1,0 +1,18 @@
+<resources>
+
+    <!-- 主界面底部导航栏按钮样式 -->
+    <style name="mainBottomBtnStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/textSize_small_much</item>
+        <item name="android:textColor">@color/main_bottom_tab</item>
+        <item name="android:drawablePadding">@dimen/itemSplit_line</item>
+        <item name="android:paddingTop">@dimen/spacing_small_much</item>
+        <item name="android:paddingBottom">@dimen/spacing_small_much</item>
+        <item name="android:button">@null</item>
+    </style>
+
+</resources>
