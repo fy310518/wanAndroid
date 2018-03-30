@@ -23,7 +23,7 @@
     <!-- App 统一间距  中 号-->
     <dimen name="spacing_medium">16dp</dimen>
     <!-- App 统一间距  大 中 号-->
-    <dimen name="spacing_medium_large">20dp</dimen>
+    <dimen name="spacing_medium_large">30dp</dimen>
 
 
     <!-- 加载动画图片 宽度 高度 -->
@@ -36,7 +36,7 @@
     <!-- shape 圆角半径-->
     <dimen name="shape_radius">5dp</dimen>
     <dimen name="shape_radius1">8dp</dimen>
-    <dimen name="shape_radius2">15dp</dimen>
+    <dimen name="shape_radius2">12dp</dimen>
     <dimen name="shape_radius3">20dp</dimen>
 
     <!-- 自定义 列表刷新控件 高度 -->

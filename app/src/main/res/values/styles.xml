@@ -1,15 +1,31 @@
 <resources>
 
+    <!-- 自定义EditText下划线 样式 -->
+    <style name="customLineColor" parent="Theme.AppCompat.Light">
+        <!-- 没有获取焦点时的颜色 -->
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <!-- 获取焦点时的颜色 -->
+        <item name="colorControlActivated">@color/colorPrimaryDark</item>
+    </style>
 
+    <!-- 自定义浮动标签 样式 -->
     <style name="HintAppearance" parent="TextAppearance.AppCompat">
         <item name="android:textSize">@dimen/txt_medium</item>
         <item name="android:textColor">@color/txtSuperColor</item>
+        <item name="android:textColorHint">@color/txtSuperColor</item>
     </style>
 
+    <!-- 自定义超出计数最大长度 样式 -->
     <style name="HintErrorAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/txt_small</item>
+        <item name="android:textColor">@color/colorHintError</item>
+        <!--<item name="textColorError">@color/colorHintError</item>-->
+    </style>
+
+    <!-- 自定义错误提示信息 样式 -->
+    <style name="errorAppearance" parent="TextAppearance.AppCompat">
         <item name="android:textSize">@dimen/txt_medium</item>
         <item name="android:textColor">@color/colorHintError</item>
-        <item name="textColorError">@color/colorHintError</item>
     </style>
 
     <!-- 主界面底部导航栏按钮样式 -->

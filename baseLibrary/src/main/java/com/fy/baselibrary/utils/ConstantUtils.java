@@ -14,8 +14,7 @@ public class ConstantUtils {
     /**
      * 服务器地址
      */
-    public static String BASE_URL = "http://192.168.100.158:80/";    //本地服务器 地址
-//  public static String BASE_URL = "http://192.168.100.120:8080/";
+    public static String BASE_URL = "http://www.wanandroid.com/";
 
     /**
      * 图片 地址 (可选)

@@ -4,7 +4,12 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 
@@ -27,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 import hodgepodge.fy.com.R;
 import hodgepodge.fy.com.api.ApiService;
@@ -46,6 +52,14 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
     private AppCompatActivity mContext;
 
 
+    @BindView(R.id.editName)
+    TextInputEditText editName;
+
+    @BindView(R.id.iLayoutPass)
+    TextInputLayout iLayoutPass;
+    @BindView(R.id.editPass)
+    TextInputEditText editPass;
+
     @Override
     public boolean isShowHeadView() {
         return false;
@@ -58,7 +72,8 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
 
     @Override
     public void setStatusBar(Activity activity) {
-        MdStatusBar.setTransparentBar(activity, R.color.transparent, R.color.transparent);
+        MdStatusBar.setColorBar(activity, R.color.statusBar, R.color.statusBar);
+//        MdStatusBar.setTransparentBar(activity, R.color.transparent, R.color.transparent);
     }
 
     @Override
@@ -70,146 +85,69 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
                 new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO});
 
         JumpUtils.jump(this, PermissionActivity.class, bundle, PermissionActivity.CALL_BACK_PERMISSION_REQUEST_CODE);
+
+        editPass.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                String text = editPass.getText().toString().trim();
+
+                if (!TextUtils.isEmpty(text) && text.length() > 12){
+                    iLayoutPass.setError("密码不符合规则!!!");
+                } else {
+                    if(null != iLayoutPass.getError()){
+                        iLayoutPass.setError(null);
+                    }
+                }
+
+            }
+        });
     }
 
 
-    @OnClick({R.id.tvLogin})
+    @OnClick({R.id.tvLogin, R.id.tvRegister})
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvLogin:
-                Bundle bundle = new Bundle();
-                bundle.putString("大王", "大王叫我来巡山");
-                JumpUtils.jump(mContext, StatusDemoActivity.class, bundle);
-//                login();
-//                getNews();
+                login();
+                break;
+            case R.id.tvRegister:
+                T.showLong("注册界面");
                 break;
         }
     }
 
     @Override
-    public void reTry() {}
-
-    private void login(){
-        IProgressDialog progressDialog = new IProgressDialog().init(mContext)
-                .setDialogMsg(R.string.user_login);
-
-//        String mUserName = editUser.getText().toString().trim();
-//        String mPassWord = editPass.getText().toString().trim();
-
-        Map<String, Object> param = new HashMap<>();
-        param.put("username", "13191614");
-        param.put("password", "123456");
-
-        RequestUtils.create(ApiService.class)
-                .loginToApp(param)
-                .compose(RxHelper.handleResult())
-                .doOnSubscribe(disposable -> RequestUtils.addDispos(disposable))
-                .flatMap(new Function<LoginBean, ObservableSource<HomeBean>>() {
-                    @Override
-                    public ObservableSource<HomeBean> apply(LoginBean loginBean) throws Exception {
-
-                        Bundle bundle = new Bundle();
-                        bundle.putString("大王", "大王叫我来巡山");
-                        JumpUtils.jump(mContext, MainActivity.class, bundle);
-
-                        //获取最新的token
-                        ConstantUtils.token = loginBean.getToken();
-
-                        if (null != loginBean.getStudent()) {
-                            //缓存学生信息 和 单独换粗学生id , 单独学生头像
-                            ConstantUtils.studentID = loginBean.getStudent().getStudentid();
-                            ConstantUtils.head_portrait = loginBean.getStudent().getTouxiangurl();
-                            SpfUtils.saveIntToSpf("studentId", ConstantUtils.studentID);
-                            SpfUtils.saveStrToSpf("touxiangurl", ConstantUtils.head_portrait);
-                        }
-
-                        Map<String, Object> homeParam = new HashMap<>();
-                        homeParam.put("token", ConstantUtils.token);
-                        homeParam.put("studentid", ConstantUtils.studentID);
-                        return RequestUtils
-                                .create(ApiService.class)
-                                .getHome(homeParam)
-                                .compose(RxHelper.handleResult())
-                                .doOnSubscribe(disposable -> RequestUtils.addDispos(disposable));
-                    }
-                })
-                .subscribe(new NetCallBack<HomeBean>(progressDialog) {
-                    @Override
-                    protected void onSuccess(HomeBean t) {
-
-                    }
-
-                    @Override
-                    protected void updataLayout(int flag) {
-                        L.e("net updataLayout", flag + "-----");
-                    }
-                });
+    public void reTry() {
+        login();
     }
 
-    private void loginTwo(){
+    private void login() {
         IProgressDialog progressDialog = new IProgressDialog().init(mContext)
                 .setDialogMsg(R.string.user_login);
+
+        String mUserName = editName.getText().toString().trim();
+        String mPassWord = editPass.getText().toString().trim();
 
         Map<String, Object> param = new HashMap<>();
-        param.put("username", "");
-        param.put("password", "");
-
-        new RxNetCache.Builder().setApi("loginToApp").create()
-                .request(RequestUtils
-                        .create(ApiService.class)
-                        .loginToApp(param)
-                        .compose(RxHelper.handleResult()))
-                .flatMap(new Function<LoginBean, ObservableSource<HomeBean>>() {
-                    @Override
-                    public ObservableSource<HomeBean> apply(LoginBean loginBean) throws Exception {
-                        //获取最新的token
-                        ConstantUtils.token = loginBean.getToken();
-
-                        if (null != loginBean.getStudent()) {
-                            //缓存学生信息 和 单独换粗学生id , 单独学生头像
-                            ConstantUtils.studentID = loginBean.getStudent().getStudentid();
-                            ConstantUtils.head_portrait = loginBean.getStudent().getTouxiangurl();
-                            SpfUtils.saveIntToSpf("studentId", ConstantUtils.studentID);
-                            SpfUtils.saveStrToSpf("touxiangurl", ConstantUtils.head_portrait);
-                        }
-
-                        Map<String, Object> homeParam = new HashMap<>();
-                        homeParam.put("token", ConstantUtils.token);
-//                        homeParam.put("studentid", ConstantUtils.studentID);
-                        homeParam.put("studentid", "1");
-                        return RequestUtils.create(ApiService.class)
-                                .getHome(homeParam)
-                                .compose(RxHelper.handleResult());
-                    }
-                })
-                .subscribe(new NetCallBack<HomeBean>(progressDialog) {
-                    @Override
-                    protected void onSuccess(HomeBean t) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("大王", "大王叫我来巡山");
-                        JumpUtils.jump(mContext, MainActivity.class, bundle);
-                    }
-
-                    @Override
-                    protected void updataLayout(int flag) {
-
-                    }
-                });
-    }
-
-    private void getNews(){
-        IProgressDialog progressDialog = new IProgressDialog().init(mContext)
-                .setDialogMsg(R.string.user_login);
+        param.put("username", mUserName);
+        param.put("password", mPassWord);
 
         RequestUtils.create(ApiService.class)
-                .getNews()
+                .login(param)
                 .compose(RxHelper.handleResult())
                 .doOnSubscribe(RequestUtils::addDispos)
-                .subscribe(new NetCallBack<List<NewsBean>>(progressDialog) {
+                .subscribe(new NetCallBack<LoginBean>(progressDialog) {
                     @Override
-                    protected void onSuccess(List<NewsBean> t) {
-                        L.e(t.toString());
+                    protected void onSuccess(LoginBean t) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("大王", "大王叫我来巡山");
+                        JumpUtils.jump(mContext, StatusDemoActivity.class, bundle);
+                        finish();
                     }
 
                     @Override

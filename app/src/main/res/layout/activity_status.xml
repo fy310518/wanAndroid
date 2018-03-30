@@ -3,14 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/BgColor">
+    android:background="@color/BgColor"
+    android:padding="20dp">
 
     <TextView
         android:id="@+id/tvKing"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp"
         android:textSize="@dimen/txt_medium"
+        android:gravity="center"
         android:text="大王叫我来巡山"
         android:textColor="@color/red"
         android:background="@color/button_normal"

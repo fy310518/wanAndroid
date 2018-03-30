@@ -32,9 +32,9 @@ public class RxHelper {
                     @Override
                     public ObservableSource<T> apply(@NonNull BeanModule<T> tBeanModule) throws Exception {
                         if (tBeanModule.isSuccess()) {
-                            return createData(tBeanModule.getRows());
+                            return createData(tBeanModule.getData());
                         } else {
-                            return Observable.error(new ServerException(tBeanModule.getMsg(), tBeanModule.getCode()));
+                            return Observable.error(new ServerException(tBeanModule.getErrorMsg(), tBeanModule.getErrorCode()));
                         }
                     }
                 })

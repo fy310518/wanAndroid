@@ -1,44 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/BgColor"
-    android:fitsSystemWindows="true"
-    android:padding="@dimen/spacing_medium_small">
+    android:padding="20dp">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/ilayoutName"
+        android:theme="@style/customLineColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="110dp"
         android:hint="@string/userName"
         app:hintAnimationEnabled="true"
         app:hintEnabled="true"
-        app:hintTextAppearance="@style/HintAppearance">
+        app:hintTextAppearance="@style/HintAppearance"
+        app:layout_constraintTop_toTopOf="parent">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/editName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/iLayoutPass"
+        android:theme="@style/customLineColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ilayoutName"
+        android:layout_marginTop="10dp"
         android:hint="@string/passWord"
+        app:counterEnabled="true"
+        app:counterMaxLength="12"
+        app:counterOverflowTextAppearance="@style/HintErrorAppearance"
+        app:errorTextAppearance="@style/errorAppearance"
+        app:errorEnabled="true"
         app:hintAnimationEnabled="true"
         app:hintEnabled="true"
         app:hintTextAppearance="@style/HintAppearance"
-        app:counterEnabled="true"
-        app:counterMaxLength="12"
-        app:counterOverflowTextAppearance="@style/HintErrorAppearance">
+        app:layout_constraintTop_toBottomOf="@id/ilayoutName"
+        app:passwordToggleEnabled="true">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/editPass"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -46,14 +57,28 @@
         android:id="@+id/tvLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_below="@id/iLayoutPass"
         android:layout_marginLeft="@dimen/spacing_medium_large"
         android:layout_marginRight="@dimen/spacing_medium_large"
         android:layout_marginTop="@dimen/spacing_medium"
         android:background="@drawable/shape_btn"
         android:text="@string/login"
         android:textColor="@color/txtSecondColor"
-        android:textSize="@dimen/txt_medium" />
+        android:textSize="@dimen/txt_small"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iLayoutPass" />
 
+    <TextView
+        android:id="@+id/tvRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_medium_small"
+        android:padding="@dimen/spacing_small"
+        android:text="@string/registerTitle"
+        android:textColor="@color/white"
+        android:textSize="@dimen/txt_small"
+        app:layout_constraintRight_toRightOf="@id/tvLogin"
+        app:layout_constraintTop_toBottomOf="@id/tvLogin" />
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

@@ -2,13 +2,11 @@ package hodgepodge.fy.com.api;
 
 import com.fy.baselibrary.retrofit.BeanModule;
 
-import hodgepodge.fy.com.entity.HomeBean;
-import hodgepodge.fy.com.entity.LoginBean;
-import hodgepodge.fy.com.entity.NewsBean;
-
 import java.util.List;
 import java.util.Map;
 
+import hodgepodge.fy.com.entity.HomeBean;
+import hodgepodge.fy.com.entity.LoginBean;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -44,12 +42,12 @@ public interface ApiService {
 
 
     /**
-     * 登录接口
+     * 登录
      */
     @FormUrlEncoded
     @Headers({"url_name:user"})
-    @POST("sys/loginToApp")
-    Observable<BeanModule<LoginBean>> loginToApp(@FieldMap Map<String, Object> options);
+    @POST("user/login")
+    Observable<BeanModule<LoginBean>> login(@FieldMap Map<String, Object> options);
 
     /**
      * 首页信息
@@ -58,13 +56,6 @@ public interface ApiService {
     @GET("student/getHome")
     Observable<BeanModule<HomeBean>> getHome(@QueryMap Map<String, Object> options);
 
-    /**
-     * 测试 资讯
-     * @return
-     */
-    @Headers({"url_name:user"})
-    @GET("https://api.kmwlyy.com/News")
-    Observable<BeanModule<List<NewsBean>>> getNews();
 
 
 

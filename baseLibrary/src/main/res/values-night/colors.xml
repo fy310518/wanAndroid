@@ -21,12 +21,12 @@
     <!-- 界面字体颜色 超浅色-->
     <color name="txtLight">#cccccc</color>
     <!-- 界面字体颜色 高亮 -->
-    <color name="txtSuperLight">#bffedc32</color>
+    <color name="txtSuperLight">#fedc32</color>
 
     <!-- 统一按钮背景色  -->
-    <color name="button_normal">#775f59</color>
+    <color name="button_normal">#775f79</color>
     <!-- 统一按钮点击效果色 -->
-    <color name="button_pressed">#362d2c</color>
+    <color name="button_pressed">#b62d99</color>
     <!-- 点击  背景变化 颜色 -->
     <color name="selection">#ffffff</color>
 
