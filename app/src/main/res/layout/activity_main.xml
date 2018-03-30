@@ -36,16 +36,6 @@
             android:id="@+id/rBtnThree"
             style="@style/mainBottomBtnStyle"
             android:text="@string/mainTabThree" />
-
-        <RadioButton
-            android:id="@+id/rBtnFour"
-            style="@style/mainBottomBtnStyle"
-            android:text="@string/mainTabFour" />
-
-        <RadioButton
-            android:id="@+id/rBtnFive"
-            style="@style/mainBottomBtnStyle"
-            android:text="@string/mainTabFive" />
         <!-- 底部导航end -->
     </RadioGroup>
 

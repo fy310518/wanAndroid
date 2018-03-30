@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.LinearLayout;
@@ -123,26 +124,14 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
         //这里全局给Activity设置toolbar和title
         Toolbar toolbar = activity.findViewById(R.id.toolbar);
-        if (null != toolbar) { //找到 Toolbar 并且替换 Actionbar
-            if (activity instanceof AppCompatActivity) {
-                ((AppCompatActivity) activity).setSupportActionBar(toolbar);
-                ((AppCompatActivity) activity).getSupportActionBar().setDisplayShowTitleEnabled(false);
-            } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    activity.setActionBar((android.widget.Toolbar) activity.findViewById(R.id.toolbar));
-                    activity.getActionBar().setDisplayShowTitleEnabled(false);
-                }
-            }
+        toolbar.setTitle(activity.getTitle());
+
+        if (activity instanceof AppCompatActivity) {
+            //设置导航图标要在setSupportActionBar方法之后
+            ((AppCompatActivity) activity).setSupportActionBar(toolbar);
+            toolbar.setNavigationIcon(R.drawable.ic_back);
+            toolbar.setNavigationOnClickListener(v -> JumpUtils.exitActivity((AppCompatActivity) activity));
         }
-
-        //找到 Toolbar 的标题栏并设置标题名
-        TextView tvTitle = activity.findViewById(R.id.tvTitle);
-        if (null != tvTitle) tvTitle.setText(activity.getTitle());
-
-        //找到 Toolbar 的返回按钮,并且设置点击事件,点击关闭这个 Activity
-        TextView tvBack = activity.findViewById(R.id.tvBack);
-        if (null != tvBack) tvBack.setOnClickListener(v ->
-            JumpUtils.exitActivity((AppCompatActivity) activity));
     }
 
 

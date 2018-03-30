@@ -78,7 +78,7 @@ public abstract class NetCallBack<V> implements Observer<V> {
         } else if (e instanceof ServerException) {
             if (e.getMessage().equals("token失效，请重新登录")) {//token 失效 进入登录页面
                 try {
-                    Class cla = Class.forName("hodgepodge.fy.com.login.LoginActivity");
+                    Class cla = Class.forName("wanandroid.fy.com.login.LoginActivity");
                     Context context = BaseApp.getAppCtx();
                     Bundle bundle = new Bundle();
                     bundle.putBoolean("untoken",true);

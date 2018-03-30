@@ -2,13 +2,13 @@
     <string name="app_name">Wan Android</string>
 
     <string name="mainTabOne">首页</string>
-    <string name="mainTabTwo">体测档案</string>
-    <string name="mainTabThree">新品推荐</string>
-    <string name="mainTabFour">校园圈</string>
-    <string name="mainTabFive">我的</string>
+    <string name="mainTabTwo">知识体系</string>
+    <string name="mainTabThree">我的</string>
 
     <string name="userName">账号：</string>
     <string name="passWord">密码：</string>
+    <string name="confirmPass">确认密码：</string>
+
     <string name="rememberPass">记住密码</string>
     <string name="loginTitel">全 国 学 校 体 育 联 盟\nThe National School Physical Education Leagues</string>
 

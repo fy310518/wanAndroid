@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="hodgepodge.fy.com">
+    package="wanandroid.fy.com">
 
     <application
         android:name="com.fy.baselibrary.application.BaseApp"
@@ -24,7 +24,7 @@
         </activity>
 
         <activity
-            android:name=".main.MainActivity"
+            android:name="wanandroid.fy.com.main.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -34,12 +34,20 @@
         </activity>
 
         <activity
-            android:name=".login.LoginActivity"
+            android:name="wanandroid.fy.com.login.LoginActivity"
             android:label="@string/logingTitle"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".status.StatusDemoActivity"
+            android:name="wanandroid.fy.com.login.RegisterActivity"
+            android:label="@string/registerTitle"
+            android:windowSoftInputMode="adjustResize|stateVisible"
+            android:screenOrientation="portrait" />
+
+
+
+        <activity
+            android:name="wanandroid.fy.com.status.StatusDemoActivity"
             android:label="@string/statusTitle"
             android:screenOrientation="portrait" />
 

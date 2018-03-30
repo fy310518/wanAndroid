@@ -40,11 +40,6 @@
     <string name="man">男</string>
     <string name="woman">女</string>
 
-    <string name="login">登  录</string>
-    <string name="login_exit">退出登录</string>
-
-
-
     <string name="dialog_title">提示</string>
     <string name="set">设置</string>
     <string name="defaule_first_message">为了您的安全，您需要授权该权限才可以正常使用相关功能哦。</string>

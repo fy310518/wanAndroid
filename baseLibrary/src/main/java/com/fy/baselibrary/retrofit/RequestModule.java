@@ -2,6 +2,8 @@ package com.fy.baselibrary.retrofit;
 
 import android.text.TextUtils;
 
+import com.fy.baselibrary.retrofit.cookie.AddCookiesInterceptor;
+import com.fy.baselibrary.retrofit.cookie.ReceivedCookiesInterceptor;
 import com.fy.baselibrary.retrofit.gson.DES3GsonConverterFactory;
 import com.fy.baselibrary.utils.ConstantUtils;
 import com.fy.baselibrary.utils.L;
@@ -72,6 +74,8 @@ public class RequestModule {
                 .writeTimeout(ConstantUtils.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
                 .addInterceptor(interceptor)
                 .addInterceptor(header)
+                .addInterceptor(new ReceivedCookiesInterceptor())
+                .addInterceptor(new AddCookiesInterceptor())
                 .build();
     }
 
