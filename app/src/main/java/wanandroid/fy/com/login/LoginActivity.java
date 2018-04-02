@@ -63,6 +63,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
     @Override
     public void setStatusBar(Activity activity) {
         MdStatusBar.setColorBar(activity, R.color.statusBar, R.color.statusBar);
+        L.e("");
 //        MdStatusBar.setTransparentBar(activity, R.color.transparent, R.color.transparent);
     }
 
