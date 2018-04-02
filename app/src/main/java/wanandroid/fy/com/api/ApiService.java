@@ -5,6 +5,7 @@ import com.fy.baselibrary.retrofit.BeanModule;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.http.Path;
 import wanandroid.fy.com.entity.HomeBean;
 import wanandroid.fy.com.entity.LoginBean;
 import io.reactivex.Observable;
@@ -63,8 +64,8 @@ public interface ApiService {
      * 首页文章列表
      */
     @Headers({"url_name:user"})
-    @GET("article/list/0/json")
-    Observable<BeanModule<HomeBean>> getHomeList();
+    @GET("article/list/{id}/json")
+    Observable<BeanModule<HomeBean>> getHomeList(@Path("id") int pageNum);
 
 
 

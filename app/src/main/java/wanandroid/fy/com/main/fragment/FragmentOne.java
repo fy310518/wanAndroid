@@ -36,7 +36,7 @@ public class FragmentOne extends BaseFragment {
 
     @Override
     protected void baseInit() {
-        getHomeList();
+        getHomeList(0);
     }
 
 
@@ -64,9 +64,9 @@ public class FragmentOne extends BaseFragment {
         }
     }
 
-    private void getHomeList(){
+    private void getHomeList(int pageNum){
         RequestUtils.create(ApiService.class)
-                .getHomeList()
+                .getHomeList(pageNum)
                 .compose(RxHelper.handleResult())
                 .doOnSubscribe(RequestUtils::addDispos)
                 .subscribe(new NetCallBack<HomeBean>() {
