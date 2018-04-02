@@ -4,12 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -18,23 +19,22 @@ import android.widget.RadioGroup;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.ConstantUtils;
-import com.fy.baselibrary.utils.JumpUtils;
+import com.fy.baselibrary.utils.ResourceUtils;
 import com.fy.baselibrary.utils.SpfUtils;
+import com.fy.baselibrary.utils.TintUtils;
 
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import wanandroid.fy.com.R;
-import wanandroid.fy.com.login.LoginActivity;
-import wanandroid.fy.com.main.fragment.FragmentFive;
-import wanandroid.fy.com.main.fragment.FragmentFour;
-import wanandroid.fy.com.main.fragment.FragmentOne;
-import wanandroid.fy.com.main.fragment.FragmentThree;
-import wanandroid.fy.com.main.fragment.FragmentTwo;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import wanandroid.fy.com.R;
+import wanandroid.fy.com.main.fragment.FragmentOne;
+import wanandroid.fy.com.main.fragment.FragmentThree;
+import wanandroid.fy.com.main.fragment.FragmentTwo;
+import wanandroid.fy.com.utils.SelectUtils;
 
 /**
  * 体育联盟 主界面
@@ -57,6 +57,10 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
     RadioGroup radioGlayout;
     @BindView(R.id.rBtnOne)
     RadioButton rBtnOne;
+    @BindView(R.id.rBtnTwo)
+    RadioButton rBtnTwo;
+    @BindView(R.id.rBtnThree)
+    RadioButton rBtnThree;
 
     @BindView(R.id.loadImg)
     ImageView loadImg;
@@ -136,6 +140,11 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
 
     //初始化底部导航按钮
     private void initRadioGroup() {
+        //设置 选择器
+        TintUtils.setTxtIconLocal(rBtnOne, SelectUtils.getSelector(R.drawable.svg_home_page), 1);
+        TintUtils.setTxtIconLocal(rBtnTwo, SelectUtils.getSelector(R.drawable.svg_knowledge_system), 1);
+        TintUtils.setTxtIconLocal(rBtnThree, SelectUtils.getSelector(R.drawable.svg_my), 1);
+
         radioGlayout.setOnCheckedChangeListener((group, checkedId) -> {
             int position = 0;
             switch (checkedId) {

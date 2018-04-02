@@ -6,7 +6,7 @@
       <module fileurl="file://E:\yidong\wanAndroid.git\trunk\app\app.iml" filepath="E:\yidong\wanAndroid.git\trunk\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/baseLibrary/baseLibrary.iml" filepath="$PROJECT_DIR$/baseLibrary/baseLibrary.iml" />
       <module fileurl="file://E:\yidong\wanAndroid.git\trunk\baseLibrary\baseLibrary.iml" filepath="E:\yidong\wanAndroid.git\trunk\baseLibrary\baseLibrary.iml" />
-      <module fileurl="file://$PROJECT_DIR$/trunk.iml" filepath="$PROJECT_DIR$/trunk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wanAndroid.iml" filepath="$PROJECT_DIR$/wanAndroid.iml" />
       <module fileurl="file://E:\yidong\wanAndroid.git\trunk\wanAndroid.iml" filepath="E:\yidong\wanAndroid.git\trunk\wanAndroid.iml" />
     </modules>
   </component>
