@@ -24,6 +24,7 @@
         </activity>
 
         <activity
+		
             android:name="wanandroid.fy.com.main.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
