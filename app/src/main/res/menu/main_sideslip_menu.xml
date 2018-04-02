@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- https://www.jianshu.com/p/d2b1689a23bf 参考-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="我的">
+        <menu>
+            <item
+                android:id="@+id/myLike"
+                android:icon="@drawable/svg_like"
+                android:title="我的收藏" />
+
+            <item
+                android:id="@+id/atNightModel"
+                android:icon="@drawable/svg_at_night_model"
+                android:title="夜间模式" />
+
+            <item
+                android:id="@+id/about"
+                android:icon="@drawable/svg_about"
+                android:title="关于我们" />
+        </menu>
+    </item>
+</menu>

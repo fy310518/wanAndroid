@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,7 +17,6 @@ import android.widget.RadioGroup;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.ConstantUtils;
-import com.fy.baselibrary.utils.ResourceUtils;
 import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.TintUtils;
 
@@ -72,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
 
     @Override
     public int setView() {
-        return R.layout.activity_main;
+        return R.layout.main_activity;
     }
 
     @SuppressLint("ResourceAsColor")
