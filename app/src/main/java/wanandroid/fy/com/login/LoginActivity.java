@@ -42,7 +42,6 @@ import wanandroid.fy.com.status.StatusDemoActivity;
 public class LoginActivity extends AppCompatActivity implements IBaseActivity {
     private AppCompatActivity mContext;
 
-
     @BindView(R.id.editName)
     TextInputEditText editName;
 
