@@ -8,7 +8,6 @@ import java.io.Serializable;
 
 public class HomeBean implements Serializable {
 
-
     /**
      * bname : 3班
      * studentname : 许文俊
