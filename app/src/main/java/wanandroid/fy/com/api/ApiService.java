@@ -57,9 +57,7 @@ public interface ApiService {
     @Headers({"url_name:user"})
     @POST("user/register")
     Observable<BeanModule<LoginBean>> register(@FieldMap Map<String, Object> options);
-
-
-
+    
     /**
      * 首页文章列表
      */
