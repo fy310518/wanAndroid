@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
     @BindView(R.id.editName)
     TextInputEditText editName;
 
+
     @BindView(R.id.iLayoutPass)
     TextInputLayout iLayoutPass;
     @BindView(R.id.editPass)
