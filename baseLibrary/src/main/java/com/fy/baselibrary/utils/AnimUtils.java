@@ -5,9 +5,12 @@ import android.animation.ObjectAnimator;
 import android.graphics.PointF;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
+
+import com.fy.baselibrary.R;
 
 import java.util.List;
 
@@ -18,6 +21,27 @@ import java.util.List;
 public class AnimUtils {
     public static final String TAG = "CircleMenu";
     public static final int radius1 = 500;
+
+
+    /**
+     * 设置fragment 转场动画
+     *
+     * @param fragmentTransaction
+     * @param position            将要显示的fragment的下标
+     */
+    public static void setFragmentTransition(FragmentTransaction fragmentTransaction,
+                                             int currentIndex, int position) {
+        //设置自定义过场动画
+        if (currentIndex > position) {
+            fragmentTransaction.setCustomAnimations(
+                    R.anim.anim_slide_right_in,
+                    R.anim.anim_slide_right_out);
+        } else {
+            fragmentTransaction.setCustomAnimations(
+                    R.anim.anim_slide_left_in,
+                    R.anim.anim_slide_left_out);
+        }
+    }
 
     /**
      * 箭头的动画

@@ -16,6 +16,7 @@ import android.widget.RadioGroup;
 
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
+import com.fy.baselibrary.utils.AnimUtils;
 import com.fy.baselibrary.utils.ConstantUtils;
 import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.TintUtils;
@@ -140,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
         //设置 选择器
         TintUtils.setTxtIconLocal(rBtnOne, SelectUtils.getSelector(R.drawable.svg_home_page), 1);
         TintUtils.setTxtIconLocal(rBtnTwo, SelectUtils.getSelector(R.drawable.svg_knowledge_system), 1);
-        TintUtils.setTxtIconLocal(rBtnThree, SelectUtils.getSelector(R.drawable.svg_my), 1);
+        TintUtils.setTxtIconLocal(rBtnThree, SelectUtils.getSelector(R.drawable.svg_bookmark), 1);
 
         radioGlayout.setOnCheckedChangeListener((group, checkedId) -> {
             int position = 0;
@@ -166,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
             fragmentManageer = getSupportFragmentManager();
         }
         FragmentTransaction fragmentTransaction = fragmentManageer.beginTransaction();
-        setFragmentTransition(fragmentTransaction, position);
+        AnimUtils.setFragmentTransition(fragmentTransaction, currentIndex, position);
 
         Fragment showfragment = null;
         switch (position) {
@@ -203,24 +204,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
         fragmentTransaction.commitAllowingStateLoss();
     }
 
-    /**
-     * 设置fragment 转场动画
-     *
-     * @param fragmentTransaction
-     * @param position            将要显示的fragment的下标
-     */
-    private void setFragmentTransition(FragmentTransaction fragmentTransaction, int position) {
-        //设置自定义过场动画
-        if (currentIndex > position) {
-            fragmentTransaction.setCustomAnimations(
-                    R.anim.anim_slide_right_in,
-                    R.anim.anim_slide_right_out);
-        } else {
-            fragmentTransaction.setCustomAnimations(
-                    R.anim.anim_slide_left_in,
-                    R.anim.anim_slide_left_out);
-        }
-    }
+
 
     //延迟200 毫秒 隐藏 加载图片控件
     private void hideLoadView() {
