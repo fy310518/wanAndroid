@@ -28,8 +28,9 @@ public class AppUtils {
     /**
      * 获取应用程序名称
      */
-    public static String getAppName(Context context) {
+    public static String getAppName() {
         try {
+            Context context = BaseApp.getAppCtx();
             PackageManager packageManager = context.getPackageManager();
             PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
             int labelRes = packageInfo.applicationInfo.labelRes;
@@ -42,11 +43,10 @@ public class AppUtils {
 
     /**
      * 获取当前应用的版本号 versionCode
-     *
-     * @param context
      * @return
      */
-    public static int getVersionCode(Context context) {
+    public static int getVersionCode() {
+        Context context = BaseApp.getAppCtx();
         PackageInfo info = null;
         try {
             info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
@@ -60,11 +60,10 @@ public class AppUtils {
 
     /**
      * 获取当前应用的版本名称 versionName
-     *
-     * @param context
      * @return
      */
-    public static String getVersionName(Context context) {
+    public static String getVersionName() {
+        Context context = BaseApp.getAppCtx();
         PackageManager packageManager = context.getPackageManager();
         PackageInfo packageInfo = null;
         try {
@@ -79,11 +78,10 @@ public class AppUtils {
 
     /**
      * 获取当前应用的 包名
-     *
-     * @param context
      * @return
      */
-    public static String getLocalPackageName(Context context) {
+    public static String getLocalPackageName() {
+        Context context = BaseApp.getAppCtx();
         PackageManager packageManager = context.getPackageManager();
         PackageInfo info = null;
         try {

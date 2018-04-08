@@ -5,9 +5,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,8 +20,7 @@ import android.widget.RadioGroup;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.AnimUtils;
-import com.fy.baselibrary.utils.ConstantUtils;
-import com.fy.baselibrary.utils.SpfUtils;
+import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.TintUtils;
 
 import java.util.concurrent.TimeUnit;
@@ -29,6 +31,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import wanandroid.fy.com.R;
+import wanandroid.fy.com.about.AboutActivity;
 import wanandroid.fy.com.main.fragment.FragmentOne;
 import wanandroid.fy.com.main.fragment.FragmentThree;
 import wanandroid.fy.com.main.fragment.FragmentTwo;
@@ -60,8 +63,10 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
     @BindView(R.id.rBtnThree)
     RadioButton rBtnThree;
 
-    @BindView(R.id.loadImg)
-    ImageView loadImg;
+    @BindView(R.id.dlMain)
+    DrawerLayout dlMain;
+    @BindView(R.id.navView)
+    NavigationView navView;
 
     @Override
     public boolean isShowHeadView() {
@@ -83,25 +88,8 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
     public void initData(Activity activity, Bundle savedInstanceState) {
         mContext = this;
 
-        //显示欢迎页，并设置点击事件（但是不设置点击回调）
-        loadImg.setVisibility(View.VISIBLE);
-
-        ConstantUtils.token = SpfUtils.getSpfSaveStr("token");
-        ConstantUtils.studentID = SpfUtils.getSpfSaveInt("studentId");
+        initNav();
         initRadioGroup();
-        hideLoadView();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        //从登录界面 进入 首页导航按钮选中
-        boolean flag = SpfUtils.getSpfSaveBoolean("loginShowHome");
-        if (flag) {
-            rBtnOne.setChecked(true);
-            SpfUtils.saveBooleanToSpf("loginShowHome", false);
-        }
     }
 
     /**
@@ -204,21 +192,6 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
         fragmentTransaction.commitAllowingStateLoss();
     }
 
-
-
-    //延迟200 毫秒 隐藏 加载图片控件
-    private void hideLoadView() {
-        Observable.timer(2500, TimeUnit.MILLISECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(aLong -> {
-                    if (null != loadImg) {
-                        loadImg.setVisibility(View.GONE);
-                    }
-                });
-    }
-
-    @OnClick({R.id.loadImg})
     @Override
     public void onClick(View v) {}
 
@@ -227,10 +200,34 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
 
     @Override
     public void onBackPressed() {
-        // super.onBackPressed(); 	不要调用父类的方法
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        startActivity(intent);
+//        如果DrawerLayout是打开状态则关闭
+        if (dlMain.isDrawerOpen(GravityCompat.START)) {
+            dlMain.closeDrawer(GravityCompat.START);
+        } else {
+            // super.onBackPressed(); 	不要调用父类的方法
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
+        }
+    }
+
+//    初始化导航视图
+    private void initNav(){
+        navView.setNavigationItemSelectedListener(item -> {
+            dlMain.closeDrawer(GravityCompat.START);
+            switch (item.getItemId()) {
+                case R.id.myLike:
+
+                    break;
+                case R.id.atNightModel:
+//                    NightModeUtils.switchNightMode(this);//todo
+                    break;
+                case R.id.about:
+                    JumpUtils.jump(mContext, AboutActivity.class, null);
+                    break;
+            }
+            return false;
+        });
     }
 }

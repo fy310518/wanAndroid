@@ -106,7 +106,7 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
                 }
             }
         } else {
-            startActivity(new Intent("hodgepodge.fy.com.main.MainActivity"));
+            startActivity(new Intent("wanandroid.fy.com.login.StartUpActivity"));
         }
     }
 

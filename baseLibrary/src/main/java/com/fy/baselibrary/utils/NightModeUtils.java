@@ -35,7 +35,7 @@ public class NightModeUtils {
         SpfUtils.saveBooleanToSpf(isNightMode, !isNight);
 //        activity.recreate(); // 这个是刷新，不然不起作用
         JumpUtils.jump(activity, activity.getClass(), null);
-        activity.finish();
+//        activity.finish();
     }
 
     /**
