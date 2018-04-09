@@ -36,7 +36,7 @@ public class AnimUtils {
             fragmentTransaction.setCustomAnimations(
                     R.anim.anim_slide_right_in,
                     R.anim.anim_slide_right_out);
-        } else {
+        } else if (currentIndex < position){
             fragmentTransaction.setCustomAnimations(
                     R.anim.anim_slide_left_in,
                     R.anim.anim_slide_left_out);

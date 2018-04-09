@@ -13,6 +13,7 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 
+import com.fy.baselibrary.application.BaseApp;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.permission.PermissionActivity;
 import com.fy.baselibrary.retrofit.NetCallBack;
@@ -21,9 +22,12 @@ import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
 import com.fy.baselibrary.startactivity.StartActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
+import com.fy.baselibrary.utils.ConstantUtils;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.T;
+import com.fy.baselibrary.utils.cache.ACache;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +57,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
 
     @Override
     public boolean isShowHeadView() {
-        return false;
+        return true;
     }
 
     @Override
@@ -120,12 +124,12 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
         IProgressDialog progressDialog = new IProgressDialog().init(mContext)
                 .setDialogMsg(R.string.user_login);
 
-        String mUserName = editName.getText().toString().trim();
-        String mPassWord = editPass.getText().toString().trim();
+        String mUserName = editName.getText().toString().trim();//"fangshuai"
+        String mPassWord = editPass.getText().toString().trim();//"fangs123"
 
         Map<String, Object> param = new HashMap<>();
-        param.put("username", "fangshuai");
-        param.put("password", "fangs123");
+        param.put("username", mUserName);
+        param.put("password", mPassWord);
 
         RequestUtils.create(ApiService.class)
                 .login(param)
@@ -134,10 +138,15 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
                 .subscribe(new NetCallBack<LoginBean>(progressDialog) {
                     @Override
                     protected void onSuccess(LoginBean login) {
+                        ACache mCache = ACache.get(BaseApp.getAppCtx());
+                        mCache.put(ConstantUtils.userName, login);
+
+                        SpfUtils.saveBooleanToSpf(ConstantUtils.isLogin, true);
+                        SpfUtils.saveStrToSpf(ConstantUtils.userName, login.getUsername());
+
                         Bundle bundle = new Bundle();
                         bundle.putString("大王", "大王叫我来巡山");
                         JumpUtils.jump(mContext, StatusDemoActivity.class, bundle);
-                        finish();
                     }
 
                     @Override

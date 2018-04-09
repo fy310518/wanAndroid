@@ -3,12 +3,15 @@ package wanandroid.fy.com.about;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.AppUtils;
+import com.fy.baselibrary.utils.ResourceUtils;
 
 import butterknife.BindView;
 import wanandroid.fy.com.R;
@@ -21,6 +24,9 @@ public class AboutActivity extends AppCompatActivity implements IBaseActivity{
 
     @BindView(R.id.tvAppInformation)
     TextView tvAppInformation;
+    @BindView(R.id.tvAbout)
+    TextView tvAbout;
+
 
     @Override
     public boolean isShowHeadView() {
@@ -40,6 +46,9 @@ public class AboutActivity extends AppCompatActivity implements IBaseActivity{
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         tvAppInformation.setText(AppUtils.getAppName() + "\n" + AppUtils.getVersionName());
+
+        tvAbout.setText(Html.fromHtml(ResourceUtils.getStr(R.string.about_content)));
+        tvAbout.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     @Override

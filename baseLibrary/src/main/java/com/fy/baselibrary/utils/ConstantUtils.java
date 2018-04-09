@@ -37,25 +37,14 @@ public class ConstantUtils {
     public static String token = "";
 
     /**
-     * student实体类中id
+     * 用户是否登录 key
      */
-    public static int studentID = 0;
+    public static String isLogin = "is_Login";
 
     /**
-     * 当前个人信息图片上传 key
+     * 缓存用户名 key
      */
-    public static String selectvisitimager = "selectvisitimager";
-
-    /**
-     * 学生实体类 缓存 key
-     */
-    public static final String student = "stuInfo";
-
-    /**
-     * 学生头像
-     */
-    public static String head_portrait = "";
-
+    public static String userName = "User_Name";
 
 
 

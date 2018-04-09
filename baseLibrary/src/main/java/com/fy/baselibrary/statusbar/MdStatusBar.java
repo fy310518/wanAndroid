@@ -28,10 +28,10 @@ import com.fy.baselibrary.utils.ScreenUtils;
 public class MdStatusBar {
 
     /** 状态栏透明度 */
-    public static int statusAlpha = 90;
+    public static int statusAlpha = 70;
 
     /** 导航栏透明度 */
-    public static int navAlpha = 10;
+    public static int navAlpha = 50;
 
     private MdStatusBar() {
         /* cannot be instantiated */
@@ -85,6 +85,7 @@ public class MdStatusBar {
             int finalStatusColor = realStatusDepth == 0 ? statusColor : calculateColor(statusColor, realStatusDepth);
             ViewGroup decorView = (ViewGroup) window.getDecorView();
             decorView.addView(createStatusBarView(act, finalStatusColor));
+
             if (applyNav && navigationBarExist(act)) {
                 int realNavDepth = limitDepthOrAlpha(navDepth);
                 int finalNavColor = realNavDepth == 0 ? navColor : calculateColor(navColor, realNavDepth);
@@ -231,6 +232,7 @@ public class MdStatusBar {
             ViewGroup decorView = (ViewGroup) window.getDecorView();
             int finalStatusColor = realStatusDepth == 0 ? statusColor : calculateColor(statusColor, realStatusDepth);
             decorView.addView(createStatusBarView(act, finalStatusColor), 0);
+
             if (applyNav && navigationBarExist(act)) {
                 int realNavDepth = limitDepthOrAlpha(navDepth);
                 window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -255,7 +257,12 @@ public class MdStatusBar {
         return depthOrAlpha;
     }
 
-
+    /**
+     * 创建一个 状态栏 高度的 view
+     * @param context
+     * @param color
+     * @return
+     */
     private static View createStatusBarView(Context context, @ColorInt int color) {
         View statusBarView = new View(context);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams

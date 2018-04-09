@@ -9,7 +9,6 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-		
         android:theme="@style/BaseAppTheme">
 
         <activity
@@ -20,12 +19,13 @@
             android:theme="@style/myTransparent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-				
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".login.StartUpActivity"
+        <activity
+            android:name=".login.StartUpActivity"
             android:label="@string/srartUpTitle"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -36,6 +36,7 @@
 
         <activity
             android:name="wanandroid.fy.com.main.MainActivity"
+            android:label="@string/mainTitle"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -52,15 +53,13 @@
         <activity
             android:name="wanandroid.fy.com.login.RegisterActivity"
             android:label="@string/registerTitle"
-            android:windowSoftInputMode="adjustResize|stateVisible"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateVisible" />
 
         <activity
             android:name=".about.AboutActivity"
             android:label="@string/aboutTitle"
             android:screenOrientation="portrait" />
-
-
 
 
         <activity

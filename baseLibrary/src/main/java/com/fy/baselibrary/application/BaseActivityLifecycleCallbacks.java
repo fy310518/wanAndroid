@@ -127,10 +127,12 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
         toolbar.setTitle(activity.getTitle());
 
         if (activity instanceof AppCompatActivity) {
+            AppCompatActivity act = (AppCompatActivity) activity;
             //设置导航图标要在setSupportActionBar方法之后
-            ((AppCompatActivity) activity).setSupportActionBar(toolbar);
-            toolbar.setNavigationIcon(R.drawable.ic_back);
-            toolbar.setNavigationOnClickListener(v -> JumpUtils.exitActivity((AppCompatActivity) activity));
+            act.setSupportActionBar(toolbar);
+
+            act.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            toolbar.setNavigationOnClickListener(v -> JumpUtils.exitActivity(act));
         }
     }
 

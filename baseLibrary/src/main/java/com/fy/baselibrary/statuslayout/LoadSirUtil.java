@@ -9,10 +9,8 @@ import android.view.ViewGroup;
 import com.fy.baselibrary.R;
 
 /**
- * Description:TODO
- * Create Time:2017/9/4 16:24
- * Author:KingJA
- * Email:kingjavip@gmail.com
+ * 多状态布局 替换逻辑工具类
+ * Created by fangs on 2017/12/12.
  */
 public class LoadSirUtil {
 

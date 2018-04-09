@@ -51,7 +51,7 @@ public class ACache {
     private ACacheManager mCache;
 
     public static ACache get(Context ctx) {
-        return get(ctx, "MoveNurse");
+        return get(ctx, "Wan Android");
     }
 
     public static ACache get(Context ctx, String cacheName) {

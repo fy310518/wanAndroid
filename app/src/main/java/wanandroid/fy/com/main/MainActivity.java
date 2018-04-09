@@ -9,29 +9,33 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
+import com.fy.baselibrary.application.BaseApp;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.AnimUtils;
+import com.fy.baselibrary.utils.ConstantUtils;
 import com.fy.baselibrary.utils.JumpUtils;
+import com.fy.baselibrary.utils.ResourceUtils;
+import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.TintUtils;
-
-import java.util.concurrent.TimeUnit;
+import com.fy.baselibrary.utils.cache.ACache;
 
 import butterknife.BindView;
-import butterknife.OnClick;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import wanandroid.fy.com.R;
 import wanandroid.fy.com.about.AboutActivity;
+import wanandroid.fy.com.login.LoginActivity;
 import wanandroid.fy.com.main.fragment.FragmentOne;
 import wanandroid.fy.com.main.fragment.FragmentThree;
 import wanandroid.fy.com.main.fragment.FragmentTwo;
@@ -67,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
     DrawerLayout dlMain;
     @BindView(R.id.navView)
     NavigationView navView;
+    TextView tvUserName;
+    Button btnLoginOrExit;
 
     @Override
     public boolean isShowHeadView() {
@@ -81,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
     @SuppressLint("ResourceAsColor")
     @Override
     public void setStatusBar(Activity activity) {
-        MdStatusBar.setTransparentBar(activity, R.color.transparent, R.color.transparent);
+        MdStatusBar.setColorBarForDrawer(activity, R.color.transparent, R.color.transparent);
     }
 
     @Override
@@ -193,7 +199,23 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
     }
 
     @Override
-    public void onClick(View v) {}
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btnLoginOrExit://登录 or 退出登录
+                boolean isLogin = SpfUtils.getSpfSaveBoolean(ConstantUtils.isLogin);
+                if (isLogin){
+                    tvUserName.setText(R.string.notLogin);
+                    btnLoginOrExit.setText(R.string.clickLogin);
+
+                    ACache mCache = ACache.get(BaseApp.getAppCtx());
+                    mCache.clear();
+                    SpfUtils.clear();
+                } else {
+                    JumpUtils.jump(MainActivity.this, LoginActivity.class, null);
+                }
+                break;
+        }
+    }
 
     @Override
     public void reTry() {}
@@ -214,6 +236,18 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
 
 //    初始化导航视图
     private void initNav(){
+        View headerView = navView.getHeaderView(0);
+        tvUserName = headerView.findViewById(R.id.tvUserName);
+        btnLoginOrExit = headerView.findViewById(R.id.btnLoginOrExit);
+        btnLoginOrExit.setOnClickListener(this);
+
+        boolean isLogin = SpfUtils.getSpfSaveBoolean(ConstantUtils.isLogin);
+        tvUserName.setText(isLogin ?
+                SpfUtils.getSpfSaveStr(ConstantUtils.userName) :
+                ResourceUtils.getStr(R.string.notLogin));
+
+        btnLoginOrExit.setText(isLogin ? R.string.exitLogin : R.string.clickLogin);
+
         navView.setNavigationItemSelectedListener(item -> {
             dlMain.closeDrawer(GravityCompat.START);
             switch (item.getItemId()) {
@@ -229,5 +263,11 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
             }
             return false;
         });
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, dlMain, toolbar, 0, 0);
+        dlMain.addDrawerListener(toggle);
+        toggle.syncState();
     }
 }

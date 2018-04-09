@@ -3,10 +3,10 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="BaseAppTheme" parent="Theme.AppCompat.DayNight">
+    <style name="BaseAppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#1398fc</item>    <!-- 状态栏 -->
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item> <!-- toolbar -->
+        <item name="colorPrimary">@color/statusBar</item>    <!-- 状态栏 -->
+        <item name="colorPrimaryDark">@color/appHeadBg</item> <!-- toolbar -->
         <item name="colorAccent">@color/colorAccent</item>  <!-- 重点 -->
 
         <item name="windowActionBar">false</item><!-- 不显示标题栏 -->

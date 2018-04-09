@@ -7,10 +7,10 @@ import android.view.View;
 
 /**
  * activity 实现接口 统一规范 <br>
- * 项目自己新建的activity 建议实现 此 接口 <br>
+ * 项目自己新建的 activity 建议实现 此 接口 <br>
  * Created by fangs on 2018/3/13.
  */
-public interface IBaseActivity {
+public interface IBaseActivity extends View.OnClickListener{
 
     /**
      * 是否显示 头部 标题栏
