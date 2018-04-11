@@ -47,9 +47,8 @@ public class RxNetCache {
      * @return
      */
     public <T> Observable<T> request(Observable<T> fromNetwork) {
-        /**
-         * 定义读取缓存数据的 被观察者
-         */
+
+        /** 定义读取缓存数据的 被观察者 */
         Observable<T> fromCache = Observable.create(new ObservableOnSubscribe<T>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<T> subscriber) throws Exception {
@@ -79,6 +78,7 @@ public class RxNetCache {
 
         return Observable.concat(fromCache, fromNetwork);
     }
+
 
     public RxNetCache setBuilder(Builder builder) {
         this.builder = builder;

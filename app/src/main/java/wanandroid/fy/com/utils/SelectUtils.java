@@ -38,4 +38,21 @@ public class SelectUtils {
 
         return TintUtils.tintSelector(TintUtils.getDrawable(draId), colors, states);
     }
+
+    /**
+     * 获取 指定 ID的 drawable，生成的 选择器
+     * @param draId
+     * @return
+     */
+    public static Drawable getTagSelector(@DrawableRes int draId){
+        int[] colors = new int[]{
+                ResourceUtils.getColor(R.color.button_normal),
+                ResourceUtils.getColor(R.color.white)};
+
+        int[][] states = new int[2][];
+        states[0] = new int[]{android.R.attr.state_pressed};
+        states[1] = new int[]{};
+
+        return TintUtils.tintSelector(TintUtils.getDrawable(draId), colors, states);
+    }
 }

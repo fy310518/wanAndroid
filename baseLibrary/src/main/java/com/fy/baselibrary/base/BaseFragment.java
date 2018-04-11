@@ -6,11 +6,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.cache.ACache;
 
 import butterknife.ButterKnife;
@@ -47,16 +47,14 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                 parent.removeView(mRootView);
             }
         }
-        Log.e(TAG, "onCreateView()");
+        L.e(TAG, "onCreateView()");
         return mRootView;
     }
 
     @Override
-    public void onClick(View view) {
-    }
+    public void onClick(View view) {}
 
-    protected void baseInit() {
-    }
+    protected void baseInit() {}
 
     protected abstract int setContentLayout();
 
@@ -77,13 +75,13 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Override//当Activity中的onCreate方法执行完后调用
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.e(TAG, "onActivityCreated()");
+        L.e(TAG, "onActivityCreated()");
     }
 
     @Override//Fragment和Activity建立关联的时候调用
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.e(TAG, "onAttach()");
+        L.e(TAG, "onAttach()");
 
         this.mContext = (AppCompatActivity) context;
         mCache = ACache.get(mContext);
@@ -92,44 +90,44 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e(TAG, "onCreate()");
+        L.e(TAG, "onCreate()");
     }
 
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.e(TAG, "onStart()");
+        L.e(TAG, "onStart()");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.e(TAG, "onResume()");
+        L.e(TAG, "onResume()");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.e(TAG, "onPause()");
+        L.e(TAG, "onPause()");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.e(TAG, "onStop()");
+        L.e(TAG, "onStop()");
     }
 
     @Override//Fragment中的布局被移除时调用
     public void onDestroyView() {
         super.onDestroyView();
-        Log.e(TAG, "onDestroyView()");
+        L.e(TAG, "onDestroyView()");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.e(TAG, "onDestroy()");
+        L.e(TAG, "onDestroy()");
 
         if (null != unbinder){
             unbinder.unbind();
@@ -139,6 +137,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Override//Fragment和Activity解除关联的时候调用
     public void onDetach() {
         super.onDetach();
-        Log.e(TAG, "onDetach()");
+        L.e(TAG, "onDetach()");
     }
 }

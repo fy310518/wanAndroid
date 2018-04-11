@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import retrofit2.http.Path;
+import wanandroid.fy.com.entity.Bookmark;
 import wanandroid.fy.com.entity.HomeBean;
 import wanandroid.fy.com.entity.LoginBean;
 import io.reactivex.Observable;
@@ -64,6 +65,20 @@ public interface ApiService {
     @Headers({"url_name:user"})
     @GET("article/list/{id}/json")
     Observable<BeanModule<HomeBean>> getHomeList(@Path("id") int pageNum);
+
+    /**
+     * 搜索热词
+     */
+    @Headers({"url_name:user"})
+    @GET("hotkey/json")
+    Observable<BeanModule<List<Bookmark>>> getHotkeyList();
+
+    /**
+     * 常用网站
+     */
+    @Headers({"url_name:user"})
+    @GET("friend/json")
+    Observable<BeanModule<List<Bookmark>>> getFriendList();
 
 
 

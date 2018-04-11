@@ -44,7 +44,6 @@ public class RequestUtils {
      * @return
      */
     public static <T> T create(Class<T> clazz) {
-
         return getInstentce().netRetrofit.create(clazz);
     }
 
