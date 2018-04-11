@@ -37,6 +37,7 @@ import butterknife.OnClick;
 import wanandroid.fy.com.R;
 import wanandroid.fy.com.api.ApiService;
 import wanandroid.fy.com.entity.LoginBean;
+import wanandroid.fy.com.main.MainActivity;
 import wanandroid.fy.com.status.StatusDemoActivity;
 
 /**
@@ -146,7 +147,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
 
                         Bundle bundle = new Bundle();
                         bundle.putString("大王", "大王叫我来巡山");
-                        JumpUtils.jump(mContext, StatusDemoActivity.class, bundle);
+                        JumpUtils.jump(mContext, MainActivity.class, bundle);
                     }
 
                     @Override

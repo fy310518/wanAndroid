@@ -8,14 +8,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.fy.baselibrary.application.BaseApp;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
 import com.fy.baselibrary.statusbar.MdStatusBar;
+import com.fy.baselibrary.utils.ConstantUtils;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.SpfUtils;
+import com.fy.baselibrary.utils.cache.ACache;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -104,6 +108,12 @@ public class RegisterActivity extends AppCompatActivity implements IBaseActivity
                 .subscribe(new NetCallBack<LoginBean>(progressDialog) {
                     @Override
                     protected void onSuccess(LoginBean login) {
+                        ACache mCache = ACache.get(BaseApp.getAppCtx());
+                        mCache.put(ConstantUtils.userName, login);
+
+                        SpfUtils.saveBooleanToSpf(ConstantUtils.isLogin, true);
+                        SpfUtils.saveStrToSpf(ConstantUtils.userName, login.getUsername());
+
                         Bundle bundle = new Bundle();
                         bundle.putString("大王", "大王叫我来巡山");
                         JumpUtils.jump(mContext, MainActivity.class, bundle);

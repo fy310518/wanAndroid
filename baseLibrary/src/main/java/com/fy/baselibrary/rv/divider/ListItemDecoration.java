@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -36,28 +37,34 @@ public class ListItemDecoration extends RecyclerView.ItemDecoration {
      *                则表示按系统配置的 listDivider 设置间隔，和绘制分割线）单位是dp;
      */
     public ListItemDecoration(Context context, int space) {
+        // 获取默认主题的属性
+        final TypedArray a = context.obtainStyledAttributes(ATTRS);
+        mDivider = a.getDrawable(0);
+        a.recycle();
 
         if (space == 0) {
-            // 获取默认主题的属性
-            final TypedArray a = context.obtainStyledAttributes(ATTRS);
-            mDivider = a.getDrawable(0);
-            a.recycle();
-
             this.mSpace = mDivider.getIntrinsicHeight();
         } else {
             this.mSpace = DensityUtils.dp2px(context, space);
         }
     }
 
-    @Override //实现类似padding的效果
+
+    @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
 
+        // 获得每个Item的位置
+        int itemPosition = parent.getChildAdapterPosition(view);
+
+        // 第1个Item不绘制(此处：不设置间隔)分割线
+        if (itemPosition == 0) return;
+
         LinearLayoutManager layoutManager = (LinearLayoutManager) parent.getLayoutManager();
         if (layoutManager.getOrientation() == LinearLayoutManager.VERTICAL) {
-            outRect.set(0, 0, 0, mSpace);//设置 列表item 四个方向的padding
+            outRect.set(0, mSpace, 0, 0);//设置 列表item 四个方向的padding
         } else {
-            outRect.set(0, 0, mSpace, 0);
+            outRect.set(mSpace, 0, 0, 0);
         }
     }
 
@@ -67,9 +74,7 @@ public class ListItemDecoration extends RecyclerView.ItemDecoration {
         LinearLayoutManager layoutManager = (LinearLayoutManager) parent.getLayoutManager();
 
         //没有子view或者没有没有颜色直接return
-        if (mDivider == null || layoutManager.getChildCount() == 0) {
-            return;
-        }
+        if (null == mDivider || layoutManager.getChildCount() == 0) return;
 
         if (layoutManager.getOrientation() == LinearLayoutManager.VERTICAL) {
             drawVertical(c, parent);
@@ -78,36 +83,38 @@ public class ListItemDecoration extends RecyclerView.ItemDecoration {
         }
     }
 
-    public void drawVertical(Canvas c, RecyclerView parent) {
-        final int left = parent.getPaddingLeft();
+    private void drawVertical(Canvas c, RecyclerView parent) {
+        final int left  = parent.getPaddingLeft();
         final int right = parent.getWidth() - parent.getPaddingRight();
 
-        final int childCount = parent.getChildCount();
+        int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
-//            if (i == 0) {
-//                return;
-//            }
-            final View child = parent.getChildAt(i);
+            View child = parent.getChildAt(i);
 
-            final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
-            final int top = child.getBottom() + params.bottomMargin;
-            final int bottom = top + mDivider.getIntrinsicHeight();
+            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
+            // ItemView的下边界：ItemView 的 bottom坐标 + 距离RecyclerView底部距离
+            int top = child.getBottom() + params.bottomMargin;
+
+            // 绘制分割线的下边界 = ItemView的下边界+分割线的高度
+            int bottom = top + mSpace;
+
             mDivider.setBounds(left, top, right, bottom);
             mDivider.draw(c);
         }
     }
 
-    public void drawHorizontal(Canvas c, RecyclerView parent) {
+    private void drawHorizontal(Canvas c, RecyclerView parent) {
         final int top = parent.getPaddingTop();
         final int bottom = parent.getHeight() - parent.getPaddingBottom();
 
-        final int childCount = parent.getChildCount();
+        int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
-            final View child = parent.getChildAt(i);
+            View child = parent.getChildAt(i);
+            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
 
-            final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
-            final int left = child.getRight() + params.rightMargin;
-            final int right = left + mDivider.getIntrinsicHeight();
+            int left  = child.getRight() + params.rightMargin;
+            int right = left + mSpace;
+
             mDivider.setBounds(left, top, right, bottom);
             mDivider.draw(c);
         }

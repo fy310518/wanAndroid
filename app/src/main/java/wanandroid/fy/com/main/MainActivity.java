@@ -27,6 +27,7 @@ import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.AnimUtils;
 import com.fy.baselibrary.utils.ConstantUtils;
 import com.fy.baselibrary.utils.JumpUtils;
+import com.fy.baselibrary.utils.NightModeUtils;
 import com.fy.baselibrary.utils.ResourceUtils;
 import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.TintUtils;
@@ -96,6 +97,23 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
 
         initNav();
         initRadioGroup();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        View headerView = navView.getHeaderView(0);
+        tvUserName = headerView.findViewById(R.id.tvUserName);
+        btnLoginOrExit = headerView.findViewById(R.id.btnLoginOrExit);
+        btnLoginOrExit.setOnClickListener(this);
+
+        boolean isLogin = SpfUtils.getSpfSaveBoolean(ConstantUtils.isLogin);
+        tvUserName.setText(isLogin ?
+                SpfUtils.getSpfSaveStr(ConstantUtils.userName) :
+                ResourceUtils.getStr(R.string.notLogin));
+
+        btnLoginOrExit.setText(isLogin ? R.string.exitLogin : R.string.clickLogin);
     }
 
     /**
@@ -236,18 +254,6 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
 
 //    初始化导航视图
     private void initNav(){
-        View headerView = navView.getHeaderView(0);
-        tvUserName = headerView.findViewById(R.id.tvUserName);
-        btnLoginOrExit = headerView.findViewById(R.id.btnLoginOrExit);
-        btnLoginOrExit.setOnClickListener(this);
-
-        boolean isLogin = SpfUtils.getSpfSaveBoolean(ConstantUtils.isLogin);
-        tvUserName.setText(isLogin ?
-                SpfUtils.getSpfSaveStr(ConstantUtils.userName) :
-                ResourceUtils.getStr(R.string.notLogin));
-
-        btnLoginOrExit.setText(isLogin ? R.string.exitLogin : R.string.clickLogin);
-
         navView.setNavigationItemSelectedListener(item -> {
             dlMain.closeDrawer(GravityCompat.START);
             switch (item.getItemId()) {
@@ -255,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
 
                     break;
                 case R.id.atNightModel:
-//                    NightModeUtils.switchNightMode(this);//todo
+                    NightModeUtils.switchNightMode(mContext);//todo
                     break;
                 case R.id.about:
                     JumpUtils.jump(mContext, AboutActivity.class, null);
