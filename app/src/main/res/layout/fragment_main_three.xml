@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.fy.baselibrary.widget.EasyPullLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/epl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    app:max_offset_bottom="150dp"
+    app:max_offset_top="150dp"
+    app:trigger_offset_bottom="75dp"
+    app:trigger_offset_top="75dp">
+
+    <com.fy.baselibrary.widget.TransformerView
+        android:id="@+id/topView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_type="edge_top" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvBookmark"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        app:layout_type="content" />
 
-</LinearLayout>
+</com.fy.baselibrary.widget.EasyPullLayout>

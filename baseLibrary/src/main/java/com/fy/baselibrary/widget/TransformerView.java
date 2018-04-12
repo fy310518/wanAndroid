@@ -49,6 +49,7 @@ public class TransformerView extends LinearLayout{
         idle();
     }
 
+    /** 初始化 */
     public void idle(){
         tvLoadTip.setText(R.string.idle);
         tvDate.setText(new SimpleDateFormat("yyyy-MM-dd  hh:mm:ss", Locale.getDefault()).format(new Date()));

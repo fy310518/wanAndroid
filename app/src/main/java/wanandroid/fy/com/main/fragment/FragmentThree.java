@@ -6,10 +6,11 @@ import com.fy.baselibrary.base.BaseFragment;
 import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
-
 import com.fy.baselibrary.utils.ConstantUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.T;
+import com.fy.baselibrary.widget.EasyPullLayout;
+import com.fy.baselibrary.widget.TransformerView;
 import com.google.android.flexbox.AlignItems;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexWrap;
@@ -34,6 +35,10 @@ import wanandroid.fy.com.utils.sticky.StickyItemDecoration;
  */
 public class FragmentThree extends BaseFragment {
 
+    @BindView(R.id.epl)
+    EasyPullLayout epl;
+    @BindView(R.id.topView)
+    TransformerView topView;
     @BindView(R.id.rvBookmark)
     RecyclerView rvBookmark;
     AdapterThree rvAdapter;
@@ -47,7 +52,8 @@ public class FragmentThree extends BaseFragment {
     protected void baseInit() {
         initRv();
 
-        getData();
+        epl.setCurrentType(EasyPullLayout.TYPE_EDGE_TOP);
+        epl.start();
     }
 
     private void initRv() {
@@ -65,6 +71,26 @@ public class FragmentThree extends BaseFragment {
             T.showLong(item.getName());
         });
         rvBookmark.setAdapter(rvAdapter);
+
+        epl.addOnPullListenerAdapter(new EasyPullLayout.OnPullListenerAdapter() {
+            @Override
+            public void onPull(int type, float fraction, boolean changed) {
+                if (!changed) return;
+
+                if (type == EasyPullLayout.TYPE_EDGE_TOP) {
+                    if (fraction == 1f) topView.ready();
+                    else topView.idle();
+                }
+            }
+
+            @Override
+            public void onTriggered(int type) {
+                if (type == EasyPullLayout.TYPE_EDGE_TOP) {
+                    topView.triggered(getContext());
+                    getData();
+                }
+            }
+        });
     }
 
     private void getData() {
@@ -102,11 +128,11 @@ public class FragmentThree extends BaseFragment {
                   L.e(list.toString());
                   rvAdapter.setmDatas(list);
                   rvAdapter.notifyDataSetChanged();
+                  epl.stop();
               }
 
               @Override
               protected void updataLayout(int flag) {
-
               }
           });
     }

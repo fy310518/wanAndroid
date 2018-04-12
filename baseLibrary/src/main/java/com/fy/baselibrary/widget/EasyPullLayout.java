@@ -40,6 +40,7 @@ public class EasyPullLayout extends ViewGroup {
     private long roll_back_duration = 0L; // default 300
     private float sticky_factor = 0f; // default 0.66f (0f~1f)
 
+    /** key对应View，value对应View的一些参数 */
     private HashMap<View, ChildViewAttr> childViews = new HashMap<>(4);
 
     private float downX = 0f;
@@ -119,8 +120,9 @@ public class EasyPullLayout extends ViewGroup {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        int i = 0;
+
         final int childCount = getChildCount();
+        int i = 0;
         while (i < childCount) {
             View child = getChildAt(i++);
 
@@ -128,13 +130,15 @@ public class EasyPullLayout extends ViewGroup {
             if (null != getByType(childViews, lp.type))
                 throw new IllegalArgumentException("Each child type can only be defined once!");
             else
-                childViews.put(child, new ChildViewAttr());
+                childViews.put(child, new ChildViewAttr());// 存储子View
         }
 
+        // 确保有一个子View的layout_type为content
         final View contentView = getByType(childViews, TYPE_CONTENT);
         if (null == contentView)
             throw new IllegalArgumentException("Child type \"content\" must be defined!");
 
+        // 设置默认的OnEdgeListener，可以被覆盖
         setOnEdgeListener(new OnEdgeListener() {
             @Override
             public int onEdge() {
@@ -155,14 +159,22 @@ public class EasyPullLayout extends ViewGroup {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        // 遍历子View
         for (Map.Entry<View, ChildViewAttr> entry : childViews.entrySet()) {
             View childView = entry.getKey();
             ChildViewAttr childViewAttr = entry.getValue();
+            // 要求该子View进行测量
             measureChildWithMargins(childView, widthMeasureSpec, 0, heightMeasureSpec, 0);
+            // 得到子View的LayoutParams对象
             LayoutParams lp = (LayoutParams) childView.getLayoutParams();
             switch (lp.type) {
                 case TYPE_EDGE_LEFT:
-                case TYPE_EDGE_RIGHT:
+                case TYPE_EDGE_RIGHT:// 类型为横向的子View
+                    /**
+                     * 把子View的size值记录下来，在摆放子View时会用到
+                     * 横向size对应为宽度加左右margin
+                     * 纵向size对应为高度加上下margin
+                     */
                     childViewAttr.size = childView.getMeasuredWidth() + lp.leftMargin + lp.rightMargin;
                     trigger_offset_left = trigger_offset_left < 0 ? childViewAttr.size / 2 : trigger_offset_left;
                     trigger_offset_right = trigger_offset_right < 0 ? childViewAttr.size / 2 : trigger_offset_right;
@@ -183,6 +195,7 @@ public class EasyPullLayout extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        // 首先获取content，得到宽高用于给其他子View做参考
         View contentView = getByType(childViews, TYPE_CONTENT);
         if (null == contentView)
             throw new IllegalArgumentException("EasyPullLayout must have and only have one layout_type \"content\"!");
@@ -191,16 +204,20 @@ public class EasyPullLayout extends ViewGroup {
         int contentHeight = contentView.getMeasuredHeight();
 
         for (Map.Entry<View, ChildViewAttr> entry : childViews.entrySet()) {
+            // 首先计算出子View的位置
+            // 此时还未进行偏移，左上角都位于(0,0)
             View childView = entry.getKey();
             ChildViewAttr childViewAttr = entry.getValue();
             LayoutParams lp = (LayoutParams) childView.getLayoutParams();
+
             int left = getPaddingLeft() + lp.leftMargin;
             int top = getPaddingTop() + lp.topMargin;
             int right = left + childView.getMeasuredWidth();
             int bottom = top + childView.getMeasuredHeight();
+
             switch (lp.type) {
-                case TYPE_EDGE_LEFT:
-                    left -= childViewAttr.size;
+                case TYPE_EDGE_LEFT:// 左侧的子View应该向左偏移，摆放在左侧
+                    left  -= childViewAttr.size;
                     right -= childViewAttr.size;
                     break;
                 case TYPE_EDGE_TOP:
@@ -222,8 +239,9 @@ public class EasyPullLayout extends ViewGroup {
 
         // bring the child to front if fixed
         View child = getByType(childViews, TYPE_EDGE_LEFT);
-        if (fixed_content_left && null != child)
-            child.bringToFront();
+
+        if (fixed_content_left && null != child)// 若设置了左侧拖拽时固定
+            child.bringToFront();// 改变左侧边缘视图z-order，使其在顶部
         child = getByType(childViews, TYPE_EDGE_TOP);
         if (fixed_content_top && null != child)
             child.bringToFront();
@@ -488,6 +506,34 @@ public class EasyPullLayout extends ViewGroup {
     }
 
     /**
+     * 设置 currentType （横向拉伸 or 纵向拉伸）
+     * @param currentType
+     */
+    public void setCurrentType(int currentType) {
+        this.currentType = currentType;
+    }
+
+    /**
+     * 定义 启动动画
+     */
+    public void start(){
+        switch (currentType) {
+            case TYPE_EDGE_LEFT:
+            case TYPE_EDGE_RIGHT:
+
+                break;
+            case TYPE_EDGE_TOP:
+            case TYPE_EDGE_BOTTOM:
+                View contentView = getByType(childViews, TYPE_EDGE_TOP);
+                ChildViewAttr childViewAttr = childViews.get(contentView);
+
+                contentView.setY(childViewAttr.top + 150);
+                onPullListenerAdapter.onTriggered(TYPE_EDGE_TOP);
+                break;
+        }
+    }
+
+    /**
      * Enable or disable one or more pull type
      *
      * @param pullType pull type to handle
@@ -545,8 +591,8 @@ public class EasyPullLayout extends ViewGroup {
         public LayoutParams(ViewGroup.LayoutParams source) {
             super(source);
         }
-
     }
+
 
     private class ChildViewAttr {
         int left, top, right, bottom, size;
@@ -567,6 +613,12 @@ public class EasyPullLayout extends ViewGroup {
         }
     }
 
+    /**
+     * 遍历 map 获取指定 type的 view
+     * @param map
+     * @param type
+     * @return
+     */
     private View getByType(HashMap<View, ChildViewAttr> map, int type) {
         for (Map.Entry<View, ChildViewAttr> entry : map.entrySet()) {
             if (((LayoutParams) entry.getKey().getLayoutParams()).type == type)
@@ -574,6 +626,7 @@ public class EasyPullLayout extends ViewGroup {
         }
         return null;
     }
+
 
     public abstract static class OnPullListenerAdapter {
         /**
@@ -598,6 +651,7 @@ public class EasyPullLayout extends ViewGroup {
     public void addOnPullListenerAdapter(OnPullListenerAdapter onPullListenerAdapter) {
         this.onPullListenerAdapter = onPullListenerAdapter;
     }
+
 
     public interface OnEdgeListener {
         /**
