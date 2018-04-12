@@ -10,7 +10,7 @@ public interface OnItemClickListner {
 
     /**
      * 条目点击事件 回调方法
-     * @param item 当前点击的条目的实体类
+     * @param view 当前点击的条目的实体类
      */
-    void onItemClick(View item);
+    void onItemClick(View view);
 }

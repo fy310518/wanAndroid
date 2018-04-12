@@ -30,13 +30,32 @@ public class ListItemDecoration extends RecyclerView.ItemDecoration {
     private int mSpace;
 
     /**
+     * 布局方向
+     */
+    private int orientation = LinearLayoutManager.VERTICAL;
+
+    /**
      * 构造分割线
-     *
      * @param context
      * @param space   设置间隔（如果参数不为 0，则表示 只设置间隔；为 0，
      *                则表示按系统配置的 listDivider 设置间隔，和绘制分割线）单位是dp;
      */
     public ListItemDecoration(Context context, int space) {
+        init(context, space);
+    }
+
+    /**
+     * 构造分割线
+     * @param context
+     * @param space   设置间隔（如果参数不为 0，则表示 只设置间隔；为 0，
+     *                则表示按系统配置的 listDivider 设置间隔，和绘制分割线）单位是dp;
+     */
+    public ListItemDecoration(Context context, int space, int orientation) {
+        this.orientation = orientation;
+        init(context, space);
+    }
+
+    private void init(Context context, int space){
         // 获取默认主题的属性
         final TypedArray a = context.obtainStyledAttributes(ATTRS);
         mDivider = a.getDrawable(0);
@@ -49,7 +68,6 @@ public class ListItemDecoration extends RecyclerView.ItemDecoration {
         }
     }
 
-
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
@@ -60,8 +78,7 @@ public class ListItemDecoration extends RecyclerView.ItemDecoration {
         // 第1个Item不绘制(此处：不设置间隔)分割线
         if (itemPosition == 0) return;
 
-        LinearLayoutManager layoutManager = (LinearLayoutManager) parent.getLayoutManager();
-        if (layoutManager.getOrientation() == LinearLayoutManager.VERTICAL) {
+        if (orientation == LinearLayoutManager.VERTICAL) {
             outRect.set(0, mSpace, 0, 0);//设置 列表item 四个方向的padding
         } else {
             outRect.set(mSpace, 0, 0, 0);

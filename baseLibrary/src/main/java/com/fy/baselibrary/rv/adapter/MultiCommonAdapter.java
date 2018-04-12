@@ -30,10 +30,11 @@ public abstract class MultiCommonAdapter<Item> extends RvCommonAdapter<Item> {
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         int layoutId = mMultiTypeSupport.getLayoutId(viewType);
-        ViewHolder holder = ViewHolder.createViewHolder(mContext, parent, layoutId);
+        ViewHolder viewHolder = ViewHolder.createViewHolder(mContext, parent, layoutId);
 
-        return holder;
+        bindOnClick(viewHolder);
+
+        return viewHolder;
     }
-
 
 }

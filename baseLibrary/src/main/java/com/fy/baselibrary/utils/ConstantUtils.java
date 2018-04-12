@@ -60,8 +60,10 @@ public class ConstantUtils {
     public static final String isfirstOpenApp = "userIsFirstOpenApp";
 
 
-
-
+    /**
+     * 吸附 ViewType
+     */
+    public static final int StickyType = 58;
 
 
 

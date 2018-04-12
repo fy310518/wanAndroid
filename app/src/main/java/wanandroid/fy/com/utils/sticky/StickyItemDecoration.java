@@ -1,53 +1,73 @@
-package com.fy.baselibrary.rv.divider.sticky;
+package wanandroid.fy.com.utils.sticky;
 
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.fy.baselibrary.application.BaseApp;
+import com.fy.baselibrary.utils.ConstantUtils;
+import com.fy.baselibrary.utils.DensityUtils;
+import com.google.android.flexbox.FlexboxLayoutManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import wanandroid.fy.com.entity.Bookmark;
+
 /**
- *
  * Created by 吸附 on 2018/1/16.
  */
 public class StickyItemDecoration extends RecyclerView.ItemDecoration {
 
-    /** 吸附的itemView */
+    /**
+     * 吸附的itemView
+     */
     private View mStickyItemView;
 
-    /** 吸附itemView 距离顶部 */
+    /**
+     * 吸附itemView 距离顶部
+     */
     private int mStickyItemViewMarginTop;
 
-    /** 吸附itemView 高度 */
+    /**
+     * 吸附itemView 高度
+     */
     private int mStickyItemViewHeight;
 
-    /** 通过它获取到需要吸附view的相关信息 */
-    private StickyView mStickyView;
-
-    /** 滚动过程中当前的UI是否可以找到吸附的view */
+    /**
+     * 滚动过程中当前的UI是否可以找到吸附的view
+     */
     private boolean mCurrentUIFindStickView;
 
-    /** adapter */
-    private RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter;
-
-    /** viewHolder */
-    private RecyclerView.ViewHolder mViewHolder;
-
-    /** position list */
+    /**
+     * position list
+     */
     private List<Integer> mStickyPositionList = new ArrayList<>();
 
-    /** 当前 RecyclerView 的布局管理器 */
-    private LinearLayoutManager mLayoutManager;
+    /**
+     * adapter
+     */
+    private RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter;
 
-    /** 绑定数据的position */
+    /**
+     * viewHolder
+     */
+    private RecyclerView.ViewHolder mViewHolder;
+
+    /**
+     * 当前 RecyclerView 的布局管理器
+     */
+    private FlexboxLayoutManager mLayoutManager;
+
+    /**
+     * 绑定数据的position
+     */
     private int mBindDataPosition = -1;
 
-    public StickyItemDecoration() {
-        mStickyView = new ExampleStickyView();
-    }
+    public StickyItemDecoration() {}
 
     @Override
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
@@ -55,7 +75,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
 
         if (parent.getAdapter().getItemCount() <= 0) return;
 
-        mLayoutManager = (LinearLayoutManager) parent.getLayoutManager();
+        mLayoutManager = (FlexboxLayoutManager) parent.getLayoutManager();
         mCurrentUIFindStickView = false;
 
 //        循环可见的itemView；如果遇到的是吸附的ItemView, 通过适配器和 itemType来创建一个ViewHolder，并且得到这个ViewHolder的itemView
@@ -63,7 +83,8 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
             View view = parent.getChildAt(m);
 
             /** 是否需要 吸附的view */
-            if (mStickyView.isStickyView(view)) {
+            Bookmark bookmark = (Bookmark) view.getTag();
+            if (ConstantUtils.StickyType == bookmark.getItemType()) {
                 //当前UI当中是否找到了需要吸附的View，此时设置为true
                 mCurrentUIFindStickView = true;
 
@@ -120,6 +141,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
 
     /**
      * 给StickyView绑定数据
+     *
      * @param position
      */
     private void bindDataForStickyView(int position, int width) {
@@ -133,6 +155,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
 
     /**
      * 缓存吸附的view position
+     *
      * @param m
      */
     private void cacheStickyViewPosition(int m) {
@@ -144,6 +167,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
 
     /**
      * 得到吸附view在RecyclerView中 的position
+     *
      * @param m
      * @return
      */
@@ -153,18 +177,20 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
 
     /**
      * 得到吸附viewHolder
+     *
      * @param recyclerView
      */
     private void getStickyViewHolder(RecyclerView recyclerView) {
         if (mAdapter != null) return;
 
         mAdapter = recyclerView.getAdapter();
-        mViewHolder = mAdapter.onCreateViewHolder(recyclerView, mStickyView.getStickViewType());
+        mViewHolder = mAdapter.onCreateViewHolder(recyclerView, ConstantUtils.StickyType);
         mStickyItemView = mViewHolder.itemView;
     }
 
     /**
      * 计算布局吸附的itemView
+     *
      * @param parentWidth
      */
     private void measureLayoutStickyItemView(int parentWidth) {
@@ -186,6 +212,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
 
     /**
      * 绘制吸附的itemView
+     *
      * @param canvas
      */
     private void drawStickyItemView(Canvas canvas) {

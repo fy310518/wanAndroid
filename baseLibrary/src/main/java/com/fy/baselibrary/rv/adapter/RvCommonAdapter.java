@@ -47,11 +47,7 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
     public ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         ViewHolder viewHolder = ViewHolder.createViewHolder(mContext, parent, mLayoutId);
 
-//        避免 在onBindViewHolder里面频繁创建事件回调，应该在 onCreateViewHolder()中每次为新建的 View 设置一次即可
-        if (null != itemClickListner){
-            //需要在 convert() 最后使用 holder.itemView.setTag(Item)
-            viewHolder.itemView.setOnClickListener(v -> itemClickListner.onItemClick(v));
-        }
+        bindOnClick(viewHolder);
 
         return viewHolder;
     }
@@ -60,17 +56,28 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
     public void onBindViewHolder(ViewHolder holder, int position) {
         convert(holder, mDatas.get(position), position);
 
-        //设置 tag 对应 onCreateViewHolder() 设置点击事件
+//        设置 tag 对应 onCreateViewHolder() 设置点击事件
         holder.itemView.setTag(getmDatas().get(position));
     }
 
     /**
-     * 渲染数据到View中
+     * 渲染数据到 View中
      * @param holder
-     * @param t
+     * @param item
      */
-    public abstract void convert(ViewHolder holder, Item t, int position);
+    public abstract void convert(ViewHolder holder, Item item, int position);
 
+    /**
+     * 绑定点击事件
+     * @param viewHolder
+     */
+    protected void bindOnClick(ViewHolder viewHolder) {
+//        避免 在onBindViewHolder里面频繁创建事件回调，应该在 onCreateViewHolder()中每次为新建的 View 设置一次即可
+        if (null != itemClickListner) {
+//            需要在 convert() 最后使用 holder.itemView.setTag(Item)
+            viewHolder.itemView.setOnClickListener(v -> itemClickListner.onItemClick(v));
+        }
+    }
 
 
     /**
