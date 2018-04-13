@@ -90,6 +90,13 @@ public class FragmentThree extends BaseFragment {
                     getData();
                 }
             }
+
+            @Override
+            public void onRollBack(int rollBackType) {
+                if (rollBackType == EasyPullLayout.ROLL_BACK_TYPE_TOP) {
+                    topView.idle();
+                }
+            }
         });
     }
 

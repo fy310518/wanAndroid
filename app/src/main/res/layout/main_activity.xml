@@ -1,64 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dlMain"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/activity_head" />
-
-    <android.support.v4.widget.DrawerLayout
-        android:id="@+id/dlMain"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/main_fragemnet_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/BgColor" />
 
-            <FrameLayout
-                android:id="@+id/main_fragemnet_container"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@color/BgColor" />
+        <RadioGroup
+            android:id="@+id/radioGlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal">
+            <!-- 底部导航start -->
+            <RadioButton
+                android:id="@+id/rBtnOne"
+                style="@style/mainBottomBtnStyle"
+                android:text="@string/mainTabOne" />
 
-            <RadioGroup
-                android:id="@+id/radioGlayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="horizontal">
-                <!-- 底部导航start -->
-                <RadioButton
-                    android:id="@+id/rBtnOne"
-                    style="@style/mainBottomBtnStyle"
-                    android:text="@string/mainTabOne" />
+            <RadioButton
+                android:id="@+id/rBtnTwo"
+                style="@style/mainBottomBtnStyle"
+                android:text="@string/mainTabTwo" />
 
-                <RadioButton
-                    android:id="@+id/rBtnTwo"
-                    style="@style/mainBottomBtnStyle"
-                    android:text="@string/mainTabTwo" />
+            <RadioButton
+                android:id="@+id/rBtnThree"
+                style="@style/mainBottomBtnStyle"
+                android:text="@string/mainTabThree" />
+            <!-- 底部导航end -->
+        </RadioGroup>
 
-                <RadioButton
-                    android:id="@+id/rBtnThree"
-                    style="@style/mainBottomBtnStyle"
-                    android:text="@string/mainTabThree" />
-                <!-- 底部导航end -->
-            </RadioGroup>
+    </LinearLayout>
 
-        </LinearLayout>
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/BgColor"
+        app:headerLayout="@layout/main_navigation_layout"
+        app:itemBackground="@color/transparent"
+        app:menu="@menu/main_sideslip_menu" />
 
-        <android.support.design.widget.NavigationView
-            android:id="@+id/navView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:background="@color/BgColor"
-            app:headerLayout="@layout/main_navigation_layout"
-            app:itemBackground="@color/transparent"
-            app:menu="@menu/main_sideslip_menu" />
-
-    </android.support.v4.widget.DrawerLayout>
-</LinearLayout>
+</android.support.v4.widget.DrawerLayout>

@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
 
     @Override
     public boolean isShowHeadView() {
-        return false;
+        return true;
     }
 
     @Override
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
     @SuppressLint("ResourceAsColor")
     @Override
     public void setStatusBar(Activity activity) {
-        MdStatusBar.setColorBarForDrawer(activity, R.color.transparent, R.color.transparent);
+        MdStatusBar.setColorBar(activity, R.color.statusBar, R.color.statusBar);
     }
 
     @Override
