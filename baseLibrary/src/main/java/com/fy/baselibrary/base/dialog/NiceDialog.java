@@ -9,7 +9,7 @@ import com.fy.baselibrary.base.ViewHolder;
  * 完善 没有扩展需求情况下 使用父类创建dialog 不够优雅的问题
  * Created by fangs on 2018/3/21.
  */
-public class NiceDialog extends CommonDialog{
+public class NiceDialog extends CommonDialog {
     private static final String LISTENER = "ViewConvertListener";
 
     private DialogConvertListener dialogConvertListener;
@@ -37,6 +37,7 @@ public class NiceDialog extends CommonDialog{
 
     /**
      * 创建 dialog
+     *
      * @return
      */
     public static NiceDialog init() {

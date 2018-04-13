@@ -18,7 +18,7 @@ import wanandroid.fy.com.R;
 import wanandroid.fy.com.main.MainActivity;
 
 /**
- * 体育联盟 主界面
+ * 欢迎页
  * Created by fangs on 2017/12/12.
  */
 public class StartUpActivity extends AppCompatActivity implements IBaseActivity {

@@ -53,7 +53,6 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
                 View view = LayoutInflater.from(activity).inflate(act.setView(), null);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -1);
-
                 linearLRoot.addView(view, params);
 
                 StatusLayoutManager slManager = initSLManager(activity);

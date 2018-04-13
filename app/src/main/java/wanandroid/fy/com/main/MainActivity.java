@@ -68,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
     @BindView(R.id.rBtnThree)
     RadioButton rBtnThree;
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.dlMain)
     DrawerLayout dlMain;
     @BindView(R.id.navView)
@@ -261,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
 
                     break;
                 case R.id.atNightModel:
-                    NightModeUtils.switchNightMode(mContext);//todo
+                    NightModeUtils.switchNightMode(mContext);//todo 有 bug 后期优化
                     break;
                 case R.id.about:
                     JumpUtils.jump(mContext, AboutActivity.class, null);
@@ -270,8 +272,6 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
             return false;
         });
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, dlMain, toolbar, 0, 0);
         dlMain.addDrawerListener(toggle);
         toggle.syncState();

@@ -61,6 +61,19 @@
             android:label="@string/aboutTitle"
             android:screenOrientation="portrait" />
 
+        <!-- 加载 web 网页 -->
+        <activity
+            android:name=".web.WebViewActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 搜索 -->
+        <activity
+            android:name=".search.SearchActivity"
+            android:screenOrientation="portrait" />
+
+
+
+
 
         <activity
             android:name="wanandroid.fy.com.status.StatusDemoActivity"

@@ -164,6 +164,10 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
         return mSelectedPositions;
     }
 
+    /**
+     * 设置 item 点击事件 监听
+     * @param itemClickListner
+     */
     public void setItemClickListner(OnItemClickListner itemClickListner) {
         this.itemClickListner = itemClickListner;
     }

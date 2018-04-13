@@ -6,9 +6,11 @@ import java.io.Serializable;
  * 热词 or 常用网站实体类
  * Created by fangs on 2018/4/11.
  */
-public class Bookmark implements Serializable{
+public class Bookmark implements Serializable {
 
-    /** item type */
+    /**
+     * item type
+     */
     private int itemType;
 
     /**

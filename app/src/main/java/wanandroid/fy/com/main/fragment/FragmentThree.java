@@ -1,12 +1,15 @@
 package wanandroid.fy.com.main.fragment;
 
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 
 import com.fy.baselibrary.base.BaseFragment;
 import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.utils.ConstantUtils;
+import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.T;
 import com.fy.baselibrary.widget.EasyPullLayout;
@@ -27,7 +30,9 @@ import io.reactivex.schedulers.Schedulers;
 import wanandroid.fy.com.R;
 import wanandroid.fy.com.api.ApiService;
 import wanandroid.fy.com.entity.Bookmark;
+import wanandroid.fy.com.search.SearchActivity;
 import wanandroid.fy.com.utils.sticky.StickyItemDecoration;
+import wanandroid.fy.com.web.WebViewActivity;
 
 /**
  * 书签
@@ -68,7 +73,17 @@ public class FragmentThree extends BaseFragment {
         rvAdapter = new AdapterThree(getContext(), new ArrayList<>());
         rvAdapter.setItemClickListner(view -> {
             Bookmark item = (Bookmark) view.getTag();
-            T.showLong(item.getName());
+
+            if (item.getItemType() == ConstantUtils.StickyType) return;
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Bookmark", item);
+
+            if (!TextUtils.isEmpty(item.getLink())) {//进入具体的 web网页
+                JumpUtils.jump(FragmentThree.this, WebViewActivity.class, bundle);
+            } else {// 进入搜索页
+                JumpUtils.jump(FragmentThree.this, SearchActivity.class, bundle);
+            }
         });
         rvBookmark.setAdapter(rvAdapter);
 
