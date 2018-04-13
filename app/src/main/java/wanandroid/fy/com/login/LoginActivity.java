@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 
 import com.fy.baselibrary.application.BaseApp;
 import com.fy.baselibrary.application.IBaseActivity;
@@ -39,6 +40,7 @@ import wanandroid.fy.com.api.ApiService;
 import wanandroid.fy.com.entity.LoginBean;
 import wanandroid.fy.com.main.MainActivity;
 import wanandroid.fy.com.status.StatusDemoActivity;
+import wanandroid.fy.com.utils.SelectUtils;
 
 /**
  * 登录
@@ -55,6 +57,9 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
     TextInputLayout iLayoutPass;
     @BindView(R.id.editPass)
     TextInputEditText editPass;
+
+    @BindView(R.id.btnLogin)
+    Button btnLogin;
 
     @Override
     public boolean isShowHeadView() {
@@ -80,6 +85,8 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
                 new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO});
 
         JumpUtils.jump(this, PermissionActivity.class, bundle, PermissionActivity.CALL_BACK_PERMISSION_REQUEST_CODE);
+
+        btnLogin.setBackground(SelectUtils.getTagSelector(R.drawable.shape_btn));
 
         editPass.addTextChangedListener(new TextWatcher() {
             @Override

@@ -40,14 +40,14 @@ public class SelectUtils {
     }
 
     /**
-     * 获取 指定 ID的 drawable，生成的 选择器
+     * 根据 指定 drawable的 ID ，生成 选择器
      * @param draId
      * @return
      */
     public static Drawable getTagSelector(@DrawableRes int draId){
         int[] colors = new int[]{
-                ResourceUtils.getColor(R.color.button_normal),
-                ResourceUtils.getColor(R.color.white)};
+                ResourceUtils.getColor(R.color.button_pressed),
+                ResourceUtils.getColor(R.color.button_normal)};
 
         int[][] states = new int[2][];
         states[0] = new int[]{android.R.attr.state_pressed};

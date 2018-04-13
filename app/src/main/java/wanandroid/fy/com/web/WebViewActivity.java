@@ -1,29 +1,31 @@
 package wanandroid.fy.com.web;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.fy.baselibrary.application.BaseActivityBean;
 import com.fy.baselibrary.application.IBaseActivity;
-import com.fy.baselibrary.base.ViewHolder;
-import com.fy.baselibrary.base.dialog.CommonDialog;
-import com.fy.baselibrary.base.dialog.DialogConvertListener;
-import com.fy.baselibrary.base.dialog.NiceDialog;
 import com.fy.baselibrary.statusbar.MdStatusBar;
+import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.utils.ResourceUtils;
 import com.fy.baselibrary.utils.T;
 
 import butterknife.BindView;
@@ -35,6 +37,11 @@ import wanandroid.fy.com.entity.Bookmark;
  * Created by fangs on 2018/4/13.
  */
 public class WebViewActivity extends AppCompatActivity implements IBaseActivity {
+    private static final String TAG = "WebViewActivity";
+
+    StatusLayoutManager slm;
+
+    String webUrl;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -62,28 +69,34 @@ public class WebViewActivity extends AppCompatActivity implements IBaseActivity 
     @SuppressLint("NewApi")
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
+        BaseActivityBean activityBean = (BaseActivityBean) getIntent()
+                .getSerializableExtra("ActivityBean");
+        slm = activityBean.getSlManager();
+
+
         Bookmark bookmark = (Bookmark) getIntent().getExtras().getSerializable("Bookmark");
 
         toolbar.setTitle(bookmark.getName());
 
-        initWeb(bookmark.getLink());
+        webUrl = bookmark.getLink();
+        initWeb();
     }
 
     @Override
-    public void onClick(View v) {}
+    public void onClick(View v) {
+    }
 
     @Override
     public void reTry() {
-
+        webView.loadUrl(webUrl);
     }
 
-    private void initWeb(String url) {
+    private void initWeb() {
 //        webView.loadUrl("file:///android_asset/test.html");//加载asset文件夹下html
-        webView.loadUrl(url);//加载url
-
-        //使用webview显示html代码
+//        使用webview显示html代码
 //        webView.loadDataWithBaseURL(null,"<html><head><title> 欢迎您 </title></head>" +
 //                "<body><h2>使用webview显示 html代码</h2></body></html>", "text/html" , "utf-8", null);
+        webView.loadUrl(webUrl);//加载url
 
         webView.addJavascriptInterface(this, "android");//添加js监听 这样html就能调用客户端
         webView.setWebChromeClient(webChromeClient);
@@ -111,22 +124,48 @@ public class WebViewActivity extends AppCompatActivity implements IBaseActivity 
     private WebViewClient webViewClient = new WebViewClient() {
         @Override
         public void onPageFinished(WebView view, String url) {//页面加载完成
-            progressBar.setVisibility(View.GONE);
+            if (null != progressBar)progressBar.setVisibility(View.GONE);
         }
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {//页面开始加载
-            progressBar.setVisibility(View.VISIBLE);
+            if (null != progressBar){
+                progressBar.setVisibility(View.VISIBLE);
+                slm.showContent();
+            }
         }
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            L.i("ansen", "拦截url:" + url);
+            L.i(TAG, "拦截url:" + url);
             if (url.equals("http://www.google.com/")) {
-                T.showLong("国内不能访问google,拦截该url");
-                return true;//表示我已经处理过了
+                T.showLong("国内不能访问google");
+                return true;
             }
-            return super.shouldOverrideUrlLoading(view, url);
+            return super.shouldOverrideUrlLoading(view, url);//表示我已经处理过了
+        }
+
+        @Override
+        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+            super.onReceivedError(view, errorCode, description, failingUrl);
+            // 断网或者网络连接超时
+            if (errorCode == ERROR_HOST_LOOKUP || errorCode == ERROR_CONNECT || errorCode == ERROR_TIMEOUT) {
+                view.loadUrl("about:blank"); // 避免出现默认的错误界面
+                slm.showNetWorkError();
+            }
+        }
+
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)// 这个方法在6.0才出现
+        @Override
+        public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
+            super.onReceivedHttpError(view, request, errorResponse);
+
+            int statusCode = errorResponse.getStatusCode();
+            L.i(TAG, "onReceivedHttpError:" + statusCode);
+            if (404 == statusCode || 500 == statusCode) {
+                view.loadUrl("about:blank");// 避免出现默认的错误界面
+                slm.showError();
+            }
         }
     };
 
@@ -135,23 +174,6 @@ public class WebViewActivity extends AppCompatActivity implements IBaseActivity 
         //不支持js的alert弹窗，需要自己监听然后通过dialog弹窗
         @Override
         public boolean onJsAlert(WebView webView, String url, String message, JsResult result) {
-            NiceDialog.init()
-                    .setLayoutId(R.layout.dialog_permission)
-                    .setDialogConvertListener(new DialogConvertListener() {
-                        @Override
-                        protected void convertView(ViewHolder holder, CommonDialog dialog) {
-                            holder.setText(R.id.tvPermissionTitle, ResourceUtils.getStr(R.string.dialog_title));
-                            holder.setText(R.id.tvPermissionDescribe, "js 调用 本地 弹窗");
-
-                            holder.setText(R.id.tvpermissionConfirm, ResourceUtils.getStr(R.string.ok));
-                            holder.setOnClickListener(R.id.tvpermissionConfirm, v -> dialog.dismiss(false));
-
-                            holder.setText(R.id.tvPermissionCancel, getString(R.string.cancel));
-                            holder.setOnClickListener(R.id.tvPermissionCancel, v -> dialog.dismiss(false));
-                        }
-                    }).show(getSupportFragmentManager());
-
-
             //注意:
             //必须要这一句代码:result.confirm()表示:
             //处理结果为确定状态同时唤醒WebCore线程
@@ -160,23 +182,28 @@ public class WebViewActivity extends AppCompatActivity implements IBaseActivity 
             return true;
         }
 
-        //获取网页标题
-        @Override
+        @Override//获取网页标题
         public void onReceivedTitle(WebView view, String title) {
             super.onReceivedTitle(view, title);
-            L.i("ansen", "网页标题:" + title);
+            L.i(TAG, "网页标题:" + title);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                if (title.contains("404") || title.contains("500") || title.contains("Error")) {
+                    view.loadUrl("about:blank");// 避免出现默认的错误界面
+                    slm.showError();
+                }
+            }
         }
 
         //加载进度回调
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
-            progressBar.setProgress(newProgress);
+            if (null != progressBar)progressBar.setProgress(newProgress);
         }
     };
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        L.i("ansen", "是否有上一个页面:" + webView.canGoBack());
+        L.i(TAG, "是否有上一个页面:" + webView.canGoBack());
         if (webView.canGoBack() && keyCode == KeyEvent.KEYCODE_BACK) {//点击返回按钮的时候判断有没有上一页
             webView.goBack(); // goBack()表示返回webView的上一页面
             return true;
@@ -193,7 +220,7 @@ public class WebViewActivity extends AppCompatActivity implements IBaseActivity 
      */
     @JavascriptInterface //仍然必不可少
     public void getClient(String str) {
-        L.i("ansen", "html调用客户端:" + str);
+        L.i(TAG, "html调用客户端:" + str);
     }
 
     @Override
@@ -201,6 +228,13 @@ public class WebViewActivity extends AppCompatActivity implements IBaseActivity 
         super.onDestroy();
 
         if (null != webView) {
+            webView.setWebViewClient(null);
+            webView.setWebChromeClient(null);
+            webView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
+            webView.clearHistory();
+
+            ((ViewGroup) webView.getParent()).removeView(webView);
+
             //释放资源
             webView.destroy();
             webView = null;

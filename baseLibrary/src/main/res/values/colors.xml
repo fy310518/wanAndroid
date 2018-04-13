@@ -27,14 +27,16 @@
 
 
     <!-- 状态栏颜色 -->
-    <color name="statusBar">#5b70d3</color>
-    <!-- 界面头部背景色 -->
-    <color name="appHeadBg">#5b70d3</color>
+    <color name="statusBar">#25b6ed</color>
+    <!-- 标题栏颜色 -->
+    <color name="appHeadBg">#25b6ed</color>
     <!-- 界面背景色 -->
-    <color name="BgColor">#5a69be</color>
+    <color name="BgColor">#eeeeee</color>
     <!-- 分割线颜色 -->
-    <color name="lineColor">#a3a3a3</color>
+    <color name="lineColor">#cccccc</color>
 
+    <!-- 标题栏内容颜色 -->
+    <color name="titleBarCon">#fefefe</color>
     <!-- 界面字体颜色 深色-->
     <color name="txtSuperColor">#333333</color>
     <!-- 界面字体颜色 浅色-->
@@ -42,24 +44,25 @@
     <!-- 界面字体颜色 超浅色-->
     <color name="txtLight">#999999</color>
     <!-- 界面字体颜色 高亮 -->
-    <color name="txtHighlight">#ffa4a3</color>
+    <color name="txtHighlight">#24b6ec</color>
 
     <!-- 界面提示字体颜色 输入正确 -->
-    <color name="colorTextCorrect">#00ff00</color>
+    <color name="colorTextCorrect">#24b6ec</color>
     <!-- 界面提示字体颜色 输入错误 -->
-    <color name="colorHintError">#FF0000</color>
+    <color name="colorHintError">#fe8382</color>
 
 
     <!-- 统一按钮背景色  -->
-    <color name="button_normal">#707070</color>
+    <color name="button_normal">#7fd5f6</color>
     <!-- 统一按钮点击效果色 -->
-    <color name="button_pressed">#fd69b7</color>
+    <color name="button_pressed">#41c0ef</color>
     <!-- 点击  背景变化 颜色 -->
     <color name="selection">#ffffff</color>
 
 
 
-
+    <!-- 下拉刷新 背景色 -->
+    <color name="transforTop">#333333</color>
 
     <!-- shape 描边颜色-->
     <color name="shape_stroke">#f1f1f1</color>

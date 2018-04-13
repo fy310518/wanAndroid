@@ -24,22 +24,22 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginRight="4dp"
-        app:srcCompat="@drawable/vector_arrow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/vGuideLine"
         app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/svg_arrow"
         tools:ignore="VectorDrawableCompat" />
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/imgTurn"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:visibility="gone"
         android:layout_marginRight="4dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/vGuideLine"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/vector_refresh"
+        app:srcCompat="@drawable/svg_refresh"
         tools:ignore="VectorDrawableCompat" />
 
     <TextView

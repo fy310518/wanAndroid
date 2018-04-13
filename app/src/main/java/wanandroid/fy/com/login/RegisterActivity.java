@@ -7,6 +7,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.fy.baselibrary.application.BaseApp;
 import com.fy.baselibrary.application.IBaseActivity;
@@ -31,6 +32,7 @@ import wanandroid.fy.com.api.ApiService;
 import wanandroid.fy.com.entity.LoginBean;
 import wanandroid.fy.com.main.MainActivity;
 import wanandroid.fy.com.status.StatusDemoActivity;
+import wanandroid.fy.com.utils.SelectUtils;
 
 /**
  * 注册
@@ -53,6 +55,9 @@ public class RegisterActivity extends AppCompatActivity implements IBaseActivity
     @BindView(R.id.editRegisterPass2)
     TextInputEditText editRegisterPass2;
 
+    @BindView(R.id.btnRegister)
+    Button btnRegister;
+
     @Override
     public boolean isShowHeadView() {
         return true;
@@ -71,7 +76,7 @@ public class RegisterActivity extends AppCompatActivity implements IBaseActivity
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         mContext = this;
-
+        btnRegister.setBackground(SelectUtils.getTagSelector(R.drawable.shape_btn));
     }
 
     @OnClick({R.id.btnRegister})

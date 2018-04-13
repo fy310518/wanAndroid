@@ -524,10 +524,10 @@ public class EasyPullLayout extends ViewGroup {
                 break;
             case TYPE_EDGE_TOP:
             case TYPE_EDGE_BOTTOM:
-                View contentView = getByType(childViews, TYPE_EDGE_TOP);
-                ChildViewAttr childViewAttr = childViews.get(contentView);
+                View topView = getByType(childViews, TYPE_EDGE_TOP);
+                ChildViewAttr childViewAttr = childViews.get(topView);
 
-                contentView.setY(childViewAttr.top + 150);
+                topView.setY(childViewAttr.top + 150);
                 onPullListenerAdapter.onTriggered(TYPE_EDGE_TOP);
                 break;
         }

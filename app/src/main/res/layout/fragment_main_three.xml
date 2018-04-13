@@ -4,10 +4,11 @@
     android:id="@+id/epl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:max_offset_bottom="150dp"
-    app:max_offset_top="150dp"
-    app:trigger_offset_bottom="75dp"
-    app:trigger_offset_top="75dp">
+    android:background="@color/transforTop"
+    app:max_offset_bottom="@dimen/max_offset"
+    app:max_offset_top="@dimen/max_offset"
+    app:trigger_offset_bottom="@dimen/refreshHeight"
+    app:trigger_offset_top="@dimen/refreshHeight">
 
     <com.fy.baselibrary.widget.TransformerView
         android:id="@+id/topView"
@@ -19,6 +20,7 @@
         android:id="@+id/rvBookmark"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/BgColor"
         app:layout_type="content" />
 
 </com.fy.baselibrary.widget.EasyPullLayout>

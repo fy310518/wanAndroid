@@ -63,7 +63,7 @@
         android:layout_marginTop="@dimen/spacing_medium"
         android:background="@drawable/shape_btn"
         android:text="@string/logingTitle"
-        android:textColor="@color/txtSecondColor"
+        android:textColor="@color/titleBarCon"
         android:textSize="@dimen/txt_small"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -76,7 +76,7 @@
         android:layout_marginTop="@dimen/spacing_medium_small"
         android:padding="@dimen/spacing_small"
         android:text="@string/registerTitle"
-        android:textColor="@color/white"
+        android:textColor="@color/txtHighlight"
         android:textSize="@dimen/txt_small"
         app:layout_constraintRight_toRightOf="@id/btnLogin"
         app:layout_constraintTop_toBottomOf="@id/btnLogin" />
