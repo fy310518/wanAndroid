@@ -11,6 +11,6 @@
         android:padding="@dimen/spacing_small"
         android:text=""
         android:textColor="@color/txtSecondColor"
-        android:textSize="@dimen/txt_small" />
+        android:textSize="@dimen/txt_medium" />
 
 </LinearLayout>

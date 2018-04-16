@@ -1,7 +1,10 @@
 package wanandroid.fy.com.utils;
 
+import android.annotation.SuppressLint;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
+import android.support.v4.graphics.drawable.DrawableCompat;
 
 import com.fy.baselibrary.utils.ResourceUtils;
 import com.fy.baselibrary.utils.TintUtils;
@@ -40,19 +43,24 @@ public class SelectUtils {
     }
 
     /**
-     * 根据 指定 drawable的 ID ，生成 选择器
+     * 根据 drawable ID ，生成 选择器 </br>
+     * normal：白色；
+     * pressed：灰色
      * @param draId
      * @return
      */
     public static Drawable getTagSelector(@DrawableRes int draId){
         int[] colors = new int[]{
-                ResourceUtils.getColor(R.color.button_pressed),
-                ResourceUtils.getColor(R.color.button_normal)};
+                ResourceUtils.getColor(R.color.button_pressed2),
+                ResourceUtils.getColor(R.color.button_normal2)};
 
         int[][] states = new int[2][];
         states[0] = new int[]{android.R.attr.state_pressed};
         states[1] = new int[]{};
 
-        return TintUtils.tintSelector(TintUtils.getDrawable(draId), colors, states);
+        Drawable drawable = TintUtils.getDrawable(draId);
+//        设置 着色器模式
+//        DrawableCompat.setTintMode(drawable, PorterDuff.Mode.MULTIPLY);
+        return TintUtils.tintSelector(drawable, colors, states);
     }
 }

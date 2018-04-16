@@ -10,7 +10,6 @@
     <color name="pink">#EF8994</color>
     <!-- UI设计原色之 橙色 -->
     <color name="orange">#f39b39</color>
-    <color name="button_press">#f3af5d</color>
     <!-- UI设计原色之 绿色 -->
     <color name="green">#93cc2f</color>
     <!-- UI设计原色之 浅蓝 -->
@@ -53,9 +52,13 @@
 
 
     <!-- 统一按钮背景色  -->
-    <color name="button_normal">#7fd5f6</color>
+    <color name="button_normal">#8a8a8a</color>
     <!-- 统一按钮点击效果色 -->
     <color name="button_pressed">#41c0ef</color>
+
+    <color name="button_normal2">#FFFAF0</color>
+    <color name="button_pressed2">#8a8a8a</color>
+
     <!-- 点击  背景变化 颜色 -->
     <color name="selection">#ffffff</color>
 

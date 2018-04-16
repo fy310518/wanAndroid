@@ -1,14 +1,17 @@
 package wanandroid.fy.com.main.fragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.widget.TextView;
 
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.rv.adapter.MultiCommonAdapter;
 import com.fy.baselibrary.rv.adapter.MultiTypeSupport;
 import com.fy.baselibrary.utils.ConstantUtils;
+import com.fy.baselibrary.utils.ResourceUtils;
 
 import java.util.List;
+import java.util.Random;
 
 import wanandroid.fy.com.R;
 import wanandroid.fy.com.entity.Bookmark;
@@ -42,6 +45,7 @@ public class AdapterThree extends MultiCommonAdapter<Bookmark> {
         } else {
             TextView te = holder.getView(R.id.tvTag);
             te.setText(bookmark.getName());
+            te.setTextColor(ResourceUtils.getRandomColor());
             te.setBackground(SelectUtils.getTagSelector(R.drawable.shape_tag));
         }
     }

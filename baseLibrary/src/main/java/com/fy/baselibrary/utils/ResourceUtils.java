@@ -1,11 +1,14 @@
 package com.fy.baselibrary.utils;
 
+import android.graphics.Color;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 
 import com.fy.baselibrary.application.BaseApp;
+
+import java.util.Random;
 
 /**
  * 通过 getResources() 获取资源
@@ -34,6 +37,19 @@ public class ResourceUtils {
      */
     public static int getColor(@ColorRes int colorId){
         return ContextCompat.getColor(BaseApp.getAppCtx(), colorId);
+    }
+
+    /**
+     * 生成随机颜色
+     * @return
+     */
+    public static int getRandomColor(){
+        Random random = new Random();
+        int r = random.nextInt(256);
+        int g = random.nextInt(256);
+        int b = random.nextInt(256);
+
+        return Color.rgb(r,g,b);
     }
 
     /**
