@@ -39,6 +39,9 @@
     <dimen name="shape_radius2">12dp</dimen>
     <dimen name="shape_radius3">20dp</dimen>
 
+    <!-- 统一 列表 空白间隔 -->
+    <dimen name="rv_divider_height">6dp</dimen>
+
     <!-- 自定义 列表刷新控件 高度 -->
     <dimen name="refreshHeight">75dp</dimen>
     <!-- 最大偏移 -->

@@ -9,7 +9,4 @@
         android:right="@dimen/spacing_small"
         android:top="@dimen/spacing_small"
         android:bottom="@dimen/spacing_small"/>
-
-    <stroke android:width="@dimen/shape_Stroke"
-        android:color="@color/colorHintError" />
 </shape>

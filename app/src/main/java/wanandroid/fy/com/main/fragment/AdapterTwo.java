@@ -1,7 +1,6 @@
 package wanandroid.fy.com.main.fragment;
 
 import android.content.Context;
-import android.widget.RelativeLayout;
 
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.rv.adapter.RvCommonAdapter;

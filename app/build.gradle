@@ -48,4 +48,6 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
     implementation project(':baseLibrary')
+
+    compile 'com.bigkoo:convenientbanner:2.0.5'
 }

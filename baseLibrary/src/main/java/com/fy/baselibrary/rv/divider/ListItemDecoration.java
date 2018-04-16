@@ -5,12 +5,14 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.DimenRes;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.fy.baselibrary.utils.DensityUtils;
+import com.fy.baselibrary.utils.ResourceUtils;
 
 /**
  * RecycleView LinearLayoutManager 样式分割线
@@ -41,11 +43,7 @@ public class ListItemDecoration extends RecyclerView.ItemDecoration {
         mDivider = a.getDrawable(0);
         a.recycle();
 
-        if (builder.mSpace == 0) {
-            builder.mSpace = mDivider.getIntrinsicHeight();
-        } else {
-            builder.mSpace = DensityUtils.dp2px(context, builder.mSpace);
-        }
+        if (builder.mSpace == 0) builder.mSpace = mDivider.getIntrinsicHeight();
     }
 
     @Override
@@ -143,8 +141,8 @@ public class ListItemDecoration extends RecyclerView.ItemDecoration {
             return this;
         }
 
-        public Builder setmSpace(int mSpace) {
-            this.mSpace = mSpace;
+        public Builder setmSpace(@DimenRes int dimenId) {
+            this.mSpace = (int) ResourceUtils.getDimen(dimenId);
             return this;
         }
 

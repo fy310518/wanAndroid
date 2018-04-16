@@ -1,5 +1,7 @@
 package wanandroid.fy.com.main.fragment;
 
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
@@ -12,13 +14,20 @@ import com.fy.baselibrary.base.dialog.NiceDialog;
 import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
+import com.fy.baselibrary.rv.divider.ListItemDecoration;
 import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.T;
+import com.fy.baselibrary.widget.EasyPullLayout;
+import com.fy.baselibrary.widget.TransformerView;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import wanandroid.fy.com.R;
 import wanandroid.fy.com.api.ApiService;
 import wanandroid.fy.com.entity.HomeBean;
+import wanandroid.fy.com.entity.TreeBean;
 
 /**
  * 首页
@@ -26,8 +35,12 @@ import wanandroid.fy.com.entity.HomeBean;
  */
 public class FragmentOne extends BaseFragment {
 
-    @BindView(R.id.tvImgPicker)
-    TextView tvImgPicker;
+    @BindView(R.id.epl)
+    EasyPullLayout epl;
+    @BindView(R.id.topView)
+    TransformerView topView;
+    @BindView(R.id.rvArticle)
+    RecyclerView rvArticle;
 
     @Override
     protected int setContentLayout() {
@@ -36,35 +49,49 @@ public class FragmentOne extends BaseFragment {
 
     @Override
     protected void baseInit() {
-        getHomeList(0);
+        initRv();
+        epl.start(EasyPullLayout.TYPE_EDGE_TOP);
     }
 
+    private void initRv(){
 
-    @OnClick({R.id.tvImgPicker})
-    @Override
-    public void onClick(View view) {
-        super.onClick(view);
+        rvArticle.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvArticle.addItemDecoration(new ListItemDecoration.Builder()
+                .setmSpace(R.dimen.rv_divider_height)
+                .setDraw(false)
+                .create(getActivity()));
 
-        switch (view.getId()){
-            case R.id.tvImgPicker:
-                NiceDialog.init()
-                        .setLayoutId(R.layout.demo_popup)
-                        .setDialogConvertListener(new DialogConvertListener() {
-                            @Override
-                            protected void convertView(ViewHolder holder, CommonDialog dialog) {
-                                holder.setText(R.id.pop_financial, "大王叫我来巡山");
-                            }
-                        })
-                        .setGravity(Gravity.BOTTOM)
-                        .setAnim(R.style.AnimUp)
-                        .setHide(true)
-                        .setDimAmount(0.7f)
-                        .show(getFragmentManager());
-                break;
-        }
+//        rvArticle.setAdapter(adapterTwo);
+
+        epl.addOnPullListenerAdapter(new EasyPullLayout.OnPullListenerAdapter() {
+            @Override
+            public void onPull(int type, float fraction, boolean changed) {
+                if (!changed) return;
+
+                if (type == EasyPullLayout.TYPE_EDGE_TOP) {
+                    if (fraction == 1f) topView.ready();
+                    else topView.idle();
+                }
+            }
+
+            @Override
+            public void onTriggered(int type) {
+                if (type == EasyPullLayout.TYPE_EDGE_TOP) {
+                    topView.triggered(getContext());
+//                    getArticleList();
+                }
+            }
+
+            @Override
+            public void onRollBack(int rollBackType) {
+                if (rollBackType == EasyPullLayout.ROLL_BACK_TYPE_TOP) {
+                    topView.idle();
+                }
+            }
+        });
     }
 
-    private void getHomeList(int pageNum){
+    private void getArticleList(int pageNum){
         RequestUtils.create(ApiService.class)
                 .getHomeList(pageNum)
                 .compose(RxHelper.handleResult())

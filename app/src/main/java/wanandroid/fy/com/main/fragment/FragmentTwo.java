@@ -10,6 +10,7 @@ import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.rv.adapter.OnItemClickListner;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
+import com.fy.baselibrary.utils.ResourceUtils;
 import com.fy.baselibrary.utils.T;
 import com.fy.baselibrary.widget.EasyPullLayout;
 import com.fy.baselibrary.widget.TransformerView;
@@ -49,17 +50,14 @@ public class FragmentTwo extends BaseFragment {
 
     private void initRv(){
         adapterTwo = new AdapterTwo(getContext(), new ArrayList<>());
-        adapterTwo.setItemClickListner(new OnItemClickListner() {
-            @Override
-            public void onItemClick(View view) {
-                TreeBean bean = (TreeBean) view.getTag();
-                T.showLong(bean.getName());
-            }
+        adapterTwo.setItemClickListner(view -> {
+            TreeBean bean = (TreeBean) view.getTag();
+            T.showLong(bean.getName());
         });
 
         rvKnowledge.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvKnowledge.addItemDecoration(new ListItemDecoration.Builder()
-                .setmSpace(6)
+                .setmSpace(R.dimen.rv_divider_height)
                 .setDraw(false)
                 .create(getActivity()));
 
