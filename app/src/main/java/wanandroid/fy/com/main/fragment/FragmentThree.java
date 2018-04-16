@@ -57,8 +57,7 @@ public class FragmentThree extends BaseFragment {
     protected void baseInit() {
         initRv();
 
-        epl.setCurrentType(EasyPullLayout.TYPE_EDGE_TOP);
-        epl.start();
+        epl.start(EasyPullLayout.TYPE_EDGE_TOP);
     }
 
     private void initRv() {

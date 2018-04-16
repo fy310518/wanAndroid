@@ -5,7 +5,7 @@
     android:viewportWidth="1024.0">
 
     <path
-        android:fillColor="@color/button_normal"
+        android:fillColor="#8a8a8a"
         android:pathData="M64,192v640c0,70.7 57.3,128 128,128L192,64c-70.7,0 -128,57.3 -128,128zM832,64v255.1L703.8,192 576,320L576,64L256,64v896h576c70.7,0 128,-57.3 128,-128L960,192c0,-70.7 -57.3,-128 -128,-128zM832,704L384,704v-64h448v64zM832,512L384,512v-64h448v64z" />
 
 </vector>

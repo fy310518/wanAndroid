@@ -76,7 +76,7 @@ public class RegisterActivity extends AppCompatActivity implements IBaseActivity
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         mContext = this;
-        btnRegister.setBackground(SelectUtils.getTagSelector(R.drawable.shape_btn));
+        btnRegister.setBackground(SelectUtils.getBtnSelector(R.drawable.shape_btn));
     }
 
     @OnClick({R.id.btnRegister})

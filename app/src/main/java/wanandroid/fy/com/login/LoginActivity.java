@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
 
         JumpUtils.jump(this, PermissionActivity.class, bundle, PermissionActivity.CALL_BACK_PERMISSION_REQUEST_CODE);
 
-        btnLogin.setBackground(SelectUtils.getTagSelector(R.drawable.shape_btn));
+        btnLogin.setBackground(SelectUtils.getBtnSelector(R.drawable.shape_btn));
 
         editPass.addTextChangedListener(new TextWatcher() {
             @Override

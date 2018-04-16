@@ -3,6 +3,10 @@
 
     <string name="idle">下拉有惊喜!!!</string>
     <string name="ready">松开刷新!!!</string>
+
+    <!-- 适配字符串 后面有一个汉字宽度的空格 -->
+    <string name="space">%1$s&#160;&#160;&#8201;</string>
+
     <string name="data_loading">正在加载&#8230;</string>
     <string name="loadProgress">%1$d%%\n正在加载&#8230;</string>
 

@@ -506,24 +506,18 @@ public class EasyPullLayout extends ViewGroup {
     }
 
     /**
-     * 设置 currentType （横向拉伸 or 纵向拉伸）
-     * @param currentType
-     */
-    public void setCurrentType(int currentType) {
-        this.currentType = currentType;
-    }
-
-    /**
      * 定义 启动动画
+     * 设置 currentType （横向拉伸 or 纵向拉伸）
      */
-    public void start(){
+    public void start(int currentType){
+        this.currentType = currentType;
         switch (currentType) {
             case TYPE_EDGE_LEFT:
             case TYPE_EDGE_RIGHT:
 
                 break;
-            case TYPE_EDGE_TOP:
             case TYPE_EDGE_BOTTOM:
+            case TYPE_EDGE_TOP://一般只需要下拉 动画
                 View topView = getByType(childViews, TYPE_EDGE_TOP);
                 ChildViewAttr childViewAttr = childViews.get(topView);
 

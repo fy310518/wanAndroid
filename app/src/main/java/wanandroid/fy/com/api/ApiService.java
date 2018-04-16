@@ -20,6 +20,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.QueryMap;
+import wanandroid.fy.com.entity.TreeBean;
 
 /**
  * 通用的 api接口 </p>
@@ -79,6 +80,15 @@ public interface ApiService {
     @Headers({"url_name:user"})
     @GET("friend/json")
     Observable<BeanModule<List<Bookmark>>> getFriendList();
+
+
+    /**
+     * 体系数据
+     * @return
+     */
+    @Headers({"url_name:user"})
+    @GET("tree/json")
+    Observable<BeanModule<List<TreeBean>>> getTreeList();
 
 
 
