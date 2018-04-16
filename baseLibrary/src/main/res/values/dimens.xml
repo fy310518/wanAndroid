@@ -47,4 +47,5 @@
     <!-- 最大偏移 -->
     <dimen name="max_offset">120dp</dimen>
 
+    <dimen name="rvImg">65dp</dimen>
 </resources>

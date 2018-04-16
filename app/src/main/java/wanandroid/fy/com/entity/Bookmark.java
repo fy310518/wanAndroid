@@ -34,6 +34,11 @@ public class Bookmark implements Serializable {
         this.itemType = itemType;
     }
 
+    public Bookmark(String name, String link) {
+        this.name = name;
+        this.link = link;
+    }
+
     public int getItemType() {
         return itemType;
     }

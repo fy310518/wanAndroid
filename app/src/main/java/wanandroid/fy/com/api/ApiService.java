@@ -7,7 +7,7 @@ import java.util.Map;
 
 import retrofit2.http.Path;
 import wanandroid.fy.com.entity.Bookmark;
-import wanandroid.fy.com.entity.HomeBean;
+import wanandroid.fy.com.entity.ArticleBean;
 import wanandroid.fy.com.entity.LoginBean;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
@@ -19,7 +19,6 @@ import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-import retrofit2.http.QueryMap;
 import wanandroid.fy.com.entity.TreeBean;
 
 /**
@@ -65,7 +64,7 @@ public interface ApiService {
      */
     @Headers({"url_name:user"})
     @GET("article/list/{id}/json")
-    Observable<BeanModule<HomeBean>> getHomeList(@Path("id") int pageNum);
+    Observable<BeanModule<List<ArticleBean>>> getArticleList(@Path("id") int pageNum);
 
     /**
      * 搜索热词

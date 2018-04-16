@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_select_square"
+    android:paddingBottom="@dimen/spacing_small"
+    android:paddingLeft="@dimen/spacing_medium_small"
+    android:paddingRight="@dimen/spacing_medium_small"
+    android:paddingTop="@dimen/spacing_small">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/imgHead"
+        android:layout_width="@dimen/rvImg"
+        android:layout_height="@dimen/rvImg"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/tvUserName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/spacing_small"
+        android:paddingRight="@dimen/spacing_small"
+        android:singleLine="true"
+        android:text="aa"
+        android:textColor="@color/txtSecondColor"
+        android:textSize="@dimen/txt_small"
+        app:layout_constraintBottom_toBottomOf="@id/imgHead"
+        app:layout_constraintLeft_toRightOf="@id/imgHead"
+        app:layout_constraintRight_toLeftOf="@+id/tvPublishTime"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvPublishTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/spacing_small"
+        android:singleLine="true"
+        android:text="sssss"
+        android:textColor="@color/txtSecondColor"
+        android:textSize="@dimen/txt_small"
+        app:layout_constraintBottom_toBottomOf="@id/imgHead"
+        app:layout_constraintLeft_toRightOf="@id/tvUserName"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tvPublishTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/spacing_small"
+        android:paddingTop="@dimen/spacing_small"
+        android:text="sssss"
+        android:textColor="@color/txtSuperColor"
+        android:textSize="@dimen/txt_medium"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgHead" />
+
+
+    <TextView
+        android:id="@+id/tvPublishType"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:paddingRight="@dimen/spacing_small"
+        android:text=""
+        android:textColor="@color/txtHighlight"
+        android:textSize="@dimen/txt_small"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/imgCollect"
+        app:layout_constraintTop_toBottomOf="@+id/tvPublishTitle" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/imgCollect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPublishTitle"
+        app:layout_constraintLeft_toRightOf="@id/tvPublishType"
+        app:srcCompat="@drawable/svg_collect" />
+
+</android.support.constraint.ConstraintLayout>

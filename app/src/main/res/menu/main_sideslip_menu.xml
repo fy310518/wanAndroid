@@ -6,7 +6,7 @@
         <menu>
             <item
                 android:id="@+id/myLike"
-                android:icon="@drawable/svg_like"
+                android:icon="@drawable/svg_collect"
                 android:title="我的收藏" />
 
             <item
