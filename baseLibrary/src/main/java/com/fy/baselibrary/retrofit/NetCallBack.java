@@ -59,13 +59,7 @@ public abstract class NetCallBack<V> implements Observer<V> {
     @Override
     public void onNext(V t) {
         L.e("net", "onNext()");
-
-        updataLayout(StatusLayoutManager.LAYOUT_CONTENT_ID);
-        if (null != t) {
-            onSuccess(t);
-        } else {
-            actionResponseError("请求失败");
-        }
+        onSuccess(t);
     }
 
     @Override
@@ -110,6 +104,7 @@ public abstract class NetCallBack<V> implements Observer<V> {
     @Override
     public void onComplete() {
         L.e("net", "onComplete()");
+        updataLayout(StatusLayoutManager.LAYOUT_CONTENT_ID);
         dismissProgress();
     }
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import retrofit2.http.Path;
+import wanandroid.fy.com.entity.BannerBean;
 import wanandroid.fy.com.entity.Bookmark;
 import wanandroid.fy.com.entity.ArticleBean;
 import wanandroid.fy.com.entity.LoginBean;
@@ -64,7 +65,14 @@ public interface ApiService {
      */
     @Headers({"url_name:user"})
     @GET("article/list/{id}/json")
-    Observable<BeanModule<List<ArticleBean>>> getArticleList(@Path("id") int pageNum);
+    Observable<BeanModule<ArticleBean>> getArticleList(@Path("id") int pageNum);
+
+    /**
+     * 首页 banner
+     */
+    @Headers({"url_name:user"})
+    @GET("banner/json")
+    Observable<BeanModule<List<BannerBean>>> getBannerList();
 
     /**
      * 搜索热词

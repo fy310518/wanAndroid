@@ -77,6 +77,10 @@ public class TransformerView extends LinearLayout{
                 .start();
     }
 
+    /**
+     * 下拉刷新 动画
+     * @param context
+     */
     public void triggered(Context context){
         tvLoadTip.setText(R.string.data_loading);
         imgArrow.setVisibility(GONE);

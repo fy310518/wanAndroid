@@ -49,7 +49,6 @@ public class HeaderAndFooterWrapper extends RecyclerView.Adapter<RecyclerView.Vi
         if (null != mHeaderViews.get(viewType)) {
             ViewHolder holder = ViewHolder.createViewHolder(parent.getContext(), mHeaderViews.get(viewType));
             return holder;
-
         } else if (mFootViews.get(viewType) != null) {
             ViewHolder holder = ViewHolder.createViewHolder(parent.getContext(), mFootViews.get(viewType));
             return holder;
@@ -79,8 +78,9 @@ public class HeaderAndFooterWrapper extends RecyclerView.Adapter<RecyclerView.Vi
                 } else if (mFootViews.get(viewType) != null) {
                     return layoutManager.getSpanCount();
                 }
-                if (oldLookup != null)
-                    return oldLookup.getSpanSize(position);
+
+                if (oldLookup != null) return oldLookup.getSpanSize(position);
+
                 return 1;
             }
         });
@@ -120,6 +120,16 @@ public class HeaderAndFooterWrapper extends RecyclerView.Adapter<RecyclerView.Vi
      */
     public void addFootView(View view) {
         mFootViews.put(mFootViews.size() + TYPE_FOOTER, view);
+    }
+
+    /** 清理头部布局 */
+    public void cleanHeader(){
+        mHeaderViews.clear();
+    }
+
+    /** 清理 底部布局 */
+    public void cleanFoot(){
+        mFootViews.clear();
     }
 
     public int getHeadersCount() {
