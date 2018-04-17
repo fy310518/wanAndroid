@@ -14,6 +14,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -40,6 +41,7 @@ import wanandroid.fy.com.login.LoginActivity;
 import wanandroid.fy.com.main.fragment.FragmentOne;
 import wanandroid.fy.com.main.fragment.FragmentThree;
 import wanandroid.fy.com.main.fragment.FragmentTwo;
+import wanandroid.fy.com.utils.NightModeConfig;
 import wanandroid.fy.com.utils.SelectUtils;
 
 /**
@@ -120,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
 
     /**
      * 解决 activity 启动模式为 singleTask时，intent传值 接收不到问题
+     *
      * @param intent
      */
     @Override
@@ -138,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
 
     /**
      * activity fragment 横竖屏切换监听回调方法
+     *
      * @param newConfig
      */
     @Override
@@ -220,10 +224,10 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btnLoginOrExit://登录 or 退出登录
                 boolean isLogin = SpfUtils.getSpfSaveBoolean(ConstantUtils.isLogin);
-                if (isLogin){
+                if (isLogin) {
                     tvUserName.setText(R.string.notLogin);
                     btnLoginOrExit.setText(R.string.clickLogin);
 
@@ -238,7 +242,8 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
     }
 
     @Override
-    public void reTry() {}
+    public void reTry() {
+    }
 
     @Override
     public void onBackPressed() {
@@ -254,8 +259,8 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
         }
     }
 
-//    初始化导航视图
-    private void initNav(){
+    //    初始化导航视图
+    private void initNav() {
         navView.setNavigationItemSelectedListener(item -> {
             dlMain.closeDrawer(GravityCompat.START);
             switch (item.getItemId()) {
@@ -263,7 +268,18 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
 
                     break;
                 case R.id.atNightModel:
-                    NightModeUtils.switchNightMode(mContext);//todo 有 bug 后期优化
+                    int currentMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                    if (currentMode != Configuration.UI_MODE_NIGHT_YES) {
+                        //保存夜间模式状态,Application中可以根据这个值判断是否设置夜间模式
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                        //ThemeConfig主题配置，这里只是保存了是否是夜间模式的boolean值
+                        NightModeConfig.getInstance().setNightMode(getApplicationContext(), true);
+                    } else {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                        NightModeConfig.getInstance().setNightMode(getApplicationContext(), false);
+                    }
+                    recreate();
+//                    NightModeUtils.switchNightMode(mContext);//todo 有 bug 后期优化
                     break;
                 case R.id.about:
                     JumpUtils.jump(mContext, AboutActivity.class, null);
