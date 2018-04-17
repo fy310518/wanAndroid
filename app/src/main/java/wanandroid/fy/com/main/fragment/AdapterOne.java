@@ -4,12 +4,16 @@ import android.content.Context;
 import android.view.View;
 
 import com.fy.baselibrary.base.ViewHolder;
+import com.fy.baselibrary.retrofit.NetCallBack;
+import com.fy.baselibrary.retrofit.RequestUtils;
+import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.rv.adapter.RvCommonAdapter;
 import com.fy.baselibrary.utils.T;
 
 import java.util.List;
 
 import wanandroid.fy.com.R;
+import wanandroid.fy.com.api.ApiService;
 import wanandroid.fy.com.entity.ArticleBean;
 
 /**
@@ -29,6 +33,26 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
         holder.setText(R.id.tvPublishTitle, article.getTitle());
         holder.setText(R.id.tvPublishType, article.getChapterName());
 
-        holder.setOnClickListener(R.id.imgCollect, view -> T.showLong("收藏此文章..."));
+        holder.setOnClickListener(R.id.imgCollect, view ->
+                collectArticle(article.getChapterId())
+        );
+    }
+
+    private void collectArticle(int articleId){
+        RequestUtils.create(ApiService.class)
+                .collectArticle(articleId)
+                .compose(RxHelper.handleResult())
+                .doOnSubscribe(RequestUtils::addDispos)
+                .subscribe(new NetCallBack<ArticleBean>() {
+                    @Override
+                    protected void onSuccess(ArticleBean t) {
+
+                    }
+
+                    @Override
+                    protected void updataLayout(int flag) {
+
+                    }
+                });
     }
 }

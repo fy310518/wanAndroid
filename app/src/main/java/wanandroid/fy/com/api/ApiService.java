@@ -100,4 +100,14 @@ public interface ApiService {
 
 
 
+
+
+    /**
+     * 收藏站内文章
+     */
+    @Headers({"url_name:user"})
+    @POST("lg/collect/{id}/json")
+    Observable<BeanModule<ArticleBean>> collectArticle(@Path("id") int articleId);
+
+
 }

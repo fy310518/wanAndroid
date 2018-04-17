@@ -3,6 +3,7 @@ package wanandroid.fy.com.main.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
@@ -47,7 +48,8 @@ public class FragmentOne extends BaseFragment {
     @BindView(R.id.rvArticle)
     RecyclerView rvArticle;
     HeaderAndFooterWrapper adapter;
-    ConvenientBanner bannerView;
+    ConvenientBanner<BannerBean> bannerView;
+    List<BannerBean> bannerBeans;
     AdapterOne rvAdapter;
     /** 当前显示的页码(从 0 开始) */
     int pageNum;
@@ -124,7 +126,6 @@ public class FragmentOne extends BaseFragment {
                 .compose(RxHelper.handleResult())
                 .observeOn(Schedulers.io());
 
-
         Observable.zip(observable1, observable2, new BiFunction<List<BannerBean>, ArticleBean, Map<String, Object>>() {
             @Override
             public Map<String, Object> apply(List<BannerBean> bannerBeans, ArticleBean articleBean) throws Exception {
@@ -141,9 +142,10 @@ public class FragmentOne extends BaseFragment {
                     if (pageNum == 0) {
                         adapter.cleanHeader();
 
-                        List<BannerBean> bannerBeans = (List<BannerBean>) map.get("banner");
-                        if (null != bannerBeans && bannerBeans.size() > 0){
-                            setBanner(bannerBeans);
+                        List<BannerBean> bannerdata = (List<BannerBean>) map.get("banner");
+                        if (null != bannerdata && bannerdata.size() > 0){
+                            bannerBeans = bannerdata;
+                            setBanner();
                             adapter.addHeaderView(bannerView);
                         }
 
@@ -163,8 +165,8 @@ public class FragmentOne extends BaseFragment {
             });
     }
 
-    private void setBanner(List<BannerBean> bannerBeans){
-        bannerView = new ConvenientBanner(getContext());
+    private void setBanner(){
+        bannerView = new ConvenientBanner<>(getContext());
         RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, 350);
         bannerView.setLayoutParams(params);
 
@@ -182,7 +184,11 @@ public class FragmentOne extends BaseFragment {
                 .setOnItemClickListener(new OnItemClickListener() {
                     @Override
                     public void onItemClick(int position) {
+                        BannerBean bannerBean = bannerBeans.get(position);
 
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("Bookmark", new Bookmark(bannerBean.getTitle(), bannerBean.getUrl()));
+                        JumpUtils.jump(FragmentOne.this, WebViewActivity.class, bundle);
                     }
                 })
                 //设置手动影响（设置了该项无法手动切换）

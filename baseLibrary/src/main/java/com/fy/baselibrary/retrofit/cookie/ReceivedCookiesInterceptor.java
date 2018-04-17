@@ -1,8 +1,5 @@
 package com.fy.baselibrary.retrofit.cookie;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.SpfUtils;
 
