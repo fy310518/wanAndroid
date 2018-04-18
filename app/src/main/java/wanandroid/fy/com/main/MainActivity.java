@@ -9,12 +9,10 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -41,7 +39,6 @@ import wanandroid.fy.com.login.LoginActivity;
 import wanandroid.fy.com.main.fragment.FragmentOne;
 import wanandroid.fy.com.main.fragment.FragmentThree;
 import wanandroid.fy.com.main.fragment.FragmentTwo;
-import wanandroid.fy.com.utils.NightModeConfig;
 import wanandroid.fy.com.utils.SelectUtils;
 
 /**
@@ -268,18 +265,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
 
                     break;
                 case R.id.atNightModel:
-                    int currentMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-                    if (currentMode != Configuration.UI_MODE_NIGHT_YES) {
-                        //保存夜间模式状态,Application中可以根据这个值判断是否设置夜间模式
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                        //ThemeConfig主题配置，这里只是保存了是否是夜间模式的boolean值
-                        NightModeConfig.getInstance().setNightMode(getApplicationContext(), true);
-                    } else {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                        NightModeConfig.getInstance().setNightMode(getApplicationContext(), false);
-                    }
-                    recreate();
-//                    NightModeUtils.switchNightMode(mContext);//todo 有 bug 后期优化
+                    NightModeUtils.switchNightMode(mContext);//todo 有 bug 后期优化
                     break;
                 case R.id.about:
                     JumpUtils.jump(mContext, AboutActivity.class, null);

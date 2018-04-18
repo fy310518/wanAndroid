@@ -1,51 +1,51 @@
 -- Merging decision tree log ---
 manifest
-ADDED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:1:1-15:12
-INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:1:1-15:12
-INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:1:1-15:12
-INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:1:1-15:12
-INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:1:1-15:12
-INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:1:1-15:12
-INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:1:1-15:12
+ADDED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:1:1-15:12
+INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:1:1-15:12
+INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:1:1-15:12
+INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:1:1-15:12
+INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:1:1-15:12
+INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:1:1-15:12
+INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:1:1-15:12
 	package
-		ADDED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:2:5-33
-		INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
-		INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
+		ADDED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:2:5-33
+		INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
+		INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
 	android:versionName
-		INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
-		ADDED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:1:1-15:12
-		INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
+		INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
+		ADDED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:1:1-15:12
+		INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
 	android:versionCode
-		INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
-		ADDED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:1:1-15:12
-		INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
+		INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
+		ADDED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:1:1-15:12
+		INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
 	xmlns:android
-		ADDED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:1:11-69
+		ADDED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:1:11-69
 application
-ADDED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:4:5-14:19
+ADDED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:4:5-14:19
 	android:supportsRtl
-		ADDED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:7:9-35
+		ADDED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:7:9-35
 	android:label
-		ADDED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:6:9-41
+		ADDED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:6:9-41
 	android:allowBackup
-		ADDED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:5:9-35
+		ADDED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:5:9-35
 activity#com.fy.baselibrary.permission.PermissionActivity
-ADDED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:10:9-12:52
+ADDED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:10:9-12:52
 	android:theme
-		ADDED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:12:13-49
+		ADDED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:12:13-49
 	android:name
-		ADDED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:11:13-58
+		ADDED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml:11:13-58
 uses-sdk
-INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
-INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
-INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
-INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
+INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
+INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
+INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
+INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
-		ADDED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
-		INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
+		INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
+		ADDED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
+		INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
-		ADDED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
-		INJECTED from E:\yidong\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
+		INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
+		ADDED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
+		INJECTED from D:\Android\WorkSpase\wanAndroid\baseLibrary\src\main\AndroidManifest.xml
