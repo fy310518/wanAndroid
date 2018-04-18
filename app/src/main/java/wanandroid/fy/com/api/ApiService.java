@@ -108,5 +108,14 @@ public interface ApiService {
     Observable<BeanModule<Object>> collectArticle(@Path("id") int articleId,
                                                   @Field("reason") String reason);
 
+    /**
+     * 站内文章  取消收藏 (文章列表)
+     */
+    @FormUrlEncoded
+    @Headers({"url_name:user"})
+    @POST("lg/uncollect_originId/{id}/json")
+    Observable<BeanModule<Object>> uncollectArticle(@Path("id") int articleId,
+                                                    @Field("reason") String reason);
+
 
 }

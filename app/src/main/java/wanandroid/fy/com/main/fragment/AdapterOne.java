@@ -1,6 +1,7 @@
 package wanandroid.fy.com.main.fragment;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatImageView;
 
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.retrofit.NetCallBack;
@@ -8,6 +9,7 @@ import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.rv.adapter.RvCommonAdapter;
 import com.fy.baselibrary.utils.T;
+import com.fy.baselibrary.utils.TintUtils;
 
 import java.util.List;
 
@@ -32,20 +34,58 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
         holder.setText(R.id.tvPublishTitle, article.getTitle());
         holder.setText(R.id.tvPublishType, article.getChapterName());
 
-        holder.setOnClickListener(R.id.imgCollect, view ->
-                collectArticle(article.getChapterId())
+        AppCompatImageView imgCollect = holder.getView(R.id.imgCollect);
+        if (article.isCollect()) {//已收藏
+            imgCollect.setImageDrawable(TintUtils.getTintDrawable(R.drawable.svg_collect, R.color.txtHighlight));
+        } else {
+            imgCollect.setImageResource(R.drawable.svg_collect);
+        }
+
+        imgCollect.setOnClickListener(view -> {
+                    if (article.isCollect()) {//已收藏 则 点击取消
+                        uncollectArticle(article, position);
+                    } else {
+                        collectArticle(article, position);
+                    }
+                }
         );
     }
 
-    private void collectArticle(int articleId){
+//    收藏
+    private void collectArticle(ArticleBean.DatasBean article, int position){
         RequestUtils.create(ApiService.class)
-                .collectArticle(articleId, "")
+                .collectArticle(article.getId(), "")
                 .compose(RxHelper.handleResult())
                 .doOnSubscribe(RequestUtils::addDispos)
                 .subscribe(new NetCallBack<Object>() {
                     @Override
                     protected void onSuccess(Object collect) {
                         T.showLong("收藏成功");
+                        article.setCollect(true);
+
+                        notifyItemChanged(position);
+                    }
+
+                    @Override
+                    protected void updataLayout(int flag) {
+
+                    }
+                });
+    }
+
+//    取消收藏
+    private void uncollectArticle(ArticleBean.DatasBean article, int position){
+        RequestUtils.create(ApiService.class)
+                .uncollectArticle(article.getId(), "")
+                .compose(RxHelper.handleResult())
+                .doOnSubscribe(RequestUtils::addDispos)
+                .subscribe(new NetCallBack<Object>() {
+                    @Override
+                    protected void onSuccess(Object collect) {
+                        T.showLong("取消收藏成功");
+                        article.setCollect(false);
+
+                        notifyItemChanged(position);
                     }
 
                     @Override
