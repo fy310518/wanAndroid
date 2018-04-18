@@ -103,7 +103,7 @@ public class RequestModule {
                 Request request = chain.request()
                         .newBuilder()
                         .addHeader("Content-Type", "multipart/form-data;charse=UTF-8")
-                        .addHeader("Accept-Encoding", "gzip, deflate")//根据服务器要求添加（避免重复压缩乱码）
+//                        .addHeader("Accept-Encoding", "gzip, deflate")//根据服务器要求添加（避免重复压缩乱码）
                         .addHeader("Connection", "keep-alive")
                         .addHeader("Accept", "application/json")
                         .addHeader("Cookie", "add cookies here")

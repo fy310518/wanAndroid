@@ -63,6 +63,8 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
                         T.showLong("收藏成功");
                         article.setCollect(true);
 
+//                        removeData(position);
+//                        addData(position, article);
                         notifyItemChanged(position);
                     }
 
@@ -85,6 +87,8 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
                         T.showLong("取消收藏成功");
                         article.setCollect(false);
 
+//                        removeData(position);
+//                        addData(position, article);
                         notifyItemChanged(position);
                     }
 
