@@ -13,7 +13,7 @@ import okhttp3.Response;
 
 /**
  * 实现拦截器接口,将本地的 cookie追加到 http 请求头中
- * Created by Administrator on 2018/3/30.
+ * Created by fangs on 2018/3/30.
  */
 public class AddCookiesInterceptor implements Interceptor {
 
@@ -23,10 +23,12 @@ public class AddCookiesInterceptor implements Interceptor {
 
         final Request.Builder builder = chain.request().newBuilder();
 
-        Observable.just(SpfUtils.getSpfSaveStr("cookie"))
+        String[] cookieArray = SpfUtils.getSpfSaveStr("cookie").split(";");
+
+        Observable.fromArray(cookieArray)
                 .subscribe(cookie -> {
                     //添加cookie
-                    L.d("http", "AddCookiesInterceptor"+cookie);
+                    L.d("http", "AddCookiesInterceptor" + cookie);
                     builder.addHeader("cookie", cookie);
                 });
 

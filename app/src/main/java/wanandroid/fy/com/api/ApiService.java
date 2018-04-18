@@ -5,6 +5,7 @@ import com.fy.baselibrary.retrofit.BeanModule;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.http.Field;
 import retrofit2.http.Path;
 import wanandroid.fy.com.entity.BannerBean;
 import wanandroid.fy.com.entity.Bookmark;
@@ -41,7 +42,6 @@ public interface ApiService {
     Observable<BeanModule<String>> uploadPostFile(@Part("token") RequestBody token,
                                                   @Part("type") RequestBody type,
                                                   @Part List<MultipartBody.Part> files);
-
 
 
     /**
@@ -91,6 +91,7 @@ public interface ApiService {
 
     /**
      * 体系数据
+     *
      * @return
      */
     @Headers({"url_name:user"})
@@ -98,16 +99,14 @@ public interface ApiService {
     Observable<BeanModule<List<TreeBean>>> getTreeList();
 
 
-
-
-
-
     /**
      * 收藏站内文章
      */
+    @FormUrlEncoded
     @Headers({"url_name:user"})
     @POST("lg/collect/{id}/json")
-    Observable<BeanModule<ArticleBean>> collectArticle(@Path("id") int articleId);
+    Observable<BeanModule<Object>> collectArticle(@Path("id") int articleId,
+                                                  @Field("reason") String reason);
 
 
 }

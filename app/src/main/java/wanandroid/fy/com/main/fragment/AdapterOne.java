@@ -1,7 +1,6 @@
 package wanandroid.fy.com.main.fragment;
 
 import android.content.Context;
-import android.view.View;
 
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.retrofit.NetCallBack;
@@ -40,13 +39,13 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
 
     private void collectArticle(int articleId){
         RequestUtils.create(ApiService.class)
-                .collectArticle(articleId)
+                .collectArticle(articleId, "")
                 .compose(RxHelper.handleResult())
                 .doOnSubscribe(RequestUtils::addDispos)
-                .subscribe(new NetCallBack<ArticleBean>() {
+                .subscribe(new NetCallBack<Object>() {
                     @Override
-                    protected void onSuccess(ArticleBean t) {
-
+                    protected void onSuccess(Object collect) {
+                        T.showLong("收藏成功");
                     }
 
                     @Override
