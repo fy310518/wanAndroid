@@ -148,12 +148,13 @@ public class MyCollectActivity extends AppCompatActivity implements IBaseActivit
                     protected void onSuccess(ArticleBean articleBean) {
                         if (pageNum == 0) {
                             List<ArticleBean.DatasBean> list = articleBean.getDatas();
-                            if (null != list && list.size() > 0) {
-                                DiffUtil.DiffResult diffResult = DiffUtil
-                                        .calculateDiff(new DiffCallBack(rvAdapter.getmDatas(), list), true);
-
-                                diffResult.dispatchUpdatesTo(rvAdapter);
+                            if (null != list) {
+//                                DiffUtil.DiffResult diffResult = DiffUtil
+//                                        .calculateDiff(new DiffCallBack(rvAdapter.getmDatas(), list), true);
+//
+//                                diffResult.dispatchUpdatesTo(rvAdapter);
                                 rvAdapter.setmDatas(list);
+                                rvAdapter.notifyDataSetChanged();
                             }
                         }
 
