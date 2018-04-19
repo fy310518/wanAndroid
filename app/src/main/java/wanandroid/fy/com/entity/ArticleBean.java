@@ -83,7 +83,7 @@ public class ArticleBean implements Serializable {
         this.datas = datas;
     }
 
-    public static class DatasBean implements Serializable{
+    public static class DatasBean implements Serializable {
         /**
          * apkLink :
          * author : scsfwgy
@@ -92,7 +92,7 @@ public class ArticleBean implements Serializable {
          * collect : false
          * courseId : 13
          * desc : 各种金融类的自定义View,基金走势图、分时图、蜡烛图、各种指标等，一步一步构建庞大的基金自定View... http://blog.csdn.net/wgyscsf
-
+         * <p>
          * envelopePic : http://www.wanandroid.com/blogimgs/3a9d2cbb-24d7-4c85-8497-9e1af6b64d23.png
          * fresh : false
          * id : 2799
@@ -107,6 +107,8 @@ public class ArticleBean implements Serializable {
          * title : 走势图、分时图、蜡烛图 FinancialCustomerView
          * type : 0
          * visible : 1
+         * "originId": 2829,
+         * "userId": 4267,
          * zan : 0
          */
 
@@ -114,7 +116,7 @@ public class ArticleBean implements Serializable {
         private String author = "";
         private int chapterId;
         private String chapterName = "";
-        private boolean collect;
+        private boolean collect = true;//设置默认值true （方便 个人收藏界面使用）
         private int courseId;
         private String desc = "";
         private String envelopePic = "";
@@ -123,6 +125,8 @@ public class ArticleBean implements Serializable {
         private String link = "";
         private String niceDate = "";
         private String origin = "";
+        private int originId = -1;
+        private int userId = -1;
         private String projectLink = "";
         private long publishTime;
         private int superChapterId;
@@ -309,7 +313,23 @@ public class ArticleBean implements Serializable {
             this.tags = tags;
         }
 
-        public static class TagsBean implements Serializable{
+        public int getOriginId() {
+            return originId;
+        }
+
+        public void setOriginId(int originId) {
+            this.originId = originId;
+        }
+
+        public int getUserId() {
+            return userId;
+        }
+
+        public void setUserId(int userId) {
+            this.userId = userId;
+        }
+
+        public static class TagsBean implements Serializable {
             /**
              * name : 项目
              * url : /project/list/1?cid=339

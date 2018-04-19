@@ -152,8 +152,9 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
         notifyDataSetChanged();
     }
 
-    public void setmDatas(List<Item> mDatas) {
-        this.mDatas = mDatas;
+    public void setmDatas(List<Item> list) {
+        mDatas.clear();
+        mDatas.addAll(list);
     }
 
     public List<Item> getmDatas() {

@@ -13,6 +13,7 @@
     <string name="logingTitle">登录</string>
     <string name="registerTitle">注册</string>
     <string name="aboutTitle">关于我们</string>
+    <string name="myCollect">我的收藏</string>
     <string name="mainTitle">wan Android</string>
 
     <string name="statusTitle">多状态</string>

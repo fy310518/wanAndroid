@@ -100,6 +100,15 @@ public interface ApiService {
 
 
     /**
+     * 收藏文章列表
+     *
+     * @return
+     */
+    @Headers({"url_name:user"})
+    @GET("lg/collect/list/{id}/json")
+    Observable<BeanModule<ArticleBean>> getCollectList(@Path("id") int pageNum);
+
+    /**
      * 收藏站内文章
      */
     @FormUrlEncoded
@@ -116,6 +125,15 @@ public interface ApiService {
     @POST("lg/uncollect_originId/{id}/json")
     Observable<BeanModule<Object>> uncollectArticle(@Path("id") int articleId,
                                                     @Field("reason") String reason);
+
+    /**
+     * 站内文章 取消收藏 [我的收藏页面（该页面包含自己录入的内容）]
+     */
+    @FormUrlEncoded
+    @Headers({"url_name:user"})
+    @POST("lg/uncollect/{id}/json")
+    Observable<BeanModule<Object>> unMyCollectArticle(@Path("id") int articleId,
+                                                      @Field("originId") int originId);
 
 
 }

@@ -35,6 +35,7 @@ import com.fy.baselibrary.utils.cache.ACache;
 import butterknife.BindView;
 import wanandroid.fy.com.R;
 import wanandroid.fy.com.about.AboutActivity;
+import wanandroid.fy.com.collect.MyCollectActivity;
 import wanandroid.fy.com.login.LoginActivity;
 import wanandroid.fy.com.main.fragment.FragmentOne;
 import wanandroid.fy.com.main.fragment.FragmentThree;
@@ -261,8 +262,8 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
         navView.setNavigationItemSelectedListener(item -> {
             dlMain.closeDrawer(GravityCompat.START);
             switch (item.getItemId()) {
-                case R.id.myLike:
-
+                case R.id.myCollect:
+                    JumpUtils.jump(mContext, MyCollectActivity.class, null);
                     break;
                 case R.id.atNightModel:
                     NightModeUtils.switchNightMode(mContext);//todo 有 bug 后期优化

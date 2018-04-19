@@ -57,6 +57,11 @@
             android:windowSoftInputMode="adjustResize|stateVisible" />
 
         <activity
+            android:name=".collect.MyCollectActivity"
+            android:label="@string/myCollect"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".about.AboutActivity"
             android:label="@string/aboutTitle"
             android:screenOrientation="portrait" />

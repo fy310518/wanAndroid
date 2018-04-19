@@ -1,6 +1,7 @@
 package wanandroid.fy.com.main.fragment;
 
 import android.os.Bundle;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -47,7 +48,7 @@ public class FragmentOne extends BaseFragment {
     TransformerView topView;
     @BindView(R.id.rvArticle)
     RecyclerView rvArticle;
-    HeaderAndFooterWrapper adapter;
+//    HeaderAndFooterWrapper adapter;
     ConvenientBanner<BannerBean> bannerView;
     List<BannerBean> bannerBeans;
     AdapterOne rvAdapter;
@@ -81,8 +82,8 @@ public class FragmentOne extends BaseFragment {
                 .setDraw(false)
                 .create(getActivity()));
 
-        adapter = new HeaderAndFooterWrapper(rvAdapter);
-        rvArticle.setAdapter(adapter);
+//        adapter = new HeaderAndFooterWrapper(rvAdapter);
+        rvArticle.setAdapter(rvAdapter);
 
         epl.addOnPullListenerAdapter(new EasyPullLayout.OnPullListenerAdapter() {
             @Override
@@ -140,21 +141,25 @@ public class FragmentOne extends BaseFragment {
                 @Override
                 protected void onSuccess(Map<String, Object> map) {
                     if (pageNum == 0) {
-                        adapter.cleanHeader();
+//                        adapter.cleanHeader();
 
                         List<BannerBean> bannerdata = (List<BannerBean>) map.get("banner");
                         if (null != bannerdata && bannerdata.size() > 0){
                             bannerBeans = bannerdata;
                             setBanner();
-                            adapter.addHeaderView(bannerView);
+//                            adapter.addHeaderView(bannerView);
                         }
 
                         ArticleBean article = (ArticleBean) map.get("article");
                         List<ArticleBean.DatasBean> list = article.getDatas();
                         if (null != list && list.size() > 0) {
+//                            adapter.notifyDataSetChanged();
+//                            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffCallBack(rvAdapter.getmDatas(), list), true);
+//                            diffResult.dispatchUpdatesTo(rvAdapter);
                             rvAdapter.setmDatas(list);
-                            adapter.notifyDataSetChanged();
+                            rvAdapter.notifyDataSetChanged();
                         }
+
                     }
                 }
 
