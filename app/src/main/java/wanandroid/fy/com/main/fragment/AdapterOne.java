@@ -32,7 +32,7 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
         super(context, R.layout.item_fm_one, datas);
     }
 
-    //    @Override
+    @Override
     public void onBindViewHolder(ViewHolder holder, int position, List<Object> payloads) {
 //        payloads 对象不会为null，但是它可能是空（empty），这时候需要完整绑定(所以我们在方法里只要判断isEmpty就好，不用重复判空)。
         if (payloads.isEmpty()) {
@@ -131,16 +131,9 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
                     @Override
                     protected void onSuccess(Object collect) {
                         T.showLong("取消收藏成功");
-                        List<ArticleBean.DatasBean> list = new ArrayList<>();
-                        list.addAll(getmDatas());
-                        list.remove(position);
-
-                        DiffUtil.DiffResult diffResult = DiffUtil
-                                .calculateDiff(new DiffCallBack(getmDatas(), list), true);
-
-                        diffResult.dispatchUpdatesTo(AdapterOne.this);
-                        //别忘了将新数据给Adapter
-                        setmDatas(list);
+                        removeData(position);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position, getItemCount());
                     }
 
                     @Override

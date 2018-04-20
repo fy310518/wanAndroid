@@ -49,7 +49,8 @@ public class DiffCallBack extends DiffUtil.Callback {
      * DiffUtil用返回的信息（true false）来检测当前item的内容是否发生了变化
      * DiffUtil 用这个方法替代equals方法去检查是否相等。所以你可以根据你的UI去改变它的返回值
      * 例如，如果你用RecyclerView.Adapter 配合DiffUtil使用，你需要返回Item的视觉表现是否相同。
-     * 这个方法仅仅在 areItemsTheSame()返回true时，才调用。
+     *
+     * ^_^ 这个方法仅仅在 areItemsTheSame()返回true时，才调用。^_^
      *
      * @param oldItemPosition
      * @param newItemPosition
@@ -86,7 +87,7 @@ public class DiffCallBack extends DiffUtil.Callback {
     public Object getChangePayload(int oldItemPosition, int newItemPosition) {
         // 定向刷新中的部分更新
         // 效率最高
-        //只是没有了ItemChange的白光一闪动画，（反正我也觉得不太重要）
+        //只是没有了ItemChange的白光一闪动画
         ArticleBean.DatasBean oldBean = mOldDatas.get(oldItemPosition);
         ArticleBean.DatasBean newBean = mNewDatas.get(newItemPosition);
 

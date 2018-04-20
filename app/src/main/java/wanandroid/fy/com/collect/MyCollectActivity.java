@@ -12,6 +12,7 @@ import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
+import com.fy.baselibrary.rv.adapter.OnListener;
 import com.fy.baselibrary.rv.anim.FadeItemAnimator;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
 import com.fy.baselibrary.statusbar.MdStatusBar;
@@ -149,15 +150,13 @@ public class MyCollectActivity extends AppCompatActivity implements IBaseActivit
                         if (pageNum == 0) {
                             List<ArticleBean.DatasBean> list = articleBean.getDatas();
                             if (null != list) {
-//                                DiffUtil.DiffResult diffResult = DiffUtil
-//                                        .calculateDiff(new DiffCallBack(rvAdapter.getmDatas(), list), true);
-//
-//                                diffResult.dispatchUpdatesTo(rvAdapter);
+                                DiffUtil.DiffResult diffResult = DiffUtil
+                                        .calculateDiff(new DiffCallBack(rvAdapter.getmDatas(), list), true);
+
+                                diffResult.dispatchUpdatesTo(rvAdapter);
                                 rvAdapter.setmDatas(list);
-                                rvAdapter.notifyDataSetChanged();
                             }
                         }
-
                     }
 
                     @Override

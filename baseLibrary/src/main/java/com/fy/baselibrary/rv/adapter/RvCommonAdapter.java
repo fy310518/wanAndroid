@@ -26,7 +26,9 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
     protected List<Item> mDatas;
     protected LayoutInflater mInflater;
 
-    protected OnItemClickListner itemClickListner;//列表条目点击事件
+    protected OnListener.OnitemClickListener itemClickListner;//列表条目点击事件
+    protected OnListener.OnRemoveItemListener removeItemListener;
+
     protected SparseBooleanArray mSelectedPositions;//保存多选 数据
 
     public RvCommonAdapter(Context context, int layoutId, List<Item> datas) {
@@ -165,11 +167,21 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
         return mSelectedPositions;
     }
 
+
     /**
      * 设置 item 点击事件 监听
      * @param itemClickListner
      */
-    public void setItemClickListner(OnItemClickListner itemClickListner) {
+    public void setItemClickListner(OnListener.OnitemClickListener itemClickListner) {
         this.itemClickListner = itemClickListner;
     }
+
+    /**
+     * 设置 item 删除事件 监听
+     * @param removeItemListener
+     */
+    public void setRemoveItemListener(OnListener.OnRemoveItemListener removeItemListener) {
+        this.removeItemListener = removeItemListener;
+    }
+
 }

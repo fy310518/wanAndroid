@@ -2,15 +2,12 @@ package wanandroid.fy.com.main.fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.fy.baselibrary.base.BaseFragment;
 import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
-import com.fy.baselibrary.rv.adapter.OnItemClickListner;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
-import com.fy.baselibrary.utils.ResourceUtils;
 import com.fy.baselibrary.utils.T;
 import com.fy.baselibrary.widget.EasyPullLayout;
 import com.fy.baselibrary.widget.TransformerView;
