@@ -95,6 +95,15 @@ public class HeaderAndFooterWrapper extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
+//    @Override
+//    public void registerAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+//        super.registerAdapterDataObserver(new NotifyObserver(observer, mHeaderViews.size()));
+//    }
+//
+//    @Override
+//    public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+//        super.unregisterAdapterDataObserver(observer);
+//    }
 
 
 
@@ -141,7 +150,7 @@ public class HeaderAndFooterWrapper extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     /**
-     * 装饰者模式  传递的 适配器的数据数量
+     * 装饰者模式  传递的 主体适配器的 数据数量
      * @return
      */
     private int getRealItemCount() {

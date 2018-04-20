@@ -1,10 +1,8 @@
 package wanandroid.fy.com.main.fragment;
 
 import android.os.Bundle;
-import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
@@ -13,8 +11,10 @@ import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.rv.adapter.HeaderAndFooterWrapper;
+import com.fy.baselibrary.rv.adapter.OnListener;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
 import com.fy.baselibrary.utils.JumpUtils;
+import com.fy.baselibrary.utils.TintUtils;
 import com.fy.baselibrary.widget.EasyPullLayout;
 import com.fy.baselibrary.widget.TransformerView;
 
@@ -48,7 +48,7 @@ public class FragmentOne extends BaseFragment {
     TransformerView topView;
     @BindView(R.id.rvArticle)
     RecyclerView rvArticle;
-//    HeaderAndFooterWrapper adapter;
+    HeaderAndFooterWrapper adapter;
     ConvenientBanner<BannerBean> bannerView;
     List<BannerBean> bannerBeans;
     AdapterOne rvAdapter;
@@ -69,8 +69,10 @@ public class FragmentOne extends BaseFragment {
 
     private void initRvAdapter(){
         rvAdapter = new AdapterOne(getContext(), new ArrayList<>());
+        rvAdapter.setChangeItemListener((position) -> adapter.notifyItemChanged(adapter.getHeadersCount() + position));
         rvAdapter.setItemClickListner(view -> {
             ArticleBean.DatasBean article = (ArticleBean.DatasBean) view.getTag();
+
             Bundle bundle = new Bundle();
             bundle.putSerializable("Bookmark", new Bookmark(article.getTitle(), article.getLink()));
             JumpUtils.jump(FragmentOne.this, WebViewActivity.class, bundle);
@@ -82,8 +84,8 @@ public class FragmentOne extends BaseFragment {
                 .setDraw(false)
                 .create(getActivity()));
 
-//        adapter = new HeaderAndFooterWrapper(rvAdapter);
-        rvArticle.setAdapter(rvAdapter);
+        adapter = new HeaderAndFooterWrapper(rvAdapter);
+        rvArticle.setAdapter(adapter);
 
         epl.addOnPullListenerAdapter(new EasyPullLayout.OnPullListenerAdapter() {
             @Override
@@ -141,23 +143,24 @@ public class FragmentOne extends BaseFragment {
                 @Override
                 protected void onSuccess(Map<String, Object> map) {
                     if (pageNum == 0) {
-//                        adapter.cleanHeader();
+                        adapter.cleanHeader();
 
                         List<BannerBean> bannerdata = (List<BannerBean>) map.get("banner");
                         if (null != bannerdata && bannerdata.size() > 0){
                             bannerBeans = bannerdata;
                             setBanner();
-//                            adapter.addHeaderView(bannerView);
+                            adapter.addHeaderView(bannerView);
                         }
 
                         ArticleBean article = (ArticleBean) map.get("article");
                         List<ArticleBean.DatasBean> list = article.getDatas();
-                        if (null != list && list.size() > 0) {
-//                            adapter.notifyDataSetChanged();
-//                            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffCallBack(rvAdapter.getmDatas(), list), true);
-//                            diffResult.dispatchUpdatesTo(rvAdapter);
+                        if (null != list) {
+//                            DiffUtil.DiffResult diffResult = DiffUtil
+//                                    .calculateDiff(new DiffCallBack(rvAdapter.getmDatas(), list), true);
+//
+//                            diffResult.dispatchUpdatesTo(adapter);
                             rvAdapter.setmDatas(list);
-                            rvAdapter.notifyDataSetChanged();
+                            adapter.notifyDataSetChanged();
                         }
 
                     }

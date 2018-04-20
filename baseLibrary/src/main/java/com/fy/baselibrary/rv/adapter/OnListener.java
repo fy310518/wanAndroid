@@ -31,11 +31,18 @@ public interface OnListener {
         void onRemove(int position);
     }
 
-//    interface OnInsertItemListener {
-//        void onInsert();
-//    }
-//
-//    interface OnChangeItemListener {
-//        void onChange();
-//    }
+    interface OnInsertItemListener {
+        void onInsert(int position);
+    }
+
+    /**
+     * 更新 item 回调接口
+     */
+    interface OnChangeItemListener {
+        /**
+         * 更新指定 position 的条目 回调方法
+         * @param position
+         */
+        void onChange(int position);
+    }
 }

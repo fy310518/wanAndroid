@@ -33,23 +33,6 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position, List<Object> payloads) {
-//        payloads 对象不会为null，但是它可能是空（empty），这时候需要完整绑定(所以我们在方法里只要判断isEmpty就好，不用重复判空)。
-        if (payloads.isEmpty()) {
-            onBindViewHolder(holder, position);
-        } else {
-            ArticleBean.DatasBean article = mDatas.get(position);
-
-            AppCompatImageView imgCollect = holder.getView(R.id.imgCollect);
-            if (article.isCollect()) {//已收藏
-                imgCollect.setImageDrawable(TintUtils.getTintDrawable(R.drawable.svg_collect, R.color.txtHighlight));
-            } else {
-                imgCollect.setImageResource(R.drawable.svg_collect);
-            }
-        }
-    }
-
-    @Override
     public void convert(ViewHolder holder, ArticleBean.DatasBean article, int position) {
         holder.setText(R.id.tvUserName, article.getAuthor());
         holder.setText(R.id.tvPublishTime, article.getNiceDate());
@@ -88,8 +71,7 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
                     protected void onSuccess(Object collect) {
                         T.showLong("收藏成功");
                         article.setCollect(true);
-
-                        notifyItemChanged(position, "");
+                        if (null != changeItemListener) changeItemListener.onChange(position);
                     }
 
                     @Override
@@ -111,7 +93,7 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
                         T.showLong("取消收藏成功");
                         article.setCollect(false);
 
-                        notifyItemChanged(position, "");
+                        if (null != changeItemListener) changeItemListener.onChange(position);
                     }
 
                     @Override
