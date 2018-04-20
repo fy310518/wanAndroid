@@ -69,7 +69,7 @@ public class FragmentOne extends BaseFragment {
 
     private void initRvAdapter(){
         rvAdapter = new AdapterOne(getContext(), new ArrayList<>());
-        rvAdapter.setChangeItemListener((position) -> adapter.notifyItemChanged(adapter.getHeadersCount() + position));
+        rvAdapter.setChangeItemListener((position) -> adapter.notifyItemChanged(adapter.getHeadersCount() + position, ""));
         rvAdapter.setItemClickListner(view -> {
             ArticleBean.DatasBean article = (ArticleBean.DatasBean) view.getTag();
 
