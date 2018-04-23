@@ -136,4 +136,17 @@ public interface ApiService {
                                                       @Field("originId") int originId);
 
 
+
+
+
+    /**
+     * 搜索
+     */
+    @FormUrlEncoded
+    @Headers({"url_name:user"})
+    @POST("article/query/{id}/json")
+    Observable<BeanModule<ArticleBean>> query(@Path("id") int articleId,
+                                         @Field("k") String queryKey);
+
+
 }

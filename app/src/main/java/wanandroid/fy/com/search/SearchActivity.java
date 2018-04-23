@@ -1,17 +1,45 @@
 package wanandroid.fy.com.search;
 
 import android.app.Activity;
+import android.inputmethodservice.Keyboard;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.util.DiffUtil;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
+import android.view.Menu;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import com.fy.baselibrary.application.IBaseActivity;
+import com.fy.baselibrary.retrofit.NetCallBack;
+import com.fy.baselibrary.retrofit.RequestUtils;
+import com.fy.baselibrary.retrofit.RxHelper;
+import com.fy.baselibrary.rv.anim.FadeItemAnimator;
+import com.fy.baselibrary.rv.divider.ListItemDecoration;
+import com.fy.baselibrary.statusbar.MdStatusBar;
+import com.fy.baselibrary.utils.ConstantUtils;
+import com.fy.baselibrary.utils.JumpUtils;
+import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.T;
 import com.fy.baselibrary.widget.EasyPullLayout;
 import com.fy.baselibrary.widget.TransformerView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import wanandroid.fy.com.R;
+import wanandroid.fy.com.api.ApiService;
+import wanandroid.fy.com.collect.MyCollectActivity;
+import wanandroid.fy.com.entity.ArticleBean;
+import wanandroid.fy.com.entity.Bookmark;
+import wanandroid.fy.com.main.fragment.AdapterOne;
+import wanandroid.fy.com.main.fragment.DiffCallBack;
+import wanandroid.fy.com.web.WebViewActivity;
 
 /**
  * 搜索
@@ -19,12 +47,20 @@ import wanandroid.fy.com.R;
  */
 public class SearchActivity extends AppCompatActivity implements IBaseActivity{
 
+    SearchView searchView;
+
     @BindView(R.id.epl)
     EasyPullLayout epl;
     @BindView(R.id.topView)
     TransformerView topView;
-    @BindView(R.id.rvBookmark)
-    RecyclerView rvBookmark;
+    @BindView(R.id.rvSearch)
+    RecyclerView rvSearch;
+    AdapterOne rvAdapter;
+    /**
+     * 当前显示的页码(从 0 开始)
+     */
+    int pageNum;
+    String queryKey;
 
     @Override
     public boolean isShowHeadView() {
@@ -38,12 +74,16 @@ public class SearchActivity extends AppCompatActivity implements IBaseActivity{
 
     @Override
     public void setStatusBar(Activity activity) {
-
+        MdStatusBar.setColorBar(activity, R.color.statusBar, R.color.statusBar);
     }
 
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
+        initRvAdapter();
 
+        Bundle bundle = getIntent().getExtras();
+        queryKey = bundle.getString(ConstantUtils.queryKey);
+        if (!TextUtils.isEmpty(queryKey)) epl.start(EasyPullLayout.TYPE_EDGE_TOP);
     }
 
     @Override
@@ -52,5 +92,120 @@ public class SearchActivity extends AppCompatActivity implements IBaseActivity{
     @Override
     public void reTry() {
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search_edit, menu);
+        //得到SearchView对象，SearchView一些属性可以直接使用，比如：setSubmitButtonEnabled，setQueryHint等
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        //如果想单独对SearchView定制，比如需要更换搜索图标等，可以通过一下代码实现。
+        if(null != searchView) {
+            searchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+            //默认刚进去就打开搜索栏
+            searchView.setIconified(false);
+            searchView.clearFocus();
+            //设置输入文本的EditText
+            SearchView.SearchAutoComplete et = searchView.findViewById(R.id.search_src_text);
+            et.setText(queryKey);
+            searchView.setQueryHint(queryKey);
+
+            // 设置监听事件
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    T.showLong(query);
+                    queryKey = query;
+                    searchView.clearFocus();
+                    getData();
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    L.e("queryKey", " ---> " + newText);
+                    return false;
+                }
+            });
+        }
+
+        return true;
+    }
+
+    private void initRvAdapter() {
+        rvAdapter = new AdapterOne(this, new ArrayList<>());
+        rvAdapter.setDelete(true);
+        rvAdapter.setItemClickListner(view -> {
+            ArticleBean.DatasBean article = (ArticleBean.DatasBean) view.getTag();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Bookmark", new Bookmark(article.getTitle(), article.getLink()));
+            JumpUtils.jump(this, WebViewActivity.class, bundle);
+        });
+
+        rvSearch.setLayoutManager(new LinearLayoutManager(this));
+        rvSearch.setItemAnimator(new FadeItemAnimator());
+        rvSearch.addItemDecoration(new ListItemDecoration.Builder()
+                .setmSpace(R.dimen.rv_divider_height)
+                .setDraw(false)
+                .create(this));
+
+        rvSearch.setAdapter(rvAdapter);
+
+        epl.addOnPullListenerAdapter(new EasyPullLayout.OnPullListenerAdapter() {
+            @Override
+            public void onPull(int type, float fraction, boolean changed) {
+                if (!changed) return;
+
+                if (type == EasyPullLayout.TYPE_EDGE_TOP) {
+                    if (fraction == 1f) topView.ready();
+                    else topView.idle();
+                }
+            }
+
+            @Override
+            public void onTriggered(int type) {
+                if (type == EasyPullLayout.TYPE_EDGE_TOP) {
+                    topView.triggered(SearchActivity.this);
+                    pageNum = 0;
+                    getData();
+                } else if (type == EasyPullLayout.TYPE_EDGE_BOTTOM) {
+
+                }
+            }
+
+            @Override
+            public void onRollBack(int rollBackType) {
+                if (rollBackType == EasyPullLayout.ROLL_BACK_TYPE_TOP) {
+                    topView.idle();
+                }
+            }
+        });
+    }
+
+    private void getData() {
+        RequestUtils.create(ApiService.class)
+                .query(pageNum, queryKey)
+                .compose(RxHelper.handleResult())
+                .doOnSubscribe(RequestUtils::addDispos)
+                .subscribe(new NetCallBack<ArticleBean>() {
+                    @Override
+                    protected void onSuccess(ArticleBean articleBean) {
+                        if (pageNum == 0) {
+                            List<ArticleBean.DatasBean> list = articleBean.getDatas();
+                            if (null != list) {
+                                DiffUtil.DiffResult diffResult = DiffUtil
+                                        .calculateDiff(new DiffCallBack(rvAdapter.getmDatas(), list), true);
+
+                                diffResult.dispatchUpdatesTo(rvAdapter);
+                                rvAdapter.setmDatas(list);
+                            }
+                        }
+                    }
+
+                    @Override
+                    protected void updataLayout(int flag) {
+                        epl.stop();
+                    }
+                });
     }
 }

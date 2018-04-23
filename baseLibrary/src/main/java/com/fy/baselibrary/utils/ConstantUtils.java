@@ -65,6 +65,9 @@ public class ConstantUtils {
      */
     public static final int StickyType = 58;
 
-
+    /**
+     * 进入 搜索 界面 传递搜索关键字的 key
+     */
+    public static final String queryKey = "QueryKey";
 
 }

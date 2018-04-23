@@ -14,6 +14,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -29,6 +31,7 @@ import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.NightModeUtils;
 import com.fy.baselibrary.utils.ResourceUtils;
 import com.fy.baselibrary.utils.SpfUtils;
+import com.fy.baselibrary.utils.T;
 import com.fy.baselibrary.utils.TintUtils;
 import com.fy.baselibrary.utils.cache.ACache;
 
@@ -40,6 +43,7 @@ import wanandroid.fy.com.login.LoginActivity;
 import wanandroid.fy.com.main.fragment.FragmentOne;
 import wanandroid.fy.com.main.fragment.FragmentThree;
 import wanandroid.fy.com.main.fragment.FragmentTwo;
+import wanandroid.fy.com.search.SearchActivity;
 import wanandroid.fy.com.utils.SelectUtils;
 
 /**
@@ -257,6 +261,23 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_search, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.search://搜索
+                JumpUtils.jump(this, SearchActivity.class, null);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     //    初始化导航视图
     private void initNav() {
         navView.setNavigationItemSelectedListener(item -> {
@@ -277,6 +298,6 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, dlMain, toolbar, 0, 0);
         dlMain.addDrawerListener(toggle);
-        toggle.syncState();
+        toggle.syncState();//设置左上角显示三道横线
     }
 }

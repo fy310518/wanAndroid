@@ -75,11 +75,11 @@ public class FragmentThree extends BaseFragment {
             if (item.getItemType() == ConstantUtils.StickyType) return;
 
             Bundle bundle = new Bundle();
-            bundle.putSerializable("Bookmark", item);
-
             if (!TextUtils.isEmpty(item.getLink())) {//进入具体的 web网页
+                bundle.putSerializable("Bookmark", item);
                 JumpUtils.jump(FragmentThree.this, WebViewActivity.class, bundle);
             } else {// 进入搜索页
+                bundle.putString(ConstantUtils.queryKey, item.getName());
                 JumpUtils.jump(FragmentThree.this, SearchActivity.class, bundle);
             }
         });
