@@ -75,7 +75,6 @@
         <activity
             android:name=".search.SearchActivity"
             android:label="@string/search"
-            android:windowSoftInputMode="adjustResize|stateVisible"
             android:screenOrientation="portrait" />
 
 

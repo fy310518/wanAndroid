@@ -104,7 +104,7 @@ public class SearchActivity extends AppCompatActivity implements IBaseActivity{
             searchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
             //默认刚进去就打开搜索栏
             searchView.setIconified(false);
-            searchView.clearFocus();
+            if (!TextUtils.isEmpty(queryKey))searchView.clearFocus();
             //设置输入文本的EditText
             SearchView.SearchAutoComplete et = searchView.findViewById(R.id.search_src_text);
             et.setText(queryKey);
@@ -134,7 +134,7 @@ public class SearchActivity extends AppCompatActivity implements IBaseActivity{
 
     private void initRvAdapter() {
         rvAdapter = new AdapterOne(this, new ArrayList<>());
-        rvAdapter.setDelete(true);
+        rvAdapter.setChangeItemListener((position) -> rvAdapter.notifyItemChanged(position, ""));
         rvAdapter.setItemClickListner(view -> {
             ArticleBean.DatasBean article = (ArticleBean.DatasBean) view.getTag();
             Bundle bundle = new Bundle();
