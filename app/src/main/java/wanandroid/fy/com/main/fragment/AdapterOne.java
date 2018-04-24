@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.AppCompatImageView;
+import android.text.Html;
+import android.widget.TextView;
 
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.retrofit.NetCallBack;
@@ -58,8 +60,10 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
     public void convert(ViewHolder holder, ArticleBean.DatasBean article, int position) {
         holder.setText(R.id.tvUserName, article.getAuthor());
         holder.setText(R.id.tvPublishTime, article.getNiceDate());
-        holder.setText(R.id.tvPublishTitle, article.getTitle());
         holder.setText(R.id.tvPublishType, article.getChapterName());
+
+        TextView tvPublishTitle = holder.getView(R.id.tvPublishTitle);
+        tvPublishTitle.setText(Html.fromHtml(article.getTitle()));
 
         AppCompatImageView imgCollect = holder.getView(R.id.imgCollect);
         setCollectImg(holder, article.isCollect());
