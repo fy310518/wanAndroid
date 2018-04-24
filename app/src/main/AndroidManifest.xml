@@ -77,7 +77,10 @@
             android:label="@string/search"
             android:screenOrientation="portrait" />
 
-
+        <!-- 知识体系下的 文章 -->
+        <activity android:name=".hierarchy.HierarchyActivity"
+            android:label=""
+            android:screenOrientation="portrait"/>
 
 
 

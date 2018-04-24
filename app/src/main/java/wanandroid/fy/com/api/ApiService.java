@@ -7,6 +7,7 @@ import java.util.Map;
 
 import retrofit2.http.Field;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import wanandroid.fy.com.entity.BannerBean;
 import wanandroid.fy.com.entity.Bookmark;
 import wanandroid.fy.com.entity.ArticleBean;
@@ -98,6 +99,16 @@ public interface ApiService {
     @GET("tree/json")
     Observable<BeanModule<List<TreeBean>>> getTreeList();
 
+    /**
+     * 知识体系下的文章
+     *
+     * @return
+     */
+    @Headers({"url_name:user"})
+    @GET("article/list/{id}/json")
+    Observable<BeanModule<ArticleBean>> getTreeArticle(@Path("id") int pageNum,
+                                                       @Query("cid") int cid);
+
 
     /**
      * 收藏文章列表
@@ -136,9 +147,6 @@ public interface ApiService {
                                                       @Field("originId") int originId);
 
 
-
-
-
     /**
      * 搜索
      */
@@ -146,7 +154,7 @@ public interface ApiService {
     @Headers({"url_name:user"})
     @POST("article/query/{id}/json")
     Observable<BeanModule<ArticleBean>> query(@Path("id") int articleId,
-                                         @Field("k") String queryKey);
+                                              @Field("k") String queryKey);
 
 
 }

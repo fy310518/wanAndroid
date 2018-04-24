@@ -1,5 +1,6 @@
 package wanandroid.fy.com.main.fragment;
 
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -8,6 +9,7 @@ import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
+import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.T;
 import com.fy.baselibrary.widget.EasyPullLayout;
 import com.fy.baselibrary.widget.TransformerView;
@@ -19,10 +21,11 @@ import butterknife.BindView;
 import wanandroid.fy.com.R;
 import wanandroid.fy.com.api.ApiService;
 import wanandroid.fy.com.entity.TreeBean;
+import wanandroid.fy.com.hierarchy.HierarchyActivity;
 
 /**
- * Created by Administrator on 2017/12/12.
  * 数据
+ * Created by fangs on 2017/12/12.
  */
 public class FragmentTwo extends BaseFragment {
 
@@ -49,7 +52,10 @@ public class FragmentTwo extends BaseFragment {
         adapterTwo = new AdapterTwo(getContext(), new ArrayList<>());
         adapterTwo.setItemClickListner(view -> {
             TreeBean bean = (TreeBean) view.getTag();
-            T.showLong(bean.getName());
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("TreeBean", bean);
+            JumpUtils.jump(FragmentTwo.this, HierarchyActivity.class, bundle);
         });
 
         rvKnowledge.setLayoutManager(new LinearLayoutManager(getActivity()));
