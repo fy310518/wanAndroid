@@ -72,10 +72,10 @@ public class RequestModule {
                 .connectTimeout(ConstantUtils.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
                 .readTimeout(ConstantUtils.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
                 .writeTimeout(ConstantUtils.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
-                .addInterceptor(interceptor)
-                .addInterceptor(header)
                 .addInterceptor(new ReceivedCookiesInterceptor())
                 .addInterceptor(new AddCookiesInterceptor())
+                .addInterceptor(interceptor)
+                .addInterceptor(header)
                 .build();
     }
 
@@ -107,6 +107,8 @@ public class RequestModule {
                         .addHeader("Connection", "keep-alive")
                         .addHeader("Accept", "application/json")
                         .addHeader("Cookie", "add cookies here")
+                        .addHeader("app-type", "Android")//TODO 测试微阅
+                        .addHeader("access-token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiNTIwIiwiaWF0IjoxNTI0NTM3ODkxLCJleHAiOjE1MjcxMjk4OTF9.yQPoKQMOC_ZXqo4cDY3iflz_1pTMN0dLcHWevz5z0k0")//TODO 测试微阅
                         .build();
 
                 //获取request的创建者builder

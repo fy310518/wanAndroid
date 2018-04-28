@@ -28,7 +28,7 @@ public class AddCookiesInterceptor implements Interceptor {
         Observable.fromArray(cookieArray)
                 .subscribe(cookie -> {
                     //添加cookie
-                    L.d("http", "AddCookiesInterceptor" + cookie);
+                    L.e("http", "AddCookiesInterceptor--" + cookie);
                     builder.addHeader("cookie", cookie);
                 });
 

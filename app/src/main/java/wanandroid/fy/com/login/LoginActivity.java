@@ -128,6 +128,24 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
         login();
     }
 
+    private void weiyu(){
+        RequestUtils.create(ApiService.class)
+                .booksByTag("奇幻", 1)
+                .compose(RxHelper.handleResult())
+                .doOnSubscribe(RequestUtils::addDispos)
+                .subscribe(new NetCallBack<Object>() {
+                    @Override
+                    protected void onSuccess(Object login) {
+
+                    }
+
+                    @Override
+                    protected void updataLayout(int flag) {
+                        L.e("net updataLayout", flag + "-----");
+                    }
+                });
+    }
+
     private void login() {
         IProgressDialog progressDialog = new IProgressDialog().init(mContext)
                 .setDialogMsg(R.string.user_login);

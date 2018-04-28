@@ -157,4 +157,58 @@ public interface ApiService {
                                               @Field("k") String queryKey);
 
 
+    @GET("http://120.55.57.236/api/user/bookshelf")
+    Observable<BeanModule<Object>> bookshelf();
+
+    /**
+     * 小说类型
+     *
+     * @return
+     */
+    @GET("http://120.55.57.236/api/classify")
+    Observable<BeanModule<Object>> classify();
+
+    /**
+     * 小说类型下的 书籍列表
+     *
+     * @param paramString1 三种类型：hot（热门）；new(新书)；reputation（好评）
+     * @param paramString2 小说类型 关键字(如：玄幻，武侠...)
+     * @param paramInt     分页加载 页码 （从 1 开始）
+     * @return
+     */
+    @GET("http://120.55.57.236/api/books")
+    Observable<BeanModule<Object>> books(@Query("type") String paramString1,
+                                         @Query("major") String paramString2,
+                                         @Query("page") int paramInt);
+
+    /**
+     * 小说 简介（描述、标签）
+     *
+     * @param paramString _id：小说id
+     * @return
+     */
+    @GET("http://120.55.57.236/api/books/{bookId}")
+    Observable<BeanModule<Object>> bookInfo(@Path("bookId") String paramString);
+
+
+    /**
+     * @param paramString 标签（如：奇幻、无限流...）
+     * @param paramInt    分页加载 页码 （从 1 开始）
+     * @return
+     */
+    @GET("http://120.55.57.236/api/books/tag")
+    Observable<BeanModule<List<Object>>> booksByTag(@Query("bookTag") String paramString,
+                                                    @Query("page") int paramInt);
+
+    /**
+     * 获取对应章节 内容
+     * @param link
+     * @return
+     */
+    @GET("http://chapterup.zhuishushenqi.com/chapter/{link}")
+    Observable<BeanModule<List<Object>>> booksByTag(@Path("link") String link);
+
+
+
+
 }
