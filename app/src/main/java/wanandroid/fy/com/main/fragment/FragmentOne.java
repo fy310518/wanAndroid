@@ -13,6 +13,7 @@ import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.rv.adapter.HeaderAndFooterWrapper;
 import com.fy.baselibrary.rv.adapter.OnListener;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
+import com.fy.baselibrary.utils.DensityUtils;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.TintUtils;
 import com.fy.baselibrary.widget.EasyPullLayout;
@@ -175,7 +176,9 @@ public class FragmentOne extends BaseFragment {
 
     private void setBanner(){
         bannerView = new ConvenientBanner<>(getContext());
-        RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, 350);
+        RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
+                (int) DensityUtils.pt2px(500));
+
         bannerView.setLayoutParams(params);
 
         //开始自动翻页

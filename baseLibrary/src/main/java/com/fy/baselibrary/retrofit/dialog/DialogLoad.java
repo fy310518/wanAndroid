@@ -17,8 +17,7 @@ public class DialogLoad extends CommonDialog {
 
     private String msg = "";
 
-    public DialogLoad() {
-    }
+    public DialogLoad() {}
 
     public static DialogLoad init() {
         return new DialogLoad();

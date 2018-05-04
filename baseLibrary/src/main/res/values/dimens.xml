@@ -26,26 +26,33 @@
     <dimen name="spacing_medium_large">30dp</dimen>
 
 
-    <!-- 加载动画图片 宽度 高度 -->
-    <dimen name="load_anim">60dip</dimen>
-
+    <!-- 统一 列表 空白间隔 -->
+    <dimen name="rv_divider_height">4dp</dimen>
     <!-- item 分割线宽度 -->
     <dimen name="itemSplit_line">1dp</dimen>
     <!-- shape 描边宽度 -->
     <dimen name="shape_Stroke">1dp</dimen>
     <!-- shape 圆角半径-->
-    <dimen name="shape_radius">5dp</dimen>
-    <dimen name="shape_radius1">8dp</dimen>
+    <dimen name="shape_radius">8dp</dimen>
     <dimen name="shape_radius2">12dp</dimen>
-    <dimen name="shape_radius3">20dp</dimen>
 
-    <!-- 统一 列表 空白间隔 -->
-    <dimen name="rv_divider_height">6dp</dimen>
 
     <!-- 自定义 列表刷新控件 高度 -->
     <dimen name="refreshHeight">75dp</dimen>
     <!-- 最大偏移 -->
     <dimen name="max_offset">120dp</dimen>
+    <!-- 下拉刷新 下拉图标 宽度、高度 -->
+    <dimen name="rvDropDown">50dp</dimen>
+    <!-- 下拉刷新 加载动画 图片 宽度、高度 -->
+    <dimen name="rvRefreshAnim">30dp</dimen>
 
+
+
+
+    <!-- 列表头像图片 宽度、高度 -->
     <dimen name="rvImg">65dp</dimen>
+    <!-- dialog 加载动画图片 宽度、高度 -->
+    <dimen name="load_anim">60dp</dimen>
+
+
 </resources>

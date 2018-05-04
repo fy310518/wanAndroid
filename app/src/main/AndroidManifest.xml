@@ -89,6 +89,8 @@
             android:label="@string/statusTitle"
             android:screenOrientation="portrait" />
 
+        <!-- 设计稿 宽度 （用于屏幕适配）  -->
+        <meta-data android:name="Rudeness_Adapter_Screen_width" android:value="1080" />
 
     </application>
 

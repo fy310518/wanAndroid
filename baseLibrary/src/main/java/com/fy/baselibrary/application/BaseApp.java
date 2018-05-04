@@ -3,7 +3,11 @@ package com.fy.baselibrary.application;
 
 import android.app.Application;
 
+import com.fy.baselibrary.utils.DensityUtils;
+import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NightModeUtils;
+import com.fy.baselibrary.utils.ResourceUtils;
+import com.fy.baselibrary.utils.ScreenUtils;
 
 /**
  * 基础 application
@@ -18,8 +22,17 @@ public class BaseApp extends Application {
         super.onCreate();
         mApplication = this;
 
+        L.e("tag ==》", ScreenUtils.getScreenDensityDpi(this) + "---》比例" + ScreenUtils.getScreenDensity(this));
+        L.e("tag ==》", ScreenUtils.getScreenWidth(this) + "---》高" + ScreenUtils.getScreenHeight(this));
+        L.e("tag ==》", DensityUtils.pt2px(1) + "");
+
+        int designWidth = (int) ResourceUtils.getMetaData("Rudeness_Adapter_Screen_width", 0);
+
+        RudenessScreenAdapter screenAdapter = new RudenessScreenAdapter(designWidth);
+        screenAdapter.activate();
+
 //        设置activity 生命周期回调
-        registerActivityLifecycleCallbacks(new BaseActivityLifecycleCallbacks());
+        registerActivityLifecycleCallbacks(new BaseActivityLifecycleCallbacks(screenAdapter));
 
         NightModeUtils.setNightMode();
     }

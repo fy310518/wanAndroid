@@ -11,8 +11,8 @@
     <solid android:color="@android:color/white" />
 
     <padding
-        android:bottom="20dp"
-        android:left="20dp"
-        android:right="20dp"
-        android:top="20dp" />
+        android:bottom="@dimen/spacing_medium_small"
+        android:left="@dimen/spacing_medium_small"
+        android:right="@dimen/spacing_medium_small"
+        android:top="@dimen/spacing_medium_small" />
 </shape>

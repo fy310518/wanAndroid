@@ -121,8 +121,8 @@ public abstract class CommonDialog extends DialogFragment {
             // 使用ViewGroup.LayoutParams，以便Dialog 宽度或高度充满整个屏幕
             WindowManager.LayoutParams params = window.getAttributes();
 
-            params.width = width > 0 ? DensityUtils.dp2px(getContext(), width) : width;
-            params.height = height > 0 ? DensityUtils.dp2px(getContext(), height) : height;
+            params.width = width > 0 ? DensityUtils.dp2px(width) : width;
+            params.height = height > 0 ? DensityUtils.dp2px(height) : height;
 
             params.dimAmount = dimAmount;//调节灰色背景透明度[0-1]，默认0.5f
 

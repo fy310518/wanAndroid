@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/spacing_small"
-        android:text="a"
+        android:text=""
         android:textColor="@color/txtSecondColor"
         android:textSize="@dimen/txt_medium"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/spacing_small"
-        android:text="b"
+        android:text=""
         android:textColor="@color/txtLight"
         android:textSize="@dimen/txt_small"
         app:layout_constraintTop_toBottomOf="@+id/tvPermissionTitle" />
@@ -54,6 +54,5 @@
         app:layout_constraintLeft_toRightOf="@+id/tvPermissionCancel"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvPermissionDescribe" />
-
 
 </android.support.constraint.ConstraintLayout>

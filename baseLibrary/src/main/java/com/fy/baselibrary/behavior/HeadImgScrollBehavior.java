@@ -41,9 +41,9 @@ public class HeadImgScrollBehavior extends CoordinatorLayout.Behavior<ImageView>
     public HeadImgScrollBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
-        mImgMaxHeight = DensityUtils.dp2px(mContext, 80);
-        mMaxHeight = DensityUtils.dp2px(mContext, 200);
-        mDependencyHeight = DensityUtils.dp2px(mContext, 56) + ScreenUtils.getStatusHeight(mContext);
+        mImgMaxHeight = DensityUtils.dp2px(80);
+        mMaxHeight = DensityUtils.dp2px(200);
+        mDependencyHeight = DensityUtils.dp2px(56) + ScreenUtils.getStatusHeight(mContext);
     }
 
 //    @Override
@@ -106,7 +106,7 @@ public class HeadImgScrollBehavior extends CoordinatorLayout.Behavior<ImageView>
             layoutParams.height = (int) mCustomFinalHeight;
             layoutParams.width = (int) mCustomFinalHeight;
 
-            int topMargin = (int) ((DensityUtils.dp2px(mContext, 56) - imgSize) * 0.5 + ScreenUtils.getStatusHeight(mContext));
+            int topMargin = (int) ((DensityUtils.dp2px(56) - imgSize) * 0.5 + ScreenUtils.getStatusHeight(mContext));
             layoutParams.setMargins(0, topMargin, 0, 0);
 
             child.setLayoutParams(layoutParams);

@@ -31,8 +31,14 @@ import butterknife.ButterKnife;
 public class BaseActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
     public static String TAG = "ActivityCallbacks";
 
+    RudenessScreenAdapter screenAdapter;
+
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
+
+    public BaseActivityLifecycleCallbacks(RudenessScreenAdapter screenAdapter) {
+        this.screenAdapter = screenAdapter;
     }
 
     @Override
@@ -69,16 +75,26 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
         //基础配置 执行完成，再执行 初始化 activity 操作
         if (null != act) act.initData(activity, savedInstanceState);
+
+        //暴力适配
+        RudenessScreenAdapter.resetDensity(screenAdapter.designWidth);
+        RudenessScreenAdapter.resetDensity(screenAdapter.designWidth);
     }
 
     @Override
     public void onActivityStarted(Activity activity) {
         Log.d(TAG, "Start()");
+
+        RudenessScreenAdapter.resetDensity(screenAdapter.designWidth);
+        RudenessScreenAdapter.resetDensity(screenAdapter.designWidth);
     }
 
     @Override
     public void onActivityResumed(Activity activity) {
         Log.d(TAG, "Resume()");
+
+        RudenessScreenAdapter.resetDensity(screenAdapter.designWidth);
+        RudenessScreenAdapter.resetDensity(screenAdapter.designWidth);
     }
 
     @Override

@@ -91,8 +91,8 @@ public abstract class CommonPopupWindow extends PopupWindow {
             setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
             setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         } else {
-            setWidth(DensityUtils.dp2px(mContext, mWidth));
-            setHeight(DensityUtils.dp2px(mContext, mHeight));
+            setWidth(DensityUtils.dp2px(mWidth));
+            setHeight(DensityUtils.dp2px(mHeight));
         }
 
 
