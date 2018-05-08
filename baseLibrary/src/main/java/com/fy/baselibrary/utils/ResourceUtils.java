@@ -86,8 +86,9 @@ public class ResourceUtils {
 
     /**
      * 获取清单文件 指定 key的 <meta-data> 的值；（<meta-data>是一个键值对）</b>
-     * @param metaKey     <meta-data> 的 key
-     * @param metaValueType   返回值类型
+     *
+     * @param metaKey       <meta-data> 的 key
+     * @param metaValueType 返回值类型
      * @return
      */
     public static Object getMetaData(String metaKey, Object metaValueType) {
@@ -101,11 +102,11 @@ public class ResourceUtils {
             Bundle bundle = ai.metaData;
             if (metaValueType instanceof Integer) {
                 value = bundle.getInt(metaKey);
-            } else if (metaValueType instanceof Float){
+            } else if (metaValueType instanceof Float) {
                 value = bundle.getFloat(metaKey);
-            } else if (metaValueType instanceof Boolean){
+            } else if (metaValueType instanceof Boolean) {
                 value = bundle.getBoolean(metaKey);
-            } else if (metaValueType instanceof String){
+            } else if (metaValueType instanceof String) {
                 value = bundle.getString(metaKey);
             }
 
@@ -117,12 +118,122 @@ public class ResourceUtils {
     }
 
 
+
+    /*****************************以下为 通过资源名称 获取资源id ***************************************/
+    private static final String RES_ID = "id";
+    private static final String RES_STRING = "string";
+    private static final String RES_DRABLE = "drable";
+    private static final String RES_LAYOUT = "layout";
+    private static final String RES_STYLE = "style";
+    private static final String RES_COLOR = "color";
+    private static final String RES_DIMEN = "dimen";
+    private static final String RES_ANIM = "anim";
+    private static final String RES_MENU = "menu";
+
     /**
-     * 得到raw目录下某个文件内容
-     * @param resId raw 资源ID
-     * (一般是 MP3和 Ogg等文件，在raw(raw是Resources 的子目录)文件内的资源会原封不动的拷贝到APK中，
-     *              而不会像其它资源文件那样被编译成二进制的形式)
+     * 获取资源文件的id
+     *
+     * @param context
+     * @param resName
      * @return
      */
+    public static int getId(Context context, String resName) {
+        return getResId(context, resName, RES_ID);
+    }
 
+    /**
+     * 获取资源文件string的id
+     *
+     * @param context
+     * @param resName
+     * @return
+     */
+    public static int getStringId(Context context, String resName) {
+        return getResId(context, resName, RES_STRING);
+    }
+
+    /**
+     * 获取资源文件drable的id
+     *
+     * @param context
+     * @param resName
+     * @return
+     */
+    public static int getDrableId(Context context, String resName) {
+        return getResId(context, resName, RES_DRABLE);
+    }
+
+    /**
+     * 获取资源文件layout的id
+     *
+     * @param context
+     * @param resName
+     * @return
+     */
+    public static int getLayoutId(Context context, String resName) {
+        return getResId(context, resName, RES_LAYOUT);
+    }
+
+    /**
+     * 获取资源文件style的id
+     *
+     * @param context
+     * @param resName
+     * @return
+     */
+    public static int getStyleId(Context context, String resName) {
+        return getResId(context, resName, RES_STYLE);
+    }
+
+    /**
+     * 获取资源文件color的id
+     *
+     * @param context
+     * @param resName
+     * @return
+     */
+    public static int getColorId(Context context, String resName) {
+        return getResId(context, resName, RES_COLOR);
+    }
+
+    /**
+     * 获取资源文件dimen的id
+     *
+     * @param context
+     * @param resName
+     * @return
+     */
+    public static int getDimenId(Context context, String resName) {
+        return getResId(context, resName, RES_DIMEN);
+    }
+
+    /**
+     * 获取资源文件ainm的id
+     *
+     * @param context
+     * @param resName
+     * @return
+     */
+    public static int getAnimId(Context context, String resName) {
+        return getResId(context, resName, RES_ANIM);
+    }
+
+    /**
+     * 获取资源文件menu的id
+     */
+    public static int getMenuId(Context context, String resName) {
+        return getResId(context, resName, RES_MENU);
+    }
+
+    /**
+     * 获取资源文件ID
+     *
+     * @param context
+     * @param resName
+     * @param defType
+     * @return
+     */
+    public static int getResId(Context context, String resName, String defType) {
+        return context.getResources().getIdentifier(resName, defType, context.getPackageName());
+    }
 }

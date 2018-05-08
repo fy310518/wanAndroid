@@ -77,24 +77,26 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
         if (null != act) act.initData(activity, savedInstanceState);
 
         //暴力适配
-        RudenessScreenAdapter.resetDensity(screenAdapter.designWidth);
-        RudenessScreenAdapter.resetDensity(screenAdapter.designWidth);
+        //通常情况下application与activity得到的resource虽然不是一个实例，但是displayMetrics是同一个实例，只需调用一次即可
+        //为了面对一些不可预计的情况以及向上兼容，分别调用一次较为保险
+        RudenessScreenAdapter.resetDensity(BaseApp.getAppCtx(), screenAdapter.designWidth);
+        RudenessScreenAdapter.resetDensity(activity, screenAdapter.designWidth);
     }
 
     @Override
     public void onActivityStarted(Activity activity) {
         Log.d(TAG, "Start()");
 
-        RudenessScreenAdapter.resetDensity(screenAdapter.designWidth);
-        RudenessScreenAdapter.resetDensity(screenAdapter.designWidth);
+        RudenessScreenAdapter.resetDensity(BaseApp.getAppCtx(), screenAdapter.designWidth);
+        RudenessScreenAdapter.resetDensity(activity, screenAdapter.designWidth);
     }
 
     @Override
     public void onActivityResumed(Activity activity) {
         Log.d(TAG, "Resume()");
 
-        RudenessScreenAdapter.resetDensity(screenAdapter.designWidth);
-        RudenessScreenAdapter.resetDensity(screenAdapter.designWidth);
+        RudenessScreenAdapter.resetDensity(BaseApp.getAppCtx(), screenAdapter.designWidth);
+        RudenessScreenAdapter.resetDensity(activity, screenAdapter.designWidth);
     }
 
     @Override

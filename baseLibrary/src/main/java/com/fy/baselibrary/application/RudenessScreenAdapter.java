@@ -8,8 +8,6 @@ import android.view.WindowManager;
 
 import java.lang.reflect.Field;
 
-import static android.content.Context.WINDOW_SERVICE;
-
 /**
  * 暴力屏幕适配
  * Created by fangs on 2018/5/4.
@@ -23,13 +21,12 @@ public class RudenessScreenAdapter {
     }
 
     /**
-     * 重新计算displayMetrics.xhdpi, 使单位pt重定义为设计稿的相对长度
+     * 重新计算displayMetrics.xhdpi, 使单位 pt重定义为设计稿的相对长度
      *
+     * @param context
      * @param designWidth 设计稿的宽度
-     * @see #activate()
      */
-    public static void resetDensity(float designWidth) {
-        Context context = BaseApp.getAppCtx();
+    public static void resetDensity(Context context, float designWidth) {
 
         Point size = new Point();
         ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRealSize(size);
@@ -39,8 +36,7 @@ public class RudenessScreenAdapter {
         resources.getDisplayMetrics().xdpi = size.x / designWidth * 72f;
 
         DisplayMetrics metrics = getMetricsOnMiui(context.getResources());
-        if (metrics != null)
-            metrics.xdpi = size.x / designWidth * 72f;
+        if (metrics != null) metrics.xdpi = size.x / designWidth * 72f;
     }
 
     /**
@@ -78,8 +74,8 @@ public class RudenessScreenAdapter {
     /**
      * 激活本方案
      */
-    public void activate() {
-        resetDensity(designWidth);
+    public void activate(Context context) {
+        resetDensity(context, designWidth);
     }
 
     /**

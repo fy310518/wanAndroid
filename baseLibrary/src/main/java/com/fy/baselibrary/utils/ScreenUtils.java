@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
+
+import com.fy.baselibrary.application.BaseApp;
 
 /**
  * 屏幕相关的工具类
@@ -33,6 +36,28 @@ public class ScreenUtils {
      */
     public static int getScreenDensityDpi(Context context) {
         return context.getResources().getDisplayMetrics().densityDpi;
+    }
+
+    /**
+     * 获取 屏幕尺寸
+     * @param context
+     * @return
+     */
+    public static float getScreenSize(Context context){
+        float screenSize = 0;
+
+        Point point = new Point();
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        if (wm != null) {
+            wm.getDefaultDisplay().getRealSize(point);
+            DisplayMetrics dm = context.getResources().getDisplayMetrics();
+            double x = Math.pow(point.x / dm.xdpi, 2);
+            double y = Math.pow(point.y / dm.ydpi, 2);
+
+            screenSize = (float) Math.sqrt(x + y);
+        }
+
+        return screenSize;
     }
 
     /**

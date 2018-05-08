@@ -11,6 +11,7 @@ import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.ResourceUtils;
 
 import java.io.File;
 

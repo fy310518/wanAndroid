@@ -20,7 +20,7 @@ public class DensityUtils {
 
     /**
      * pt转 px
-     * @param ptValue 需要转换的pt值，若context.resources.displayMetrics经过resetDensity()的修改则得到修正的相对长度，否则得到原生的磅
+     * @param ptValue
      * @return px值
      */
     public static float pt2px(float ptValue){
@@ -42,22 +42,22 @@ public class DensityUtils {
     /**
      * sp转px
      *
+     * @param context
      * @param spVal
      * @return
      */
-    public static int sp2px(float spVal) {
-        Context context = BaseApp.getAppCtx();
+    public static int sp2px(Context context, float spVal) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, spVal, context.getResources().getDisplayMetrics());
     }
 
     /**
      * px转dp
      *
+     * @param context
      * @param pxVal
      * @return
      */
-    public static float px2dp(float pxVal) {
-        Context context = BaseApp.getAppCtx();
+    public static float px2dp(Context context, float pxVal) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (pxVal / scale);
     }
@@ -65,17 +65,23 @@ public class DensityUtils {
     /**
      * px转sp
      *
+     * @param context
      * @param pxVal
      * @return
      */
-    public static float px2sp(float pxVal) {
-        Context context = BaseApp.getAppCtx();
+    public static float px2sp(Context context, float pxVal) {
         return (pxVal / context.getResources().getDisplayMetrics().scaledDensity);
     }
 
-    public static float px2pt(float pxVal){
-        Context context = BaseApp.getAppCtx();
-        return (pxVal / context.getResources().getDisplayMetrics().scaledDensity);
+    /**
+     * px 转 pt （1pt＝1/72英寸）
+     * @param context
+     * @param pxVal
+     * @return
+     */
+    public static float px2pt(Context context, float pxVal){
+
+        return (pxVal / context.getResources().getDisplayMetrics().xdpi) * 72;
     }
 
 
