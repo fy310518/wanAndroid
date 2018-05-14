@@ -38,7 +38,7 @@ public interface ApiService {
      */
     @Multipart
     @Headers({"url_name:user"})
-    @POST("file/uploadImages")
+    @POST("http://www.wanandroid.com/file/uploadImages")
 //    @POST("http://192.168.100.123/hfs/")
     Observable<BeanModule<String>> uploadPostFile(@Part("token") RequestBody token,
                                                   @Part("type") RequestBody type,

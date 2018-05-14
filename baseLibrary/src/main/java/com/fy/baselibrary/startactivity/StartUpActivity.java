@@ -1,10 +1,11 @@
-package wanandroid.fy.com.login;
+package com.fy.baselibrary.startactivity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.fy.baselibrary.R;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.JumpUtils;
@@ -14,8 +15,6 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import wanandroid.fy.com.R;
-import wanandroid.fy.com.main.MainActivity;
 
 /**
  * 欢迎页
@@ -61,7 +60,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity 
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aLong -> {
-                    JumpUtils.jump(StartUpActivity.this, MainActivity.class, null);
+                    JumpUtils.jump(StartUpActivity.this, "wanandroid.fy.com.main.MainActivity", null);
                 });
     }
 }

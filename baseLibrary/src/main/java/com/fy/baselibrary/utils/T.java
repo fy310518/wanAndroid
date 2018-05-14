@@ -1,7 +1,12 @@
 package com.fy.baselibrary.utils;
 
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fy.baselibrary.R;
 import com.fy.baselibrary.application.BaseApp;
 
 /**
@@ -10,7 +15,9 @@ import com.fy.baselibrary.application.BaseApp;
  */
 public class T {
 
-    /** 显示toast 开关 */
+    /**
+     * 显示toast 开关
+     */
     public static boolean isShow = true;
     private static Toast toast;
 
@@ -57,13 +64,14 @@ public class T {
 
     /**
      * 显示系统 toast
+     *
      * @param message 消息
      */
-    private static void show(String message, int duration){
-        if (isShow){
+    private static void show(String message, int duration) {
+        if (isShow) {
 
-            if (null == toast){
-                toast =  Toast.makeText(BaseApp.getAppCtx(), message, duration);
+            if (null == toast) {
+                toast = Toast.makeText(BaseApp.getAppCtx(), message, duration);
             } else {
                 toast.setText(message);
             }
@@ -71,5 +79,27 @@ public class T {
             toast.setDuration(duration);
             toast.show();
         }
+    }
+
+
+    /**
+     * 自定义 布局的Toast todo 待测
+     *
+     * @param duration
+     * @param message
+     */
+    public static void showQulifier(int duration, CharSequence message) {
+        if (null == toast) {
+            LayoutInflater inflate = (LayoutInflater) BaseApp.getAppCtx().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflate.inflate(R.layout.dialog_permission, null);// todo 布局待实现
+
+            toast = new Toast(BaseApp.getAppCtx());
+            toast.setView(view);
+            toast.setDuration(duration);
+        } else {
+            toast.setText(message);
+        }
+
+        show(message.toString(), Toast.LENGTH_LONG);
     }
 }

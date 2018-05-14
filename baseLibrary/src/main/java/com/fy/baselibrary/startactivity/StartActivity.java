@@ -107,7 +107,7 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
                 }
             }
         } else {
-            startActivity(new Intent("wanandroid.fy.com.login.StartUpActivity"));
+            startActivity(new Intent(this, StartUpActivity.class));
         }
     }
 

@@ -6,6 +6,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true">
 
+        <!-- 欢迎页 -->
+        <activity
+            android:name=".startactivity.StartUpActivity"
+            android:label="@string/srartUpTitle"
+            android:screenOrientation="portrait" />
+
         <!-- 全局 权限管理 -->
         <activity
             android:name=".permission.PermissionActivity"

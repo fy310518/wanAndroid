@@ -25,22 +25,12 @@
         </activity>
 
         <activity
-            android:name=".login.StartUpActivity"
-            android:label="@string/srartUpTitle"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="wanandroid.fy.com.login.StartUpActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name="wanandroid.fy.com.main.MainActivity"
             android:label="@string/mainTitle"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="hodgepodge.fy.com.main.MainActivity" />
+                <action android:name="wanandroid.fy.com.main.MainActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

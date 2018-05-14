@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">baseLibrary</string>
 
+    <string name="srartUpTitle">欢迎</string>
+
+
     <string name="idle">下拉有惊喜!!!</string>
     <string name="ready">松开刷新!!!</string>
 
