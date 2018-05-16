@@ -61,6 +61,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity 
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aLong -> {
                     JumpUtils.jump(StartUpActivity.this, "wanandroid.fy.com.main.MainActivity", null);
+                    finish();
                 });
     }
 }

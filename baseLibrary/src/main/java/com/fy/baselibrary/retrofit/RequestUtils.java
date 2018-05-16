@@ -59,7 +59,7 @@ public class RequestUtils {
     public static <T> T create(Class<T> clazz) {
         return getInstentce().netRetrofit.create(clazz);
     }
-    
+
     /**
      * 同时从缓存和网络获取请求结果
      * @param fromNetwork  从网络获取数据的 Observable

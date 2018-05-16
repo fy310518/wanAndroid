@@ -43,7 +43,8 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-        L.d(TAG, "Create()");
+        L.e(TAG, activity.getClass().getName() + "--Create()");
+        RequestUtils.clearDispos();
 
         BaseActivityBean activityBean = new BaseActivityBean();
 
@@ -85,7 +86,7 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
     @Override
     public void onActivityStarted(Activity activity) {
-        Log.d(TAG, "Start()");
+        L.e(TAG, activity.getClass().getName() + "--Start()");
 
         RudenessScreenAdapter.resetDensity(BaseApp.getAppCtx(), screenAdapter.designWidth);
         RudenessScreenAdapter.resetDensity(activity, screenAdapter.designWidth);
@@ -93,7 +94,7 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
     @Override
     public void onActivityResumed(Activity activity) {
-        Log.d(TAG, "Resume()");
+        L.e(TAG, activity.getClass().getName() + "--Resume()");
 
         RudenessScreenAdapter.resetDensity(BaseApp.getAppCtx(), screenAdapter.designWidth);
         RudenessScreenAdapter.resetDensity(activity, screenAdapter.designWidth);
@@ -106,18 +107,17 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
     @Override
     public void onActivityStopped(Activity activity) {
-        L.d(TAG, "Stop()");
-        RequestUtils.clearDispos();
+        L.e(TAG, activity.getClass().getName() + "--Stop()");
     }
 
     @Override
     public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-        L.d(TAG, "SaveInstanceState()");
+        L.e(TAG, activity.getClass().getName() + "--SaveInstanceState()");
     }
 
     @Override
     public void onActivityDestroyed(Activity activity) {
-        L.d(TAG, "Destroy()");
+        L.e(TAG, activity.getClass().getName() + "--Destroy()");
 
         BaseActivityBean activityBean = (BaseActivityBean) activity.getIntent()
                 .getSerializableExtra("ActivityBean");
