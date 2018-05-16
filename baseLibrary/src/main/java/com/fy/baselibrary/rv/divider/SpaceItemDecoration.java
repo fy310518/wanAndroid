@@ -4,17 +4,23 @@ import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.fy.baselibrary.utils.ScreenUtils;
+
 /**
  * RecycleView item 间隔 (9宫格 样式分割线)
  * Created by fangs on 2017/12/29.
  */
 public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
     private int mSpace;
-    private int minmSpace;
+    private int minmSpace = 0;
+
+    private int mImageSize;
 
     public SpaceItemDecoration(int space) {
         this.mSpace = space;
-        minmSpace = (int) (mSpace * 0.5);
+//        minmSpace = (int) (mSpace * 0.5);
+        mImageSize = ScreenUtils.getImageItemWidth();
+
     }
 
     @Override
@@ -28,14 +34,14 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
 //        如果是RecyclerView的第一个子项
         int position = parent.getChildAdapterPosition(view);
         if (position % 3 == 0 ) {
+            outRect.left = 0;
+            outRect.right = mSpace;
+        } else if (position % 3 == 1){
+            outRect.left = mSpace;
+            outRect.right = mSpace;
+        } else if (position % 3 == 2){
             outRect.left = mSpace;
             outRect.right = 0;
-        } else if (position % 3 == 1){
-            outRect.left = minmSpace;
-            outRect.right = 0;
-        }else if (position % 3 == 2){
-            outRect.left = minmSpace;
-            outRect.right = mSpace;
         }
     }
 

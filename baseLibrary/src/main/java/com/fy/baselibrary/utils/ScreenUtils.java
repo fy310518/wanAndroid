@@ -155,10 +155,10 @@ public class ScreenUtils {
 
     /**
      * 根据屏幕宽度与密度计算GridView显示的列数， 最少为三列，并获取Item宽度
-     * @param context
      * @return
      */
-    public static int getImageItemWidth(Context context) {
+    public static int getImageItemWidth() {
+        Context context = BaseApp.getAppCtx();
         int screenWidth = getScreenWidth(context);
         int densityDpi = getScreenDensityDpi(context);
 

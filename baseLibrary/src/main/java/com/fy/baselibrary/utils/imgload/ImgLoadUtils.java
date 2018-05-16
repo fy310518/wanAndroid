@@ -48,8 +48,7 @@ public class ImgLoadUtils {
      * @param url
      * @param imageView
      */
-    public static void loadImg(String url, ImageView imageView){
-        Context context = BaseApp.getAppCtx();
+    public static void loadImg(Context context, String url, ImageView imageView){
         Glide.with(context)
                 .load(url)
                 .error(R.mipmap.img_load_error)
@@ -77,8 +76,7 @@ public class ImgLoadUtils {
      * @param url
      * @param imageView
      */
-    public static void loadImages(String url, ImageView imageView) {
-        Context context = BaseApp.getAppCtx();
+    public static void loadImages(Context context, String url, ImageView imageView) {
         Glide.with(context)
                 .load(url)
                 .fallback(R.mipmap.img_load_default)
@@ -110,8 +108,7 @@ public class ImgLoadUtils {
      * @param url
      * @param imageView
      */
-    public static void loadCircleImg(String url, ImageView imageView) {
-        Context context = BaseApp.getAppCtx();
+    public static void loadCircleImg(Context context, String url, ImageView imageView) {
         Glide.with(context).load(url)
                 .fallback(R.mipmap.img_load_error)
                 .placeholder(R.mipmap.img_loading)
@@ -127,8 +124,7 @@ public class ImgLoadUtils {
      * @param url
      * @param imageView
      */
-    public static void loadRound(String url, ImageView imageView){
-        Context context = BaseApp.getAppCtx();
+    public static void loadRound(Context context, String url, ImageView imageView){
         Glide.with(context).load(url)
                 .fallback(R.mipmap.img_load_default)
                 .placeholder(R.mipmap.img_loading)
@@ -140,8 +136,7 @@ public class ImgLoadUtils {
     }
 
 
-    public static void loadRoundImg(int url, ImageView imageView){
-        Context context = BaseApp.getAppCtx();
+    public static void loadRoundImg(Context context, int url, ImageView imageView){
         Glide.with(context).load(url)
                 .fallback(R.mipmap.img_load_default)
                 .placeholder(R.mipmap.img_loading)

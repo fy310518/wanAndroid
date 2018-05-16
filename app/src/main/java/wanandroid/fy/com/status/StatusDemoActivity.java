@@ -2,16 +2,25 @@ package wanandroid.fy.com.status;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.fy.baselibrary.application.BaseActivityBean;
 import com.fy.baselibrary.application.IBaseActivity;
+import com.fy.baselibrary.base.ViewHolder;
+import com.fy.baselibrary.rv.adapter.RvCommonAdapter;
+import com.fy.baselibrary.rv.divider.SpaceItemDecoration;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.NightModeUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -32,6 +41,8 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
     StatusLayoutManager slManager;
 
+    @BindView(R.id.rv)
+    RecyclerView rv;
     @BindView(R.id.tvKing)
     TextView tvKing;
 
@@ -55,7 +66,9 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
         BaseActivityBean activityBean = (BaseActivityBean) activity.getIntent()
                 .getSerializableExtra("ActivityBean");
         slManager = activityBean.getSlManager();
+
     }
+
 
     @OnClick({R.id.tvKing})
     @Override

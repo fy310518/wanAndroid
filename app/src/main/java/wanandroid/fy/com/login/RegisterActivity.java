@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -31,7 +30,6 @@ import wanandroid.fy.com.R;
 import wanandroid.fy.com.api.ApiService;
 import wanandroid.fy.com.entity.LoginBean;
 import wanandroid.fy.com.main.MainActivity;
-import wanandroid.fy.com.status.StatusDemoActivity;
 import wanandroid.fy.com.utils.SelectUtils;
 
 /**

@@ -6,6 +6,13 @@
     android:background="@color/BgColor"
     android:padding="20dp">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@+id/tvKing"
+        app:layout_constraintRight_toRightOf="@+id/tvKing"/>
+
     <TextView
         android:id="@+id/tvKing"
         android:layout_width="match_parent"
@@ -16,7 +23,6 @@
         android:text="大王叫我来巡山"
         android:textColor="@color/red"
         android:background="@color/button_normal"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
