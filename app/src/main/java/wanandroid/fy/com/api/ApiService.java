@@ -44,6 +44,15 @@ public interface ApiService {
                                                   @Part("type") RequestBody type,
                                                   @Part List<MultipartBody.Part> files);
 
+    /**
+     * 多图片上传
+     * @return
+     */
+    @Multipart
+    @Headers({"url_name:user"})
+    @POST("http://192.168.100.123/hfs/")
+    Observable<BeanModule<String>> uploadFile(@Part List<MultipartBody.Part> files);
+
 
     /**
      * 登录
@@ -202,13 +211,12 @@ public interface ApiService {
 
     /**
      * 获取对应章节 内容
+     *
      * @param link
      * @return
      */
     @GET("http://chapterup.zhuishushenqi.com/chapter/{link}")
     Observable<BeanModule<List<Object>>> booksByTag(@Path("link") String link);
-
-
 
 
 }

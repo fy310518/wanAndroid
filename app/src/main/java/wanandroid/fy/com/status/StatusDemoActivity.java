@@ -2,21 +2,21 @@ package wanandroid.fy.com.status;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.fy.baselibrary.application.BaseActivityBean;
 import com.fy.baselibrary.application.IBaseActivity;
-import com.fy.baselibrary.base.ViewHolder;
-import com.fy.baselibrary.rv.adapter.RvCommonAdapter;
-import com.fy.baselibrary.rv.divider.SpaceItemDecoration;
+import com.fy.baselibrary.retrofit.NetCallBack;
+import com.fy.baselibrary.retrofit.RequestUtils;
+import com.fy.baselibrary.retrofit.RxHelper;
+import com.fy.baselibrary.retrofit.file.RequestBodyUtils;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
+import com.fy.baselibrary.utils.FileUtils;
+import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NightModeUtils;
 
 import java.util.ArrayList;
@@ -32,6 +32,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import wanandroid.fy.com.api.ApiService;
 
 /**
  * 多状态布局 demo
@@ -67,6 +68,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                 .getSerializableExtra("ActivityBean");
         slManager = activityBean.getSlManager();
 
+        uploadImg();
     }
 
 
@@ -119,5 +121,28 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                         slManager.showContent();
                     }
                 });
+    }
+
+    private void uploadImg(){
+        List<String> fileList = new ArrayList<>();
+        fileList.add(FileUtils.getSDCardPath() + "DCIM/Camera/20121006174327607.jpg");
+//        fileList.add(FileUtils.getSDCardPath() + "DCIM/Camera/tooopen_sy_133481514678.jpg");
+
+        RequestUtils.create(ApiService.class)
+                .uploadFile(RequestBodyUtils.fileToMultipartBodyParts(fileList))
+                .compose(RxHelper.handleResult())
+                .doOnSubscribe(RequestUtils::addDispos)
+                .subscribe(new NetCallBack<Object>() {
+                    @Override
+                    protected void onSuccess(Object login) {
+
+                    }
+
+                    @Override
+                    protected void updataLayout(int flag) {
+                        L.e("net updataLayout", flag + "-----");
+                    }
+                });
+
     }
 }
