@@ -1,9 +1,15 @@
-package com.fy.baselibrary.retrofit.file;
+package wanandroid.fy.com.api;
+
+import com.fy.baselibrary.retrofit.upload.UploadOnSubscribe;
+import com.fy.baselibrary.retrofit.upload.UploadRequestBody;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -12,9 +18,9 @@ import okhttp3.RequestBody;
  * 文件 转换 RequestBody 工具类
  * Created by fangs on 2018/5/17.
  */
-public class RequestBodyUtils {
+public class UpLoadUtils {
 
-    private RequestBodyUtils() {
+    private UpLoadUtils() {
         /* cannot be instantiated */
         throw new UnsupportedOperationException("cannot be instantiated");
     }
@@ -82,5 +88,33 @@ public class RequestBodyUtils {
         return multipartBody;
     }
 
+
+    /**
+     * 上传多个文件
+     */
+    public static Observable<Object> uploadFiles(List<File> files, ApiService apiService) {
+//        总长度
+        long sumLength = 0l;
+        for (File file : files) sumLength += file.length();
+
+//      进度Observable
+        UploadOnSubscribe uploadOnSubscribe = new UploadOnSubscribe(sumLength);
+        Observable<Integer> progressObservale = Observable.create(uploadOnSubscribe);
+
+        ArrayList<MultipartBody.Part> fileParts = new ArrayList<>();
+        for (File file : files) {
+            UploadRequestBody uploadRequestBody = new UploadRequestBody(file);
+//          设置进度监听
+            uploadRequestBody.setUploadOnSubscribe(uploadOnSubscribe);
+
+            fileParts.add(MultipartBody.Part.createFormData("upload", file.getName(), uploadRequestBody));
+        }
+
+        Observable uploadFile = apiService.uploadFile2(fileParts);
+
+        return Observable.merge(progressObservale, uploadFile)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 
 }

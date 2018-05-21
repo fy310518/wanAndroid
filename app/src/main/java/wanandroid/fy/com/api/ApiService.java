@@ -5,6 +5,7 @@ import com.fy.baselibrary.retrofit.BeanModule;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Flowable;
 import retrofit2.http.Field;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -44,6 +45,9 @@ public interface ApiService {
                                                   @Part("type") RequestBody type,
                                                   @Part List<MultipartBody.Part> files);
 
+    @POST("http://192.168.100.123/hfs/")
+    Observable<BeanModule<Object>> uploadFile1(@Part List<MultipartBody.Part> files);
+
     /**
      * 多图片上传
      * @return
@@ -51,7 +55,7 @@ public interface ApiService {
     @Multipart
     @Headers({"url_name:user"})
     @POST("http://192.168.100.123/hfs/")
-    Observable<BeanModule<String>> uploadFile(@Part List<MultipartBody.Part> files);
+    Observable<Object> uploadFile2(@Part List<MultipartBody.Part> files);
 
 
     /**

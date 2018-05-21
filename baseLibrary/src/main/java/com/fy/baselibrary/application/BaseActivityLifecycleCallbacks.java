@@ -44,7 +44,6 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         L.e(TAG, activity.getClass().getName() + "--Create()");
-        RequestUtils.clearDispos();
 
         BaseActivityBean activityBean = new BaseActivityBean();
 
@@ -102,7 +101,8 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
     @Override
     public void onActivityPaused(Activity activity) {
-        L.d(TAG, "Pause()");
+        L.e(TAG, activity.getClass().getName() + "--Pause()");
+        RequestUtils.clearDispos();
     }
 
     @Override

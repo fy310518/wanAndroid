@@ -74,7 +74,7 @@ public class RequestModule {
                 .writeTimeout(ConstantUtils.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
                 .addInterceptor(new ReceivedCookiesInterceptor())
                 .addInterceptor(new AddCookiesInterceptor())
-                .addInterceptor(interceptor)
+//                .addInterceptor(interceptor)
                 .addInterceptor(header)
                 .build();
     }

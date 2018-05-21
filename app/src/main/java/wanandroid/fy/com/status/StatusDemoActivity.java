@@ -12,33 +12,35 @@ import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
-import com.fy.baselibrary.retrofit.file.RequestBodyUtils;
+import com.fy.baselibrary.retrofit.upload.UpLoadCallBack;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NightModeUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import wanandroid.fy.com.R;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import wanandroid.fy.com.R;
 import wanandroid.fy.com.api.ApiService;
+import wanandroid.fy.com.api.UpLoadUtils;
 
 /**
  * 多状态布局 demo
  * Created by fangs on 2018/3/16.
  */
-public class StatusDemoActivity extends AppCompatActivity implements IBaseActivity{
+public class StatusDemoActivity extends AppCompatActivity implements IBaseActivity {
 
     StatusLayoutManager slManager;
 
@@ -68,7 +70,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                 .getSerializableExtra("ActivityBean");
         slManager = activityBean.getSlManager();
 
-        uploadImg();
+        uploadFiles();
     }
 
 
@@ -123,13 +125,13 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                 });
     }
 
-    private void uploadImg(){
+    private void uploadImg() {
         List<String> fileList = new ArrayList<>();
         fileList.add(FileUtils.getSDCardPath() + "DCIM/Camera/20121006174327607.jpg");
-//        fileList.add(FileUtils.getSDCardPath() + "DCIM/Camera/tooopen_sy_133481514678.jpg");
+        fileList.add(FileUtils.getSDCardPath() + "DCIM/Camera/tooopen_sy_133481514678.jpg");
 
         RequestUtils.create(ApiService.class)
-                .uploadFile(RequestBodyUtils.fileToMultipartBodyParts(fileList))
+                .uploadFile1(UpLoadUtils.fileToMultipartBodyParts(fileList))
                 .compose(RxHelper.handleResult())
                 .doOnSubscribe(RequestUtils::addDispos)
                 .subscribe(new NetCallBack<Object>() {
@@ -144,5 +146,32 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                     }
                 });
 
+    }
+
+    public void uploadFiles() {
+        List<File> files = new ArrayList<>();
+        files.add(new File(FileUtils.getSDCardPath() + "DCIM/Camera/20121006174327607.jpg"));
+        files.add(new File(FileUtils.getSDCardPath() + "DCIM/Downloads.zip"));
+        files.add(new File(FileUtils.getSDCardPath() + "DCIM/Camera/tooopen_sy_133481514678.jpg"));
+
+        UpLoadUtils.uploadFiles(files, RequestUtils.create(ApiService.class))
+                .doOnSubscribe(RequestUtils::addDispos)
+                .subscribe(new UpLoadCallBack() {
+                    @Override
+                    protected void onProgress(Integer percent) {
+                        L.e("进度监听", percent + "%");
+
+                    }
+
+                    @Override
+                    protected void onSuccess(Object t) {
+
+                    }
+
+                    @Override
+                    protected void updataLayout(int flag) {
+
+                    }
+                });
     }
 }
