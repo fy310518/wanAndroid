@@ -46,9 +46,7 @@ public class UploadRequestBody extends RequestBody {
             int read;
             while ((read = in.read(buffer)) != -1) {
                 // update progress on UI thread
-                if (mUploadOnSubscribe != null) {
-                    mUploadOnSubscribe.onRead(read);
-                }
+                if (null != mUploadOnSubscribe) mUploadOnSubscribe.onRead(read);
 
                 sink.write(buffer, 0, read);
             }

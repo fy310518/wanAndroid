@@ -4,6 +4,8 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.text.TextUtils;
 
+import com.fy.baselibrary.application.BaseApp;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
@@ -17,7 +19,9 @@ import java.util.Locale;
  */
 public class FileUtils {
 
-    /** 应用 所有 文件 根目录 */
+    /**
+     * 应用 所有 文件 根目录
+     */
     public static String SAVE_FOLDER = "HJY";
 
     private FileUtils() {
@@ -90,6 +94,7 @@ public class FileUtils {
     /**
      * 到得文件的放置路径
      * <p/> 如果文件目录不存在 会创建
+     *
      * @param aModuleName 模块名字 (如："head.img.temp")
      * @return
      * @author fangs
@@ -101,7 +106,7 @@ public class FileUtils {
 
         File dirpath;
 
-        if (isSDCardEnable()) dirpath = new File(getSDCardPath(), fDirStr);
+        if (isSDCardEnable()) dirpath = new File(BaseApp.getAppCtx().getExternalFilesDir(null), fDirStr);
         else dirpath = Environment.getDataDirectory();
 
         if (!dirpath.exists() && !dirpath.isDirectory()) {
@@ -130,6 +135,7 @@ public class FileUtils {
 
     /**
      * 判断指定路径的 文件 是否存在，不存在创建文件
+     *
      * @param filePath
      * @return
      */
@@ -148,25 +154,26 @@ public class FileUtils {
 
     /**
      * 递归删除文件和文件夹
-     * @param file    要删除的根目录
+     *
+     * @param file 要删除的根目录
      */
-    public static void recursionDeleteFile(File file){
+    public static void recursionDeleteFile(File file) {
 
         if (!file.exists()) return;
 
-        if(file.isFile()){
+        if (file.isFile()) {
             deleteFileSafely(file);//删除当前 文件
             return;
         }
 
-        if(file.isDirectory()){
+        if (file.isDirectory()) {
             File[] childFile = file.listFiles();
-            if(null == childFile || childFile.length == 0){
+            if (null == childFile || childFile.length == 0) {
                 deleteFileSafely(file);//删除 当前目录
                 return;
             }
 
-            for(File f : childFile){
+            for (File f : childFile) {
                 recursionDeleteFile(f);
             }
 
@@ -177,6 +184,7 @@ public class FileUtils {
 
     /**
      * 安全删除文件
+     *
      * @param file
      * @return
      */
@@ -203,21 +211,22 @@ public class FileUtils {
             L.d("file", "paramString---->null");
             return str;
         }
-        L.d("file","paramString:"+paramString);
+        L.d("file", "paramString:" + paramString);
         int i = paramString.lastIndexOf('.');
         if (i <= -1) {
-            L.d("file","i <= -1");
+            L.d("file", "i <= -1");
             return str;
         }
 
 
         str = paramString.substring(i + 1);
-        L.d("file","paramString.substring(i + 1)------>"+str);
+        L.d("file", "paramString.substring(i + 1)------>" + str);
         return str;
     }
 
     /**
      * 向指定文件写内容  (追加形式写文件)
+     *
      * @param path          文件目录(如：fy.com.base)
      * @param inputfileName 文件名（如：log.txt）
      * @param content       准备写入的内容
@@ -248,9 +257,10 @@ public class FileUtils {
 
     /**
      * 获取应用 图片保存目录
+     *
      * @return
      */
-    public static String getImgPath(){
+    public static String getImgPath() {
         String takeImageFilePath;
 
         if (FileUtils.isSDCardEnable())
@@ -262,9 +272,10 @@ public class FileUtils {
 
     /**
      * 根据系统时间、前缀、后缀产生一个文件
-     * @param folder    目标文件所在的 文件夹（目录）
-     * @param prefix    目标文件的 前缀 (如：IMG_)
-     * @param suffix    目标文件的 后缀名（如：.jpg）
+     *
+     * @param folder 目标文件所在的 文件夹（目录）
+     * @param prefix 目标文件的 前缀 (如：IMG_)
+     * @param suffix 目标文件的 后缀名（如：.jpg）
      * @return
      */
     public static File createFile(String folder, String prefix, String suffix) {
@@ -276,5 +287,9 @@ public class FileUtils {
 
         return new File(folder, filename);
     }
+
+
+
+
 
 }

@@ -1,13 +1,10 @@
 package com.fy.baselibrary.retrofit.upload;
 
-
-import com.fy.baselibrary.utils.L;
-
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 
 /**
- * 文件上传的回调
+ * 文件上传 进度观察者
  * Created by fangs on 2018/5/21.
  */
 public class UploadOnSubscribe implements ObservableOnSubscribe<Integer> {

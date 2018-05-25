@@ -24,8 +24,39 @@ public abstract class UpLoadCallBack extends NetCallBack {
         }
     }
 
+    public void setmSumLength(long mSumLength) {
+        this.mSumLength = mSumLength;
+    }
+
+    private long mSumLength = 0l;
+    private long loaded = 0l;
+
+    private int mPercent = 0;
+
+    public void onRead(long read) {
+        loaded += read;
+        if (mSumLength <= 0) {
+            onPercent(-1);
+        } else {
+            onPercent((int) (100 * loaded / mSumLength));
+        }
+    }
+
+    private void onPercent(int percent) {
+        if (percent == mPercent) return;
+
+        if (percent >= 100) {
+            percent = 100;
+            onProgress(percent);
+//            onComplete();
+            return;
+        }
+
+        onProgress(percent);
+    }
+
     /**
-     * 上传进度 回调方法
+     * 上传、下载 进度回调方法
      *
      * @param percent
      */

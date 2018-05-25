@@ -19,22 +19,31 @@ import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NightModeUtils;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
+import okhttp3.ResponseBody;
 import wanandroid.fy.com.R;
 import wanandroid.fy.com.api.ApiService;
-import wanandroid.fy.com.api.UpLoadUtils;
+import wanandroid.fy.com.api.LoadFileUtils;
 
 /**
  * 多状态布局 demo
@@ -70,7 +79,8 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                 .getSerializableExtra("ActivityBean");
         slManager = activityBean.getSlManager();
 
-        uploadFiles();
+//        uploadFiles();
+        downLoad("http://pic48.nipic.com/file/20140912/7487939_224235377000_2.jpg");
     }
 
 
@@ -131,7 +141,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
         fileList.add(FileUtils.getSDCardPath() + "DCIM/Camera/tooopen_sy_133481514678.jpg");
 
         RequestUtils.create(ApiService.class)
-                .uploadFile1(UpLoadUtils.fileToMultipartBodyParts(fileList))
+                .uploadFile1(LoadFileUtils.fileToMultipartBodyParts(fileList))
                 .compose(RxHelper.handleResult())
                 .doOnSubscribe(RequestUtils::addDispos)
                 .subscribe(new NetCallBack<Object>() {
@@ -154,7 +164,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
         files.add(new File(FileUtils.getSDCardPath() + "DCIM/Downloads.zip"));
         files.add(new File(FileUtils.getSDCardPath() + "DCIM/Camera/tooopen_sy_133481514678.jpg"));
 
-        UpLoadUtils.uploadFiles(files, RequestUtils.create(ApiService.class))
+        LoadFileUtils.uploadFiles(files, RequestUtils.create(ApiService.class))
                 .doOnSubscribe(RequestUtils::addDispos)
                 .subscribe(new UpLoadCallBack() {
                     @Override
@@ -173,5 +183,24 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
                     }
                 });
+    }
+
+    private void downLoad(String url) {
+        LoadFileUtils.downLoadFile(url, new UpLoadCallBack() {
+            @Override
+            protected void onProgress(Integer percent) {
+                L.e("文件下载", "file download: " + percent);
+            }
+
+            @Override
+            protected void onSuccess(Object t) {
+
+            }
+
+            @Override
+            protected void updataLayout(int flag) {
+
+            }
+        });
     }
 }
