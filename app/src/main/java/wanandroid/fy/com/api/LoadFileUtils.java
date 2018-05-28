@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -203,83 +204,95 @@ public class LoadFileUtils {
         }
     }
 
+    /**
+     * rxJava 多线程 断点续传
+     *
+     * @param start
+     * @param end
+     * @param url
+     * @return
+     */
+    public static Observable download(@NonNull final long start,
+                                      @NonNull final long end,
+                                      @NonNull final String url,
+                                      File targetFile) {
 
-    public Observable download(@NonNull final long start, @NonNull final long end,
-                               @NonNull final String url,
-                               final File file,
-                               final Observer subscriber) {
-        String str = "";
-        if (end == -1) {
-            str = "";
-        } else {
-            str = end + "";
-        }
+        String str = end == -1 ? "" : end + "";
 
         return RequestUtils.create(ApiService.class)
                 .download("bytes=" + start + "-" + str, url)
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
+                .doOnSubscribe(RequestUtils::addDispos)
+                .subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
                 .map(body -> body)
-                .observeOn(Schedulers.computation())
-                .doOnNext(body -> {
-                    //第一次请求全部文件长度
-                    if (end == -1) {
-                        try {
-                            RandomAccessFile randomFile = new RandomAccessFile(file, "rw");
-                            randomFile.setLength(body.contentLength());
-                            long one = body.contentLength() / 3;
-
-                            download(0, one, url, file, subscriber)
-                                    .mergeWith(download(one, one * 2, url, file, subscriber))
-                                    .mergeWith(download(one * 2, body.contentLength(), url, file, subscriber))
-                                    .subscribe(subscriber);
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        writeCaches(start, end, body.byteStream(), file);
-                    }
-                })
-                .subscribeOn(AndroidSchedulers.mainThread());
+                .doOnNext((ResponseBody body) -> writeCaches(start, body.byteStream(), targetFile));
     }
 
 
-    /**
-     * 写入文件
-     *
-     * @param file
-     * @throws IOException
-     */
-    public void writeCaches(final long start, @NonNull final long end,
-                            InputStream inputStream, File file) {
+    public static void downFile(@NonNull final String url, Observer subscriber) {
 
+        RequestUtils.create(ApiService.class)
+                .download("", url)
+                .doOnSubscribe(RequestUtils::addDispos)
+                .subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
+                .map(body -> {
+                    L.e("downFile -- map", "---map---");
+                    return body;
+                })
+                .flatMap(new Function<ResponseBody, ObservableSource<Object>>() {
+                    @Override
+                    public ObservableSource<Object> apply(ResponseBody body) throws Exception {
+
+                        //第一次请求全部文件长度
+                        long len = body.contentLength();
+                        File targetFile = FileUtils.createFile(url);
+                        RandomAccessFile raf = new RandomAccessFile(targetFile, "rwd");
+                        raf.setLength(len);
+                        raf.close();
+
+                        long one = len / 3;
+                        Observable servece1 = download(0, one, url, targetFile);
+                        Observable servece2 = download(one, one * 2, url, targetFile);
+                        Observable servece3 = download(one * 2, len, url, targetFile);
+
+                        return Observable.merge(servece1, servece2, servece3)
+                                .subscribeOn(Schedulers.io());
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+
+    }
+
+    /**
+     * 异步 写入文件
+     *
+     * @param saveFile
+     */
+    public static void writeCaches(@NonNull final long start,
+                                   InputStream is,
+                                   File saveFile) {
+
+        RandomAccessFile raf = null;
         byte[] buffer = new byte[1024 * 4];
-        RandomAccessFile randomAccessFile = null;
-        FileChannel channelOut = null;
 
         try {
-            if (!file.getParentFile().exists())
-                file.getParentFile().mkdirs();
-            long allLength = 0 == info.getCountLength() ? responseBody.contentLength() : info.getReadLength() + responseBody
-                    .contentLength();
+            raf = new RandomAccessFile(saveFile, "rw");
+            // 定位该线程的下载位置
+            raf.seek(start);
+            L.e("Thread", start + "---" + Thread.currentThread().getId());
 
-            randomAccessFile = new RandomAccessFile(file, "rwd");
-            channelOut = randomAccessFile.getChannel();
-            MappedByteBuffer mappedBuffer = channelOut.map(FileChannel.MapMode.READ_WRITE,
-                    info.getReadLength(), allLength - info.getReadLength());
-
-            int len;
-            while ((len = inputStream.read(buffer)) != -1) {
-                mappedBuffer.put(buffer, 0, len);
+            int len = -1;
+            while ((len = is.read(buffer)) != -1) {
+                raf.write(buffer, 0, len);
             }
+
+
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
-                if (null != inputStream) inputStream.close();
-                if (null != channelOut) channelOut.close();
-                if (null != randomAccessFile) randomAccessFile.close();
+                if (null != is) is.close();
+                if (null != raf) raf.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

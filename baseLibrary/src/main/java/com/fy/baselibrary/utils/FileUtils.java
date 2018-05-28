@@ -106,12 +106,12 @@ public class FileUtils {
 
         File dirpath;
 
-        if (isSDCardEnable()) dirpath = new File(BaseApp.getAppCtx().getExternalFilesDir(null), fDirStr);
+        if (isSDCardEnable())
+            dirpath = new File(BaseApp.getAppCtx().getExternalFilesDir(null), fDirStr);
         else dirpath = Environment.getDataDirectory();
 
-        if (!dirpath.exists() && !dirpath.isDirectory()) {
-            dirpath.mkdirs();
-        }
+        folderIsExists(dirpath.getPath());
+
         return dirpath.getPath();
     }
 
@@ -124,7 +124,7 @@ public class FileUtils {
     public static File folderIsExists(String filePath) {
         File folder = new File(filePath);
         try {
-            if (!folder.exists() || !folder.isDirectory()) {
+            if (!folder.isDirectory()) {
                 folder.mkdirs();
             }
         } catch (Exception e) {
@@ -142,7 +142,7 @@ public class FileUtils {
     public static File fileIsExists(String filePath) {
         File file = new File(filePath);
         try {
-            if (!file.exists() || !file.isFile()) {
+            if (!file.isFile()) {
                 file.createNewFile();
             }
         } catch (Exception e) {
@@ -288,8 +288,18 @@ public class FileUtils {
         return new File(folder, filename);
     }
 
+    /**
+     * 根据 url 在本地生成一个文件
+     *
+     * @param url 下载 url【如：http://img5q.duitang.com/uploads/item/201505/01/20150501113308_QNmsf.jpeg】
+     * @return
+     */
+    public static File createFile(String url) {
+        String fileName = url.substring(url.lastIndexOf("/"));
+        File file = new File(FileUtils.getPath("down"), fileName);
 
-
+        return FileUtils.fileIsExists(file.getPath());
+    }
 
 
 }

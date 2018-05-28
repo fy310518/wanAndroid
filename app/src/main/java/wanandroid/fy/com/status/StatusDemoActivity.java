@@ -80,7 +80,8 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
         slManager = activityBean.getSlManager();
 
 //        uploadFiles();
-        downLoad("http://pic48.nipic.com/file/20140912/7487939_224235377000_2.jpg");
+//        downLoad("http://pic48.nipic.com/file/20140912/7487939_224235377000_2.jpg");
+        downLoad("http://f5.market.mi-img.com/download/AppStore/06ab54403254040c70cbb19fba30340f6bd8c677b/com.tencent.tmgp.sgame.apk");
     }
 
 
@@ -186,21 +187,39 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
     }
 
     private void downLoad(String url) {
-        LoadFileUtils.downLoadFile(url, new UpLoadCallBack() {
-            @Override
-            protected void onProgress(Integer percent) {
-                L.e("文件下载", "file download: " + percent);
-            }
+//        LoadFileUtils.downLoadFile(url, new UpLoadCallBack() {
+//            @Override
+//            protected void onProgress(Integer percent) {
+//                L.e("文件下载", "file download: " + percent);
+//            }
+//
+//            @Override
+//            protected void onSuccess(Object t) {
+//
+//            }
+//
+//            @Override
+//            protected void updataLayout(int flag) {
+//
+//            }
+//        });
 
-            @Override
-            protected void onSuccess(Object t) {
+        LoadFileUtils.downFile(url,
+                new UpLoadCallBack() {
+                    @Override
+                    protected void onProgress(Integer percent) {
 
-            }
+                    }
 
-            @Override
-            protected void updataLayout(int flag) {
+                    @Override
+                    protected void onSuccess(Object t) {
 
-            }
-        });
+                    }
+
+                    @Override
+                    protected void updataLayout(int flag) {
+
+                    }
+                });
     }
 }
