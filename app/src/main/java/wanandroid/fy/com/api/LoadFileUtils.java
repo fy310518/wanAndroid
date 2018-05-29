@@ -2,6 +2,7 @@ package wanandroid.fy.com.api;
 
 import android.support.annotation.NonNull;
 
+import com.fy.baselibrary.application.BaseApp;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.upload.UpLoadCallBack;
 import com.fy.baselibrary.retrofit.upload.UploadOnSubscribe;
@@ -12,11 +13,13 @@ import com.fy.baselibrary.utils.L;
 import org.reactivestreams.Subscriber;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
+import java.net.ProtocolException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
@@ -207,59 +210,54 @@ public class LoadFileUtils {
     /**
      * rxJava 多线程 断点续传
      *
-     * @param start
-     * @param end
      * @param url
+     * @param subscriber
      * @return
      */
-    public static Observable download(@NonNull final long start,
-                                      @NonNull final long end,
-                                      @NonNull final String url,
-                                      File targetFile) {
-
-        String str = end == -1 ? "" : end + "";
-
-        return RequestUtils.create(ApiService.class)
-                .download("bytes=" + start + "-" + str, url)
-                .doOnSubscribe(RequestUtils::addDispos)
-                .subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
-                .map(body -> body)
-                .doOnNext((ResponseBody body) -> writeCaches(start, body.byteStream(), targetFile));
-    }
-
-
-    public static void downFile(@NonNull final String url, Observer subscriber) {
+    public static void downFile(@NonNull final String url, UpLoadCallBack subscriber) {
         RequestUtils.create(ApiService.class)
                 .download("", url)
                 .doOnSubscribe(RequestUtils::addDispos)
-                .subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
-                .map(body -> {
-                    L.e("downFile -- map", "---map---");
-                    return body;
-                })
+                .subscribeOn(Schedulers.io())
+                .map(body -> body)
                 .flatMap(new Function<ResponseBody, ObservableSource<Object>>() {
                     @Override
                     public ObservableSource<Object> apply(ResponseBody body) throws Exception {
 
                         //第一次请求全部文件长度
                         long len = body.contentLength();
+                        L.e("Thread", len + "---》" + Thread.currentThread().getName() + "-->" + Thread.currentThread().getId());
                         File targetFile = FileUtils.createFile(url);
                         RandomAccessFile raf = new RandomAccessFile(targetFile, "rwd");
                         raf.setLength(len);
                         raf.close();
 
+                        subscriber.setmSumLength(len);
                         long one = len / 3;
-                        Observable servece1 = download(0, one, url, targetFile);
-                        Observable servece2 = download(one, one * 2, url, targetFile);
-                        Observable servece3 = download(one * 2, len, url, targetFile);
+                        Observable servece1 = download(0, one, url, targetFile, subscriber);
+                        Observable servece2 = download(one, one * 2, url, targetFile, subscriber);
+                        Observable servece3 = download(one * 2, len, url, targetFile, subscriber);
 
-                        return Observable.merge(servece1, servece2, servece3)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread());
+                        return Observable.merge(servece1, servece2, servece3);
                     }
                 })
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
+    }
 
+    public static Observable download(@NonNull final long start,
+                                      @NonNull final long end,
+                                      @NonNull final String url,
+                                      File targetFile, UpLoadCallBack subscriber) {
+
+        String str = end == -1 ? "" : end + "";
+
+        return RequestUtils.create(ApiService.class)
+                .download("bytes=" + start + "-" + str, url)
+                .doOnSubscribe(RequestUtils::addDispos)
+                .subscribeOn(Schedulers.io())
+                .map(body -> body)
+                .doOnNext((ResponseBody body) -> writeCaches(start, body.byteStream(), targetFile, subscriber));
     }
 
     /**
@@ -267,15 +265,12 @@ public class LoadFileUtils {
      *
      * @param saveFile
      */
-    public static void writeCaches(@NonNull final long start,
-                                   InputStream is,
-                                   File saveFile) {
-
+    public static void writeCaches(@NonNull final long start, InputStream is, File saveFile, UpLoadCallBack subscriber) {
         RandomAccessFile raf = null;
         byte[] buffer = new byte[1024 * 4];
 
         try {
-            raf = new RandomAccessFile(saveFile, "rw");
+            raf = new RandomAccessFile(saveFile, "rwd");
             // 定位该线程的下载位置
             raf.seek(start);
             L.e("Thread", start + "---》" + Thread.currentThread().getName() + "-->" + Thread.currentThread().getId());
@@ -283,11 +278,12 @@ public class LoadFileUtils {
             int len = -1;
             while ((len = is.read(buffer)) != -1) {
                 raf.write(buffer, 0, len);
+
+                subscriber.onRead(len);
             }
 
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException e){
+            subscriber.onError(e);
         } finally {
             try {
                 if (null != is) is.close();

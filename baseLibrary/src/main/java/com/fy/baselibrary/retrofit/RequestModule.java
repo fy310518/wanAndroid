@@ -10,6 +10,7 @@ import com.fy.baselibrary.utils.L;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -20,6 +21,7 @@ import dagger.Provides;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -75,7 +77,8 @@ public class RequestModule {
                 .addInterceptor(new ReceivedCookiesInterceptor())
                 .addInterceptor(new AddCookiesInterceptor())
                 .addInterceptor(header)
-                .addNetworkInterceptor(interceptor)
+//                .addNetworkInterceptor(interceptor)
+                .protocols(Collections.singletonList(Protocol.HTTP_1_1))
                 .build();
     }
 

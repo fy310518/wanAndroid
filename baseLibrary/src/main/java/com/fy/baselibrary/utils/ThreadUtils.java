@@ -33,13 +33,13 @@ public class ThreadUtils {
      */
 
     //参数初始化
-    private static final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
+    public static final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
     //核心线程数量大小
-    private static final int corePoolSize = Math.max(2, Math.min(CPU_COUNT - 1, 4));
+    public static final int corePoolSize = Math.max(2, Math.min(CPU_COUNT - 1, 4));
     //线程池最大容纳线程数
-    private static final int maximumPoolSize = CPU_COUNT * 2 + 1;
+    public static final int maximumPoolSize = CPU_COUNT * 2 + 1;
     //线程空闲后的存活时长
-    private static final int keepAliveTime = 30;
+    public static final int keepAliveTime = 30;
     //任务过多后,存储任务的一个阻塞队列
     BlockingQueue workQueue = new SynchronousQueue<>();
 

@@ -80,8 +80,9 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
         slManager = activityBean.getSlManager();
 
 //        uploadFiles();
-        downLoad("http://pic48.nipic.com/file/20140912/7487939_224235377000_2.jpg");
-        downLoad("http://hotchat-dl.iqiyi.com/qijupro_android/qiju.apk");
+//        downLoad("http://pic48.nipic.com/file/20140912/7487939_224235377000_2.jpg");
+//        downLoad("http://imtt.dd.qq.com/16891/1861D39534D33194426C894BA0D816CF.apk?fsname=com.ss.android.ugc.aweme_1.8.3_183.apk&csr=1bbd");
+        downLoad("https://pic.ibaotu.com/00/60/62/19S888piCNXP.mp4");
     }
 
 
@@ -203,21 +204,18 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 //
 //            }
 //        });
-
         LoadFileUtils.downFile(url, new UpLoadCallBack() {
                     @Override
                     protected void onProgress(Integer percent) {
-
+                        L.e("onProgress", percent + "---》" + Thread.currentThread().getName() + "-->" + Thread.currentThread().getId());
                     }
 
                     @Override
                     protected void onSuccess(Object t) {
-
                     }
 
                     @Override
                     protected void updataLayout(int flag) {
-
                     }
                 });
     }

@@ -292,10 +292,18 @@ public class FileUtils {
      * 根据 url 在本地生成一个文件
      *
      * @param url 下载 url【如：http://img5q.duitang.com/uploads/item/201505/01/20150501113308_QNmsf.jpeg】
+     *            【http://imtt.dd.qq.com/16891/1861D39534D33194426C894BA0D816CF.apk?fsname=com.ss.android.ugc.aweme_1.8.3_183.apk&csr=1bbd】
      * @return
      */
     public static File createFile(String url) {
-        String fileName = url.substring(url.lastIndexOf("/"));
+        String fileName;
+
+        if (url.indexOf("?") == -1){
+            fileName = url.substring(url.lastIndexOf("/"));
+        } else {
+            fileName = url.subSequence(url.lastIndexOf("/"), url.indexOf("?")).toString();
+        }
+
         File file = new File(FileUtils.getPath("down"), fileName);
 
         return FileUtils.fileIsExists(file.getPath());

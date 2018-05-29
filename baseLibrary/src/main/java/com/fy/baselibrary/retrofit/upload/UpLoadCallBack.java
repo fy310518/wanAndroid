@@ -28,8 +28,8 @@ public abstract class UpLoadCallBack extends NetCallBack {
         this.mSumLength = mSumLength;
     }
 
-    private long mSumLength = 0l;
-    private long loaded = 0l;
+    private long mSumLength = 0l;//总长度
+    public long loaded = 0l;//进度
 
     private int mPercent = 0;
 
@@ -42,6 +42,10 @@ public abstract class UpLoadCallBack extends NetCallBack {
         }
     }
 
+    /**
+     * 计算 上传、下载 进度百分比
+     * @param percent
+     */
     private void onPercent(int percent) {
         if (percent == mPercent) return;
 
