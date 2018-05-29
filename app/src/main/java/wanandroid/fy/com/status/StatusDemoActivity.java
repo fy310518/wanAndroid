@@ -80,8 +80,8 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
         slManager = activityBean.getSlManager();
 
 //        uploadFiles();
-//        downLoad("http://pic48.nipic.com/file/20140912/7487939_224235377000_2.jpg");
-        downLoad("http://f5.market.mi-img.com/download/AppStore/06ab54403254040c70cbb19fba30340f6bd8c677b/com.tencent.tmgp.sgame.apk");
+        downLoad("http://pic48.nipic.com/file/20140912/7487939_224235377000_2.jpg");
+        downLoad("http://hotchat-dl.iqiyi.com/qijupro_android/qiju.apk");
     }
 
 
@@ -204,8 +204,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 //            }
 //        });
 
-        LoadFileUtils.downFile(url,
-                new UpLoadCallBack() {
+        LoadFileUtils.downFile(url, new UpLoadCallBack() {
                     @Override
                     protected void onProgress(Integer percent) {
 

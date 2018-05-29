@@ -229,7 +229,6 @@ public class LoadFileUtils {
 
 
     public static void downFile(@NonNull final String url, Observer subscriber) {
-
         RequestUtils.create(ApiService.class)
                 .download("", url)
                 .doOnSubscribe(RequestUtils::addDispos)
@@ -255,10 +254,10 @@ public class LoadFileUtils {
                         Observable servece3 = download(one * 2, len, url, targetFile);
 
                         return Observable.merge(servece1, servece2, servece3)
-                                .subscribeOn(Schedulers.io());
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread());
                     }
                 })
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
 
     }
@@ -279,7 +278,7 @@ public class LoadFileUtils {
             raf = new RandomAccessFile(saveFile, "rw");
             // 定位该线程的下载位置
             raf.seek(start);
-            L.e("Thread", start + "---" + Thread.currentThread().getId());
+            L.e("Thread", start + "---》" + Thread.currentThread().getName() + "-->" + Thread.currentThread().getId());
 
             int len = -1;
             while ((len = is.read(buffer)) != -1) {

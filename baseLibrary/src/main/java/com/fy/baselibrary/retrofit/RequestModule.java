@@ -75,7 +75,7 @@ public class RequestModule {
                 .addInterceptor(new ReceivedCookiesInterceptor())
                 .addInterceptor(new AddCookiesInterceptor())
                 .addInterceptor(header)
-//                .addNetworkInterceptor(interceptor)
+                .addNetworkInterceptor(interceptor)
                 .build();
     }
 
