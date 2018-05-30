@@ -1,6 +1,7 @@
 package wanandroid.fy.com.api;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.fy.baselibrary.application.BaseApp;
 import com.fy.baselibrary.retrofit.RequestUtils;
@@ -9,19 +10,14 @@ import com.fy.baselibrary.retrofit.upload.UploadOnSubscribe;
 import com.fy.baselibrary.retrofit.upload.UploadRequestBody;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.L;
-
-import org.reactivestreams.Subscriber;
+import com.fy.baselibrary.utils.cache.ACache;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
-import java.net.ProtocolException;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +25,8 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -219,33 +215,55 @@ public class LoadFileUtils {
                 .download("", url)
                 .doOnSubscribe(RequestUtils::addDispos)
                 .subscribeOn(Schedulers.io())
-                .map(body -> body)
                 .flatMap(new Function<ResponseBody, ObservableSource<Object>>() {
                     @Override
                     public ObservableSource<Object> apply(ResponseBody body) throws Exception {
-
                         //第一次请求全部文件长度
-                        long len = body.contentLength();
-                        L.e("Thread", len + "---》" + Thread.currentThread().getName() + "-->" + Thread.currentThread().getId());
+                        long sumLength = body.contentLength();
+                        subscriber.setmSumLength(sumLength);
+
+                        ACache mCache = ACache.get(BaseApp.getAppCtx());
                         File targetFile = FileUtils.createFile(url);
+
+                        long one = sumLength / 3;
+                        Observable[] sources = new Observable[3];
+                        for (int i = 0; i < 3; i++){
+                            Observable servece = null;
+
+                            String strLen = mCache.getAsString(url + i + "loaded");
+                            //如果文件已经删除 则从头开始下载
+                            if (targetFile.length() == 0){
+                                strLen = "";
+                                subscriber.loaded = 0L;
+                                //删除 每个线程 已经下载的 总长度 缓存
+                                mCache.remove(url + i + "loaded");
+                            }
+
+                            //判断是否下载全部文件
+                            if (!TextUtils.isEmpty(strLen) && !strLen.equals("" + one)){
+                                long len1 = Long.parseLong(strLen);
+                                if (len1 < one) servece = download(url + i, len1, one, url, targetFile, subscriber);
+                            } else {
+                                servece = download(url + i, i * one, one * (i + 1), url, targetFile, subscriber);
+                            }
+                            
+                            if (null != servece) sources[i] = servece;
+                        }
+
                         RandomAccessFile raf = new RandomAccessFile(targetFile, "rwd");
-                        raf.setLength(len);
+                        raf.setLength(sumLength);
                         raf.close();
 
-                        subscriber.setmSumLength(len);
-                        long one = len / 3;
-                        Observable servece1 = download(0, one, url, targetFile, subscriber);
-                        Observable servece2 = download(one, one * 2, url, targetFile, subscriber);
-                        Observable servece3 = download(one * 2, len, url, targetFile, subscriber);
 
-                        return Observable.merge(servece1, servece2, servece3);
+                        return Observable.mergeArray(sources);//todo 被观察者 不到三个的时候 没有测试
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
 
-    public static Observable download(@NonNull final long start,
+    public static Observable download(@NonNull String nameKey,
+                                      @NonNull final long start,
                                       @NonNull final long end,
                                       @NonNull final String url,
                                       File targetFile, UpLoadCallBack subscriber) {
@@ -256,8 +274,8 @@ public class LoadFileUtils {
                 .download("bytes=" + start + "-" + str, url)
                 .doOnSubscribe(RequestUtils::addDispos)
                 .subscribeOn(Schedulers.io())
-                .map(body -> body)
-                .doOnNext((ResponseBody body) -> writeCaches(start, body.byteStream(), targetFile, subscriber));
+                .doOnNext((ResponseBody body) -> writeCaches(nameKey, start, body.byteStream(), targetFile, subscriber))
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**
@@ -265,21 +283,33 @@ public class LoadFileUtils {
      *
      * @param saveFile
      */
-    public static void writeCaches(@NonNull final long start, InputStream is, File saveFile, UpLoadCallBack subscriber) {
+    public static void writeCaches(@NonNull String nameKey, @NonNull final long start,
+                                   InputStream is,
+                                   File saveFile,
+                                   UpLoadCallBack subscriber) {
         RandomAccessFile raf = null;
         byte[] buffer = new byte[1024 * 4];
 
         try {
+            ACache mCache = ACache.get(BaseApp.getAppCtx());
+
             raf = new RandomAccessFile(saveFile, "rwd");
             // 定位该线程的下载位置
             raf.seek(start);
             L.e("Thread", start + "---》" + Thread.currentThread().getName() + "-->" + Thread.currentThread().getId());
 
-            int len = -1;
+            long loaded = 0L;//当前线程下载 总长度
+            String strLoaded = mCache.getAsString(nameKey + "loaded");
+            if (!TextUtils.isEmpty(strLoaded)) loaded = Long.parseLong(strLoaded);
+
+            int len;
             while ((len = is.read(buffer)) != -1) {
                 raf.write(buffer, 0, len);
-
                 subscriber.onRead(len);
+
+                loaded += len;
+                //缓存当前线程 下载内容 总长度
+                mCache.put(nameKey + "loaded", loaded + "");
             }
 
         } catch (IOException e){
@@ -291,7 +321,6 @@ public class LoadFileUtils {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
     }
 }

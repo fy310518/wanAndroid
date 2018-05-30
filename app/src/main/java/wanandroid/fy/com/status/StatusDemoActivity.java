@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
 import com.fy.baselibrary.application.BaseActivityBean;
+import com.fy.baselibrary.application.BaseApp;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
@@ -18,6 +20,7 @@ import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NightModeUtils;
+import com.fy.baselibrary.utils.cache.ACache;
 
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
@@ -81,7 +84,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
 //        uploadFiles();
 //        downLoad("http://pic48.nipic.com/file/20140912/7487939_224235377000_2.jpg");
-//        downLoad("http://imtt.dd.qq.com/16891/1861D39534D33194426C894BA0D816CF.apk?fsname=com.ss.android.ugc.aweme_1.8.3_183.apk&csr=1bbd");
+//        downLoad("http://imtt.dd.qq.com/16891/1861D39534D33194426C894BA0D816CF.apk?fsname=com.ss.android.ugc.aweme_1.8.3_183.aweme_1pk&csr=1bbd");
         downLoad("https://pic.ibaotu.com/00/60/62/19S888piCNXP.mp4");
     }
 
@@ -204,18 +207,25 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 //
 //            }
 //        });
-        LoadFileUtils.downFile(url, new UpLoadCallBack() {
+        ACache mCache = ACache.get(BaseApp.getAppCtx());
+        String percent = mCache.getAsString(url + "percent");
+        if (!TextUtils.isEmpty(percent))tvKing.setText(percent + "%");
+
+        LoadFileUtils.downFile(url, new UpLoadCallBack(url) {
                     @Override
                     protected void onProgress(Integer percent) {
                         L.e("onProgress", percent + "---》" + Thread.currentThread().getName() + "-->" + Thread.currentThread().getId());
+                        runOnUiThread(() -> tvKing.setText(percent + "%"));
                     }
 
                     @Override
                     protected void onSuccess(Object t) {
+                        L.e("onProgress", Thread.currentThread().getName() + "-->" + Thread.currentThread().getId());
                     }
 
                     @Override
                     protected void updataLayout(int flag) {
+                        L.e("onProgress", Thread.currentThread().getName() + "-->" + Thread.currentThread().getId());
                     }
                 });
     }

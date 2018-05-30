@@ -1,7 +1,12 @@
 package com.fy.baselibrary.retrofit.upload;
 
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+
+import com.fy.baselibrary.application.BaseApp;
 import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
+import com.fy.baselibrary.utils.cache.ACache;
 
 /**
  * 自定义Subscribe (增强 NetCallBAck)
@@ -9,7 +14,19 @@ import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
  */
 public abstract class UpLoadCallBack extends NetCallBack {
 
-    public UpLoadCallBack() {}
+    public UpLoadCallBack() {
+    }
+
+    public UpLoadCallBack(@NonNull final String url) {
+        this.url = url;
+
+        //从缓存中获取 已经下载的总进度
+        ACache mCache = ACache.get(BaseApp.getAppCtx());
+        String strLoaded = mCache.getAsString(url + "loaded");
+        if (!TextUtils.isEmpty(strLoaded)) {
+            loaded = Long.parseLong(strLoaded);
+        }
+    }
 
     public UpLoadCallBack(IProgressDialog pDialog) {
         super(pDialog);
@@ -28,10 +45,14 @@ public abstract class UpLoadCallBack extends NetCallBack {
         this.mSumLength = mSumLength;
     }
 
-    private long mSumLength = 0l;//总长度
-    public long loaded = 0l;//进度
+    /**
+     * 下载 url
+     */
+    private String url;
+    private long mSumLength = 0L;//总长度
+    public long loaded = 0L;//已经下载的 总长度
 
-    private int mPercent = 0;
+    private int mPercent = 0;//进度百分比 数
 
     public void onRead(long read) {
         loaded += read;
@@ -44,6 +65,7 @@ public abstract class UpLoadCallBack extends NetCallBack {
 
     /**
      * 计算 上传、下载 进度百分比
+     *
      * @param percent
      */
     private void onPercent(int percent) {
@@ -52,12 +74,28 @@ public abstract class UpLoadCallBack extends NetCallBack {
         if (percent >= 100) {
             percent = 100;
             onProgress(percent);
-//            onComplete();
+            cachePercent(percent);
+            onComplete();
             return;
         }
 
         onProgress(percent);
+        cachePercent(percent);
     }
+
+    /**
+     * 缓存进度百分比
+     * @param percent
+     */
+    private void cachePercent(int percent) {
+        //缓存 断点续传 进度百分比
+        if (!TextUtils.isEmpty(url)) {
+            ACache mCache = ACache.get(BaseApp.getAppCtx());
+            mCache.put(url + "percent", percent + "");
+            mCache.put(url + "loaded", loaded + "");
+        }
+    }
+
 
     /**
      * 上传、下载 进度回调方法
