@@ -12,6 +12,8 @@ import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.TransfmtUtils;
 import com.fy.baselibrary.utils.cache.ACache;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * 自定义Subscribe (增强 NetCallBAck)
  * Created by fangs on 2018/5/21.
@@ -43,24 +45,25 @@ public abstract class UpLoadCallBack extends NetCallBack {
 
         ACache mCache = ACache.get(BaseApp.getAppCtx());
         //从缓存中获取 已经下载的总进度
-        loaded = mCache.getAsLong(url + Constant.DownTask);
+        loaded.addAndGet(mCache.getAsLong(url + Constant.DownTask));
     }
 
     /**
      * 下载 url
      */
     private String url;
-    private long mSumLength = 0L;//总长度
-    public long loaded = 0L;//已经下载的 总长度
+    public long mSumLength = 0L;//总长度
+    public AtomicLong loaded = new AtomicLong();//已经下载的 总长度
 
     private double mPercent = 0;//进度百分比 数
 
     public void onRead(long read) {
-        loaded += read;
+        loaded.addAndGet(read);
+
         if (mSumLength <= 0) {
             onPercent(-1);
         } else {
-            onPercent(100d * loaded / mSumLength);
+            onPercent(100d * loaded.get() / mSumLength);
         }
     }
 
@@ -76,7 +79,7 @@ public abstract class UpLoadCallBack extends NetCallBack {
             percent = 100;
             onProgress(percent + "");
             cachePercent(percent);
-            L.e("Thread", "完成" + Thread.currentThread().getName() + "-->" + Thread.currentThread().getId());
+            L.e("Thread", "完成" + Thread.currentThread().getName() + "-->" + loaded + "---->" + mSumLength);
             onComplete();
             return;
         }

@@ -235,7 +235,7 @@ public class LoadFileUtils {
                             //如果文件已经删除 则从头开始下载
                             if (targetFile.length() == 0){
                                 startPosition = 0L;
-                                subscriber.loaded = 0L;
+                                subscriber.loaded.set(0L);
                                 //删除 每个线程 已经下载的 总长度 缓存
                                 mCache.remove(url + i + Constant.DownTherad);
                                 mCache.remove(url  + Constant.DownTask);
