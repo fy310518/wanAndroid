@@ -4,8 +4,7 @@ import android.text.TextUtils;
 
 import com.fy.baselibrary.retrofit.cookie.AddCookiesInterceptor;
 import com.fy.baselibrary.retrofit.cookie.ReceivedCookiesInterceptor;
-import com.fy.baselibrary.retrofit.gson.DES3GsonConverterFactory;
-import com.fy.baselibrary.utils.ConstantUtils;
+import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.L;
 import com.google.gson.GsonBuilder;
 
@@ -43,7 +42,7 @@ public class RequestModule {
         return new Retrofit.Builder()
                 .addCallAdapterFactory(callAdapterFactory)
                 .addConverterFactory(gsonConverterFactory)
-                .baseUrl(ConstantUtils.BASE_URL)
+                .baseUrl(Constant.BASE_URL)
                 .client(client)
                 .build();
     }
@@ -71,9 +70,9 @@ public class RequestModule {
     @Provides
     protected OkHttpClient getClient(HttpLoggingInterceptor interceptor, Interceptor header) {
         return new OkHttpClient.Builder()
-                .connectTimeout(ConstantUtils.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
-                .readTimeout(ConstantUtils.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
-                .writeTimeout(ConstantUtils.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
+                .connectTimeout(Constant.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
+                .readTimeout(Constant.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
+                .writeTimeout(Constant.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
                 .addInterceptor(new ReceivedCookiesInterceptor())
                 .addInterceptor(new AddCookiesInterceptor())
                 .addInterceptor(header)
@@ -125,8 +124,8 @@ public class RequestModule {
                     //匹配获得新的BaseUrl
                     String headerValue = headerValues.get(0);
                     HttpUrl newBaseUrl = null;
-                    if ("user".equals(headerValue) && !TextUtils.isEmpty(ConstantUtils.custom_Url)) {
-                        newBaseUrl = HttpUrl.parse(ConstantUtils.custom_Url);
+                    if ("user".equals(headerValue) && !TextUtils.isEmpty(Constant.custom_Url)) {
+                        newBaseUrl = HttpUrl.parse(Constant.custom_Url);
 
                         //从request中获取原有的HttpUrl实例oldHttpUrl
                         HttpUrl oldHttpUrl = request.url();

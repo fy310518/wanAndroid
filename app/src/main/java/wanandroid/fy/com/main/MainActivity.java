@@ -26,12 +26,11 @@ import com.fy.baselibrary.application.BaseApp;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.AnimUtils;
-import com.fy.baselibrary.utils.ConstantUtils;
+import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.NightModeUtils;
 import com.fy.baselibrary.utils.ResourceUtils;
 import com.fy.baselibrary.utils.SpfUtils;
-import com.fy.baselibrary.utils.T;
 import com.fy.baselibrary.utils.TintUtils;
 import com.fy.baselibrary.utils.cache.ACache;
 
@@ -114,9 +113,9 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
         btnLoginOrExit = headerView.findViewById(R.id.btnLoginOrExit);
         btnLoginOrExit.setOnClickListener(this);
 
-        boolean isLogin = SpfUtils.getSpfSaveBoolean(ConstantUtils.isLogin);
+        boolean isLogin = SpfUtils.getSpfSaveBoolean(Constant.isLogin);
         tvUserName.setText(isLogin ?
-                SpfUtils.getSpfSaveStr(ConstantUtils.userName) :
+                SpfUtils.getSpfSaveStr(Constant.userName) :
                 ResourceUtils.getStr(R.string.notLogin));
 
         btnLoginOrExit.setText(isLogin ? R.string.exitLogin : R.string.clickLogin);
@@ -228,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnLoginOrExit://登录 or 退出登录
-                boolean isLogin = SpfUtils.getSpfSaveBoolean(ConstantUtils.isLogin);
+                boolean isLogin = SpfUtils.getSpfSaveBoolean(Constant.isLogin);
                 if (isLogin) {
                     tvUserName.setText(R.string.notLogin);
                     btnLoginOrExit.setText(R.string.clickLogin);

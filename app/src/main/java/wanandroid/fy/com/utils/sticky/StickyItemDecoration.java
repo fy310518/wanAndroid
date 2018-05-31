@@ -1,15 +1,11 @@
 package wanandroid.fy.com.utils.sticky;
 
 import android.graphics.Canvas;
-import android.graphics.Rect;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fy.baselibrary.application.BaseApp;
-import com.fy.baselibrary.utils.ConstantUtils;
-import com.fy.baselibrary.utils.DensityUtils;
+import com.fy.baselibrary.utils.Constant;
 import com.google.android.flexbox.FlexboxLayoutManager;
 
 import java.util.ArrayList;
@@ -84,7 +80,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
 
             /** 是否需要 吸附的view */
             Bookmark bookmark = (Bookmark) view.getTag();
-            if (ConstantUtils.StickyType == bookmark.getItemType()) {
+            if (Constant.StickyType == bookmark.getItemType()) {
                 //当前UI当中是否找到了需要吸附的View，此时设置为true
                 mCurrentUIFindStickView = true;
 
@@ -184,7 +180,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
         if (mAdapter != null) return;
 
         mAdapter = recyclerView.getAdapter();
-        mViewHolder = mAdapter.onCreateViewHolder(recyclerView, ConstantUtils.StickyType);
+        mViewHolder = mAdapter.onCreateViewHolder(recyclerView, Constant.StickyType);
         mStickyItemView = mViewHolder.itemView;
     }
 

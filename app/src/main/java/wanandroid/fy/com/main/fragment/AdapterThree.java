@@ -1,17 +1,15 @@
 package wanandroid.fy.com.main.fragment;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.widget.TextView;
 
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.rv.adapter.MultiCommonAdapter;
 import com.fy.baselibrary.rv.adapter.MultiTypeSupport;
-import com.fy.baselibrary.utils.ConstantUtils;
+import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.ResourceUtils;
 
 import java.util.List;
-import java.util.Random;
 
 import wanandroid.fy.com.R;
 import wanandroid.fy.com.entity.Bookmark;
@@ -27,7 +25,7 @@ public class AdapterThree extends MultiCommonAdapter<Bookmark> {
         super(context, datas, new MultiTypeSupport<Bookmark>() {
             @Override
             public int getLayoutId(int itemType) {
-                return itemType == ConstantUtils.StickyType ?
+                return itemType == Constant.StickyType ?
                         R.layout.item_fm_three_sticky : R.layout.item_fm_three;
             }
 
@@ -40,7 +38,7 @@ public class AdapterThree extends MultiCommonAdapter<Bookmark> {
 
     @Override
     public void convert(ViewHolder holder, Bookmark bookmark, int position) {
-        if (bookmark.getItemType() == ConstantUtils.StickyType){
+        if (bookmark.getItemType() == Constant.StickyType){
             holder.setText(R.id.tvTagSticky, bookmark.getName());
         } else {
             TextView te = holder.getView(R.id.tvTag);

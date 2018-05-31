@@ -21,7 +21,7 @@ public class TransfmtUtils {
      * @return String
      */
     public static String doubleToKeepTwoDecimalPlaces(double doubleDigital) {
-        DecimalFormat df = new DecimalFormat("#.00");
+        DecimalFormat df = new DecimalFormat("##0.00");
 
         return df.format(doubleDigital);
     }

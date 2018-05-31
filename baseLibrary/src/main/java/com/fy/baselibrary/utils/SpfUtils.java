@@ -72,11 +72,33 @@ public class SpfUtils {
      * 从默认的SharedPreferences文件 取int数据
      *
      * @param key
-     * @return   没有对应的key  默认返回-1值
+     * @return   没有对应的key  默认返回 -1
      */
     public static int getSpfSaveInt(String key) {
-
         return getSpf().getInt(key, -1);
+    }
+
+    /**
+     * 向默认的SharedPreferences文件保存 long数据
+     *
+     * @param key   保存的键
+     * @param value 保存的内容
+     */
+    public static void saveLongToSpf(String key, long value) {
+        SharedPreferences.Editor editor = getSpf().edit();
+
+        editor.putLong(key, value);
+        editor.apply();
+    }
+
+    /**
+     * 从默认的SharedPreferences文件 取 long数据
+     *
+     * @param key
+     * @return   没有对应的key  默认返回 0
+     */
+    public static long getSpfSaveLong(String key) {
+        return getSpf().getLong(key, 0);
     }
 
     /**

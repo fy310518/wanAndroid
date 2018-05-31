@@ -1,7 +1,6 @@
 package wanandroid.fy.com.search;
 
 import android.app.Activity;
-import android.inputmethodservice.Keyboard;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.util.DiffUtil;
@@ -12,7 +11,6 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.TextView;
 
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.NetCallBack;
@@ -21,7 +19,7 @@ import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.rv.anim.FadeItemAnimator;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
 import com.fy.baselibrary.statusbar.MdStatusBar;
-import com.fy.baselibrary.utils.ConstantUtils;
+import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.T;
@@ -34,7 +32,6 @@ import java.util.List;
 import butterknife.BindView;
 import wanandroid.fy.com.R;
 import wanandroid.fy.com.api.ApiService;
-import wanandroid.fy.com.collect.MyCollectActivity;
 import wanandroid.fy.com.entity.ArticleBean;
 import wanandroid.fy.com.entity.Bookmark;
 import wanandroid.fy.com.main.fragment.AdapterOne;
@@ -82,7 +79,7 @@ public class SearchActivity extends AppCompatActivity implements IBaseActivity{
         initRvAdapter();
 
         Bundle bundle = getIntent().getExtras();
-        queryKey = bundle.getString(ConstantUtils.queryKey);
+        queryKey = bundle.getString(Constant.queryKey);
         if (!TextUtils.isEmpty(queryKey)) epl.start(EasyPullLayout.TYPE_EDGE_TOP);
     }
 

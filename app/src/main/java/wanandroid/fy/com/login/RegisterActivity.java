@@ -15,7 +15,7 @@ import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
 import com.fy.baselibrary.statusbar.MdStatusBar;
-import com.fy.baselibrary.utils.ConstantUtils;
+import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.SpfUtils;
@@ -112,10 +112,10 @@ public class RegisterActivity extends AppCompatActivity implements IBaseActivity
                     @Override
                     protected void onSuccess(LoginBean login) {
                         ACache mCache = ACache.get(BaseApp.getAppCtx());
-                        mCache.put(ConstantUtils.userName, login);
+                        mCache.put(Constant.userName, login);
 
-                        SpfUtils.saveBooleanToSpf(ConstantUtils.isLogin, true);
-                        SpfUtils.saveStrToSpf(ConstantUtils.userName, login.getUsername());
+                        SpfUtils.saveBooleanToSpf(Constant.isLogin, true);
+                        SpfUtils.saveStrToSpf(Constant.userName, login.getUsername());
 
                         Bundle bundle = new Bundle();
                         bundle.putString("大王", "大王叫我来巡山");

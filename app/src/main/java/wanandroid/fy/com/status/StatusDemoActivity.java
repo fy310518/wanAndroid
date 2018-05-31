@@ -14,7 +14,7 @@ import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
-import com.fy.baselibrary.retrofit.upload.UpLoadCallBack;
+import com.fy.baselibrary.retrofit.load.UpLoadCallBack;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.FileUtils;
@@ -22,28 +22,19 @@ import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NightModeUtils;
 import com.fy.baselibrary.utils.cache.ACache;
 
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
-
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.PublishSubject;
-import okhttp3.ResponseBody;
 import wanandroid.fy.com.R;
 import wanandroid.fy.com.api.ApiService;
 import wanandroid.fy.com.api.LoadFileUtils;
@@ -173,7 +164,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                 .doOnSubscribe(RequestUtils::addDispos)
                 .subscribe(new UpLoadCallBack() {
                     @Override
-                    protected void onProgress(Integer percent) {
+                    protected void onProgress(String percent) {
                         L.e("进度监听", percent + "%");
 
                     }
@@ -208,24 +199,21 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 //            }
 //        });
         ACache mCache = ACache.get(BaseApp.getAppCtx());
-        String percent = mCache.getAsString(url + "percent");
-        if (!TextUtils.isEmpty(percent))tvKing.setText(percent + "%");
+        int percent = mCache.getAsInt(url + "percent");
+        if (percent > 0)tvKing.setText(percent + "%");
 
         LoadFileUtils.downFile(url, new UpLoadCallBack(url) {
                     @Override
-                    protected void onProgress(Integer percent) {
-                        L.e("onProgress", percent + "---》" + Thread.currentThread().getName() + "-->" + Thread.currentThread().getId());
+                    protected void onProgress(String percent) {
                         runOnUiThread(() -> tvKing.setText(percent + "%"));
                     }
 
                     @Override
                     protected void onSuccess(Object t) {
-                        L.e("onProgress", Thread.currentThread().getName() + "-->" + Thread.currentThread().getId());
                     }
 
                     @Override
                     protected void updataLayout(int flag) {
-                        L.e("onProgress", Thread.currentThread().getName() + "-->" + Thread.currentThread().getId());
                     }
                 });
     }

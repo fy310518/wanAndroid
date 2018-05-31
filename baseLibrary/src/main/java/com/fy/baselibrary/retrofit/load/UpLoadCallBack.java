@@ -1,4 +1,4 @@
-package com.fy.baselibrary.retrofit.upload;
+package com.fy.baselibrary.retrofit.load;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -6,6 +6,10 @@ import android.text.TextUtils;
 import com.fy.baselibrary.application.BaseApp;
 import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
+import com.fy.baselibrary.utils.Constant;
+import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.SpfUtils;
+import com.fy.baselibrary.utils.TransfmtUtils;
 import com.fy.baselibrary.utils.cache.ACache;
 
 /**
@@ -19,13 +23,6 @@ public abstract class UpLoadCallBack extends NetCallBack {
 
     public UpLoadCallBack(@NonNull final String url) {
         this.url = url;
-
-        //从缓存中获取 已经下载的总进度
-        ACache mCache = ACache.get(BaseApp.getAppCtx());
-        String strLoaded = mCache.getAsString(url + "loaded");
-        if (!TextUtils.isEmpty(strLoaded)) {
-            loaded = Long.parseLong(strLoaded);
-        }
     }
 
     public UpLoadCallBack(IProgressDialog pDialog) {
@@ -35,7 +32,7 @@ public abstract class UpLoadCallBack extends NetCallBack {
     @Override
     public void onNext(Object o) {
         if (o instanceof Integer) {
-            onProgress((Integer) o);
+            onProgress(o + "");
         } else {
             super.onNext(o);
         }
@@ -43,6 +40,10 @@ public abstract class UpLoadCallBack extends NetCallBack {
 
     public void setmSumLength(long mSumLength) {
         this.mSumLength = mSumLength;
+
+        ACache mCache = ACache.get(BaseApp.getAppCtx());
+        //从缓存中获取 已经下载的总进度
+        loaded = mCache.getAsLong(url + Constant.DownTask);
     }
 
     /**
@@ -52,14 +53,14 @@ public abstract class UpLoadCallBack extends NetCallBack {
     private long mSumLength = 0L;//总长度
     public long loaded = 0L;//已经下载的 总长度
 
-    private int mPercent = 0;//进度百分比 数
+    private double mPercent = 0;//进度百分比 数
 
     public void onRead(long read) {
         loaded += read;
         if (mSumLength <= 0) {
             onPercent(-1);
         } else {
-            onPercent((int) (100 * loaded / mSumLength));
+            onPercent(100d * loaded / mSumLength);
         }
     }
 
@@ -68,18 +69,19 @@ public abstract class UpLoadCallBack extends NetCallBack {
      *
      * @param percent
      */
-    private void onPercent(int percent) {
+    private void onPercent(double percent) {
         if (percent == mPercent) return;
 
         if (percent >= 100) {
             percent = 100;
-            onProgress(percent);
+            onProgress(percent + "");
             cachePercent(percent);
+            L.e("Thread", "完成" + Thread.currentThread().getName() + "-->" + Thread.currentThread().getId());
             onComplete();
             return;
         }
 
-        onProgress(percent);
+        onProgress(TransfmtUtils.doubleToKeepTwoDecimalPlaces(percent));
         cachePercent(percent);
     }
 
@@ -87,12 +89,12 @@ public abstract class UpLoadCallBack extends NetCallBack {
      * 缓存进度百分比
      * @param percent
      */
-    private void cachePercent(int percent) {
+    private void cachePercent(double percent) {
         //缓存 断点续传 进度百分比
         if (!TextUtils.isEmpty(url)) {
             ACache mCache = ACache.get(BaseApp.getAppCtx());
-            mCache.put(url + "percent", percent + "");
-            mCache.put(url + "loaded", loaded + "");
+            mCache.put(url + Constant.DownPercent, percent);
+            mCache.put(url + Constant.DownTask, loaded);
         }
     }
 
@@ -102,5 +104,5 @@ public abstract class UpLoadCallBack extends NetCallBack {
      *
      * @param percent
      */
-    protected abstract void onProgress(Integer percent);
+    protected abstract void onProgress(String percent);
 }

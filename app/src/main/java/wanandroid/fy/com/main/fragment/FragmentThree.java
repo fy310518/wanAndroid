@@ -8,7 +8,7 @@ import com.fy.baselibrary.base.BaseFragment;
 import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
-import com.fy.baselibrary.utils.ConstantUtils;
+import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.widget.EasyPullLayout;
@@ -72,14 +72,14 @@ public class FragmentThree extends BaseFragment {
         rvAdapter.setItemClickListner(view -> {
             Bookmark item = (Bookmark) view.getTag();
 
-            if (item.getItemType() == ConstantUtils.StickyType) return;
+            if (item.getItemType() == Constant.StickyType) return;
 
             Bundle bundle = new Bundle();
             if (!TextUtils.isEmpty(item.getLink())) {//进入具体的 web网页
                 bundle.putSerializable("Bookmark", item);
                 JumpUtils.jump(FragmentThree.this, WebViewActivity.class, bundle);
             } else {// 进入搜索页
-                bundle.putString(ConstantUtils.queryKey, item.getName());
+                bundle.putString(Constant.queryKey, item.getName());
                 JumpUtils.jump(FragmentThree.this, SearchActivity.class, bundle);
             }
         });
@@ -129,12 +129,12 @@ public class FragmentThree extends BaseFragment {
 
             List<Bookmark> data = new ArrayList<>();
             if (listBeanModule.size() > 0) {
-                data.add(new Bookmark("搜索热词", ConstantUtils.StickyType));
+                data.add(new Bookmark("搜索热词", Constant.StickyType));
                 data.addAll(listBeanModule);
             }
 
             if (listBeanModule2.size() > 0) {
-                data.add(new Bookmark("常用网站", ConstantUtils.StickyType));
+                data.add(new Bookmark("常用网站", Constant.StickyType));
                 data.addAll(listBeanModule2);
             }
 

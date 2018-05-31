@@ -18,6 +18,7 @@ package com.fy.baselibrary.utils.cache;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -51,7 +52,7 @@ public class ACache {
     private ACacheManager mCache;
 
     public static ACache get(Context ctx) {
-        return get(ctx, "Wan Android");
+        return get(ctx, "ACache");
     }
 
     public static ACache get(Context ctx, String cacheName) {
@@ -174,6 +175,52 @@ public class ACache {
             }
             if (removeFile)
                 remove(key);
+        }
+    }
+
+    /**
+     * 保存 long 数据
+     * @param key
+     * @param value
+     */
+    public void put(String key, long value) {
+        put(key, value + "");
+    }
+
+    /**
+     * 获取 long 数据
+     * @param key
+     * @return   不存在则返回 0L
+     */
+    public long getAsLong(String key) {
+        String longstring = getAsString(key);
+        if (!TextUtils.isEmpty(longstring)){
+            return Long.parseLong(longstring);
+        } else {
+           return 0L;
+        }
+    }
+
+    /**
+     * 保存 long 数据
+     * @param key
+     * @param value
+     */
+    public void put(String key, int value) {
+        put(key, value + "");
+    }
+
+    /**
+     * 获取 long 数据
+     * @param key
+     * @return   不存在则返回 0
+     */
+    public int getAsInt(String key) {
+        String intstring = getAsString(key);
+        if (!TextUtils.isEmpty(intstring)){
+            return Integer.parseInt(intstring);
+        } else {
+            return 0;
         }
     }
 

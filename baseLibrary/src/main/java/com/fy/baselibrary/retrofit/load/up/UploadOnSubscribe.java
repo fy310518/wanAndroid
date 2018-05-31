@@ -1,4 +1,4 @@
-package com.fy.baselibrary.retrofit.upload;
+package com.fy.baselibrary.retrofit.load.up;
 
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
