@@ -24,6 +24,8 @@ import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -65,7 +67,6 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity 
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.tvSkip) {
-            RequestUtils.clearDispos();
             intoMainAct();
         }
     }
@@ -80,26 +81,10 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity 
                 .take(skip + 1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(aLong -> tvSkip.setText(ResourceUtils.getReplaceStr(R.string.skip, skip - aLong)))
                 .doOnSubscribe(RequestUtils::addDispos)
-                .subscribe(new Observer<Long>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
-
-                    @Override
-                    public void onNext(Long aLong) {
-                        tvSkip.setText(ResourceUtils.getReplaceStr(R.string.skip, skip - aLong));
-                        L.e("interval", aLong + "s");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        intoMainAct();
-                    }
+                .subscribe(aLong -> {
+                    if (aLong == 4L)intoMainAct();
                 });
     }
 
