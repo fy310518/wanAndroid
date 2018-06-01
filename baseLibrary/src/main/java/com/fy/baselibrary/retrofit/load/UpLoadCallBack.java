@@ -75,11 +75,10 @@ public abstract class UpLoadCallBack extends NetCallBack {
     private void onPercent(double percent) {
         if (percent == mPercent) return;
 
-        if (percent >= 100) {
-            percent = 100;
-            onProgress(percent + "");
+        if (percent >= 100d) {
+            percent = 100d;
+            onProgress(100 + "");
             cachePercent(percent);
-            L.e("Thread", "完成" + Thread.currentThread().getName() + "-->" + loaded + "---->" + mSumLength);
             onComplete();
             return;
         }
@@ -97,7 +96,7 @@ public abstract class UpLoadCallBack extends NetCallBack {
         if (!TextUtils.isEmpty(url)) {
             ACache mCache = ACache.get(BaseApp.getAppCtx());
             mCache.put(url + Constant.DownPercent, percent);
-            mCache.put(url + Constant.DownTask, loaded);
+            mCache.put(url + Constant.DownTask, loaded.get());
         }
     }
 

@@ -85,7 +85,7 @@ public class TintUtils {
 
     /**
      * Tint 方式实现 selector
-     * @param drawable          图片资源（shape, png图片，svg图）
+     * @param drawable          图片资源（shape, png图片，svg）
      * @param colors            不同状态 显示不同的颜色 数组
      * @param states            View状态数组（比如按下，选中等）
      * @return
@@ -116,7 +116,7 @@ public class TintUtils {
             //png、shape 图等
             drawable = ContextCompat.getDrawable(ctx, draId);
         } catch (Resources.NotFoundException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             //vector图标
             drawable = VectorDrawableCompat.create(ctx.getResources(), draId, ctx.getTheme());
         }

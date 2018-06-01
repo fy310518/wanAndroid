@@ -20,6 +20,8 @@
     <color name="white">#ffffff</color>
     <!-- UI设计原色之 黑色 -->
     <color name="black">#000000</color>
+
+    <color name="alphaBlack">#80000000</color>
     <!-- 透明 -->
     <color name="transparent">#00000000</color>
 

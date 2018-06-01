@@ -1,4 +1,4 @@
-package wanandroid.fy.com.api;
+package com.fy.baselibrary.retrofit.load;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -111,7 +111,7 @@ public class LoadFileUtils {
     /**
      * 上传多个文件
      */
-    public static Observable<Object> uploadFiles(List<File> files, ApiService apiService) {
+    public static Observable<Object> uploadFiles(List<File> files, LoadService apiService) {
 //        总长度
         long sumLength = 0l;
         for (File file : files) sumLength += file.length();
@@ -143,7 +143,7 @@ public class LoadFileUtils {
      * @param callBack
      */
     public static void downLoadFile(String url, UpLoadCallBack callBack) {
-        RequestUtils.create(ApiService.class)
+        RequestUtils.create(LoadService.class)
                 .downloadFile(url)
                 .map((Function<ResponseBody, Object>) body -> {
                     long contLen = body.contentLength();
@@ -211,7 +211,7 @@ public class LoadFileUtils {
      * @return
      */
     public static void downFile(@NonNull final String url, UpLoadCallBack subscriber) {
-        RequestUtils.create(ApiService.class)
+        RequestUtils.create(LoadService.class)
                 .download("", url)
                 .doOnSubscribe(RequestUtils::addDispos)
                 .subscribeOn(Schedulers.io())
@@ -274,7 +274,7 @@ public class LoadFileUtils {
 
         String str = end == -1 ? "" : end + "";
 
-        return RequestUtils.create(ApiService.class)
+        return RequestUtils.create(LoadService.class)
                 .download("bytes=" + start + "-" + str, url)
                 .doOnSubscribe(RequestUtils::addDispos)
                 .subscribeOn(Schedulers.io())
@@ -312,7 +312,6 @@ public class LoadFileUtils {
                 loaded += len;
                 //缓存当前线程 下载内容 总长度
                 mCache.put(nameKey + Constant.DownTherad, loaded);
-                L.e("Thread", Thread.currentThread().getName() + "-->" + Thread.currentThread().getId());
             }
         } finally {
             if (null != is) is.close();
