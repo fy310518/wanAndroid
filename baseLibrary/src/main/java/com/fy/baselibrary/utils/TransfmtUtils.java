@@ -14,14 +14,14 @@ public class TransfmtUtils {
     }
 
     /**
-     * double类型数字  保留两位小数(四舍五入)
+     * double类型数字  保留一位小数(四舍五入)
      * DecimalFormat转换最简便
      *
      * @param doubleDigital
      * @return String
      */
     public static String doubleToKeepTwoDecimalPlaces(double doubleDigital) {
-        DecimalFormat df = new DecimalFormat("##0.##");
+        DecimalFormat df = new DecimalFormat("##0.0");
 
         return df.format(doubleDigital);
     }

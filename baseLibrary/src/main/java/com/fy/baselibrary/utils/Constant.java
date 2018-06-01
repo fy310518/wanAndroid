@@ -28,6 +28,11 @@ public class Constant {
     public static final int THREAD_COUNT = 3;
 
     /**
+     * 所有下载任务 缓存key
+     */
+    public static final String AllDownTask = "All_Task_DownLoad";
+
+    /**
      * 一个下载任务 已经下载的进度百分比 数值
      */
     public static final String DownPercent = "Task_DownLoad_Percent";

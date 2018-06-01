@@ -215,5 +215,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                     protected void updataLayout(int flag) {
                     }
                 });
+
+
     }
 }

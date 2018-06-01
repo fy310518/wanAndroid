@@ -259,7 +259,7 @@ public class LoadFileUtils {
 
                         subscriber.setmSumLength(sumLength);
                         Observable[] observables = new Observable[sources.size()];
-                        return Observable.mergeArray(sources.toArray(observables));//todo 被观察者 不到三个的时候 没有测试
+                        return Observable.mergeArray(sources.toArray(observables));
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())

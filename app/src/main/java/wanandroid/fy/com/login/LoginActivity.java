@@ -21,6 +21,7 @@ import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
+import com.fy.baselibrary.retrofit.load.down.DownLoadListener;
 import com.fy.baselibrary.startactivity.StartActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.Constant;
@@ -38,6 +39,7 @@ import butterknife.OnClick;
 import wanandroid.fy.com.R;
 import wanandroid.fy.com.api.ApiService;
 import wanandroid.fy.com.entity.LoginBean;
+import wanandroid.fy.com.loadfile.DownFileActivity;
 import wanandroid.fy.com.main.MainActivity;
 import wanandroid.fy.com.status.StatusDemoActivity;
 import wanandroid.fy.com.utils.SelectUtils;
@@ -119,7 +121,8 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
                 break;
             case R.id.tvRegister:
 //                JumpUtils.jump(mContext, RegisterActivity.class, null);
-                JumpUtils.jump(mContext, StatusDemoActivity.class, null);
+//                JumpUtils.jump(mContext, StatusDemoActivity.class, null);
+                JumpUtils.jump(mContext, DownFileActivity.class, null);
                 break;
         }
     }

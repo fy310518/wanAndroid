@@ -7,8 +7,6 @@ import com.fy.baselibrary.application.BaseApp;
 import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
 import com.fy.baselibrary.utils.Constant;
-import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.TransfmtUtils;
 import com.fy.baselibrary.utils.cache.ACache;
 

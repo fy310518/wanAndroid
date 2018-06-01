@@ -17,6 +17,7 @@
     <string name="mainTitle">wan Android</string>
 
     <string name="statusTitle">多状态</string>
+    <string name="fileDown">文件下载</string>
 
 
     <string name="notLogin">未登录</string>
