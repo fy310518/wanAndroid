@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.fy.baselibrary.application.BaseApp;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.load.UpLoadCallBack;
+import com.fy.baselibrary.retrofit.load.down.DownManager;
 import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
 import com.fy.baselibrary.retrofit.load.up.UploadRequestBody;
 import com.fy.baselibrary.utils.Constant;
@@ -225,9 +226,9 @@ public class LoadFileUtils {
 
                         ACache mCache = ACache.get(BaseApp.getAppCtx());
                         //计算各个线程下载的数据段
-                        long bitLen = sumLength / Constant.THREAD_COUNT;
+                        long bitLen = sumLength / DownManager.THREAD_COUNT;
                         List<Observable> sources = new ArrayList<>();
-                        for (int i = 0; i < Constant.THREAD_COUNT; i++){
+                        for (int i = 0; i < DownManager.THREAD_COUNT; i++){
                             Observable servece = null;
 
                             //开始位置，获取上次取消下载的进度
@@ -242,7 +243,7 @@ public class LoadFileUtils {
                             }
 
                             //结束位置，-1是为了防止上一个线程和下一个线程重复下载衔接处数据
-                            long endPosition = i + 1 < Constant.THREAD_COUNT ? (i + 1) * bitLen - 1 : (i + 1) * bitLen + 1;
+                            long endPosition = i + 1 < DownManager.THREAD_COUNT ? (i + 1) * bitLen - 1 : (i + 1) * bitLen + 1;
 
                             //判断是否下载全部文件
                             if (startPosition < endPosition) {

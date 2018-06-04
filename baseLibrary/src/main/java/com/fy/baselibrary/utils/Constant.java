@@ -23,11 +23,6 @@ public class Constant {
 
 
     /**
-     * 文件下载 默认下载线程数
-     */
-    public static final int THREAD_COUNT = 3;
-
-    /**
      * 所有下载任务 缓存key
      */
     public static final String AllDownTask = "All_Task_DownLoad";

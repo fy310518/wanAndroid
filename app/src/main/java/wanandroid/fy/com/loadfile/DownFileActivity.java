@@ -19,7 +19,7 @@ import wanandroid.fy.com.R;
  * 下载文件 演示 activity
  * Created by fangs on 2018/6/1.
  */
-public class DownFileActivity extends AppCompatActivity implements IBaseActivity{
+public class DownFileActivity extends AppCompatActivity implements IBaseActivity {
 
     @BindView(R.id.tvProgress1)
     TextView tvProgress1;
@@ -51,10 +51,11 @@ public class DownFileActivity extends AppCompatActivity implements IBaseActivity
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
 
-        //        uploadFiles();
 //        downLoad("http://pic48.nipic.com/file/20140912/7487939_224235377000_2.jpg");
-        downLoad("http://imtt.dd.qq.com/16891/1861D39534D33194426C894BA0D816CF.apk?fsname=com.ss.android.ugc.aweme_1.8.3_183.aweme_1pk&csr=1bbd", tvProgress1);
+//        downLoad("http://imtt.dd.qq.com/16891/1861D39534D33194426C894BA0D816CF.apk?fsname=com.ss.android.ugc.aweme_1.8.3_183.aweme_1pk&csr=1bbd", tvProgress1);
         downLoad("https://pic.ibaotu.com/00/60/62/19S888piCNXP.mp4", tvProgress2);
+
+        DownManager.getInstentce().runDownTask();
     }
 
     @Override
@@ -69,7 +70,7 @@ public class DownFileActivity extends AppCompatActivity implements IBaseActivity
 
     private void downLoad(String url, TextView tv) {
         DownManager.getInstentce()
-                .startDown(new DownInfo(url), new DownLoadListener() {
+                .addDownTask(new DownInfo(url), new DownLoadListener() {
 
                     @Override
                     public void onPuase() {

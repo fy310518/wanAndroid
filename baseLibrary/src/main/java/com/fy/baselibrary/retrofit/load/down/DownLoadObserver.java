@@ -1,11 +1,6 @@
 package com.fy.baselibrary.retrofit.load.down;
 
-import android.text.TextUtils;
-
-import com.fy.baselibrary.application.BaseApp;
-import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.TransfmtUtils;
-import com.fy.baselibrary.utils.cache.ACache;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -44,13 +39,18 @@ public class DownLoadObserver<T> implements Observer<T> {
     @Override
     public void onError(Throwable e) {
         downInfo.setStateInte(DownInfo.ERROR);
+        DownManager.getInstentce().saveDownInfo();
+        DownManager.getInstentce().removeTask(downInfo);
     }
 
     @Override
     public void onComplete() {
-        downInfo.setStateInte(DownInfo.FINISH);
-        DownManager.getInstentce().saveDownInfo();
         loadListener.onComplete();
+        downInfo.setStateInte(DownInfo.FINISH);
+
+        DownManager.getInstentce().saveDownInfo();
+        DownManager.getInstentce().runDownTask();
+        DownManager.getInstentce().removeTask(downInfo);
     }
 
     /**
