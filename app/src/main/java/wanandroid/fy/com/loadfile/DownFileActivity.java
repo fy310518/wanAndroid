@@ -3,13 +3,13 @@ package wanandroid.fy.com.loadfile;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
 
 import com.fy.baselibrary.application.IBaseActivity;
-import com.fy.baselibrary.retrofit.load.down.DownInfo;
-import com.fy.baselibrary.retrofit.load.down.DownLoadListener;
 import com.fy.baselibrary.retrofit.load.down.DownManager;
+import com.fy.baselibrary.rv.divider.ListItemDecoration;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 
 import butterknife.BindView;
@@ -21,17 +21,9 @@ import wanandroid.fy.com.R;
  */
 public class DownFileActivity extends AppCompatActivity implements IBaseActivity {
 
-    @BindView(R.id.tvProgress1)
-    TextView tvProgress1;
-
-    @BindView(R.id.tvProgress2)
-    TextView tvProgress2;
-
-    @BindView(R.id.tvProgress3)
-    TextView tvProgress3;
-
-    @BindView(R.id.tvProgress4)
-    TextView tvProgress4;
+    @BindView(R.id.rvDownList)
+    RecyclerView rvDownList;
+    DownFileListAdapter rvAdapter;
 
     @Override
     public boolean isShowHeadView() {
@@ -51,10 +43,20 @@ public class DownFileActivity extends AppCompatActivity implements IBaseActivity
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
 
-//        downLoad("http://pic48.nipic.com/file/20140912/7487939_224235377000_2.jpg");
-        downLoad("http://imtt.dd.qq.com/16891/1861D39534D33194426C894BA0D816CF.apk?fsname=com.ss.android.ugc.aweme_1.8.3_183.aweme_1pk&csr=1bbd", tvProgress1);
-        downLoad("https://pic.ibaotu.com/00/60/62/19S888piCNXP.mp4", tvProgress2);
+        DownManager.getInstentce().setLoadCall(downInfo -> runOnUiThread(() -> {
+            for (int i = 0; i < rvAdapter.getItemCount(); i++) {
+                if (downInfo.getUrl().equals(rvAdapter.getmDatas().get(i).getUrl())) {
+                    rvAdapter.changeItemListener.onChange(i);
+                    break;
+                }
+            }
+        }));
 
+        downLoad("http://pic48.nipic.com/file/20140912/7487939_224235377000_2.jpg");
+        downLoad("http://imtt.dd.qq.com/16891/1861D39534D33194426C894BA0D816CF.apk?fsname=com.ss.android.ugc.aweme_1.8.3_183.aweme_1pk&csr=1bbd");
+        downLoad("https://pic.ibaotu.com/00/60/62/19S888piCNXP.mp4");
+
+        initRv();
         DownManager.getInstentce().runDownTask();
     }
 
@@ -68,29 +70,20 @@ public class DownFileActivity extends AppCompatActivity implements IBaseActivity
 
     }
 
-    private void downLoad(String url, TextView tv) {
+    private void initRv(){
+        rvDownList.setLayoutManager(new LinearLayoutManager(this));
+        rvDownList.addItemDecoration(new ListItemDecoration.Builder()
+                .setmSpace(R.dimen.rv_divider_height)
+                .setDraw(false).create(this));
+        rvAdapter = new DownFileListAdapter(this, DownManager.getInstentce().getDownTask());
+        rvAdapter.setChangeItemListener((position) -> rvAdapter.notifyItemChanged(position, ""));
+        rvDownList.setAdapter(rvAdapter);
+    }
+
+    private void downLoad(String url) {
         DownManager.getInstentce()
-                .addDownTask(url, new DownLoadListener() {
+                .addDownTask(url, null);
 
-                    @Override
-                    public void onPuase() {
-                        tv.setText(tv.getText() + "  暂停下载");
-                    }
 
-                    @Override
-                    public void onCancel() {
-                        tv.setText("取消下载");
-                    }
-
-                    @Override
-                    public void onProgress(String percent) {
-                        runOnUiThread(() -> tv.setText(percent + "%"));
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
     }
 }

@@ -28,7 +28,7 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
 
     protected OnListener.OnitemClickListener itemClickListner;//列表条目点击事件
     protected OnListener.OnRemoveItemListener removeItemListener;
-    protected OnListener.OnChangeItemListener changeItemListener;
+    public OnListener.OnChangeItemListener changeItemListener;
 
     protected SparseBooleanArray mSelectedPositions;//保存多选 数据
 

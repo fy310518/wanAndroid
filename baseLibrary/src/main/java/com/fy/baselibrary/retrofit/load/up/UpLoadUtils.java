@@ -1,5 +1,6 @@
-package com.fy.baselibrary.retrofit.load;
+package com.fy.baselibrary.retrofit.load.up;
 
+import com.fy.baselibrary.retrofit.load.LoadService;
 import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
 import com.fy.baselibrary.retrofit.load.up.UploadRequestBody;
 

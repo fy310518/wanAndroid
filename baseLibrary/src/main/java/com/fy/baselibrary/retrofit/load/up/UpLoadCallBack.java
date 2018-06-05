@@ -1,4 +1,4 @@
-package com.fy.baselibrary.retrofit.load;
+package com.fy.baselibrary.retrofit.load.up;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;

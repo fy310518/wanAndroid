@@ -52,6 +52,9 @@ public class DownManager {
     /** 所有下载任务的 回调集合*/
     private Map<String, DownLoadObserver> observerMap;
 
+
+    private DownLoadListener.DownLoadCall loadCall;
+
     private volatile static DownManager instentce;
 
     public static synchronized DownManager getInstentce(){
@@ -71,6 +74,9 @@ public class DownManager {
         observerMap = new HashMap<>();
     }
 
+    public void setLoadCall(DownLoadListener.DownLoadCall loadCall) {
+        this.loadCall = loadCall;
+    }
 
     /**
      * 开始下载
@@ -207,7 +213,7 @@ public class DownManager {
      * @param url
      */
     public DownManager addDownTask(String url, DownLoadListener loadListener) {
-        if (TextUtils.isEmpty(url) || null == loadListener) return getInstentce();
+        if (TextUtils.isEmpty(url)) return getInstentce();
 
         //获取缓存中 所有的未完成下载任务列表
         ACache mCache = ACache.get(BaseApp.getAppCtx());
@@ -228,16 +234,17 @@ public class DownManager {
         if (null == downInfo) downInfo = new DownInfo(url);
         if (downInfo.getStateInte() == DownInfo.FINISH) {
             T.showLong("此任务已完成");
-            loadListener.onProgress(100 + "");
+            if (null != loadListener)loadListener.onProgress(100 + "");
             return getInstentce();
-        } else if (downInfo.getStateInte() == DownInfo.ERROR) {
+        } else if (downInfo.getStateInte() == DownInfo.PAUSE) {
             T.showLong("开始下载");
-            loadListener.onProgress(TransfmtUtils.doubleToKeepTwoDecimalPlaces(downInfo.getPercent()) + "");
+            if (null != loadListener) loadListener.onProgress(TransfmtUtils.doubleToKeepTwoDecimalPlaces(downInfo.getPercent()) + "");
         }
 
         if (observerMap.get(url) == null) {
             //向下载队列添加下载任务
             DownLoadObserver observer = new DownLoadObserver(downInfo, loadListener);
+            if (null != loadCall)observer.setLoadCall(loadCall);//设置 多任务 进度回调监听
             observerMap.put(url, observer);
             downQueue.offer(downInfo);
         }
@@ -265,12 +272,42 @@ public class DownManager {
         if (observerMap.containsKey(url)) {
             DownLoadObserver observer = observerMap.get(url);
             observer.getDisposed().dispose();//切断当前的订阅
-            observerMap.remove(url);
         }
     }
 
+    /**
+     * 暂停所有下载任务
+     */
+    public void pauseAll() {
+        for (String url : observerMap.keySet()) {
+            //暂停下载
+            pause(url);
+        }
+    }
 
+    /**
+     * 取消下载
+     * @param url
+     */
+    public void cancle(@NonNull final String url){
+        for (DownInfo infobean : downInfos){
+            if (infobean.getUrl().equals(url)){
+                infobean.setStateInte(DownInfo.CANCEL);
+                break;
+            }
+        }
+        pause(url);
+    }
 
+    /**
+     * 取消所有下载任务
+     */
+    public void cancleAll() {
+        for (DownInfo infobean : downInfos) {
+            infobean.setStateInte(DownInfo.CANCEL);
+            pause(infobean.getUrl());
+        }
+    }
 
 
 
@@ -316,5 +353,38 @@ public class DownManager {
         }
 
         mCache.put(Constant.AllDownTask, GsonUtils.<DownInfo>listToJson(list));
+    }
+
+    /**
+     * 获取所有 未下载任务 集合
+     * @return
+     */
+    public List<DownInfo> getDownTask(){
+        List<DownInfo> data = new ArrayList<>();
+        data.addAll(downQueue);
+        return data;
+    }
+
+    /**
+     * 获取 正在下载的任务 集合
+     * @return
+     */
+    public List<DownInfo> getDownloading(){
+        List<DownInfo> data = new ArrayList<>();
+        data.addAll(downInfos);
+
+        return data;
+    }
+
+    /**
+     * 获取 所有下载任务 集合
+     * @return
+     */
+    public List<DownInfo> getAllTask(){
+        List<DownInfo> data = new ArrayList<>();
+        data.addAll(getDownloading());
+        data.addAll(getDownTask());
+
+        return data;
     }
 }

@@ -157,7 +157,7 @@ public class FragmentOne extends BaseFragment {
                         List<ArticleBean.DatasBean> list = article.getDatas();
                         if (null != list) {
 //                            DiffUtil.DiffResult diffResult = DiffUtil
-//                                    .calculateDiff(new DiffCallBack(rvAdapter.getmDatas(), list), true);
+//                                    .calculateDiff(new DownFileDiffCall(rvAdapter.getmDatas(), list), true);
 //
 //                            diffResult.dispatchUpdatesTo(adapter);
                             rvAdapter.setmDatas(list);

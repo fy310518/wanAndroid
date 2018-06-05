@@ -27,4 +27,17 @@ public interface DownLoadListener {
      * 完成下载
      */
     void onComplete();
+
+
+    /**
+     * 多任务 进度回调监听
+     */
+    interface DownLoadCall {
+        /**
+         * 上传、下载 进度回调方法
+         *
+         * @param downInfo
+         */
+        void onProgress(DownInfo downInfo);
+    }
 }
