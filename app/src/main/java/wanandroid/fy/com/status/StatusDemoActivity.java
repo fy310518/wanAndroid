@@ -8,12 +8,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.fy.baselibrary.application.BaseActivityBean;
-import com.fy.baselibrary.application.BaseApp;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
-import com.fy.baselibrary.retrofit.load.LoadFileUtils;
+import com.fy.baselibrary.retrofit.load.UpLoadUtils;
 import com.fy.baselibrary.retrofit.load.LoadService;
 import com.fy.baselibrary.retrofit.load.UpLoadCallBack;
 import com.fy.baselibrary.statusbar.MdStatusBar;
@@ -21,7 +20,6 @@ import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NightModeUtils;
-import com.fy.baselibrary.utils.cache.ACache;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -72,10 +70,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                 .getSerializableExtra("ActivityBean");
         slManager = activityBean.getSlManager();
 
-//        uploadFiles();
-//        downLoad("http://pic48.nipic.com/file/20140912/7487939_224235377000_2.jpg");
-        downLoad("http://imtt.dd.qq.com/16891/1861D39534D33194426C894BA0D816CF.apk?fsname=com.ss.android.ugc.aweme_1.8.3_183.aweme_1pk&csr=1bbd");
-//        downLoad("https://pic.ibaotu.com/00/60/62/19S888piCNXP.mp4");
+        uploadFiles();
     }
 
 
@@ -136,7 +131,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
         fileList.add(FileUtils.getSDCardPath() + "DCIM/Camera/tooopen_sy_133481514678.jpg");
 
         RequestUtils.create(LoadService.class)
-                .uploadFile1(LoadFileUtils.fileToMultipartBodyParts(fileList))
+                .uploadFile1(UpLoadUtils.fileToMultipartBodyParts(fileList))
                 .compose(RxHelper.handleResult())
                 .doOnSubscribe(RequestUtils::addDispos)
                 .subscribe(new NetCallBack<Object>() {
@@ -159,7 +154,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
         files.add(new File(FileUtils.getSDCardPath() + "DCIM/Downloads.zip"));
         files.add(new File(FileUtils.getSDCardPath() + "DCIM/Camera/tooopen_sy_133481514678.jpg"));
 
-        LoadFileUtils.uploadFiles(files, RequestUtils.create(LoadService.class))
+        UpLoadUtils.uploadFiles(files, RequestUtils.create(LoadService.class))
                 .doOnSubscribe(RequestUtils::addDispos)
                 .subscribe(new UpLoadCallBack() {
                     @Override
@@ -178,44 +173,5 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
                     }
                 });
-    }
-
-    private void downLoad(String url) {
-//        LoadFileUtils.downLoadFile(url, new UpLoadCallBack() {
-//            @Override
-//            protected void onProgress(Integer percent) {
-//                L.e("文件下载", "file download: " + percent);
-//            }
-//
-//            @Override
-//            protected void onSuccess(Object t) {
-//
-//            }
-//
-//            @Override
-//            protected void updataLayout(int flag) {
-//
-//            }
-//        });
-        ACache mCache = ACache.get(BaseApp.getAppCtx());
-        int percent = mCache.getAsInt(url + "percent");
-        if (percent > 0)tvKing.setText(percent + "%");
-
-        LoadFileUtils.downFile(url, new UpLoadCallBack(url) {
-                    @Override
-                    protected void onProgress(String percent) {
-                        runOnUiThread(() -> tvKing.setText(percent + "%"));
-                    }
-
-                    @Override
-                    protected void onSuccess(Object t) {
-                    }
-
-                    @Override
-                    protected void updataLayout(int flag) {
-                    }
-                });
-
-
     }
 }

@@ -42,6 +42,8 @@ public class DownInfo implements Serializable {
 
     private int stateInte = START;
 
+    public DownInfo() {}
+
     public DownInfo(@NonNull String url) {
         this.url = url;
     }
@@ -84,5 +86,16 @@ public class DownInfo implements Serializable {
 
     public void setPercent(double percent) {
         this.percent = percent;
+    }
+
+    @Override
+    public String toString() {
+        return "DownInfo{" +
+                "url='" + url + '\'' +
+                ", countLength=" + countLength +
+                ", readLength=" + readLength +
+                ", percent=" + percent +
+                ", stateInte=" + stateInte +
+                '}';
     }
 }

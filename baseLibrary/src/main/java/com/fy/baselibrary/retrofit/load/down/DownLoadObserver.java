@@ -1,5 +1,6 @@
 package com.fy.baselibrary.retrofit.load.down;
 
+import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.TransfmtUtils;
 
 import io.reactivex.Observer;
@@ -39,7 +40,8 @@ public class DownLoadObserver<T> implements Observer<T> {
     @Override
     public void onError(Throwable e) {
         downInfo.setStateInte(DownInfo.ERROR);
-        DownManager.getInstentce().saveDownInfo();
+        DownManager.getInstentce().saveDownInfo(downInfo);
+        L.e("清除下载错误的任务", downInfo.getUrl() + "--->");
         DownManager.getInstentce().removeTask(downInfo);
     }
 
@@ -48,8 +50,9 @@ public class DownLoadObserver<T> implements Observer<T> {
         loadListener.onComplete();
         downInfo.setStateInte(DownInfo.FINISH);
 
-        DownManager.getInstentce().saveDownInfo();
+        DownManager.getInstentce().saveDownInfo(downInfo);
         DownManager.getInstentce().runDownTask();
+        L.e("清除下载完成的任务", downInfo.getUrl() + "--->");
         DownManager.getInstentce().removeTask(downInfo);
     }
 

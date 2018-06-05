@@ -10,10 +10,10 @@ import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.GsonUtils;
 import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.T;
 import com.fy.baselibrary.utils.ThreadUtils;
+import com.fy.baselibrary.utils.TransfmtUtils;
 import com.fy.baselibrary.utils.cache.ACache;
-
-import org.json.JSONArray;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,7 +52,7 @@ public class DownManager {
     /** 所有下载任务的 回调集合*/
     private Map<String, DownLoadObserver> observerMap;
 
-    public volatile static DownManager instentce;
+    private volatile static DownManager instentce;
 
     public static synchronized DownManager getInstentce(){
         if (null == instentce) {
@@ -82,6 +82,7 @@ public class DownManager {
         //正在下载不处理
         if (null == info) return;
         String url = info.getUrl();
+        L.e("文件下载", "--》" + url);
 
         DownLoadObserver observer = observerMap.get(url);
         boolean isCache = false;
@@ -102,6 +103,8 @@ public class DownManager {
                     public ObservableSource<Object> apply(ResponseBody body) throws Exception {
                         //第一次请求全部文件长度
                         long sumLength = body.contentLength();
+                        L.e("文件下载", sumLength + "--》" + url);
+
                         info.setCountLength(sumLength);
                         File targetFile = FileUtils.createFile(url);
 
@@ -123,7 +126,7 @@ public class DownManager {
                             }
 
                             //结束位置，-1是为了防止上一个线程和下一个线程重复下载衔接处数据
-                            long endPosition = i + 1 < THREAD_COUNT ? (i + 1) * bitLen - 1 : (i + 1) * bitLen + 1;
+                            long endPosition = i + 1 < THREAD_COUNT ? (i + 1) * bitLen - 1 : (i + 1) * bitLen + THREAD_COUNT;
 
                             //判断是否下载全部文件
                             if (startPosition < endPosition) {
@@ -146,7 +149,7 @@ public class DownManager {
                 .subscribe(observer);
     }
 
-    public static Observable download(@NonNull String nameKey,
+    private Observable download(@NonNull String nameKey,
                                       @NonNull final long start,
                                       @NonNull final long end,
                                       @NonNull final String url,
@@ -167,7 +170,7 @@ public class DownManager {
      *
      * @param saveFile
      */
-    public static void writeCaches(@NonNull String nameKey, @NonNull final long start,
+    private void writeCaches(@NonNull String nameKey, @NonNull final long start,
                                    InputStream is,
                                    File saveFile,
                                    DownLoadObserver observer) throws IOException {
@@ -187,9 +190,9 @@ public class DownManager {
             int len;
             while ((len = is.read(buffer)) != -1) {
                 raf.write(buffer, 0, len);
+                loaded += len;
                 observer.onRead(len);
 
-                loaded += len;
                 //缓存当前线程 下载内容 总长度
                 mCache.put(nameKey + Constant.DownTherad, loaded);
             }
@@ -201,11 +204,36 @@ public class DownManager {
 
     /**
      * 增加一个下载任务 到 下载队列
-     * @param downInfo
+     * @param url
      */
-    public DownManager addDownTask(DownInfo downInfo, DownLoadListener loadListener) {
-        if (null == downInfo || null == loadListener) return getInstentce();
-        String url = downInfo.getUrl();
+    public DownManager addDownTask(String url, DownLoadListener loadListener) {
+        if (TextUtils.isEmpty(url) || null == loadListener) return getInstentce();
+
+        //获取缓存中 所有的未完成下载任务列表
+        ACache mCache = ACache.get(BaseApp.getAppCtx());
+        String jsonArray = mCache.getAsString(Constant.AllDownTask);
+        if (null != jsonArray && !TextUtils.isEmpty(jsonArray)) {
+            downInfos =  GsonUtils.jsonToList(jsonArray, DownInfo.class);
+        }
+
+        DownInfo downInfo = null;
+        //判断下载任务列表中 是否存在指定url的 下载任务
+        for (DownInfo infobean : downInfos){
+            if (infobean.getUrl().equals(url)){
+                downInfo = infobean;
+                break;
+            }
+        }
+
+        if (null == downInfo) downInfo = new DownInfo(url);
+        if (downInfo.getStateInte() == DownInfo.FINISH) {
+            T.showLong("此任务已完成");
+            loadListener.onProgress(100 + "");
+            return getInstentce();
+        } else if (downInfo.getStateInte() == DownInfo.ERROR) {
+            T.showLong("开始下载");
+            loadListener.onProgress(TransfmtUtils.doubleToKeepTwoDecimalPlaces(downInfo.getPercent()) + "");
+        }
 
         if (observerMap.get(url) == null) {
             //向下载队列添加下载任务
@@ -222,12 +250,6 @@ public class DownManager {
      * @Desc 多线程、多任务下载
      */
     public void runDownTask() {
-        ACache mCache = ACache.get(BaseApp.getAppCtx());
-        JSONArray jsonArray = mCache.getAsJSONArray(Constant.AllDownTask);
-        if (null != jsonArray && !TextUtils.isEmpty(jsonArray.toString())) {
-            downInfos =  GsonUtils.jsonToList(jsonArray.toString());
-        }
-
         for (int i = 0; i < MAX_COUNT; i++) {
             //开始下载
             startDown();
@@ -258,20 +280,41 @@ public class DownManager {
      */
     public void removeTask(DownInfo downInfo){
         if (null == downInfo || observerMap.get(downInfo.getUrl()) == null) return;
-        String url = downInfo.getUrl();
-        observerMap.remove(url);
+        observerMap.remove(downInfo.getUrl());
 
         boolean isRemove = downInfos.remove(downInfo);
-        L.e("清除下载完成的任务", "--->" + isRemove);
+        L.e("清除下载完成的任务", downInfo.getUrl() + "--->" + isRemove);
     }
 
     /**
      * 缓存所有下载信息
      */
-    public void saveDownInfo(){
-        if (null != downInfos && downInfos.size() > 0) {
-            ACache mCache = ACache.get(BaseApp.getAppCtx());
-            mCache.put(Constant.AllDownTask, GsonUtils.listToJson(downInfos));
+    public void saveDownInfo(DownInfo downInfo) {
+        List<DownInfo> list = null;
+        //获取缓存中 所有的未完成下载任务列表
+        ACache mCache = ACache.get(BaseApp.getAppCtx());
+        String jsonArray = mCache.getAsString(Constant.AllDownTask);
+        if (null != jsonArray && !TextUtils.isEmpty(jsonArray)) {
+            list = GsonUtils.jsonToList(jsonArray, DownInfo.class);
         }
+
+        if (null == list) {
+            list = new ArrayList<>();
+            list.add(downInfo);
+        } else {
+            boolean isCache = false;
+            for (int i = 0; i < list.size(); i++){
+                DownInfo infobean = list.get(i);
+                if (infobean.getUrl().equals(downInfo.getUrl())){
+                    list.set(i, downInfo);
+                    isCache = true;
+                    break;
+                }
+            }
+
+            if (!isCache)list.add(downInfo);
+        }
+
+        mCache.put(Constant.AllDownTask, GsonUtils.<DownInfo>listToJson(list));
     }
 }

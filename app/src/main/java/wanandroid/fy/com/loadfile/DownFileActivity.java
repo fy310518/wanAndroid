@@ -52,7 +52,7 @@ public class DownFileActivity extends AppCompatActivity implements IBaseActivity
     public void initData(Activity activity, Bundle savedInstanceState) {
 
 //        downLoad("http://pic48.nipic.com/file/20140912/7487939_224235377000_2.jpg");
-//        downLoad("http://imtt.dd.qq.com/16891/1861D39534D33194426C894BA0D816CF.apk?fsname=com.ss.android.ugc.aweme_1.8.3_183.aweme_1pk&csr=1bbd", tvProgress1);
+        downLoad("http://imtt.dd.qq.com/16891/1861D39534D33194426C894BA0D816CF.apk?fsname=com.ss.android.ugc.aweme_1.8.3_183.aweme_1pk&csr=1bbd", tvProgress1);
         downLoad("https://pic.ibaotu.com/00/60/62/19S888piCNXP.mp4", tvProgress2);
 
         DownManager.getInstentce().runDownTask();
@@ -70,7 +70,7 @@ public class DownFileActivity extends AppCompatActivity implements IBaseActivity
 
     private void downLoad(String url, TextView tv) {
         DownManager.getInstentce()
-                .addDownTask(new DownInfo(url), new DownLoadListener() {
+                .addDownTask(url, new DownLoadListener() {
 
                     @Override
                     public void onPuase() {

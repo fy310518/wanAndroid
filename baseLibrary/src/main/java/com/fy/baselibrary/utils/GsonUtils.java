@@ -2,10 +2,14 @@ package com.fy.baselibrary.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,8 +29,19 @@ public class GsonUtils {
      * @param bean
      * @return
      */
-    public static String beanToJSONString(Object bean) {
+    public static String toJson(Object bean) {
         return new Gson().toJson(bean);
+    }
+
+    /**
+     * 将Json字符串转换成对象
+     * @param json
+     * @param type
+     * @return
+     */
+    public static<T> T fromJson(String json, Class<T> type) {
+        Gson gson = new Gson();
+        return gson.fromJson(json, type);
     }
 
     /**
@@ -40,17 +55,6 @@ public class GsonUtils {
         return returnData;
     }
 
-    /**
-     * 将Json字符串转换成对象
-     * @param json
-     * @param beanClass
-     * @return
-     */
-    public static Object JSONToObject(String json,Class beanClass) {
-        Gson gson = new Gson();
-        Object res = gson.fromJson(json, beanClass);
-        return res;
-    }
 
     /**
      * 将 map 转换成 json字符串
@@ -70,19 +74,22 @@ public class GsonUtils {
      * @param <T>
      * @return
      */
-    public static<T> List<T> jsonToList(String jsonStr){
-        Gson gson = new Gson();
+    public static <T> List<T> jsonToList(String jsonStr, Class<T> clazz) {
+        List<T> lst = new ArrayList<>();
 
-        List<T> list = gson.fromJson(jsonStr, new TypeToken<List<T>>(){}.getType());
+        JsonArray array = new JsonParser().parse(jsonStr).getAsJsonArray();
+        for (final JsonElement elem : array) {
+            lst.add(new Gson().fromJson(elem, clazz));
+        }
 
-        return list;
+        return lst;
     }
 
     /**
      * 将 list 转换成json字符串
      * @return
      */
-    public static<T> String listToJson(List<T> data){
+    public static <T> String listToJson(List<T> data){
         Gson gson = new Gson();
 
         return gson.toJson(data);
