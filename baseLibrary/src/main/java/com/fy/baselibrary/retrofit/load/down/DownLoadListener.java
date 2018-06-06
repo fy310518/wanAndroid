@@ -17,27 +17,21 @@ public interface DownLoadListener {
     void onCancel();
 
     /**
-     * 上传、下载 进度回调方法
-     *
-     * @param percent
+     * 下载 进度回调方法
+     * @param finished  文件的下载长度
+     * @param total     文件总长度
+     * @param progress  下载进度百分比 （finished / total * 100）
      */
-    void onProgress(String percent);
+    void onProgress(long finished, long total, double progress);
 
     /**
-     * 完成下载
+     * download complete
      */
     void onComplete();
 
-
     /**
-     * 多任务 进度回调监听
+     * download fail or exception callback
+     * @param e
      */
-    interface DownLoadCall {
-        /**
-         * 上传、下载 进度回调方法
-         *
-         * @param downInfo
-         */
-        void onProgress(DownInfo downInfo);
-    }
+    void onFailed(Exception e);
 }

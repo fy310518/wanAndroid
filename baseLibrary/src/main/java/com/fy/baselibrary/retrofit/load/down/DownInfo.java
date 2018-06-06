@@ -14,37 +14,39 @@ public class DownInfo implements Serializable {
     /**
      * 定义下载状态码 开始，正在下载，暂停，取消 ，错误，完成
      */
-    public static final int START = 0;
-    public static final int DOWN = 1;
-    public static final int PAUSE = 2;
-    public static final int CANCEL = 3;
-    public static final int ERROR = 4;
-    public static final int FINISH = 5;
+    public static final int STATUS_NOT_DOWNLOAD = 0;
+    public static final int STATUS_DOWNLOADING = 1;
+    public static final int STATUS_PAUSED = 2;
+    public static final int STATUS_CANCEL = 3;
+    public static final int STATUS_DOWNLOAD_ERROR = 4;
+    public static final int STATUS_COMPLETE = 5;
 
 
-    /**
-     * 下载 url
-     */
-    @NonNull
+    private String name;
+    private String image;
+
+    /** 载 url */
     private String url;
-    /**
-     * 文件总长度
-     */
+    /** 文件总长度 */
     private long countLength;
-    /**
-     * 已经下载的 总长度
-     */
+    /** 已经下载的 总长度 */
     private AtomicLong readLength = new AtomicLong();
     /**
      * 进度百分比 数
      */
     private double percent;
 
-    private int stateInte = START;
+    private int stateInte = STATUS_NOT_DOWNLOAD;
 
     public DownInfo() {}
 
     public DownInfo(@NonNull String url) {
+        this.url = url;
+    }
+
+    public DownInfo(String name, String image, String url) {
+        this.name = name;
+        this.image = image;
         this.url = url;
     }
 
@@ -97,5 +99,20 @@ public class DownInfo implements Serializable {
                 ", percent=" + percent +
                 ", stateInte=" + stateInte +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DownInfo downInfo = (DownInfo) o;
+
+        return url.equals(downInfo.url);
+    }
+
+    @Override
+    public int hashCode() {
+        return url.hashCode();
     }
 }

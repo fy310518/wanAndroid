@@ -15,19 +15,25 @@ import io.reactivex.disposables.Disposable;
 public class DownLoadObserver<T> implements Observer<T> {
 
     private Disposable disposed;
+
+    private int position;
     /**
      * 下载数据
      */
     private DownInfo downInfo;
     /**
      * 下载监听
-     * 单个下载任务 监听器
      */
     private DownLoadListener loadListener;
 
-    private DownLoadListener.DownLoadCall loadCall;
 
     public DownLoadObserver(DownInfo downInfo, DownLoadListener loadListener) {
+        this.downInfo = downInfo;
+        this.loadListener = loadListener;
+    }
+
+    public DownLoadObserver(int position, DownInfo downInfo, DownLoadListener loadListener) {
+        this.position = position;
         this.downInfo = downInfo;
         this.loadListener = loadListener;
     }
@@ -39,31 +45,28 @@ public class DownLoadObserver<T> implements Observer<T> {
 
     @Override
     public void onNext(T t) {
-        downInfo.setStateInte(DownInfo.DOWN);
     }
 
     @Override
     public void onError(Throwable e) {
         if (e instanceof SocketException) {
-            if (e.getMessage().equals("Socket closed")) {
-                if (downInfo.getStateInte() != DownInfo.CANCEL) {
-                    downInfo.setStateInte(DownInfo.PAUSE);
-                    DownManager.getInstentce().saveDownInfo(downInfo);
-                    L.e("清除下载错误的任务", downInfo.getUrl() + "--->");
-                }
-                DownManager.getInstentce().removeTask(downInfo);
+            if (downInfo.getStateInte() != DownInfo.STATUS_CANCEL) {
+                downInfo.setStateInte(DownInfo.STATUS_PAUSED);
+                DownManager.getInstentce().saveDownInfo(downInfo);
+                L.e("清除下载错误的任务", downInfo.getUrl() + "--->");
             }
+            DownManager.getInstentce().removeTask(downInfo);
         }
     }
 
     @Override
     public void onComplete() {
         if (null != loadListener) loadListener.onComplete();
-        downInfo.setStateInte(DownInfo.FINISH);
+        downInfo.setStateInte(DownInfo.STATUS_COMPLETE);
 
         DownManager.getInstentce().saveDownInfo(downInfo);
         DownManager.getInstentce().runDownTask();
-        L.e("清除下载完成的任务", downInfo.getUrl() + "--->");
+        L.e("清除下载完成的任务", downInfo.getUrl() + "--->" + Thread.currentThread().getName());
         DownManager.getInstentce().removeTask(downInfo);
     }
 
@@ -94,25 +97,24 @@ public class DownLoadObserver<T> implements Observer<T> {
         if (percent >= 100d) {
             percent = 100d;
             downInfo.setPercent(percent);
-            if (null != loadListener) loadListener.onProgress(100 + "");
-            if (null != loadCall) loadCall.onProgress(downInfo);
+            if (null != loadListener)
+                loadListener.onProgress(downInfo.getReadLength().get(),
+                        downInfo.getCountLength(),
+                        downInfo.getPercent());
             onComplete();
             return;
         }
 
-        downInfo.setPercent(percent);
-        if (null != loadListener) loadListener.onProgress(TransfmtUtils.doubleToKeepTwoDecimalPlaces(percent));
-        if (null != loadCall) loadCall.onProgress(downInfo);
 //     缓存进度百分比
         downInfo.setPercent(percent);
+        if (null != loadListener)
+            loadListener.onProgress(downInfo.getReadLength().get(),
+                downInfo.getCountLength(),
+                downInfo.getPercent());
     }
 
 
     public Disposable getDisposed() {
         return disposed;
-    }
-
-    public void setLoadCall(DownLoadListener.DownLoadCall loadCall) {
-        this.loadCall = loadCall;
     }
 }

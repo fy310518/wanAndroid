@@ -53,8 +53,6 @@ public class DownManager {
     private Map<String, DownLoadObserver> observerMap;
 
 
-    private DownLoadListener.DownLoadCall loadCall;
-
     private volatile static DownManager instentce;
 
     public static synchronized DownManager getInstentce(){
@@ -74,9 +72,6 @@ public class DownManager {
         observerMap = new HashMap<>();
     }
 
-    public void setLoadCall(DownLoadListener.DownLoadCall loadCall) {
-        this.loadCall = loadCall;
-    }
 
     /**
      * 开始下载
@@ -210,41 +205,55 @@ public class DownManager {
 
     /**
      * 增加一个下载任务 到 下载队列
-     * @param url
+     * @param downInfo
      */
-    public DownManager addDownTask(String url, DownLoadListener loadListener) {
+    public DownManager addDownTask(DownInfo downInfo, DownLoadListener loadListener) {
+        String url = downInfo.getUrl();
         if (TextUtils.isEmpty(url)) return getInstentce();
 
-        //获取缓存中 所有的未完成下载任务列表
+        //获取缓存中 所有的下载任务列表
         ACache mCache = ACache.get(BaseApp.getAppCtx());
         String jsonArray = mCache.getAsString(Constant.AllDownTask);
         if (null != jsonArray && !TextUtils.isEmpty(jsonArray)) {
             downInfos =  GsonUtils.jsonToList(jsonArray, DownInfo.class);
         }
 
-        DownInfo downInfo = null;
-        //判断下载任务列表中 是否存在指定url的 下载任务
-        for (DownInfo infobean : downInfos){
+        /**
+         * 1、判断缓存的下载任务列表中 是否存在指定url的 下载任务
+         * 2、如果存在指定 url 的下载任务，判断该任务的文件是否存在，不存在则替换 下载列表中对应的任务
+         */
+        File targetFile = FileUtils.createFile(url);
+        for (int i = 0; i < downInfos.size(); i++){
+            DownInfo infobean = downInfos.get(i);
             if (infobean.getUrl().equals(url)){
+                if (targetFile.length() == 0) {
+                    downInfos.set(i, downInfo);
+                    break;
+                }
+
                 downInfo = infobean;
                 break;
             }
         }
 
-        if (null == downInfo) downInfo = new DownInfo(url);
-        if (downInfo.getStateInte() == DownInfo.FINISH) {
+        if (downInfo.getStateInte() == DownInfo.STATUS_COMPLETE) {
             T.showLong("此任务已完成");
-            if (null != loadListener)loadListener.onProgress(100 + "");
+            if (null != loadListener)
+                loadListener.onProgress(downInfo.getReadLength().get(),
+                        downInfo.getCountLength(),
+                        downInfo.getPercent());
             return getInstentce();
-        } else if (downInfo.getStateInte() == DownInfo.PAUSE) {
+        } else if (downInfo.getStateInte() == DownInfo.STATUS_PAUSED || downInfo.getStateInte() == DownInfo.STATUS_NOT_DOWNLOAD) {
             T.showLong("开始下载");
-            if (null != loadListener) loadListener.onProgress(TransfmtUtils.doubleToKeepTwoDecimalPlaces(downInfo.getPercent()) + "");
+            if (null != loadListener)
+                loadListener.onProgress(downInfo.getReadLength().get(),
+                        downInfo.getCountLength(),
+                        downInfo.getPercent());
         }
 
         if (observerMap.get(url) == null) {
             //向下载队列添加下载任务
             DownLoadObserver observer = new DownLoadObserver(downInfo, loadListener);
-            if (null != loadCall)observer.setLoadCall(loadCall);//设置 多任务 进度回调监听
             observerMap.put(url, observer);
             downQueue.offer(downInfo);
         }
@@ -292,7 +301,7 @@ public class DownManager {
     public void cancle(@NonNull final String url){
         for (DownInfo infobean : downInfos){
             if (infobean.getUrl().equals(url)){
-                infobean.setStateInte(DownInfo.CANCEL);
+                infobean.setStateInte(DownInfo.STATUS_CANCEL);
                 break;
             }
         }
@@ -304,7 +313,7 @@ public class DownManager {
      */
     public void cancleAll() {
         for (DownInfo infobean : downInfos) {
-            infobean.setStateInte(DownInfo.CANCEL);
+            infobean.setStateInte(DownInfo.STATUS_CANCEL);
             pause(infobean.getUrl());
         }
     }
@@ -320,7 +329,7 @@ public class DownManager {
         observerMap.remove(downInfo.getUrl());
 
         boolean isRemove = downInfos.remove(downInfo);
-        L.e("清除下载完成的任务", downInfo.getUrl() + "--->" + isRemove);
+        L.e("清除下载完成的任务", downInfo.getUrl() + "--->" + isRemove + "-->" + Thread.currentThread().getName());
     }
 
     /**
@@ -342,7 +351,7 @@ public class DownManager {
             boolean isCache = false;
             for (int i = 0; i < list.size(); i++){
                 DownInfo infobean = list.get(i);
-                if (infobean.getUrl().equals(downInfo.getUrl())){
+                if (infobean.equals(downInfo)){
                     list.set(i, downInfo);
                     isCache = true;
                     break;
@@ -352,8 +361,9 @@ public class DownManager {
             if (!isCache)list.add(downInfo);
         }
 
-        mCache.put(Constant.AllDownTask, GsonUtils.<DownInfo>listToJson(list));
+        mCache.put(Constant.AllDownTask, GsonUtils.listToJson(list));
     }
+
 
     /**
      * 获取所有 未下载任务 集合

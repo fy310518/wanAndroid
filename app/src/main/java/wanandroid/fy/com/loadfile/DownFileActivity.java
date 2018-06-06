@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.fy.baselibrary.application.IBaseActivity;
+import com.fy.baselibrary.retrofit.load.down.DownInfo;
+import com.fy.baselibrary.retrofit.load.down.DownLoadListener;
 import com.fy.baselibrary.retrofit.load.down.DownManager;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
 import com.fy.baselibrary.statusbar.MdStatusBar;
@@ -43,20 +45,13 @@ public class DownFileActivity extends AppCompatActivity implements IBaseActivity
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
 
-        DownManager.getInstentce().setLoadCall(downInfo -> runOnUiThread(() -> {
-            for (int i = 0; i < rvAdapter.getItemCount(); i++) {
-                if (downInfo.getUrl().equals(rvAdapter.getmDatas().get(i).getUrl())) {
-                    rvAdapter.changeItemListener.onChange(i);
-                    break;
-                }
-            }
-        }));
-
-        downLoad("http://pic48.nipic.com/file/20140912/7487939_224235377000_2.jpg");
-        downLoad("http://imtt.dd.qq.com/16891/1861D39534D33194426C894BA0D816CF.apk?fsname=com.ss.android.ugc.aweme_1.8.3_183.aweme_1pk&csr=1bbd");
-        downLoad("https://pic.ibaotu.com/00/60/62/19S888piCNXP.mp4");
-
         initRv();
+
+        for (int i = 0; i < rvAdapter.getItemCount(); i++){
+            DownManager.getInstentce()
+                    .addDownTask(rvAdapter.getmDatas().get(i), new DownLoadCall(i));
+        }
+
         DownManager.getInstentce().runDownTask();
     }
 
@@ -73,17 +68,48 @@ public class DownFileActivity extends AppCompatActivity implements IBaseActivity
     private void initRv(){
         rvDownList.setLayoutManager(new LinearLayoutManager(this));
         rvDownList.addItemDecoration(new ListItemDecoration.Builder()
-                .setmSpace(R.dimen.rv_divider_height)
-                .setDraw(false).create(this));
-        rvAdapter = new DownFileListAdapter(this, DownManager.getInstentce().getDownTask());
+                .setmSpace(R.dimen.rv_divider_height).create(this));
+        rvAdapter = new DownFileListAdapter(this, DataSource.getInstance().getData());
         rvAdapter.setChangeItemListener((position) -> rvAdapter.notifyItemChanged(position, ""));
         rvDownList.setAdapter(rvAdapter);
     }
 
-    private void downLoad(String url) {
-        DownManager.getInstentce()
-                .addDownTask(url, null);
 
+    class DownLoadCall implements DownLoadListener {
+        private int position;
 
+        public DownLoadCall(int position) {
+            this.position = position;
+        }
+
+        @Override
+        public void onPuase() {
+
+        }
+
+        @Override
+        public void onCancel() {
+
+        }
+
+        @Override
+        public void onProgress(long finished, long total, double progress) {
+            DownInfo downInfo = rvAdapter.getmDatas().get(position);
+            downInfo.setStateInte(DownInfo.STATUS_DOWNLOADING);
+            downInfo.setPercent(progress);
+            downInfo.setCountLength(total);
+            downInfo.getReadLength().set(finished);
+            runOnUiThread(() -> rvAdapter.changeItemListener.onChange(position));
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+
+        @Override
+        public void onFailed(Exception e) {
+
+        }
     }
 }
