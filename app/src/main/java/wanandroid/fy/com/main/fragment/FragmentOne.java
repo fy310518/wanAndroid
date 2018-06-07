@@ -11,11 +11,9 @@ import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.rv.adapter.HeaderAndFooterWrapper;
-import com.fy.baselibrary.rv.adapter.OnListener;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
 import com.fy.baselibrary.utils.DensityUtils;
 import com.fy.baselibrary.utils.JumpUtils;
-import com.fy.baselibrary.utils.TintUtils;
 import com.fy.baselibrary.widget.EasyPullLayout;
 import com.fy.baselibrary.widget.TransformerView;
 

@@ -10,7 +10,6 @@ import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
 import com.fy.baselibrary.utils.JumpUtils;
-import com.fy.baselibrary.utils.T;
 import com.fy.baselibrary.widget.EasyPullLayout;
 import com.fy.baselibrary.widget.TransformerView;
 

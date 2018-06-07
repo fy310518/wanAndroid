@@ -7,11 +7,9 @@ import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.retrofit.load.down.DownInfo;
 import com.fy.baselibrary.retrofit.load.down.DownManager;
 import com.fy.baselibrary.rv.adapter.RvCommonAdapter;
-import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.TransfmtUtils;
 import com.fy.baselibrary.utils.imgload.ImgLoadUtils;
 
-import java.io.File;
 import java.util.List;
 
 import wanandroid.fy.com.R;

@@ -21,7 +21,6 @@ import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
-import com.fy.baselibrary.retrofit.load.down.DownLoadListener;
 import com.fy.baselibrary.startactivity.StartActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.Constant;
@@ -41,7 +40,6 @@ import wanandroid.fy.com.api.ApiService;
 import wanandroid.fy.com.entity.LoginBean;
 import wanandroid.fy.com.loadfile.DownFileActivity;
 import wanandroid.fy.com.main.MainActivity;
-import wanandroid.fy.com.status.StatusDemoActivity;
 import wanandroid.fy.com.utils.SelectUtils;
 
 /**

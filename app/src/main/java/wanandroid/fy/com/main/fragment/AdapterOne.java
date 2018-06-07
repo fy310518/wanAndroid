@@ -1,8 +1,6 @@
 package wanandroid.fy.com.main.fragment;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.AppCompatImageView;
 import android.text.Html;
 import android.widget.TextView;
@@ -15,7 +13,6 @@ import com.fy.baselibrary.rv.adapter.RvCommonAdapter;
 import com.fy.baselibrary.utils.T;
 import com.fy.baselibrary.utils.TintUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import wanandroid.fy.com.R;

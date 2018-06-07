@@ -20,7 +20,7 @@ import wanandroid.fy.com.R;
  * 关于
  * Created by fangs on 2018/4/8.
  */
-public class AboutActivity extends AppCompatActivity implements IBaseActivity{
+public class AboutActivity extends AppCompatActivity implements IBaseActivity {
 
     @BindView(R.id.tvAppInformation)
     TextView tvAppInformation;

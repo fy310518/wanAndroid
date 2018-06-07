@@ -36,7 +36,7 @@ import wanandroid.fy.com.utils.SelectUtils;
  * 注册
  * Created by fangs on 2018/3/30.
  */
-public class RegisterActivity extends AppCompatActivity implements IBaseActivity{
+public class RegisterActivity extends AppCompatActivity implements IBaseActivity {
 
     private AppCompatActivity mContext;
 

@@ -15,7 +15,7 @@ import wanandroid.fy.com.entity.TreeBean;
  * 知识体系 fragment
  * Created by fangs on 2018/4/16.
  */
-public class AdapterTwo extends RvCommonAdapter<TreeBean>{
+public class AdapterTwo extends RvCommonAdapter<TreeBean> {
 
     public AdapterTwo(Context context, List<TreeBean> datas) {
         super(context, R.layout.item_fm_two, datas);

@@ -12,7 +12,6 @@ import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
-import com.fy.baselibrary.rv.adapter.OnListener;
 import com.fy.baselibrary.rv.anim.FadeItemAnimator;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
 import com.fy.baselibrary.statusbar.MdStatusBar;
@@ -21,23 +20,15 @@ import com.fy.baselibrary.widget.EasyPullLayout;
 import com.fy.baselibrary.widget.TransformerView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.BiFunction;
-import io.reactivex.schedulers.Schedulers;
 import wanandroid.fy.com.R;
 import wanandroid.fy.com.api.ApiService;
 import wanandroid.fy.com.entity.ArticleBean;
-import wanandroid.fy.com.entity.BannerBean;
 import wanandroid.fy.com.entity.Bookmark;
 import wanandroid.fy.com.main.fragment.AdapterOne;
 import wanandroid.fy.com.main.fragment.DiffCallBack;
-import wanandroid.fy.com.main.fragment.FragmentOne;
 import wanandroid.fy.com.web.WebViewActivity;
 
 /**

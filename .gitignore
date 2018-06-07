@@ -7,6 +7,3 @@
 /build
 /captures
 .externalNativeBuild
-/baseLibrary/build/generated
-/baseLibrary/build/intermediates
-/baseLibrary/build/tmp

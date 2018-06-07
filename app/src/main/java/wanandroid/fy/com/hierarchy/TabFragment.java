@@ -31,7 +31,7 @@ import wanandroid.fy.com.web.WebViewActivity;
  * TabLayout Fragment
  * Created by fangs on 2018/4/24.
  */
-public class TabFragment extends BaseFragment{
+public class TabFragment extends BaseFragment {
 
     @BindView(R.id.epl)
     EasyPullLayout epl;

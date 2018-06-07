@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="BgColor">#282d29</color>
+    <color name="appHeadBg">#233634</color>
+    <color name="button_normal">#9aada9</color>
+    <color name="button_pressed">#416c51</color>
+    <color name="colorAccent">#40FF4081</color>
+    <color name="colorHintError">#ccfe8382</color>
+    <color name="colorPrimary">#403F51B5</color>
+    <color name="colorPrimaryDark">#401976D2</color>
+    <color name="colorTextCorrect">#416c51</color>
+    <color name="lineColor">#3a3a3a</color>
+    <color name="selection">#ffffff</color>
+    <color name="statusBar">#1c2e32</color>
+    <color name="titleBarCon">#f9f9f9</color>
+    <color name="txtLight">#cccccc</color>
+    <color name="txtSecondColor">#7c7c7c</color>
+    <color name="txtSuperColor">#434343</color>
+    <color name="txtSuperLight">#5aac6a</color>
+</resources>
