@@ -7,3 +7,11 @@
 /build
 /captures
 .externalNativeBuild
+/.gradle
+/.idea
+/.gitignore
+/app/.gitignore
+/app/app.iml
+/app/build
+/baseLibrary/baseLibrary.iml
+/baseLibrary/build
