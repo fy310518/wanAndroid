@@ -13,6 +13,7 @@ import com.fy.baselibrary.retrofit.load.down.DownLoadListener;
 import com.fy.baselibrary.retrofit.load.down.DownManager;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
 import com.fy.baselibrary.statusbar.MdStatusBar;
+import com.fy.baselibrary.utils.L;
 
 import butterknife.BindView;
 import wanandroid.fy.com.R;
@@ -52,7 +53,7 @@ public class DownFileActivity extends AppCompatActivity implements IBaseActivity
                     .addDownTask(rvAdapter.getmDatas().get(i), new DownLoadCall(i));
         }
 
-        DownManager.getInstentce().runDownTask();
+//        DownManager.getInstentce().runDownTask();
     }
 
     @Override
@@ -74,6 +75,12 @@ public class DownFileActivity extends AppCompatActivity implements IBaseActivity
         rvDownList.setAdapter(rvAdapter);
     }
 
+    private boolean isCurrentListViewItemVisible(int position) {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) rvDownList.getLayoutManager();
+        int first = layoutManager.findFirstVisibleItemPosition();
+        int last = layoutManager.findLastVisibleItemPosition();
+        return first <= position && position <= last;
+    }
 
     class DownLoadCall implements DownLoadListener {
         private int position;
@@ -95,11 +102,13 @@ public class DownFileActivity extends AppCompatActivity implements IBaseActivity
         @Override
         public void onProgress(long finished, long total, double progress) {
             DownInfo downInfo = rvAdapter.getmDatas().get(position);
-            downInfo.setStateInte(DownInfo.STATUS_DOWNLOADING);
-            downInfo.setPercent(progress);
-            downInfo.setCountLength(total);
-            downInfo.getReadLength().set(finished);
-            runOnUiThread(() -> rvAdapter.changeItemListener.onChange(position));
+            L.e("Thread", downInfo.getUrl() + "---》" + Thread.currentThread().getName() + "-->" + downInfo.getPercent());
+
+                runOnUiThread(() -> {
+                            if (isCurrentListViewItemVisible(position))
+                                rvAdapter.changeItemListener.onChange(position);
+                        }
+                );
         }
 
         @Override

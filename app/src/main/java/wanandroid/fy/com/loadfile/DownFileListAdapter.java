@@ -1,6 +1,7 @@
 package wanandroid.fy.com.loadfile;
 
 import android.content.Context;
+import android.widget.ImageView;
 
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.retrofit.load.down.DownInfo;
@@ -8,6 +9,7 @@ import com.fy.baselibrary.retrofit.load.down.DownManager;
 import com.fy.baselibrary.rv.adapter.RvCommonAdapter;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.TransfmtUtils;
+import com.fy.baselibrary.utils.imgload.ImgLoadUtils;
 
 import java.io.File;
 import java.util.List;
@@ -31,19 +33,63 @@ public class DownFileListAdapter extends RvCommonAdapter<DownInfo> {
             onBindViewHolder(holder, position);
         } else {
             DownInfo downInfo = mDatas.get(position);
+            holder.setText(R.id.tvDownLoadStatus, getButtonText(downInfo.getStateInte()));
             holder.setText(R.id.tvProgress, TransfmtUtils.doubleToKeepTwoDecimalPlaces(downInfo.getPercent()) + "");
         }
     }
 
     @Override
     public void convert(ViewHolder holder, DownInfo downInfo, int position) {
-        File file = FileUtils.createFile(downInfo.getUrl());
-        holder.setText(R.id.tvTaskName, file.getName());
+        ImageView imgIcon = holder.getView(R.id.imgIcon);
+        ImgLoadUtils.loadImage(mContext, downInfo.getImageUrl(), imgIcon);
+        holder.setText(R.id.tvTaskName, downInfo.getName());
+
+        holder.setText(R.id.tvDownLoadStatus, getButtonText(downInfo.getStateInte()));
         holder.setText(R.id.tvProgress, TransfmtUtils.doubleToKeepTwoDecimalPlaces(downInfo.getPercent()) + "");
 
-        //暂停 当前请求
-        holder.setOnClickListener(R.id.tvPause, v -> DownManager.getInstentce().pause(downInfo.getUrl()));
-        //取消 当前请求
-        holder.setOnClickListener(R.id.tvCancel, v -> DownManager.getInstentce().cancle(downInfo.getUrl()));
+        //当前下载状态
+        holder.setOnClickListener(R.id.tvDownLoadStatus, v -> startTask(downInfo));
+    }
+
+    public void startTask(DownInfo downInfo){
+        switch (downInfo.getStateInte()) {
+            case DownInfo.STATUS_NOT_DOWNLOAD:
+                DownManager.getInstentce().runDownTask();
+                break;
+            case DownInfo.STATUS_DOWNLOADING:
+                DownManager.getInstentce().pause(downInfo.getUrl());
+                break;
+            case DownInfo.STATUS_PAUSED:
+                DownManager.getInstentce().stratDown(downInfo);
+                break;
+            case DownInfo.STATUS_CANCEL:
+
+                break;
+            case DownInfo.STATUS_DOWNLOAD_ERROR:
+                DownManager.getInstentce().stratDown(downInfo);
+                break;
+            case DownInfo.STATUS_COMPLETE:
+
+                break;
+        }
+    }
+
+    public String getButtonText(int status) {
+        switch (status) {
+            case DownInfo.STATUS_NOT_DOWNLOAD:
+                return "下载队列中...";
+            case DownInfo.STATUS_DOWNLOADING:
+                return "pause download";
+            case DownInfo.STATUS_PAUSED:
+                return "resumed download";
+            case DownInfo.STATUS_CANCEL:
+                return "start download";
+            case DownInfo.STATUS_DOWNLOAD_ERROR:
+                return "Try Again";
+            case DownInfo.STATUS_COMPLETE:
+                return "Install";
+            default:
+                return "Download";
+        }
     }
 }

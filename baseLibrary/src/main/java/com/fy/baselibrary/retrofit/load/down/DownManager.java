@@ -45,6 +45,8 @@ public class DownManager {
     /** 最大并行下载量 */
     private final int MAX_COUNT = ThreadUtils.maximumPoolSize / THREAD_COUNT;
 
+    /** 是否已经执行下载 */
+    private boolean isRunDownLoad;
     /** 将要下载的 任务队列 */
     private Queue<DownInfo> downQueue;
     /** 正在下载的任务 集合 */
@@ -79,13 +81,11 @@ public class DownManager {
      */
     private void startDown() {
         DownInfo info = downQueue.poll();
-
         //正在下载不处理
         if (null == info) return;
         String url = info.getUrl();
-        L.e("文件下载", "--》" + url);
 
-        DownLoadObserver observer = observerMap.get(url);
+        //判断当前要 执行的下载任务 是否已经添加到 “正在下载的任务 集合 downInfos 中”
         boolean isCache = false;
         for (DownInfo infobean : downInfos){
             if (infobean.getUrl().equals(url)){
@@ -95,6 +95,8 @@ public class DownManager {
         }
         if (!isCache)downInfos.add(info);
 
+        isRunDownLoad = true;
+        DownLoadObserver observer = observerMap.get(url);
         RequestUtils.create(LoadService.class)
                 .download("", url)
                 .doOnSubscribe(RequestUtils::addDispos)
@@ -266,10 +268,36 @@ public class DownManager {
      * @Desc 多线程、多任务下载
      */
     public void runDownTask() {
-        for (int i = 0; i < MAX_COUNT; i++) {
+        int num = MAX_COUNT;
+        if (isRunDownLoad) num = MAX_COUNT - downInfos.size();
+
+        for (int i = 0; i < num; i++) {
             //开始下载
             startDown();
         }
+    }
+
+    /**
+     * 将一个下载任务从暂停状态改为 等待下载状态
+     * @param downInfo
+     */
+    public void stratDown(DownInfo downInfo) {
+        downInfo.setStateInte(DownInfo.STATUS_NOT_DOWNLOAD);
+
+        File targetFile = FileUtils.createFile(downInfo.getUrl());
+        for (int i = 0; i < downInfos.size(); i++) {
+            DownInfo infobean = downInfos.get(i);
+            if (infobean.getUrl().equals(downInfo.getUrl())) {
+                if (targetFile.length() == 0) {
+                    downInfos.set(i, downInfo);
+                    break;
+                }
+
+                infobean.setStateInte(DownInfo.STATUS_NOT_DOWNLOAD);
+            }
+        }
+
+        runDownTask();
     }
 
     /**
@@ -299,13 +327,16 @@ public class DownManager {
      * @param url
      */
     public void cancle(@NonNull final String url){
+        pause(url);
+        File targetFile = FileUtils.createFile(url);
+        FileUtils.deleteFileSafely(targetFile);
+
         for (DownInfo infobean : downInfos){
             if (infobean.getUrl().equals(url)){
                 infobean.setStateInte(DownInfo.STATUS_CANCEL);
                 break;
             }
         }
-        pause(url);
     }
 
     /**
@@ -313,8 +344,11 @@ public class DownManager {
      */
     public void cancleAll() {
         for (DownInfo infobean : downInfos) {
-            infobean.setStateInte(DownInfo.STATUS_CANCEL);
             pause(infobean.getUrl());
+
+            File targetFile = FileUtils.createFile(infobean.getUrl());
+            FileUtils.deleteFileSafely(targetFile);
+            infobean.setStateInte(DownInfo.STATUS_CANCEL);
         }
     }
 
@@ -382,18 +416,6 @@ public class DownManager {
     public List<DownInfo> getDownloading(){
         List<DownInfo> data = new ArrayList<>();
         data.addAll(downInfos);
-
-        return data;
-    }
-
-    /**
-     * 获取 所有下载任务 集合
-     * @return
-     */
-    public List<DownInfo> getAllTask(){
-        List<DownInfo> data = new ArrayList<>();
-        data.addAll(getDownloading());
-        data.addAll(getDownTask());
 
         return data;
     }

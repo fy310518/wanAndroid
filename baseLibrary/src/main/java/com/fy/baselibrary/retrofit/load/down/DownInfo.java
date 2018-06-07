@@ -23,7 +23,7 @@ public class DownInfo implements Serializable {
 
 
     private String name;
-    private String image;
+    private String imageUrl;
 
     /** 载 url */
     private String url;
@@ -44,9 +44,9 @@ public class DownInfo implements Serializable {
         this.url = url;
     }
 
-    public DownInfo(String name, String image, String url) {
+    public DownInfo(String name, String imageUrl, String url) {
         this.name = name;
-        this.image = image;
+        this.imageUrl = imageUrl;
         this.url = url;
     }
 
@@ -88,6 +88,22 @@ public class DownInfo implements Serializable {
 
     public void setPercent(double percent) {
         this.percent = percent;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @Override
