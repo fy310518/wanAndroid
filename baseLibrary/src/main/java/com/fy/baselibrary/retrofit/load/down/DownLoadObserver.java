@@ -1,8 +1,5 @@
 package com.fy.baselibrary.retrofit.load.down;
 
-import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.utils.TransfmtUtils;
-
 import java.net.SocketException;
 
 import io.reactivex.Observer;
@@ -50,12 +47,11 @@ public class DownLoadObserver<T> implements Observer<T> {
     @Override
     public void onError(Throwable e) {
         if (e instanceof SocketException) {
+            DownManager.getInstentce().removeTask(downInfo);
             if (downInfo.getStateInte() != DownInfo.STATUS_CANCEL) {
                 downInfo.setStateInte(DownInfo.STATUS_PAUSED);
                 DownManager.getInstentce().saveDownInfo(downInfo);
-                L.e("清除下载错误的任务", downInfo.getUrl() + "--->");
             }
-            DownManager.getInstentce().removeTask(downInfo);
         }
     }
 
@@ -64,10 +60,10 @@ public class DownLoadObserver<T> implements Observer<T> {
         if (null != loadListener) loadListener.onComplete();
         downInfo.setStateInte(DownInfo.STATUS_COMPLETE);
 
+        DownManager.getInstentce().removeTask(downInfo);
+
         DownManager.getInstentce().saveDownInfo(downInfo);
         DownManager.getInstentce().runDownTask();
-        L.e("清除下载完成的任务", downInfo.getUrl() + "--->" + Thread.currentThread().getName());
-        DownManager.getInstentce().removeTask(downInfo);
     }
 
 
@@ -94,6 +90,7 @@ public class DownLoadObserver<T> implements Observer<T> {
     private void onPercent(double percent) {
         if (percent == downInfo.getPercent()) return;
 
+        downInfo.setStateInte(DownInfo.STATUS_DOWNLOADING);
         if (percent >= 100d) {
             percent = 100d;
             downInfo.setPercent(percent);

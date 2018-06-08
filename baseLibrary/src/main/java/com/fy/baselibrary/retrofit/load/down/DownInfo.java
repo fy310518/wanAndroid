@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * 下载请求数据 实体类
  * Created by fangs on 2018/5/31.
  */
-public class DownInfo implements Serializable {
+public class DownInfo implements Serializable, Cloneable {
 
     /**
      * 定义下载状态码 开始，正在下载，暂停，取消 ，错误，完成
@@ -130,5 +130,19 @@ public class DownInfo implements Serializable {
     @Override
     public int hashCode() {
         return url.hashCode();
+    }
+
+    @Override
+    protected Object clone() {
+        DownInfo downInfo = null;
+
+        try {
+            downInfo = (DownInfo) super.clone();
+            downInfo.setReadLength(getReadLength());
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+
+        return downInfo;
     }
 }

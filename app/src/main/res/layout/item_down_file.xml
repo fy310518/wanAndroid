@@ -9,26 +9,27 @@
         android:id="@+id/imgIcon"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:layout_marginRight="@dimen/spacing_small"
-        android:scaleType="center"/>
+        android:scaleType="center" />
 
     <TextView
         android:id="@+id/tvTaskName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/spacing_small"
+        android:layout_marginLeft="@dimen/spacing_small"
         android:text=""
         android:textSize="@dimen/txt_small"
-        app:layout_constraintLeft_toRightOf="@id/imgIcon"/>
+        app:layout_constraintLeft_toRightOf="@id/imgIcon" />
 
     <TextView
         android:id="@+id/tvProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/spacing_small"
         android:text=""
         android:textSize="@dimen/txt_small"
-        app:layout_constraintLeft_toRightOf="@id/imgIcon"
         app:layout_constraintBottom_toBottomOf="@id/imgIcon"
+        app:layout_constraintLeft_toRightOf="@id/imgIcon"
         app:layout_constraintTop_toBottomOf="@id/tvTaskName" />
 
     <TextView

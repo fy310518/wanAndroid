@@ -76,6 +76,7 @@ public class DownFileActivity extends AppCompatActivity implements IBaseActivity
     }
 
     private boolean isCurrentListViewItemVisible(int position) {
+        if (null == rvDownList) return true;
         LinearLayoutManager layoutManager = (LinearLayoutManager) rvDownList.getLayoutManager();
         int first = layoutManager.findFirstVisibleItemPosition();
         int last = layoutManager.findLastVisibleItemPosition();
