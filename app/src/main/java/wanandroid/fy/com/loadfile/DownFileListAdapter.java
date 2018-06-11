@@ -2,11 +2,14 @@ package wanandroid.fy.com.loadfile;
 
 import android.content.Context;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.retrofit.load.down.DownInfo;
 import com.fy.baselibrary.retrofit.load.down.DownManager;
 import com.fy.baselibrary.rv.adapter.RvCommonAdapter;
+import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.T;
 import com.fy.baselibrary.utils.TransfmtUtils;
 import com.fy.baselibrary.utils.imgload.ImgLoadUtils;
 
@@ -41,32 +44,35 @@ public class DownFileListAdapter extends RvCommonAdapter<DownInfo> {
         ImageView imgIcon = holder.getView(R.id.imgIcon);
         ImgLoadUtils.loadImage(mContext, downInfo.getImageUrl(), imgIcon);
         holder.setText(R.id.tvTaskName, downInfo.getName());
-
-        holder.setText(R.id.tvDownLoadStatus, getButtonText(downInfo.getStateInte()));
         holder.setText(R.id.tvProgress, TransfmtUtils.doubleToKeepTwoDecimalPlaces(downInfo.getPercent()) + "");
 
         //当前下载状态
-        holder.setOnClickListener(R.id.tvDownLoadStatus, v -> startTask(downInfo));
+        TextView tvDownLoadStatus = holder.getView(R.id.tvDownLoadStatus);
+        tvDownLoadStatus.setText(getButtonText(downInfo.getStateInte()));
+        tvDownLoadStatus.setOnClickListener(v -> {
+            if (tvDownLoadStatus.getText().equals("下载队列中...")) return;
+            startTask(downInfo);
+        });
     }
 
-    public void startTask(DownInfo downInfo){
+    public void startTask(DownInfo downInfo) {
         switch (downInfo.getStateInte()) {
             case DownInfo.STATUS_NOT_DOWNLOAD:
                 DownManager.getInstentce().runDownTask();
                 break;
             case DownInfo.STATUS_DOWNLOADING:
-                DownManager.getInstentce().pause(downInfo.getUrl());
+                DownManager.getInstentce().stop(downInfo.getUrl(), DownInfo.STATUS_PAUSED);
                 break;
             case DownInfo.STATUS_PAUSED:
                 DownManager.getInstentce().stratDown(downInfo);
                 break;
             case DownInfo.STATUS_CANCEL:
-
+                DownManager.getInstentce().stratDown(downInfo);
                 break;
             case DownInfo.STATUS_DOWNLOAD_ERROR:
                 DownManager.getInstentce().stratDown(downInfo);
                 break;
-            case DownInfo.STATUS_COMPLETE:
+            case DownInfo.STATUS_COMPLETE://下载完成
 
                 break;
         }

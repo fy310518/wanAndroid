@@ -1,5 +1,7 @@
 package com.fy.baselibrary.retrofit.load.down;
 
+import com.fy.baselibrary.utils.L;
+
 import java.net.SocketException;
 
 import io.reactivex.Observer;
@@ -13,7 +15,10 @@ public class DownLoadObserver<T> implements Observer<T> {
 
     private Disposable disposed;
 
-    private int position;
+    /**
+     * 下载开关
+     */
+    private boolean downSwitch = true;
     /**
      * 下载数据
      */
@@ -29,12 +34,6 @@ public class DownLoadObserver<T> implements Observer<T> {
         this.loadListener = loadListener;
     }
 
-    public DownLoadObserver(int position, DownInfo downInfo, DownLoadListener loadListener) {
-        this.position = position;
-        this.downInfo = downInfo;
-        this.loadListener = loadListener;
-    }
-
     @Override
     public void onSubscribe(Disposable d) {
         this.disposed = d;
@@ -46,11 +45,25 @@ public class DownLoadObserver<T> implements Observer<T> {
 
     @Override
     public void onError(Throwable e) {
+
         if (e instanceof SocketException) {
-            DownManager.getInstentce().removeTask(downInfo);
-            if (downInfo.getStateInte() != DownInfo.STATUS_CANCEL) {
-                downInfo.setStateInte(DownInfo.STATUS_PAUSED);
+            int status = -1;
+            if (e.getMessage().equals(DownInfo.STATUS_CANCEL + "")) {
+                status = DownInfo.STATUS_CANCEL;
+            } else if (e.getMessage().equals(DownInfo.STATUS_PAUSED + "")) {
+                status = DownInfo.STATUS_PAUSED;
+            } else {
+                DownManager.getInstentce().removeTask(downInfo);
                 DownManager.getInstentce().saveDownInfo(downInfo);
+            }
+
+            if (status != -1) {
+                downInfo.setStateInte(status);
+                downSwitch = false;
+                //切断当前的订阅
+                if (null != disposed && !disposed.isDisposed()) disposed.dispose();
+                if (null != loadListener) loadListener.onProgress(downInfo.getReadLength().get(),
+                        downInfo.getCountLength(), downInfo.getPercent());
             }
         }
     }
@@ -73,7 +86,10 @@ public class DownLoadObserver<T> implements Observer<T> {
      * @param read
      */
     public void onRead(long read) {
+        if (!downSwitch) return;
+
         downInfo.getReadLength().addAndGet(read);
+        L.e("Thread", Thread.currentThread().getName() + "-->" + downInfo.getUrl() + "" + downInfo.getReadLength().get());
 
         if (downInfo.getCountLength() <= 0) {
             onPercent(-1);
@@ -110,8 +126,7 @@ public class DownLoadObserver<T> implements Observer<T> {
                 downInfo.getPercent());
     }
 
-
-    public Disposable getDisposed() {
-        return disposed;
+    public void setDownSwitch(boolean downSwitch) {
+        this.downSwitch = downSwitch;
     }
 }

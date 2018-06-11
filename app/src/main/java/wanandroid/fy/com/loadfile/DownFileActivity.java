@@ -53,7 +53,7 @@ public class DownFileActivity extends AppCompatActivity implements IBaseActivity
                     .addDownTask(rvAdapter.getmDatas().get(i), new DownLoadCall(i));
         }
 
-//        DownManager.getInstentce().runDownTask();
+        DownManager.getInstentce().runDownTask();
     }
 
     @Override
@@ -102,9 +102,6 @@ public class DownFileActivity extends AppCompatActivity implements IBaseActivity
 
         @Override
         public void onProgress(long finished, long total, double progress) {
-            DownInfo downInfo = rvAdapter.getmDatas().get(position);
-            L.e("Thread", downInfo.getUrl() + "---》" + Thread.currentThread().getName() + "-->" + downInfo.getPercent());
-
                 runOnUiThread(() -> {
                             if (isCurrentListViewItemVisible(position))
                                 rvAdapter.changeItemListener.onChange(position);

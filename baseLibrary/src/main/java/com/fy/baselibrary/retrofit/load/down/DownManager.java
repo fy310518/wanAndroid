@@ -26,7 +26,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Set;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -82,7 +81,20 @@ public class DownManager {
      * 1、正在执行下载任务 的数目小于“最大并行下载量”则从下载队列里面取一个任务
      */
     private void startDown() {
-        DownInfo info = downQueue.poll();
+        //判断下载列表中是否有 等待下载的任务
+        DownInfo taskItem = null;
+        for (DownInfo infobean : downInfos) {
+            String url = infobean.getUrl();
+            if (infobean.getStateInte() == DownInfo.STATUS_NOT_DOWNLOAD && observerMap.containsKey(url)) {
+                taskItem = infobean;
+                DownLoadObserver observer = observerMap.get(url);
+                observer.setDownSwitch(true);
+            }
+        }
+
+        //正在下载不处理
+        DownInfo info = null == taskItem ? downQueue.poll() : taskItem;
+
         //正在下载不处理
         if (null == info) return;
         String url = info.getUrl();
@@ -296,7 +308,11 @@ public class DownManager {
                     break;
                 }
 
-                infobean.setStateInte(DownInfo.STATUS_NOT_DOWNLOAD);
+                if (observerMap.containsKey(infobean.getUrl())) {
+                    DownLoadObserver observer = observerMap.get(infobean.getUrl());
+                    observer.setDownSwitch(true);
+                    observer.onRead(0);
+                }
             }
         }
 
@@ -304,15 +320,14 @@ public class DownManager {
     }
 
     /**
-     * 暂停下载
-     *
+     * 停止下载（暂停 or 取消）
      * @param url
      */
-    public void pause(@NonNull final String url) {
+    public void stop(@NonNull final String url, int downStatus) {
         if (observerMap.containsKey(url)) {
             DownLoadObserver observer = observerMap.get(url);
-            observer.onError(new SocketException());
-            observer.getDisposed().dispose();//切断当前的订阅
+            L.e("Thread", "stop() ---》" + Thread.currentThread().getName() + "-->" + downStatus);
+            observer.onError(new SocketException("" + downStatus));
         }
     }
 
@@ -322,7 +337,7 @@ public class DownManager {
     public void pauseAll() {
         for (String url : observerMap.keySet()) {
             //暂停下载
-            pause(url);
+            stop(url, DownInfo.STATUS_PAUSED);
         }
 
         isRunDownLoad = false;
@@ -333,7 +348,8 @@ public class DownManager {
      * @param url
      */
     public void cancle(@NonNull final String url){
-        pause(url);
+        stop(url, DownInfo.STATUS_CANCEL);
+
         File targetFile = FileUtils.createFile(url);
         FileUtils.deleteFileSafely(targetFile);
 
@@ -350,7 +366,7 @@ public class DownManager {
      */
     public void cancleAll() {
         for (DownInfo infobean : downInfos) {
-            pause(infobean.getUrl());
+            stop(infobean.getUrl(), DownInfo.STATUS_CANCEL);
 
             File targetFile = FileUtils.createFile(infobean.getUrl());
             FileUtils.deleteFileSafely(targetFile);
