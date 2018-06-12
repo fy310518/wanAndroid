@@ -54,7 +54,6 @@ public class DownLoadObserver<T> implements Observer<T> {
                 status = DownInfo.STATUS_PAUSED;
             } else {
                 DownManager.getInstentce().removeTask(downInfo);
-                DownManager.getInstentce().saveDownInfo(downInfo);
             }
 
             if (status != -1) {
@@ -65,6 +64,8 @@ public class DownLoadObserver<T> implements Observer<T> {
                 if (null != loadListener) loadListener.onProgress(downInfo.getReadLength().get(),
                         downInfo.getCountLength(), downInfo.getPercent());
             }
+
+            DownManager.getInstentce().saveDownInfo(downInfo);
         }
     }
 
@@ -89,7 +90,6 @@ public class DownLoadObserver<T> implements Observer<T> {
         if (!downSwitch) return;
 
         downInfo.getReadLength().addAndGet(read);
-        L.e("Thread", Thread.currentThread().getName() + "-->" + downInfo.getUrl() + "" + downInfo.getReadLength().get());
 
         if (downInfo.getCountLength() <= 0) {
             onPercent(-1);
@@ -106,6 +106,7 @@ public class DownLoadObserver<T> implements Observer<T> {
     private void onPercent(double percent) {
         if (percent == downInfo.getPercent()) return;
 
+
         downInfo.setStateInte(DownInfo.STATUS_DOWNLOADING);
         if (percent >= 100d) {
             percent = 100d;
@@ -118,7 +119,7 @@ public class DownLoadObserver<T> implements Observer<T> {
             return;
         }
 
-//     缓存进度百分比
+
         downInfo.setPercent(percent);
         if (null != loadListener)
             loadListener.onProgress(downInfo.getReadLength().get(),

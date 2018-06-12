@@ -118,9 +118,8 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
                 login();
                 break;
             case R.id.tvRegister:
-//                JumpUtils.jump(mContext, RegisterActivity.class, null);
+                JumpUtils.jump(mContext, RegisterActivity.class, null);
 //                JumpUtils.jump(mContext, StatusDemoActivity.class, null);
-                JumpUtils.jump(mContext, DownFileActivity.class, null);
                 break;
         }
     }

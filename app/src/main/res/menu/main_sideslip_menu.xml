@@ -1,9 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- https://www.jianshu.com/p/d2b1689a23bf 参考-->
+<?xml version="1.0" encoding="utf-8"?><!-- https://www.jianshu.com/p/d2b1689a23bf 参考-->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:title="我的">
         <menu>
+            <item
+                android:id="@+id/myDownLoad"
+                android:icon="@drawable/svg_download"
+                android:title="我的下载" />
+
             <item
                 android:id="@+id/myCollect"
                 android:icon="@drawable/svg_collect"

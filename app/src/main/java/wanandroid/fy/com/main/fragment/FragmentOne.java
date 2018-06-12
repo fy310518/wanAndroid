@@ -102,7 +102,7 @@ public class FragmentOne extends BaseFragment {
                 if (type == EasyPullLayout.TYPE_EDGE_TOP) {
                     topView.triggered(getContext());
                     pageNum = 0;
-                    getData();
+//                    getData();
                 } else if (type == EasyPullLayout.TYPE_EDGE_BOTTOM){
 
                 }

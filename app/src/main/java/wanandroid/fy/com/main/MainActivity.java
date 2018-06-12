@@ -38,6 +38,7 @@ import butterknife.BindView;
 import wanandroid.fy.com.R;
 import wanandroid.fy.com.about.AboutActivity;
 import wanandroid.fy.com.collect.MyCollectActivity;
+import wanandroid.fy.com.loadfile.DownFileActivity;
 import wanandroid.fy.com.login.LoginActivity;
 import wanandroid.fy.com.main.fragment.FragmentOne;
 import wanandroid.fy.com.main.fragment.FragmentThree;
@@ -284,6 +285,9 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
             switch (item.getItemId()) {
                 case R.id.myCollect:
                     JumpUtils.jump(mContext, MyCollectActivity.class, null);
+                    break;
+                case R.id.myDownLoad:
+                    JumpUtils.jump(mContext, DownFileActivity.class, null);
                     break;
                 case R.id.atNightModel:
                     NightModeUtils.switchNightMode(mContext);//todo 有 bug 后期优化
