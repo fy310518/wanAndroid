@@ -82,7 +82,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity 
     }
 
     private void intoMainAct() {
-        JumpUtils.jump(StartUpActivity.this, "wanandroid.fy.com.main.MainActivity", null);
+        JumpUtils.jump(this, "wanandroid.fy.com.main.MainActivity", null);
         finish();
     }
 }

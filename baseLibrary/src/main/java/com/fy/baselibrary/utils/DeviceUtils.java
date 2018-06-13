@@ -3,6 +3,8 @@ package com.fy.baselibrary.utils;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
@@ -83,16 +85,49 @@ public class DeviceUtils {
     }
 
     /**
+     * 获取当前APP所在手机的 IP 地址
+     * @return
+     */
+    public static String getCurIp() {
+        WifiManager wifiManager = (WifiManager) BaseApp.getAppCtx().getApplicationContext().
+                getSystemService(Context.WIFI_SERVICE);
+
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        int ipAddress = wifiInfo.getIpAddress();
+
+
+        return (ipAddress & 0xFF) + "." +
+                ((ipAddress >> 8) & 0xFF) + "." +
+                ((ipAddress >> 16) & 0xFF) + "." +
+                ((ipAddress >> 24) & 0xFF);
+    }
+
+    /**
+     * 获取当前APP所在手机的 MAC 地址
+     * @return
+     */
+    @SuppressLint("HardwareIds")
+    public static String getCurMac() {
+        WifiManager wifi = (WifiManager) BaseApp.getAppCtx()
+                .getApplicationContext()
+                .getSystemService(Context.WIFI_SERVICE);
+
+        WifiInfo info = wifi != null ? wifi.getConnectionInfo() : null;
+
+        return info != null ? info.getMacAddress() : "";
+    }
+
+    /**
      * 打印设备内存信息
      */
-    public static void getDevices(){
+    public static void getDevices() {
         //应用程序最大可用内存
-        int maxMemory = ((int) Runtime.getRuntime().maxMemory())/1024/1024;
+        int maxMemory = ((int) Runtime.getRuntime().maxMemory()) / 1024 / 1024;
         //应用程序已获得内存
-        long totalMemory = ((int) Runtime.getRuntime().totalMemory())/1024/1024;
+        long totalMemory = ((int) Runtime.getRuntime().totalMemory()) / 1024 / 1024;
         //应用程序已获得内存中未使用内存
-        long freeMemory = ((int) Runtime.getRuntime().freeMemory())/1024/1024;
-        System.out.println("---> maxMemory="+maxMemory+"M,totalMemory="+totalMemory+"M,freeMemory="+freeMemory+"M");
+        long freeMemory = ((int) Runtime.getRuntime().freeMemory()) / 1024 / 1024;
+        System.out.println("---> maxMemory=" + maxMemory + "M,totalMemory=" + totalMemory + "M,freeMemory=" + freeMemory + "M");
 
         L.e("maxMemory" + maxMemory + "totalMemory" + totalMemory + "freeMemory" + freeMemory);
     }

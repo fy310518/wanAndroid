@@ -324,6 +324,7 @@ public class EasyPullLayout extends ViewGroup {
                         pullFraction = offsetY == 0f ? 0f : -trigger_offset_bottom < offsetY ? offsetY / -trigger_offset_bottom : 1f;
                         break;
                 }
+
                 boolean changed = !(lastPullFraction < 1f && pullFraction < 1f || lastPullFraction == 1f && pullFraction == 1f);
                 onPullListenerAdapter.onPull(currentType, pullFraction, changed);
                 lastPullFraction = pullFraction;
@@ -376,8 +377,7 @@ public class EasyPullLayout extends ViewGroup {
                                         0
                         : 0;
         horizontalAnimator = ValueAnimator.ofFloat(1f, 0f);
-        horizontalAnimator.setDuration(roll_back_duration)
-                .setInterpolator(new DecelerateInterpolator());
+        horizontalAnimator.setDuration(roll_back_duration).setInterpolator(new DecelerateInterpolator());
         horizontalAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -423,10 +423,8 @@ public class EasyPullLayout extends ViewGroup {
                         : offsetY < -trigger_offset_bottom ? offsetY + trigger_offset_bottom
                         : offsetY;
         final float triggerOffset =
-                rollBackOffset != offsetY ?
-                        currentType == TYPE_EDGE_TOP ? trigger_offset_top :
-                                currentType == TYPE_EDGE_BOTTOM ? -trigger_offset_bottom :
-                                        0
+                rollBackOffset != offsetY ? (currentType == TYPE_EDGE_TOP ? trigger_offset_top :
+                                (currentType == TYPE_EDGE_BOTTOM ? -trigger_offset_bottom : 0))
                         : 0;
         verticalAnimator = ValueAnimator.ofFloat(1f, 0f);
         verticalAnimator.setDuration(roll_back_duration)
@@ -455,6 +453,7 @@ public class EasyPullLayout extends ViewGroup {
                 }
             }
         });
+
         verticalAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -518,11 +517,10 @@ public class EasyPullLayout extends ViewGroup {
                 break;
             case TYPE_EDGE_BOTTOM:
             case TYPE_EDGE_TOP://一般只需要下拉 动画
-                View topView = getByType(childViews, TYPE_EDGE_TOP);
-                ChildViewAttr childViewAttr = childViews.get(topView);
+                currentState = STATE_ROLLING;
+                offsetY = max_offset_top;
 
-                topView.setY(childViewAttr.top + 150);
-                onPullListenerAdapter.onTriggered(TYPE_EDGE_TOP);
+                rollBackVertical();
                 break;
         }
     }
