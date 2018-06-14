@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
@@ -52,11 +53,11 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
         if (activity instanceof IBaseActivity) {
             act = (IBaseActivity) activity;
 
-            if (act.setView() != 0){
+            if (act.setView() != 0) {
                 activity.setContentView(R.layout.activity_base);
                 LinearLayout linearLRoot = activity.findViewById(R.id.linearLRoot);
 
-                if (act.isShowHeadView())initHead(activity);
+                if (act.isShowHeadView()) initHead(activity);
 
                 View view = LayoutInflater.from(activity).inflate(act.setView(), null);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -1);
@@ -69,6 +70,17 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
             act.setStatusBar(activity);
         }
 
+//        注册屏幕旋转监听
+//        BaseOrientoinListener orientoinListener = new BaseOrientoinListener(activity);
+//        boolean autoRotateOn = (android.provider.Settings.System.getInt(activity.getContentResolver(),
+//                Settings.System.ACCELEROMETER_ROTATION, 0) == 1);
+//
+//        //检查系统是否开启自动旋转
+//        if (autoRotateOn) {
+//            orientoinListener.enable();
+//        }
+//
+//        activityBean.setOrientoinListener(orientoinListener);
         //设置 黄油刀 简化 Android 样板代码
         activityBean.setUnbinder(ButterKnife.bind(activity));
 
@@ -76,6 +88,12 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
         //基础配置 执行完成，再执行 初始化 activity 操作
         if (null != act) act.initData(activity, savedInstanceState);
+
+        if (BaseApp.mAppStatus == -1) {
+            Bundle bundle = new Bundle();
+            bundle.putString("action", "force_kill");
+            JumpUtils.jump(activity, "wanandroid.fy.com.main.MainActivity", bundle);
+        }
 
         //暴力适配
         //通常情况下application与activity得到的resource虽然不是一个实例，但是displayMetrics是同一个实例，只需调用一次即可
@@ -128,12 +146,14 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
             //解绑定 黄油刀
             if (null != activityBean.getUnbinder()) activityBean.getUnbinder().unbind();
             //销毁 屏幕旋转监听
-            if (null != activityBean.getOrientoinListener())activityBean.getOrientoinListener().disable();
+            if (null != activityBean.getOrientoinListener())
+                activityBean.getOrientoinListener().disable();
         }
     }
 
     /**
      * 初始化 toolbar
+     *
      * @param activity
      */
     private void initHead(Activity activity) {

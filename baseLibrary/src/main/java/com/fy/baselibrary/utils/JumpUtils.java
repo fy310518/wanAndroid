@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-
-import com.fy.baselibrary.R;
 
 import java.io.File;
 
@@ -29,7 +26,7 @@ public class JumpUtils {
      * @param action
      * @param bundle
      */
-    public static void jump(AppCompatActivity act, String action, Bundle bundle) {
+    public static void jump(Activity act, String action, Bundle bundle) {
         Intent intent = new Intent();
         if (null != bundle) {
             intent.putExtras(bundle);
@@ -46,7 +43,7 @@ public class JumpUtils {
      * @param bundle
      * @param requestCode 请求码
      */
-    public static void jump(AppCompatActivity act, String action, Bundle bundle, int requestCode) {
+    public static void jump(Activity act, String action, Bundle bundle, int requestCode) {
         Intent intent = new Intent();
         if (null != bundle) {
             intent.putExtras(bundle);
@@ -63,7 +60,7 @@ public class JumpUtils {
      * @param actClass
      * @param bundle
      */
-    public static void jump(AppCompatActivity act, Class actClass, Bundle bundle) {
+    public static void jump(Activity act, Class actClass, Bundle bundle) {
         Intent intent = new Intent(act, actClass);
         if (null != bundle) {
             intent.putExtras(bundle);
@@ -79,7 +76,7 @@ public class JumpUtils {
      * @param bundle
      * @param requestCode 请求码
      */
-    public static void jump(AppCompatActivity act, Class actClass, Bundle bundle, int requestCode) {
+    public static void jump(Activity act, Class actClass, Bundle bundle, int requestCode) {
         Intent intent = new Intent(act, actClass);
         if (null != bundle) {
             intent.putExtras(bundle);
@@ -94,7 +91,7 @@ public class JumpUtils {
      * @param bundle
      * @param className
      */
-    public static void jumpReflex(AppCompatActivity act, Bundle bundle, String className){
+    public static void jumpReflex(Activity act, Bundle bundle, String className){
         try {
             Class cla = Class.forName(className);
             jump(act, cla, bundle);
@@ -109,7 +106,7 @@ public class JumpUtils {
      * @param bundle
      * @param className
      */
-    public static void jumpReflex(AppCompatActivity act, String className, Bundle bundle, int requestCode){
+    public static void jumpReflex(Activity act, String className, Bundle bundle, int requestCode){
         try {
             Class cla = Class.forName(className);
             jump(act, cla, bundle, requestCode);
@@ -123,7 +120,7 @@ public class JumpUtils {
      * @param act
      * @param bundle
      */
-    public static void jumpResult(AppCompatActivity act, Bundle bundle){
+    public static void jumpResult(Activity act, Bundle bundle){
         Intent intent = new Intent();
         if (null != bundle) {
             intent.putExtras(bundle);
@@ -135,7 +132,7 @@ public class JumpUtils {
     /**
      * 退出当前activity
      */
-    public static void exitActivity(AppCompatActivity act) {
+    public static void exitActivity(Activity act) {
         act.finish();
     }
 
@@ -143,7 +140,7 @@ public class JumpUtils {
      * 退出整个应用
      * @param act
      */
-    public static void exitApp(AppCompatActivity act, Class actClass){
+    public static void exitApp(Activity act, Class actClass){
         Intent intent = new Intent(act, actClass);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  //注意
         act.startActivity(intent);
@@ -213,7 +210,7 @@ public class JumpUtils {
      * 安装apk
      * @param file
      */
-    public static void install(AppCompatActivity act, File file) {
+    public static void install(Activity act, File file) {
 
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
@@ -241,7 +238,7 @@ public class JumpUtils {
      * @param act
      * @param url
      */
-    public static void jump(AppCompatActivity act, String url){
+    public static void jump(Activity act, String url){
         Uri uri = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         act.startActivity(intent);

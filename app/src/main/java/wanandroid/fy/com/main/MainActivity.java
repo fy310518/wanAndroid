@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -133,6 +134,11 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
         Intent intent1 = getIntent();
         Bundle bundle = intent.getExtras();
         if (null != bundle) {
+            String action = bundle.getString("action");
+            if (!TextUtils.isEmpty(action) && "force_kill".equals(action)) {
+                JumpUtils.jump(this, "com.fy.baselibrary.startactivity.StartActivity", null);
+            }
+
             intent1 = intent1.putExtras(bundle);
             super.onNewIntent(intent1);
             setIntent(intent1);//intent传值 接收不到问题，关键在这句

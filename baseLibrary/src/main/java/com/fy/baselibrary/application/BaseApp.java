@@ -1,17 +1,9 @@
 package com.fy.baselibrary.application;
 
-
 import android.app.Application;
-import android.content.Context;
-import android.graphics.Point;
-import android.util.DisplayMetrics;
-import android.view.WindowManager;
 
-import com.fy.baselibrary.utils.DensityUtils;
-import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NightModeUtils;
 import com.fy.baselibrary.utils.ResourceUtils;
-import com.fy.baselibrary.utils.ScreenUtils;
 
 /**
  * 基础 application
@@ -19,6 +11,8 @@ import com.fy.baselibrary.utils.ScreenUtils;
  */
 public class BaseApp extends Application {
 
+    /** 记录应用是否被强杀 */
+    public static int mAppStatus = -1;
     private static BaseApp mApplication; // 单例模式
 
     @Override
