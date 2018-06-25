@@ -15,6 +15,7 @@
         <!-- 全局 权限管理 -->
         <activity
             android:name=".permission.PermissionActivity"
+            android:label="@string/permission"
             android:theme="@style/myTransparent" />
 
     </application>

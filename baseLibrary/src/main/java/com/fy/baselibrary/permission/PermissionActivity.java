@@ -19,6 +19,7 @@ import com.fy.baselibrary.base.dialog.CommonDialog;
 import com.fy.baselibrary.base.dialog.DialogConvertListener;
 import com.fy.baselibrary.base.dialog.NiceDialog;
 import com.fy.baselibrary.statusbar.MdStatusBar;
+import com.fy.baselibrary.utils.ResourceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,15 +31,13 @@ import java.util.List;
  */
 public class PermissionActivity extends AppCompatActivity implements IBaseActivity {
 
+    /** 权限请求 状态码 */
     private final static int PERMISSION_REQUEST_CODE = 0x01;
-
-    //权限请求成功
+    /** 权限请求成功 状态码 */
     public final static int CALL_BACK_RESULT_CODE_SUCCESS = 0x02;
-
-    //权限请求失败
+    /** 权限请求失败 状态码*/
     public final static int CALL_BACK_RESULE_CODE_FAILURE = 0x03;
-
-    //跳转至权限请求界面requestcode
+    /** 跳转至权限请求界面 requestcode */
     public final static int CALL_BACK_PERMISSION_REQUEST_CODE = 0x04;
 
     public final static String KEY_PERMISSIONS_ARRAY = "key_permission_array";
@@ -47,20 +46,20 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
 
     public final static String KEY_ALWAYS_MESSAGE = "key_always_message";
 
+    /** 第一次拒绝该权限的提示信息。 */
+    private String mFirstRefuseMessage;
+    /** 永久拒绝权限提醒的提示信息 */
+    private String mAlwaysRefuseMessage;
+
     private String[] mPermissions;
 
     private boolean isToSettingPermission;
 
+    @Override
+    public void onClick(View v) {}
 
-    /**
-     * 第一次拒绝该权限的提示信息。
-     */
-    private String mFirstRefuseMessage;
-
-    /**
-     * 永久拒绝权限提醒的提示信息
-     */
-    private String mAlwaysRefuseMessage;
+    @Override
+    public void reTry() {}
 
     @Override
     public boolean isShowHeadView() {
@@ -80,43 +79,35 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         mFirstRefuseMessage = getString(R.string.defaule_always_message);
-        if (getIntent() != null) {
+
+        Intent intent = getIntent();
+        if (null != intent) {
             mPermissions = getIntent().getExtras().getStringArray(KEY_PERMISSIONS_ARRAY);
             mFirstRefuseMessage = getIntent().getStringExtra(KEY_FIRST_MESSAGE);
             mAlwaysRefuseMessage = getIntent().getStringExtra(KEY_ALWAYS_MESSAGE);
         }
 
         if (TextUtils.isEmpty(mFirstRefuseMessage)) {
-            mFirstRefuseMessage = getString(R.string.defaule_first_message);
+            mFirstRefuseMessage = ResourceUtils.getStr(R.string.defaule_first_message);
         }
         if (TextUtils.isEmpty(mAlwaysRefuseMessage)) {
-            mAlwaysRefuseMessage = getString(R.string.defaule_always_message);
+            mAlwaysRefuseMessage = ResourceUtils.getStr(R.string.defaule_always_message);
         }
 
         checkPermission(mPermissions);
     }
 
-    @Override
-    public void onClick(View v) {
-    }
-
-    @Override
-    public void reTry() {
-    }
-
-    /**
-     * 请求多个权限
-     */
+    /** 请求多个权限 */
     public void checkPermission(String... permissions) {
-        if (permissions != null) {
+        if (null != permissions) {
             List<String> requestPermissionCount = getRequestPermissionList(permissions);
-            if (requestPermissionCount != null && requestPermissionCount.size() > 0) {
+            if (null != requestPermissionCount && requestPermissionCount.size() > 0) {
                 ActivityCompat.requestPermissions(this, requestPermissionCount.toArray(new String[0]), PERMISSION_REQUEST_CODE);
             } else {
-                notifySuccess();
+                permissionEnd(CALL_BACK_RESULT_CODE_SUCCESS);
             }
         } else {
-            notifySuccess();
+            permissionEnd(CALL_BACK_RESULT_CODE_SUCCESS);
         }
     }
 
@@ -128,8 +119,7 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
      */
     public List<String> getRequestPermissionList(String... permissions) {
         List<String> reequestPermissionCount = new ArrayList<>();
-        for (int i = 0; i < permissions.length; i++) {
-            String permission = permissions[i];
+        for (String permission : permissions){
             if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
                 reequestPermissionCount.add(permission);
             }
@@ -147,11 +137,19 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
         }
     }
 
-    public void onCancelPermission() {
-        setResult(CALL_BACK_RESULE_CODE_FAILURE);
+    /**
+     * 权限请求结束
+     * @param resultCode
+     */
+    public void permissionEnd(int resultCode) {
+        setResult(resultCode);
         finish();
     }
 
+    /**
+     * 调用系统弹窗请求权限
+     * @param isRefuse
+     */
     public void onSurePermission(boolean isRefuse) {
         if (isRefuse) {
             isToSettingPermission = true;
@@ -164,24 +162,21 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
         }
     }
 
-
+    /**
+     * 循环获取 被用户拒绝的权限列表，
+     * @return
+     */
     public List<String> getshouldRationaleList() {
-        if (mPermissions != null) {
+        if (null != mPermissions) {
             List<String> strings = new ArrayList<>();
-            for (int i = 0; i < mPermissions.length; i++) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, mPermissions[i])) {
-                    strings.add(mPermissions[i]);
+            for (String permission : mPermissions) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+                    strings.add(permission);
                 }
             }
             return strings;
         }
         return null;
-    }
-
-
-    public void notifySuccess() {
-        setResult(CALL_BACK_RESULT_CODE_SUCCESS);
-        finish();
     }
 
     public void showPermissionDialog(final boolean isAlwaysRefuse) {
@@ -190,14 +185,14 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
                 .setDialogConvertListener(new DialogConvertListener() {
                     @Override
                     protected void convertView(ViewHolder holder, CommonDialog dialog) {
-                        holder.setText(R.id.tvPermissionTitle, getString(R.string.dialog_title));
+                        holder.setText(R.id.tvPermissionTitle, R.string.dialog_title);
                         holder.setText(R.id.tvPermissionDescribe, isAlwaysRefuse ? mAlwaysRefuseMessage : mFirstRefuseMessage);
 
-                        holder.setText(R.id.tvpermissionConfirm, isAlwaysRefuse ? getString(R.string.set) : getString(R.string.ok));
+                        holder.setText(R.id.tvpermissionConfirm, isAlwaysRefuse ? R.string.set : R.string.ok);
                         holder.setOnClickListener(R.id.tvpermissionConfirm, v -> onSurePermission(isAlwaysRefuse));
 
-                        holder.setText(R.id.tvPermissionCancel, getString(R.string.cancel));
-                        holder.setOnClickListener(R.id.tvPermissionCancel, v -> onCancelPermission());
+                        holder.setText(R.id.tvPermissionCancel, R.string.cancel);
+                        holder.setOnClickListener(R.id.tvPermissionCancel, v -> permissionEnd(CALL_BACK_RESULE_CODE_FAILURE));
                     }
                 }).show(getSupportFragmentManager());
     }
@@ -215,11 +210,11 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
 
             if (failurePermissionCount.size() == 0) {
                 //全部成功
-                notifySuccess();
+                permissionEnd(CALL_BACK_RESULT_CODE_SUCCESS);
             } else {
                 //失败
                 List<String> rationaleList = getshouldRationaleList();
-                if (rationaleList != null && rationaleList.size() > 0) {
+                if (null != rationaleList && rationaleList.size() > 0) {
                     showPermissionDialog(false);
                 } else {
                     showPermissionDialog(true);

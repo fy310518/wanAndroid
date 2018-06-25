@@ -2,19 +2,14 @@ package com.fy.baselibrary.application;
 
 import android.app.Activity;
 import android.app.Application;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.fy.baselibrary.R;
 import com.fy.baselibrary.retrofit.RequestUtils;
@@ -161,7 +156,7 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
         ViewStub vStubTitleBar = activity.findViewById(R.id.vStubTitleBar);
         vStubTitleBar.inflate();
 
-        //这里全局给Activity设置toolbar和title
+        //这里全局给Activity设置toolbar和title mate
         Toolbar toolbar = activity.findViewById(R.id.toolbar);
         toolbar.setTitle(activity.getTitle());
         if (activity instanceof AppCompatActivity) {

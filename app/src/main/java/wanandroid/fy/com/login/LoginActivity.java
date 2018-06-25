@@ -189,10 +189,10 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
         if (requestCode == PermissionActivity.CALL_BACK_PERMISSION_REQUEST_CODE) {
             switch (resultCode) {
                 case PermissionActivity.CALL_BACK_RESULT_CODE_SUCCESS:
-//                    T.showLong("权限申请成功！");
+                    T.showLong("权限申请成功！");
                     break;
                 case PermissionActivity.CALL_BACK_RESULE_CODE_FAILURE:
-//                    T.showLong("权限申请失败！");
+                    T.showLong("权限申请失败！");
                     break;
             }
         }

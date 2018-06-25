@@ -66,7 +66,7 @@ public class ResourceUtils {
      * @return
      */
     public static String getStr(@StringRes int stringId) {
-        return BaseApp.getAppCtx().getResources().getString(stringId);
+        return BaseApp.getAppCtx().getString(stringId);
     }
 
     /**

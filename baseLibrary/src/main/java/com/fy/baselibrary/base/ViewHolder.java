@@ -66,6 +66,20 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     }
 
     /**
+     * 设置指定 viewID 的TextView 的文本
+     * @param viewId
+     * @param strId
+     * @return
+     */
+    public ViewHolder setText(int viewId, int strId) {
+        TextView tv = getView(viewId);
+        tv.setText(strId);
+        return this;
+    }
+
+
+
+    /**
      * 设置指定 viewID 的ImageView 的图片（资源图片）
      * @param viewId
      * @param resId
