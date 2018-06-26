@@ -181,7 +181,6 @@ public class FileUtils {
         }
     }
 
-
     /**
      * 安全删除文件
      *
@@ -189,7 +188,7 @@ public class FileUtils {
      * @return
      */
     public static boolean deleteFileSafely(File file) {
-        if (file != null) {
+        if (null != file) {
             String tmpPath = file.getParent() + File.separator + System.currentTimeMillis();
             File tmp = new File(tmpPath);
             file.renameTo(tmp);

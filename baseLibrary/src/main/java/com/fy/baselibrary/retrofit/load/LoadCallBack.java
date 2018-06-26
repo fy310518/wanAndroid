@@ -1,4 +1,4 @@
-package com.fy.baselibrary.retrofit.load.up;
+package com.fy.baselibrary.retrofit.load;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -13,28 +13,27 @@ import com.fy.baselibrary.utils.cache.ACache;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * 自定义Subscribe (增强 NetCallBAck)
+ * 自定义文件上传、下载 观察者 (增强 NetCallBAck)
  * Created by fangs on 2018/5/21.
  */
-public abstract class UpLoadCallBack extends NetCallBack {
+public abstract class LoadCallBack<T> extends NetCallBack<T> {
 
-    public UpLoadCallBack() {
-    }
+    public LoadCallBack() {}
 
-    public UpLoadCallBack(@NonNull final String url) {
+    public LoadCallBack(@NonNull final String url) {
         this.url = url;
     }
 
-    public UpLoadCallBack(IProgressDialog pDialog) {
+    public LoadCallBack(IProgressDialog pDialog) {
         super(pDialog);
     }
 
     @Override
-    public void onNext(Object o) {
-        if (o instanceof Integer) {
-            onProgress(o + "");
+    public void onNext(T t) {
+        if (t instanceof Integer) {
+            onProgress(t + "");
         } else {
-            super.onNext(o);
+            super.onNext(t);
         }
     }
 

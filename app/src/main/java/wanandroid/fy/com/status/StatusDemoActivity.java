@@ -13,7 +13,7 @@ import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.load.LoadService;
-import com.fy.baselibrary.retrofit.load.up.UpLoadCallBack;
+import com.fy.baselibrary.retrofit.load.LoadCallBack;
 import com.fy.baselibrary.retrofit.load.up.UpLoadUtils;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
@@ -156,7 +156,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
         UpLoadUtils.uploadFiles(files, RequestUtils.create(LoadService.class))
                 .doOnSubscribe(RequestUtils::addDispos)
-                .subscribe(new UpLoadCallBack() {
+                .subscribe(new LoadCallBack<Object>() {
                     @Override
                     protected void onProgress(String percent) {
                         L.e("进度监听", percent + "%");

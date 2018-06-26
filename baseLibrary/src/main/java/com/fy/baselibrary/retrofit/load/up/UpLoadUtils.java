@@ -111,7 +111,7 @@ public class UpLoadUtils {
             fileParts.add(MultipartBody.Part.createFormData("upload", file.getName(), uploadRequestBody));
         }
 
-        Observable uploadFile = apiService.uploadFile2(fileParts);
+        Observable<Object> uploadFile = apiService.uploadFile2(fileParts);
 
         return Observable.merge(progressObservale, uploadFile)
                 .subscribeOn(Schedulers.io())
