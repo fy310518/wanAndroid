@@ -42,7 +42,7 @@ dependencies {
     compile "com.android.support:cardview-v7:$var.supportLibraryVersion"
     compile "com.android.support:design:$var.supportLibraryVersion"
     compile "com.android.support:exifinterface:$var.supportLibraryVersion"
-    compile 'com.android.support.constraint:constraint-layout:1.1.1'
+    compile 'com.android.support.constraint:constraint-layout:1.1.2'
 
     //    butterknife
     compile 'com.jakewharton:butterknife:8.8.1'
