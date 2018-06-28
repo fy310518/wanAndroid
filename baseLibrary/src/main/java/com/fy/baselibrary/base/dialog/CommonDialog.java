@@ -24,7 +24,6 @@ import com.fy.baselibrary.utils.L;
 
 /**
  * 应用 所有dialog 的父类
- * <br/>
  * Created by fangs on 2017/3/13.
  */
 public abstract class CommonDialog extends DialogFragment {

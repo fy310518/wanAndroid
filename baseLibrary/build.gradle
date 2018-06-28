@@ -11,7 +11,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true//配置5.0 版本一下可以使用svg
+        vectorDrawables.useSupportLibrary = true//配置5.0 版本以下可以使用svg
 
         ndk {
             // 设置支持的SO库架构
@@ -26,6 +26,10 @@ android {
         }
     }
 
+    lintOptions {
+        abortOnError false
+    }
+
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
@@ -37,48 +41,80 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     testImplementation 'junit:junit:4.12'
-    compile "com.android.support:appcompat-v7:$var.supportLibraryVersion"
-    compile "com.android.support:recyclerview-v7:$var.supportLibraryVersion"
-    compile "com.android.support:cardview-v7:$var.supportLibraryVersion"
-    compile "com.android.support:design:$var.supportLibraryVersion"
-    compile "com.android.support:exifinterface:$var.supportLibraryVersion"
-    compile 'com.android.support.constraint:constraint-layout:1.1.2'
+    api "com.android.support:appcompat-v7:$var.supportLibraryVersion"
+    api "com.android.support:recyclerview-v7:$var.supportLibraryVersion"
+    api "com.android.support:cardview-v7:$var.supportLibraryVersion"
+    api "com.android.support:design:$var.supportLibraryVersion"
+    api "com.android.support:exifinterface:$var.supportLibraryVersion"
+    api 'com.android.support.constraint:constraint-layout:1.1.2'
 
     //    butterknife
-    compile 'com.jakewharton:butterknife:8.8.1'
+    api 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     //    dagger2
-    compile 'com.google.dagger:dagger:2.9'
+    api 'com.google.dagger:dagger:2.9'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.9'
 
     //    rxjava
-    compile 'io.reactivex.rxjava2:rxjava:2.1.7'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    api 'io.reactivex.rxjava2:rxjava:2.1.7'
+    api 'io.reactivex.rxjava2:rxandroid:2.0.1'
 
     //    retrofit2
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    api 'com.squareup.retrofit2:retrofit:2.3.0'
     //    为retrofit添加gson转换器的依赖
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    api 'com.squareup.retrofit2:converter-gson:2.3.0'
     //    Retrofit与RxJava结合
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     //    通过OkHttp中的interceptor来实现实际的底层的请求和响应日志
-    compile 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+    api 'com.squareup.okhttp3:logging-interceptor:3.10.0'
 
     //    glide
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-
-
+    api 'com.github.bumptech.glide:glide:3.7.0'
 
 //    //circleimageview 圆形图片
-//    compile 'de.hdodenhof:circleimageview:2.1.0'
+//    api 'de.hdodenhof:circleimageview:2.1.0'
 //    //baseRecyclerViewAdapterHelper
-//    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+//    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
 //    //下拉刷新上拉加载
-//    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
+//    api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
 //    //PhotoView
-//    compile 'com.github.chrisbanes:PhotoView:2.0.0'
+//    api 'com.github.chrisbanes:PhotoView:2.0.0'
 //    //takephoto
-//    compile 'com.jph.takephoto:takephoto_library:4.0.3'
+//    api 'com.jph.takephoto:takephoto_library:4.0.3'
 //    //性能更好的MD风格的RatingBar
-//    compile 'me.zhanghai.android.materialratingbar:library:1.2.0'
+//    api 'me.zhanghai.android.materialratingbar:library:1.2.0'
 }
+
+
+/** 以下开始是将Android Library上传到jcenter的相关配置**/
+apply plugin: 'com.novoda.bintray-release'
+
+allprojects {
+    tasks.withType(Javadoc) {
+        options{
+            encoding "UTF-8"
+            charSet 'UTF-8'
+            links "http://docs.oracle.com/javase/7/docs/api"
+        }
+    }
+}
+
+publish {
+    //bintray.com用户名
+    userOrg = 'fy310518'
+    //jcenter上的路径
+    groupId = 'fy310518.maven'
+    //项目名称
+    artifactId = 'baselibrary'
+    //版本号
+    publishVersion = '1.0.0'
+    //描述，不重要
+    desc = '尝试自己写一个 wanAndroid 客户端'
+    //网站，不重要
+    website = 'https://github.com/fy310518/wanAndroid'
+}
+
+//gradlew clean build bintrayUpload -PbintrayUser=fy310518 -PbintrayKey=54c46159b02281fdabc355fb3912291e0d390994 -PdryRun=false -x releaseAndroidJavadocs
+//测试 是否上传成功
+//https://jcenter.bintray.com/fy310518.maven
+

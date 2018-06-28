@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.URLEncoder;
 import java.nio.charset.Charset;
 
 import okhttp3.MediaType;
@@ -24,7 +23,7 @@ import static okhttp3.internal.Util.UTF_8;
 * @author Alois
 * create at 2017/4/25 上午 10:09
 */
-public class DES3GsonResponseBodyConverter  <T> implements Converter<ResponseBody, T> {
+public class DES3GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
     private final Gson gson;
     private final TypeAdapter<T> adapter;
 

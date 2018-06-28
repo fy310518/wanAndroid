@@ -44,11 +44,11 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     implementation 'com.google.android:flexbox:0.3.2'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
 
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     implementation project(':baseLibrary')
 
-    compile 'com.bigkoo:convenientbanner:2.0.5'
+    api 'com.bigkoo:convenientbanner:2.0.5'
 }

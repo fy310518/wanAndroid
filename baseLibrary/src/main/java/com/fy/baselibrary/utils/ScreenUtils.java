@@ -14,7 +14,6 @@ import com.fy.baselibrary.application.BaseApp;
 
 /**
  * 屏幕相关的工具类
- * <p/>
  * Created by fangs on 2017/3/1.
  */
 public class ScreenUtils {

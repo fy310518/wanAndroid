@@ -40,7 +40,7 @@ public class SelectUtils {
     }
 
     /**
-     * 根据 drawable ID ，生成 选择器 </br>
+     * 根据 drawable ID ，生成 选择器
      * normal：白色；
      * pressed：灰色
      * @param draId
@@ -62,7 +62,7 @@ public class SelectUtils {
     }
 
     /**
-     * 根据 drawable ID ，生成 选择器 </br>
+     * 根据 drawable ID ，生成 选择器
      * normal：白色；
      * pressed：灰色
      * @param draId

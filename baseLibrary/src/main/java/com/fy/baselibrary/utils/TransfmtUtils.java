@@ -32,7 +32,7 @@ public class TransfmtUtils {
 
     /**
      * 把十进制字符串转化成 16进制字符串 (两两截取转换)
-     * <p/>
+     *
      * String str1=    "07101311"
      * 要转换成16进制的  070A0D0B
      *

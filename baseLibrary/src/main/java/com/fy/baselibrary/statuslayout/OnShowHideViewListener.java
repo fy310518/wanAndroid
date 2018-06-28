@@ -4,7 +4,6 @@ import android.view.View;
 
 /**
  * 状态View显示隐藏监听事件
- * <p/>
  * Created by chenpengfei on 2016/12/15.
  */
 public interface OnShowHideViewListener {

@@ -18,7 +18,7 @@ import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
 /**
- * 通用的 上传文件 下载文件 api <br/>
+ * 通用的 上传文件 下载文件 api
  * Created by fangs on 2018/6/1.
  */
 public interface LoadService {

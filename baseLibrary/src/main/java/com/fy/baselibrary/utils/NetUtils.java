@@ -9,7 +9,6 @@ import android.net.NetworkInfo;
 
 /**
  * 网络相关的工具类
- * <p/>
  * Created by fangs on 2017/3/1.
  */
 public class NetUtils {

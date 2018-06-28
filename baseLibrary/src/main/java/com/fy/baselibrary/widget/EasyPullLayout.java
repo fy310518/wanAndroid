@@ -19,7 +19,6 @@ import java.util.Map;
 
 /**
  * Very light Pull Layout that support both VERTICAL and HORIZONTAL
- * <br/>
  * http://blog.csdn.net/u012199331/article/details/77014607
  * https://github.com/huzenan/EasyPullLayoutJavaDemo
  */

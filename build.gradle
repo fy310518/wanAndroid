@@ -10,6 +10,9 @@ buildscript {
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+
+        //将Library上传到jcenter
+        classpath 'com.novoda:bintray-release:0.8.1'
     }
 }
 
@@ -22,6 +25,11 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+// 指定javadoc UTF-8格式
+task javadoc(type: Javadoc) {
+    options.encoding = "utf-8"
 }
 
 ext {

@@ -163,7 +163,6 @@ public class ImgLoadUtils {
 
     /**
      * 异步获取 glide 缓存在磁盘的图片
-     * </p>
      * Glide提供了一个downloadOnly() 接口来获取缓存的图片文件，
      * 但是前提必须要设置diskCacheStrategy方法的缓存策略为DiskCacheStrategy.ALL或者 DiskCacheStrategy.SOURCE，
      * 还有downloadOnly()方法需要在线程里进行

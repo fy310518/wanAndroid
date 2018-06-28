@@ -366,7 +366,7 @@ public class SpanUtils {
 
         /**
          * 设置点击事件
-         * <p>需添加view.setMovementMethod(LinkMovementMethod.getInstance())</p>
+         * 需添加view.setMovementMethod(LinkMovementMethod.getInstance())
          *
          * @param clickSpan 点击事件
          * @return {@link Builder}
@@ -378,7 +378,7 @@ public class SpanUtils {
 
         /**
          * 设置超链接
-         * <p>需添加view.setMovementMethod(LinkMovementMethod.getInstance())</p>
+         * 需添加view.setMovementMethod(LinkMovementMethod.getInstance())
          *
          * @param url 超链接
          * @return {@link Builder}
@@ -390,8 +390,8 @@ public class SpanUtils {
 
         /**
          * 设置模糊
-         * <p>尚存bug，其他地方存在相同的字体的话，相同字体出现在之前的话那么就不会模糊，出现在之后的话那会一起模糊</p>
-         * <p>推荐还是把所有字体都模糊这样使用</p>
+         * 尚存bug，其他地方存在相同的字体的话，相同字体出现在之前的话那么就不会模糊，出现在之后的话那会一起模糊
+         * 推荐还是把所有字体都模糊这样使用
          *
          * @param radius 模糊半径（需大于0）
          * @param style  模糊样式<ul>

@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * RecycleView item 动画 基类
- * </p> https://www.jianshu.com/p/b9aef3597f2d
+ * https://www.jianshu.com/p/b9aef3597f2d
  */
 public abstract class BaseItemAnimator extends SimpleItemAnimator {
     private static final boolean DEBUG = false;
@@ -625,7 +625,6 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
 
     /**
      * {@inheritDoc}
-     * <p>
      * If the payload list is not empty, BaseItemAnimator returns <code>true</code>.
      * When this is the case:
      * <ul>
@@ -634,7 +633,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
      * </li>
      * <li>
      * If you are not overriding {@link #animateChange(ViewHolder, ViewHolder, int, int, int, int)},
-     * then BaseItemAnimator will call {@link #animateMove(ViewHolder, int, int, int, int)} and
+     * then BaseItemAnimator will call {} and
      * run a move animation instead.
      * </li>
      * </ul>

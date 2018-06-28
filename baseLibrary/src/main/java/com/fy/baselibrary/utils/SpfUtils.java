@@ -137,7 +137,7 @@ public class SpfUtils {
      * Return whether the sp contains the preference.
      *
      * @param key The key of sp.
-     * @return {@code true}: yes<br>{@code false}: no
+     * @return {@code true}: yes{@code false}: no
      */
     public boolean contains(@NonNull final String key) {
         return getSpf().contains(key);

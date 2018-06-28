@@ -1,5 +1,6 @@
 package com.fy.baselibrary.startactivity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -11,7 +12,9 @@ import com.fy.baselibrary.R;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.statusbar.MdStatusBar;
+import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.JumpUtils;
+import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.ResourceUtils;
 import com.fy.baselibrary.utils.TintUtils;
 
@@ -69,6 +72,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity 
 
     }
 
+    @SuppressLint("CheckResult")
     private void hideLoadView() {
         Observable.interval(0, 1, TimeUnit.SECONDS)
                 .take(skip + 1)
@@ -82,7 +86,8 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity 
     }
 
     private void intoMainAct() {
-        JumpUtils.jump(this, "wanandroid.fy.com.main.MainActivity", null);
+        L.e("包名", AppUtils.getLocalPackageName());
+        JumpUtils.jump(this,  "wanandroid.fy.com.main.MainActivity", null);
         finish();
     }
 }

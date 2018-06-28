@@ -70,7 +70,7 @@ public class JumpUtils {
     }
 
     /**
-     * 跳转到指定 activity <br/> 带回调结果的跳转
+     * 跳转到指定 activity  带回调结果的跳转
      *
      * @param actClass    要跳转到的Activity
      * @param bundle

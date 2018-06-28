@@ -15,7 +15,6 @@ import java.io.File;
 
 /**
  * 获取设备信息 工具类
- * <p/>
  * Created by fangs on 2017/3/22.
  */
 public class DeviceUtils {
@@ -134,7 +133,7 @@ public class DeviceUtils {
 
     /**
      * 判断设备是否 rooted.
-     * @return {@code true}: yes<br>{@code false}: no
+     * @return {@code true}: yes{@code false}: no
      */
     public static boolean isDeviceRooted() {
         String su = "su";

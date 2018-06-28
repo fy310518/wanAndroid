@@ -280,7 +280,7 @@ public class DownManager {
 
     /**
      * 开始下载
-     * @Desc 多线程、多任务下载
+     * @deprecated  多线程、多任务下载
      */
     public synchronized void runDownTask() {
         int num = MAX_COUNT;

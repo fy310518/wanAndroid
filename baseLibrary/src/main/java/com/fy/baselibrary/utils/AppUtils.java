@@ -15,7 +15,7 @@ import static android.content.Context.ACTIVITY_SERVICE;
 
 /**
  * App相关的辅助类
- * <p/>
+ *
  * Created by fangs on 2017/3/1.
  */
 public class AppUtils {
@@ -77,7 +77,7 @@ public class AppUtils {
     }
 
     /**
-     * 获取当前应用的 包名
+     * 获取当前应用的 应用id
      * @return
      */
     public static String getLocalPackageName() {

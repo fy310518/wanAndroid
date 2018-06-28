@@ -15,7 +15,7 @@ import com.fy.baselibrary.application.BaseApp;
 import java.util.Random;
 
 /**
- * 获取项目资源 （如：res目录下的，assets 目录下的，manifest文件配置的资源等）</br>
+ * 获取项目资源 （如：res目录下的，assets 目录下的，manifest文件配置的资源等）
  * Created by fangs on 2017/9/13.
  */
 public class ResourceUtils {
@@ -72,7 +72,7 @@ public class ResourceUtils {
     /**
      * %d   （表示整数）
      * %f   （表示浮点数）
-     * %s   （表示字符串）<br>
+     * %s   （表示字符串）
      * 获取 strings 资源文件，指定 id 的资源，替换后的字符串
      *
      * @param id   资源ID（如：ID内容为 “病人ID：%1$d”）
@@ -85,9 +85,9 @@ public class ResourceUtils {
     }
 
     /**
-     * 获取清单文件 指定 key的 <meta-data> 的值；（<meta-data>是一个键值对）</b>
+     * 获取清单文件 指定 key的 meta-data 的值；（meta-data是一个键值对）
      *
-     * @param metaKey       <meta-data> 的 key
+     * @param metaKey       meta-data 的 key
      * @param metaValueType 返回值类型
      * @return
      */

@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.fy.baselibrary.base.dialog.CommonDialog;
 
 /**
- * 自定义对话框的dialog</p>
+ * 自定义对话框的dialog
  * Created by fangs on 2017/11/7.
  */
 public class IProgressDialog {

@@ -8,7 +8,6 @@ import android.view.inputmethod.InputMethodManager;
 
 /**
  * 打开或关闭软键盘
- * <p/>
  * Created by fangs on 2017/3/1.
  */
 public class KeyBoardUtils {

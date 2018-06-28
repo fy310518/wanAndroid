@@ -14,7 +14,6 @@ import java.util.Locale;
 
 /**
  * 文件工具类
- * <p/>
  * Created by fangs on 2017/3/22.
  */
 public class FileUtils {
@@ -93,7 +92,7 @@ public class FileUtils {
 
     /**
      * 到得文件的放置路径
-     * <p/> 如果文件目录不存在 会创建
+     * 如果文件目录不存在 会创建
      *
      * @param aModuleName 模块名字 (如："head.img.temp")
      * @return
@@ -291,7 +290,6 @@ public class FileUtils {
      * 根据 url 在本地生成一个文件
      *
      * @param url 下载 url【如：http://img5q.duitang.com/uploads/item/201505/01/20150501113308_QNmsf.jpeg】
-     *            【http://imtt.dd.qq.com/16891/1861D39534D33194426C894BA0D816CF.apk?fsname=com.ss.android.ugc.aweme_1.8.3_183.apk&csr=1bbd】
      * @return
      */
     public static File createFile(String url) {

@@ -22,7 +22,6 @@ import com.fy.baselibrary.utils.ScreenUtils;
 /**
  * 状态栏和导航栏 操作工具类
  * https://github.com/Zackratos/UltimateBar
- * <br>
  * Created by github on 18/3/14.
  */
 public class MdStatusBar {
@@ -161,7 +160,7 @@ public class MdStatusBar {
 
 
     /**
-     * 隐藏状态栏和导航栏<br>
+     * 隐藏状态栏和导航栏
      * 注：实现这种效果，必须重写 Activity 的 onWindowFocusChanged 方法，在onWindowFocusChanged()中执行
      * @param applyNav apply NavigationBar
      */
