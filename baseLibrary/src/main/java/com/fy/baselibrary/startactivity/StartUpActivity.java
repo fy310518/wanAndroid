@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fy.baselibrary.R;
@@ -26,12 +27,15 @@ import io.reactivex.schedulers.Schedulers;
 
 /**
  * 欢迎页
+ * 注意：1、欢迎页，背景图片名称必须为“loading”，必须放在drawable 类型目录如：drawable-xhdpi
+ *      2、使用此欢迎页项目应用id 需要和项目包名一致
  * Created by fangs on 2017/12/12.
  */
 public class StartUpActivity extends AppCompatActivity implements IBaseActivity {
 
     private int skip = 5;
     TextView tvSkip;
+    ImageView loadImg;
 
     @Override
     public boolean isShowHeadView() {
@@ -50,6 +54,10 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity 
 
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
+        loadImg = findViewById(R.id.loadImg);
+        int loadImgId = ResourceUtils.getDrableId(this, "loading");
+        loadImg.setImageDrawable(TintUtils.getDrawable(loadImgId));
+
         Drawable back = TintUtils.getTintDrawable(R.drawable.shape_tag, R.color.alphaBlack);
         tvSkip = findViewById(R.id.tvSkip);
         tvSkip.setOnClickListener(this);
@@ -86,8 +94,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity 
     }
 
     private void intoMainAct() {
-        L.e("包名", AppUtils.getLocalPackageName());
-        JumpUtils.jump(this,  "wanandroid.fy.com.main.MainActivity", null);
+        JumpUtils.jump(this,  AppUtils.getLocalPackageName() + ".main.MainActivity", null);
         finish();
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="wanandroid.fy.com">
+    package="com.fy.wanandroid">
 
     <application
         android:name="com.fy.baselibrary.application.BaseApp"
@@ -18,7 +18,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/myTransparent">
             <intent-filter>
-                <action android:name="com.fy.baselibrary.startactivity.StartActivity" />
+                <action android:name="com.fy.wanandroid.startactivity.StartActivity" />
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -26,23 +26,23 @@
         </activity>
 
         <activity
-            android:name="wanandroid.fy.com.main.MainActivity"
+            android:name=".main.MainActivity"
             android:label="@string/mainTitle"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="wanandroid.fy.com.main.MainActivity" />
+                <action android:name="com.fy.wanandroid.main.MainActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name="wanandroid.fy.com.login.LoginActivity"
+            android:name=".login.LoginActivity"
             android:label="@string/logingTitle"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="wanandroid.fy.com.login.RegisterActivity"
+            android:name=".login.RegisterActivity"
             android:label="@string/registerTitle"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateVisible" />
@@ -76,7 +76,7 @@
 
 
         <activity
-            android:name="wanandroid.fy.com.status.StatusDemoActivity"
+            android:name=".status.StatusDemoActivity"
             android:label="@string/statusTitle"
             android:screenOrientation="portrait" />
 

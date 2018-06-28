@@ -122,7 +122,7 @@ public class ResourceUtils {
     /*****************************以下为 通过资源名称 获取资源id ***************************************/
     private static final String RES_ID = "id";
     private static final String RES_STRING = "string";
-    private static final String RES_DRABLE = "drable";
+    private static final String RES_DRAWABLE = "drawable";
     private static final String RES_LAYOUT = "layout";
     private static final String RES_STYLE = "style";
     private static final String RES_COLOR = "color";
@@ -153,14 +153,14 @@ public class ResourceUtils {
     }
 
     /**
-     * 获取资源文件drable的id
+     * 获取资源文件drawble的id
      *
      * @param context
-     * @param resName
+     * @param drableName
      * @return
      */
-    public static int getDrableId(Context context, String resName) {
-        return getResId(context, resName, RES_DRABLE);
+    public static int getDrableId(Context context, String drableName) {
+        return getResId(context, drableName, RES_DRAWABLE);
     }
 
     /**
