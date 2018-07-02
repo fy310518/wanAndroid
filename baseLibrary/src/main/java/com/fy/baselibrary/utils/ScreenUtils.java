@@ -1,11 +1,15 @@
 package com.fy.baselibrary.utils;
 
 import android.app.Activity;
+import android.app.Application;
+import android.content.ComponentCallbacks;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
@@ -166,4 +170,45 @@ public class ScreenUtils {
         int columnSpace = (int) (2 * getScreenDensity(context));
         return (screenWidth - columnSpace * (cols - 1)) / cols;
     }
+
+
+
+    private static float sNoncompatdensity;
+    private static float sNoncompatscaledDensity;
+
+    /**
+     * 屏幕适配
+     * @param context
+     */
+    public static void setCustomDensity(Context context, int designWidth) {
+        final DisplayMetrics appDisplayMetrics = context.getResources().getDisplayMetrics();
+        if (sNoncompatdensity == 0){
+            sNoncompatdensity = appDisplayMetrics.density;
+            sNoncompatscaledDensity = appDisplayMetrics.scaledDensity;
+
+            //添加字体变化的监听
+            context.registerComponentCallbacks(new ComponentCallbacks() {
+                @Override
+                public void onConfigurationChanged(Configuration newConfig) {
+                    //字体改变后,将appScaledDensity重新赋值
+                    if (null != newConfig && newConfig.fontScale > 0) {
+                        sNoncompatscaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+                    }
+                }
+                @Override
+                public void onLowMemory() {}
+            });
+        }
+
+
+        float targetDensity = appDisplayMetrics.widthPixels / designWidth;
+        float targetScaledDensity = targetDensity * (sNoncompatscaledDensity / sNoncompatdensity);
+        int targetDensityDpi = (int) (160 * targetDensity);
+
+//        最后在这里将修改过后的值赋给系统参数
+        appDisplayMetrics.density = targetDensity;
+        appDisplayMetrics.scaledDensity = targetScaledDensity;
+        appDisplayMetrics.densityDpi = targetDensityDpi;
+    }
+
 }

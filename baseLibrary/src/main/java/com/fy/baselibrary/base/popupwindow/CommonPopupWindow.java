@@ -57,8 +57,7 @@ public abstract class CommonPopupWindow extends PopupWindow {
     /** 渲染数据到View中 */
     public abstract void convertView(ViewHolder holder);
 
-    public CommonPopupWindow() {
-    }
+    public CommonPopupWindow() {}
 
     /**
      * 绘制 Popup UI

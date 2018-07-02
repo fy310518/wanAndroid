@@ -102,14 +102,16 @@ allprojects {
 publish {
     //bintray.com用户名
     userOrg = 'fy310518'
+    //要传到的maven的名字。你可能有多个maven，要传哪个写哪个
+    repoName= 'grace'
     //jcenter上的路径
-    groupId = 'fy310518.maven'
+    groupId = 'com.fy.grace'
     //项目名称
     artifactId = 'baselibrary'
     //版本号
-    publishVersion = '1.0.0'
+    publishVersion = '1.0.1'
     //描述，不重要
-    desc = '尝试自己写一个 wanAndroid 客户端'
+    desc = 'Elegant Android application development base library'
     //网站，不重要
     website = 'https://github.com/fy310518/wanAndroid'
 }

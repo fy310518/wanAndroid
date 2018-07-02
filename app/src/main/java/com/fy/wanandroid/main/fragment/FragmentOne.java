@@ -175,7 +175,7 @@ public class FragmentOne extends BaseFragment {
     private void setBanner(){
         bannerView = new ConvenientBanner<>(getContext());
         RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
-                (int) DensityUtils.pt2px(500));
+                DensityUtils.dp2px(220));
 
         bannerView.setLayoutParams(params);
 

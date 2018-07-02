@@ -17,6 +17,7 @@ import com.fy.baselibrary.retrofit.load.down.DownManager;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.ScreenUtils;
 
 import butterknife.ButterKnife;
 
@@ -27,20 +28,20 @@ import butterknife.ButterKnife;
  */
 public class BaseActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
     public static String TAG = "ActivityCallbacks";
-
-    RudenessScreenAdapter screenAdapter;
+    int designWidth;
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
-    public BaseActivityLifecycleCallbacks(RudenessScreenAdapter screenAdapter) {
-        this.screenAdapter = screenAdapter;
+    public BaseActivityLifecycleCallbacks(int designWidth) {
+        this.designWidth = designWidth;
     }
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         L.e(TAG, activity.getClass().getName() + "--Create()");
+        ScreenUtils.setCustomDensity(activity, designWidth);
 
         BaseActivityBean activityBean = new BaseActivityBean();
 
@@ -90,27 +91,16 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
             JumpUtils.jump(activity, "wanandroid.fy.com.main.MainActivity", bundle);
         }
 
-        //暴力适配
-        //通常情况下application与activity得到的resource虽然不是一个实例，但是displayMetrics是同一个实例，只需调用一次即可
-        //为了面对一些不可预计的情况以及向上兼容，分别调用一次较为保险
-        RudenessScreenAdapter.resetDensity(BaseApp.getAppCtx(), screenAdapter.designWidth);
-        RudenessScreenAdapter.resetDensity(activity, screenAdapter.designWidth);
     }
 
     @Override
     public void onActivityStarted(Activity activity) {
         L.e(TAG, activity.getClass().getName() + "--Start()");
-
-        RudenessScreenAdapter.resetDensity(BaseApp.getAppCtx(), screenAdapter.designWidth);
-        RudenessScreenAdapter.resetDensity(activity, screenAdapter.designWidth);
     }
 
     @Override
     public void onActivityResumed(Activity activity) {
         L.e(TAG, activity.getClass().getName() + "--Resume()");
-
-        RudenessScreenAdapter.resetDensity(BaseApp.getAppCtx(), screenAdapter.designWidth);
-        RudenessScreenAdapter.resetDensity(activity, screenAdapter.designWidth);
     }
 
     @Override

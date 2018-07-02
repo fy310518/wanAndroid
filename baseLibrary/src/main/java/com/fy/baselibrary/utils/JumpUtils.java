@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 
 import java.io.File;
 
@@ -207,16 +209,22 @@ public class JumpUtils {
 
 
     /**
-     * 安装apk
-     * @param file
+     * 调用系统安装器安装apk(适配 Android 7.0 在应用间共享文件)
+     *
+     * @param context 上下文
+     * @param file apk文件
      */
-    public static void install(Activity act, File file) {
-
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
-        act.finish();
-        act.startActivity(intent);
+    public static void installApk(Context context, File file) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri data;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            data = FileProvider.getUriForFile(context, ProviderUtil.getFileProviderName(context), file);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } else {
+            data = Uri.fromFile(file);
+        }
+        intent.setDataAndType(data, "application/vnd.android.package-archive");
+        context.startActivity(intent);
     }
 
     /**

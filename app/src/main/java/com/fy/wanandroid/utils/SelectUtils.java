@@ -1,6 +1,7 @@
 package com.fy.wanandroid.utils;
 
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.DrawableRes;
 
 import com.fy.baselibrary.utils.ResourceUtils;
@@ -36,7 +37,10 @@ public class SelectUtils {
         states[2] = new int[]{android.R.attr.state_checked};
         states[3] = new int[]{};
 
-        return TintUtils.tintSelector(TintUtils.getDrawable(draId), colors, states);
+        Drawable drawable = TintUtils.getDrawable(draId);
+        StateListDrawable stateListDrawable = TintUtils.getStateListDrawable(drawable, states);
+
+        return TintUtils.tintSelector(stateListDrawable, colors, states);
     }
 
     /**

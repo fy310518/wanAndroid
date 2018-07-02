@@ -12,7 +12,7 @@ public class ProviderUtil {
         throw new UnsupportedOperationException("cannot be instantiated");
     }
 
-    public static String getFileProviderName(Context context){
-        return context.getPackageName()+".provider";
+    public static String getFileProviderName(Context context) {
+        return context.getPackageName() + ".provider";
     }
 }
