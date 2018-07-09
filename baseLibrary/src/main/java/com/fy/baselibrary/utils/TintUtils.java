@@ -69,6 +69,16 @@ public class TintUtils {
             imageView2.setBackground(drawable3);
      */
 
+    public static StateListDrawable getStateListDrawable(Drawable[] drawables, int[][] states) {
+        StateListDrawable stateListDrawable = new StateListDrawable();
+        for (int i = 0; i < drawables.length; i++) {
+            int[] state = states[i];
+            Drawable drawable = drawables[i];
+            stateListDrawable.addState(state, drawable);
+        }
+        return stateListDrawable;
+    }
+
     /**
      * StateListDrawable 设置背景选择器
      * @param drawable              图片资源（shape,png图片，svg图）

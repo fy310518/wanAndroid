@@ -1,12 +1,23 @@
 package com.fy.wanandroid.status;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.fy.baselibrary.application.BaseActivityBean;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.NetCallBack;
@@ -34,6 +45,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+
+import com.fy.baselibrary.utils.imgload.ImgLoadUtils;
+import com.fy.baselibrary.utils.imgload.imgprogress.ProgressInterceptor;
+import com.fy.baselibrary.utils.imgload.imgprogress.ProgressListener;
 import com.fy.wanandroid.R;
 
 /**
@@ -41,6 +56,9 @@ import com.fy.wanandroid.R;
  * Created by fangs on 2018/3/16.
  */
 public class StatusDemoActivity extends AppCompatActivity implements IBaseActivity {
+
+    @BindView(R.id.imgDemo)
+    ImageView imgDemo;
 
     StatusLayoutManager slManager;
 
@@ -70,7 +88,9 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                 .getSerializableExtra("ActivityBean");
         slManager = activityBean.getSlManager();
 
-        uploadFiles();
+//        uploadFiles();
+
+        loadImage();
     }
 
 
@@ -94,6 +114,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
         }
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void reTry() {
         slManager.showEmptyData();
@@ -173,5 +194,43 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
                     }
                 });
+    }
+
+    /**
+     * glide 带下载进度 demo
+     */
+    public void loadImage() {
+        String url = "http://imgsrc.baidu.com/imgad/pic/item/10dfa9ec8a13632753f607fa9b8fa0ec09fac7e4.jpg";
+
+        ProgressInterceptor.addListener(url, new ProgressListener() {
+            @Override
+            public void onProgress(int progress) {
+                L.e("glide", progress + "%");
+            }
+        });
+
+        RequestOptions options = new RequestOptions()
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE);
+
+        Glide.with(this)
+                .load(url)
+                .apply(options)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                Target<Drawable> target, boolean isFirstResource) {
+                        ProgressInterceptor.removeListener(url);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model,
+                                                   Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        ProgressInterceptor.removeListener(url);
+                        return false;
+                    }
+                })
+                .into(imgDemo);
     }
 }

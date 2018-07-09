@@ -39,6 +39,7 @@ import com.fy.wanandroid.R;
 import com.fy.wanandroid.api.ApiService;
 import com.fy.wanandroid.entity.LoginBean;
 import com.fy.wanandroid.main.MainActivity;
+import com.fy.wanandroid.status.StatusDemoActivity;
 import com.fy.wanandroid.utils.SelectUtils;
 
 /**
@@ -117,8 +118,8 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
                 login();
                 break;
             case R.id.tvRegister:
-                JumpUtils.jump(mContext, RegisterActivity.class, null);
-//                JumpUtils.jump(mContext, StatusDemoActivity.class, null);
+//                JumpUtils.jump(mContext, RegisterActivity.class, null);
+                JumpUtils.jump(mContext, StatusDemoActivity.class, null);
                 break;
         }
     }

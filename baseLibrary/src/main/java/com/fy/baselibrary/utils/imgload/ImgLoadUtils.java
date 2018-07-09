@@ -1,15 +1,15 @@
 package com.fy.baselibrary.utils.imgload;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.FutureTarget;
+import com.bumptech.glide.request.RequestOptions;
 import com.fy.baselibrary.R;
-import com.fy.baselibrary.application.BaseApp;
 
 import java.io.File;
 
@@ -31,30 +31,6 @@ public class ImgLoadUtils {
         throw new UnsupportedOperationException("cannot be instantiated");
     }
 
-    /**
-     * 预加载 （把指定URL地址的图片 的原始尺寸保存到缓存中）
-     * @param url
-     */
-    public static void preloadImg(String url){
-        Context context = BaseApp.getAppCtx();
-        Glide.with(context)
-                .load(url)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .preload();
-    }
-
-    /**
-     * 加载指定URL的图片(从缓存中取得)
-     * @param url
-     * @param imageView
-     */
-    public static void loadImg(Context context, String url, ImageView imageView){
-        Glide.with(context)
-                .load(url)
-                .error(R.mipmap.img_load_error)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .into(imageView);
-    }
 
     /**
      * 加载指定URL的图片
@@ -62,12 +38,15 @@ public class ImgLoadUtils {
      * @param imageView
      */
     public static void loadImage(Context context, String url, ImageView imageView) {
-        Glide.with(context)
-                .load(url)
+
+        RequestOptions options = new RequestOptions()
                 .fallback(R.mipmap.img_load_default)
                 .error(R.mipmap.img_load_error)
-                .placeholder(R.mipmap.img_loading)
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)//缓存最后一次那个image
+                .placeholder(R.mipmap.img_loading);
+
+        Glide.with(context)
+                .load(url)
+                .apply(options)
                 .into(imageView);
     }
 
@@ -77,115 +56,76 @@ public class ImgLoadUtils {
      * @param imageView
      */
     public static void loadImages(Context context, String url, ImageView imageView) {
-        Glide.with(context)
-                .load(url)
+
+        RequestOptions options = new RequestOptions()
                 .fallback(R.mipmap.img_load_default)
                 .error(R.mipmap.img_load_error)
                 .placeholder(R.mipmap.img_loading)
+                .diskCacheStrategy(DiskCacheStrategy.NONE);
+
+        Glide.with(context)
+                .load(url)
+                .apply(options)
                 .into(imageView);
     }
 
     /**
-     * 加载圆角网络图片
+     * 加载圆形 图片
      * @param context
      * @param url
      * @param imageView
-     * @param radius
      */
-    public static void loadCircularBead(Context context, String url, ImageView imageView, int radius) {
+    public static void loadCircularBead(Context context, String url, ImageView imageView) {
+        RequestOptions options = new RequestOptions()
+                .fallback(R.mipmap.img_load_default)
+                .error(R.mipmap.img_load_error)
+                .placeholder(R.mipmap.img_loading)
+                .circleCrop();
+
         Glide.with(context)
                 .load(url)
-                .placeholder(R.mipmap.img_loading)
-                .error(R.mipmap.img_load_error)
-                .transform(new CenterCrop(context), new GlideRoundTransform(context, radius))
-                .crossFade(500) //标准的淡入淡出动画
+                .apply(options)
                 .into(imageView);
     }
 
 
     /**
-     * 加载指定URL的图片（不做任何缓存）圆形显示
+     * 预加载 （把指定URL地址的图片 的原始尺寸保存到缓存中）
      * @param url
-     * @param imageView
      */
-    public static void loadCircleImg(Context context, String url, ImageView imageView) {
-        Glide.with(context).load(url)
-                .fallback(R.mipmap.img_load_error)
-                .placeholder(R.mipmap.img_loading)
-                .error(R.mipmap.img_load_error)
-                .transform(new GlideCircleTransform(context))
-                .skipMemoryCache(true)//不自动缓存到内存
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(imageView);
+    public static void preloadImg(Context context, String url){
+        Glide.with(context)
+                .load(url)
+                .preload();
     }
 
-    /**
-     * 加载指定URL的图片（不做任何缓存）圆角显示
-     * @param url
-     * @param imageView
-     */
-    public static void loadRound(Context context, String url, ImageView imageView){
-        Glide.with(context).load(url)
-                .fallback(R.mipmap.img_load_default)
-                .placeholder(R.mipmap.img_loading)
-                .error(R.mipmap.img_load_error)
-                .transform(new GlideRoundTransform(context))
-                .skipMemoryCache(true)//不自动缓存到内存
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(imageView);
-    }
-
-
-    public static void loadRoundImg(Context context, int url, ImageView imageView){
-        Glide.with(context).load(url)
-                .fallback(R.mipmap.img_load_default)
-                .placeholder(R.mipmap.img_loading)
-                .error(R.mipmap.img_load_error)
-                .skipMemoryCache(true)//不自动缓存到内存
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(imageView);
-    }
 
     /**
      * 加载指定URL的图片 显示加载进度
      * 原图缓存到磁盘，
      * @param context
      * @param url
-     * @param imgTarget
      */
-    public static void loadImage(Context context, String url, GlideDrawableImageViewTarget imgTarget) {
-        Glide.with(context)
-                .load(url)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)//原图缓存
-                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .into(imgTarget);
+    public static void loadImage(Context context, String url) {
+
     }
 
     /**
      * 异步获取 glide 缓存在磁盘的图片
-     * Glide提供了一个downloadOnly() 接口来获取缓存的图片文件，
-     * 但是前提必须要设置diskCacheStrategy方法的缓存策略为DiskCacheStrategy.ALL或者 DiskCacheStrategy.SOURCE，
-     * 还有downloadOnly()方法需要在线程里进行
      * @param context
      * @param url
      * @param consumer
      */
+    @SuppressLint("CheckResult")
     public static void getImgCachePath(Context context, String url, Consumer<File> consumer) {
         Observable.just(url)
-                .map(new Function<String, File>() {
-                    @Override
-                    public File apply(String s) throws Exception {
-                        File cacheImg = null;
-                        try {
-                            cacheImg = Glide.with(context)
-                                    .load(url)
-                                    .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                                    .get();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        return cacheImg;
-                    }
+                .map(url1 -> {
+                    FutureTarget<File> target = Glide.with(context)
+                            .asFile()
+                            .load(url1)
+                            .submit();
+
+                    return target.get();
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

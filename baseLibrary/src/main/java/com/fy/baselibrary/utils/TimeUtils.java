@@ -2,7 +2,10 @@ package com.fy.baselibrary.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 /**
@@ -88,5 +91,46 @@ public class TimeUtils {
         String birthdayYear = Long2DataString(birthdayLong, "yyyy");
 
         return Integer.parseInt(currentYear) - Integer.parseInt(birthdayYear);
+    }
+
+    /**
+     * 获取指定时间戳 所在的一周的日期集合
+     * @param time
+     * @param isToDayStart 用于 返回的日期集合是否 以指定的时间戳为第一天
+     * @return
+     */
+    public static List<Date> dateToWeek(long time, boolean isToDayStart){
+        //今天零点零分零秒的毫秒数
+        long zero = time - TimeZone.getDefault().getRawOffset();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(zero);
+
+        int d = calendar.get(Calendar.DAY_OF_WEEK);
+        long startTime = isToDayStart ? calendar.getTimeInMillis() : calendar.getTimeInMillis() - d * 24 * 3600000;
+
+        Date fdate;
+        List<Date> list = new ArrayList<>();
+        for (int a = 1; a < 8; a++) {
+            fdate = new Date();
+            if (isToDayStart)fdate.setTime(startTime + (a - 1) * 24 * 3600000);
+            else fdate.setTime(startTime + a * 24 * 3600000);
+
+            list.add(a - 1, fdate);
+        }
+        return list;
+    }
+
+    /**
+     * 判断两个时间戳是否同一天
+     * @param time1
+     * @param time2
+     * @return
+     */
+    public static boolean isSameDay(long time1, long time2){
+        String date1 = TimeUtils.Long2DataString(time1, "yyyy-MM-dd");
+        String date2 = TimeUtils.Long2DataString(time2, "yyyy-MM-dd");
+
+        return date1.equals(date2);
     }
 }

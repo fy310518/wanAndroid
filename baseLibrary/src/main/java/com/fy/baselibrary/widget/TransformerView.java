@@ -83,7 +83,7 @@ public class TransformerView extends LinearLayout{
      */
     public void triggered(Context context){
         tvLoadTip.setText(R.string.data_loading);
-        imgArrow.setVisibility(GONE);
+        imgArrow.setVisibility(INVISIBLE);
         imgTurn.setVisibility(VISIBLE);
 
 

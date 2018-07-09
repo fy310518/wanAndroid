@@ -50,7 +50,7 @@
         android:singleLine="true"
         android:text="@string/data_loading"
         android:textColor="@color/colorAccent"
-        android:textSize="@dimen/txt_medium"
+        android:textSize="@dimen/txt_small"
         app:layout_constraintBottom_toTopOf="@+id/hGuideLine"
         app:layout_constraintStart_toStartOf="@+id/vGuideLine" />
 
@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/spacing_small_much"
         android:textColor="@color/colorAccent"
-        android:textSize="@dimen/txt_small"
+        android:textSize="@dimen/txt_small_much"
         app:layout_constraintStart_toStartOf="@+id/vGuideLine"
         app:layout_constraintTop_toBottomOf="@+id/hGuideLine"
         tools:text="2017.8.6 19:20" />

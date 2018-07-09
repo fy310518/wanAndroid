@@ -1,6 +1,8 @@
-package com.fy.baselibrary.utils.imgload;
+package com.fy.baselibrary.utils.imgload.imgprogress;
 
-import android.util.Log;
+import android.support.annotation.Nullable;
+
+import com.fy.baselibrary.utils.L;
 
 import java.io.IOException;
 
@@ -14,11 +16,10 @@ import okio.Source;
 
 /**
  * 下载进度的具体计算
- * Created by gl on 2018/1/16.
  */
 public class ProgressResponseBody extends ResponseBody {
 
-    private static final String TAG = "ProgressResponseBody";
+    private static final String TAG = "Glide";
 
     private BufferedSource bufferedSource;
 
@@ -26,13 +27,12 @@ public class ProgressResponseBody extends ResponseBody {
 
     private ProgressListener listener;
 
-    //url参数就是图片的url地址了，而ResponseBody参数则是OkHttp拦截到的原始的ResponseBody对象
     public ProgressResponseBody(String url, ResponseBody responseBody) {
         this.responseBody = responseBody;
-//        获取该url对应的监听器回调对象
         listener = ProgressInterceptor.LISTENER_MAP.get(url);
     }
 
+    @Nullable
     @Override
     public MediaType contentType() {
         return responseBody.contentType();
@@ -54,7 +54,7 @@ public class ProgressResponseBody extends ResponseBody {
 
     private class ProgressSource extends ForwardingSource {
 
-        long totalBytesRead = 0;
+        long totalBytesRead = 0L;
 
         int currentProgress;
 
@@ -72,16 +72,17 @@ public class ProgressResponseBody extends ResponseBody {
                 totalBytesRead += bytesRead;
             }
             int progress = (int) (100f * totalBytesRead / fullLength);
-            Log.d(TAG, "download progress is " + progress);
+            L.e(TAG, "download progress is " + progress);
+
             if (listener != null && progress != currentProgress) {
                 listener.onProgress(progress);
             }
             if (listener != null && totalBytesRead == fullLength) {
                 listener = null;
             }
+
             currentProgress = progress;
             return bytesRead;
         }
     }
-
 }

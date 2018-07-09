@@ -32,13 +32,25 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
 
     protected SparseBooleanArray mSelectedPositions;//保存多选 数据
 
-    public RvCommonAdapter(Context context, int layoutId, List<Item> datas) {
-        mContext = context;
-        mInflater = LayoutInflater.from(context);
-        mLayoutId = layoutId;
-        mDatas = datas;
+    private RecyclerView mRv;
+    private int mSelectedPos = -1;//实现单选  保存当前选中的position
 
-        mSelectedPositions = new SparseBooleanArray();
+    public RvCommonAdapter(Context context, int layoutId, List<Item> datas) {
+        init(context, layoutId, datas);
+    }
+
+    public RvCommonAdapter(Context context, int layoutId, List<Item> datas, RecyclerView rv) {
+        init(context, layoutId, datas);
+        this.mRv = rv;
+    }
+
+    private void init(Context context, int layoutId, List<Item> datas){
+        this.mContext = context;
+        this.mInflater = LayoutInflater.from(context);
+        this.mLayoutId = layoutId;
+        this.mDatas = datas;
+
+        this.mSelectedPositions = new SparseBooleanArray();
     }
 
     @Override
@@ -82,6 +94,10 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
         }
     }
 
+    public void setmDatas(List<Item> list) {
+        mDatas.clear();
+        mDatas.addAll(list);
+    }
 
     /**
      * 添加data，从指定location中加入
@@ -155,10 +171,6 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
         notifyDataSetChanged();
     }
 
-    public void setmDatas(List<Item> list) {
-        mDatas.clear();
-        mDatas.addAll(list);
-    }
 
     public List<Item> getmDatas() {
         return this.mDatas;
@@ -192,4 +204,25 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
     public void setChangeItemListener(OnListener.OnChangeItemListener changeItemListener) {
         this.changeItemListener = changeItemListener;
     }
+
+
+//    单选 样板代码
+//    holder.ivSelect.setOnClickListener(new View.OnClickListener() {
+//        @Override
+//        public void onClick(View view) {
+//            //实现单选方法三： RecyclerView另一种定向刷新方法：不会有白光一闪动画 也不会重复onBindVIewHolder
+//            CouponVH couponVH = (CouponVH) mRv.findViewHolderForLayoutPosition(mSelectedPos);
+//            if (couponVH != null) {//还在屏幕里
+//                couponVH.ivSelect.setSelected(false);//此处注意判空
+//            }else {//add by 2016 11 22 for 一些极端情况，holder被缓存在Recycler的cacheView里，
+//                //此时拿不到ViewHolder，但是也不会回调onBindViewHolder方法。所以add一个异常处理
+//                notifyItemChanged(mSelectedPos);
+//            }
+//            mDatas.get(mSelectedPos).setSelected(false);//不管在不在屏幕里 都需要改变数据
+//            //设置新Item的勾选状态
+//            mSelectedPos = position;
+//            mDatas.get(mSelectedPos).setSelected(true);
+//            holder.ivSelect.setSelected(true);
+//        }
+//    });
 }
