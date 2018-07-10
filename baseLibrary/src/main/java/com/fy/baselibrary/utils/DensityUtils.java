@@ -5,6 +5,7 @@ import android.util.TypedValue;
 import android.view.View;
 
 import com.fy.baselibrary.application.BaseApp;
+import com.fy.baselibrary.application.ContextUtils;
 
 /**
  * 单位转换 和 测量 工具类
@@ -23,7 +24,7 @@ public class DensityUtils {
      * @return px值
      */
     public static float pt2px(float ptValue){
-        Context context = BaseApp.getAppCtx();
+        Context context = ContextUtils.getAppCtx();
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PT, ptValue, context.getResources().getDisplayMetrics());
     }
 
@@ -34,7 +35,7 @@ public class DensityUtils {
      * @return
      */
     public static int dp2px(float dpVal) {
-        Context context = BaseApp.getAppCtx();
+        Context context = ContextUtils.getAppCtx();
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpVal, context.getResources().getDisplayMetrics());
     }
 

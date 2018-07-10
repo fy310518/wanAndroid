@@ -1,5 +1,6 @@
 package com.fy.baselibrary.startactivity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +13,6 @@ import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.utils.ResourceUtils;
 
 import java.io.File;
 
@@ -44,13 +44,14 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
         MdStatusBar.setTransparentBar(activity, R.color.transparent, R.color.transparent);
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         BaseApp.mAppStatus = 0;
 
         //rx 递归删除缓存的压缩文件
         Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
-            FileUtils.recursionDeleteFile(new File(FileUtils.getPath("head.img.temp")));
+            FileUtils.recursionDeleteFile(new File(FileUtils.getPath(FileUtils.ZIP)));
         })
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

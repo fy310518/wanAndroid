@@ -3,11 +3,10 @@ package com.fy.baselibrary.utils;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fy.baselibrary.R;
-import com.fy.baselibrary.application.BaseApp;
+import com.fy.baselibrary.application.ContextUtils;
 
 /**
  * Toast统一管理类 (解决多次弹出toast)
@@ -41,7 +40,7 @@ public class T {
      * @param message
      */
     public static void showShort(int message) {
-        show(BaseApp.getAppCtx().getResources().getString(message), Toast.LENGTH_SHORT);
+        show(ContextUtils.getAppCtx().getResources().getString(message), Toast.LENGTH_SHORT);
     }
 
     /**
@@ -59,7 +58,7 @@ public class T {
      * @param message
      */
     public static void showLong(int message) {
-        show(BaseApp.getAppCtx().getResources().getString(message), Toast.LENGTH_LONG);
+        show(ContextUtils.getAppCtx().getResources().getString(message), Toast.LENGTH_LONG);
     }
 
     /**
@@ -71,7 +70,7 @@ public class T {
         if (isShow) {
 
             if (null == toast) {
-                toast = Toast.makeText(BaseApp.getAppCtx(), message, duration);
+                toast = Toast.makeText(ContextUtils.getAppCtx(), message, duration);
             } else {
                 toast.setText(message);
             }
@@ -90,10 +89,10 @@ public class T {
      */
     public static void showQulifier(int duration, CharSequence message) {
         if (null == toast) {
-            LayoutInflater inflate = (LayoutInflater) BaseApp.getAppCtx().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflate = (LayoutInflater) ContextUtils.getAppCtx().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflate.inflate(R.layout.dialog_permission, null);// todo 布局待实现
 
-            toast = new Toast(BaseApp.getAppCtx());
+            toast = new Toast(ContextUtils.getAppCtx());
             toast.setView(view);
             toast.setDuration(duration);
         } else {

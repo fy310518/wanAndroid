@@ -1,7 +1,6 @@
 package com.fy.baselibrary.utils;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.ComponentCallbacks;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -9,12 +8,11 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.fy.baselibrary.application.BaseApp;
+import com.fy.baselibrary.application.ContextUtils;
 
 /**
  * 屏幕相关的工具类
@@ -161,7 +159,7 @@ public class ScreenUtils {
      * @return
      */
     public static int getImageItemWidth() {
-        Context context = BaseApp.getAppCtx();
+        Context context = ContextUtils.getAppCtx();
         int screenWidth = getScreenWidth(context);
         int densityDpi = getScreenDensityDpi(context);
 

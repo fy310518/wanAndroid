@@ -3,7 +3,7 @@ package com.fy.baselibrary.retrofit.load.down;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.fy.baselibrary.application.BaseApp;
+import com.fy.baselibrary.application.ContextUtils;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.load.LoadService;
 import com.fy.baselibrary.utils.Constant;
@@ -128,7 +128,7 @@ public class DownManager {
 
                         info.setCountLength(sumLength);
 
-                        ACache mCache = ACache.get(BaseApp.getAppCtx());
+                        ACache mCache = ACache.get(ContextUtils.getAppCtx());
                         //计算各个线程下载的数据段
                         long bitLen = sumLength / THREAD_COUNT;
                         List<Observable> sources = new ArrayList<>();
@@ -202,7 +202,7 @@ public class DownManager {
             raf.seek(start);
             L.e("下载", Thread.currentThread().getName() + "-->" + saveFile.getName() + "---" + start);
 
-            ACache mCache = ACache.get(BaseApp.getAppCtx());
+            ACache mCache = ACache.get(ContextUtils.getAppCtx());
             //当前线程下载 总长度
             long loaded = mCache.getAsLong(nameKey + Constant.DownTherad);
 
@@ -230,7 +230,7 @@ public class DownManager {
         if (TextUtils.isEmpty(url)) return;
 
         //获取缓存中 所有的下载任务列表
-        ACache mCache = ACache.get(BaseApp.getAppCtx());
+        ACache mCache = ACache.get(ContextUtils.getAppCtx());
         String jsonArray = mCache.getAsString(Constant.AllDownTask);
         if (null != jsonArray && !TextUtils.isEmpty(jsonArray)) {
             downInfos =  GsonUtils.jsonToList(jsonArray, DownInfo.class);
@@ -383,7 +383,7 @@ public class DownManager {
     public void saveDownInfo(DownInfo downInfo) {
         List<DownInfo> list = null;
         //获取缓存中 所有的未完成下载任务列表
-        ACache mCache = ACache.get(BaseApp.getAppCtx());
+        ACache mCache = ACache.get(ContextUtils.getAppCtx());
         String jsonArray = mCache.getAsString(Constant.AllDownTask);
         if (null != jsonArray && !TextUtils.isEmpty(jsonArray)) {
             list = GsonUtils.jsonToList(jsonArray, DownInfo.class);

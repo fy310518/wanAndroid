@@ -13,4 +13,5 @@ import dagger.Component;
 public interface RequestComponent {
 
     void inJect(RequestUtils requestConn);
+
 }

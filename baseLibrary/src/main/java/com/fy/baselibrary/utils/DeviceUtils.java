@@ -9,7 +9,7 @@ import android.os.Build;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 
-import com.fy.baselibrary.application.BaseApp;
+import com.fy.baselibrary.application.ContextUtils;
 
 import java.io.File;
 
@@ -64,7 +64,7 @@ public class DeviceUtils {
      */
     @SuppressLint("HardwareIds")
     public static String getAndroidID() {
-        Context context = BaseApp.getAppCtx();
+        Context context = ContextUtils.getAppCtx();
         return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
@@ -88,7 +88,7 @@ public class DeviceUtils {
      * @return
      */
     public static String getCurIp() {
-        WifiManager wifiManager = (WifiManager) BaseApp.getAppCtx().getApplicationContext().
+        WifiManager wifiManager = (WifiManager) ContextUtils.getAppCtx().getApplicationContext().
                 getSystemService(Context.WIFI_SERVICE);
 
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
@@ -107,7 +107,7 @@ public class DeviceUtils {
      */
     @SuppressLint("HardwareIds")
     public static String getCurMac() {
-        WifiManager wifi = (WifiManager) BaseApp.getAppCtx()
+        WifiManager wifi = (WifiManager) ContextUtils.getAppCtx()
                 .getApplicationContext()
                 .getSystemService(Context.WIFI_SERVICE);
 

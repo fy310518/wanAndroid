@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 
 import com.fy.baselibrary.application.BaseApp;
+import com.fy.baselibrary.application.ContextUtils;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class AppUtils {
      */
     public static String getAppName() {
         try {
-            Context context = BaseApp.getAppCtx();
+            Context context = ContextUtils.getAppCtx();
             PackageManager packageManager = context.getPackageManager();
             PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
             int labelRes = packageInfo.applicationInfo.labelRes;
@@ -46,7 +47,7 @@ public class AppUtils {
      * @return
      */
     public static int getVersionCode() {
-        Context context = BaseApp.getAppCtx();
+        Context context = ContextUtils.getAppCtx();
         PackageInfo info = null;
         try {
             info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
@@ -63,7 +64,7 @@ public class AppUtils {
      * @return
      */
     public static String getVersionName() {
-        Context context = BaseApp.getAppCtx();
+        Context context = ContextUtils.getAppCtx();
         PackageManager packageManager = context.getPackageManager();
         PackageInfo packageInfo = null;
         try {
@@ -81,7 +82,7 @@ public class AppUtils {
      * @return
      */
     public static String getLocalPackageName() {
-        Context context = BaseApp.getAppCtx();
+        Context context = ContextUtils.getAppCtx();
         PackageManager packageManager = context.getPackageManager();
         PackageInfo info = null;
         try {
@@ -129,7 +130,7 @@ public class AppUtils {
      * @return the application's signature
      */
     public static Signature[] getAppSignature(final String packageName) {
-        Context context = BaseApp.getAppCtx();
+        Context context = ContextUtils.getAppCtx();
 
         if (isSpace(packageName)) return null;
         try {
@@ -141,6 +142,15 @@ public class AppUtils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * Android 7.0 在应用间共享文件
+     * 获取 清单文件注册的 文件共享签名认证
+     * @return
+     */
+    public static String getFileProviderName() {
+        return getLocalPackageName() + ".provider";
     }
 
     /**

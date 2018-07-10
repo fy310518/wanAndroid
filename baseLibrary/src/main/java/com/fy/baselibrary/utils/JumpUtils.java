@@ -218,7 +218,7 @@ public class JumpUtils {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         Uri data;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            data = FileProvider.getUriForFile(context, ProviderUtil.getFileProviderName(context), file);
+            data = FileProvider.getUriForFile(context, AppUtils.getFileProviderName(), file);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else {
             data = Uri.fromFile(file);

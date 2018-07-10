@@ -8,7 +8,6 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -16,8 +15,9 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
-import com.fy.baselibrary.application.BaseApp;
+import com.fy.baselibrary.application.ContextUtils;
 import com.fy.baselibrary.utils.media.MediaScanner;
+import com.fy.baselibrary.utils.media.UpdateMedia;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -62,10 +62,10 @@ public class PhotoUtils {
                 } else {
 
                     /**
-                     * 7.0 调用系统相机拍照不再允许使用Uri方式，应该替换为FileProvider
+                     * 7.0 调用系统相机拍照不再允许使用Uri方式，应该替换为 FileProvider
                      * 并且这样可以解决MIUI系统上拍照返回size为0的情况
                      */
-                    uri = FileProvider.getUriForFile(activity, ProviderUtil.getFileProviderName(activity), takeImageFile);
+                    uri = FileProvider.getUriForFile(activity, AppUtils.getFileProviderName(), takeImageFile);
                     //加入uri权限 要不三星手机不能拍照
                     List<ResolveInfo> resInfoList = activity.getPackageManager()
                             .queryIntentActivities(takePictureIntent, PackageManager.MATCH_DEFAULT_ONLY);
@@ -76,7 +76,7 @@ public class PhotoUtils {
                     }
                 }
 
-                Log.e("nanchen", ProviderUtil.getFileProviderName(activity));
+                L.e("PhotoUtils", AppUtils.getFileProviderName());
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
             }
         }
@@ -135,13 +135,7 @@ public class PhotoUtils {
      * @param bmp
      */
     public static void saveImageToGallery(Bitmap bmp) {
-        // 首先保存图片
-        File appDir = new File(Environment.getExternalStorageDirectory(), "Boohee");
-        if (!appDir.exists()) {
-            appDir.mkdirs();
-        }
-        String fileName = System.currentTimeMillis() + ".jpg";
-        File file = new File(appDir, fileName);
+        File file = FileUtils.createFile(FileUtils.IMG, "IMG_", ".jpg");
         try {
             FileOutputStream fos = new FileOutputStream(file);
             bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
@@ -155,62 +149,14 @@ public class PhotoUtils {
 
         // 其次把文件插入到系统图库
         try {
-            MediaStore.Images.Media.insertImage(BaseApp.getAppCtx().getContentResolver(),
-                    file.getAbsolutePath(), fileName, null);
+            MediaStore.Images.Media.insertImage(ContextUtils.getAppCtx().getContentResolver(),
+                    file.getAbsolutePath(), file.getName(), null);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
         // 最后通知图库更新
-        mediaScanConn.connect();
-    }
-
-    /**
-     * 通知图库更新（4.4之后 使用）
-     */
-    public static MediaScannerConnection mediaScanConn = new MediaScannerConnection(BaseApp.getAppCtx(),
-            new MediaScannerConnection.MediaScannerConnectionClient() {
-                @Override
-                public void onScanCompleted(String path, Uri uri) {  //当client和MediaScaner扫描完成后  进行关闭我们的连接
-                    // TODO Auto-generated method stub
-                    L.e("aaa", "扫描完成");
-                    mediaScanConn.disconnect();
-                }
-
-                @Override
-                public void onMediaScannerConnected() {   //当client和MediaScanner完成链接后，就开始进行扫描。
-                    // TODO Auto-generated method stub
-                    L.e("aaa", "扫描");
-                    /** 这个方法一次只能扫描一个文件，path 必须是一个具体的文件，不能是目录 */
-                    mediaScanConn.scanFile(FileUtils.getPath("/DCIM/camera/aaa.jpg"), "");
-                }
-            });
-
-    /**
-     * 通知系统媒体库更新 (使用此 广播方式)
-     * @param context
-     * @param action    扫描的类型 文件或目录（文件：Intent.ACTION_MEDIA_SCANNER_SCAN_FILE）
-     * @param file      要扫描的文件
-     */
-    public static void scanFolder(Context context, String action, File file) {
-        Intent mediaScanIntent = new Intent(action);
-        Uri contentUri = Uri.fromFile(file);
-        mediaScanIntent.setData(contentUri);
-        context.sendBroadcast(mediaScanIntent);
-    }
-
-    /**
-     * 通知系统媒体库更新
-     * @param context
-     * @param action    扫描的类型 文件或目录
-     * @param file      要扫描的文件或目录
-     */
-    public static void scanMedia(Context context, String action, File file){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            new MediaScanner(context).scanFile(new File(FileUtils.getPath("/DCIM/camera/")), null);
-        } else {
-            scanFolder(context, action, file);
-        }
+        new UpdateMedia(file.getPath()).runUpdate();
     }
 
 
@@ -221,7 +167,7 @@ public class PhotoUtils {
      * @return 获取图像的Bitmap
      */
     public static Bitmap getBitmapFromUri(Uri uri) {
-        Context mContext = BaseApp.getAppCtx();
+        Context mContext = ContextUtils.getAppCtx();
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), uri);
             return bitmap;

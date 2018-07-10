@@ -12,7 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.widget.TextView;
 
-import com.fy.baselibrary.application.BaseApp;
+import com.fy.baselibrary.application.ContextUtils;
 
 /**
  * Tint 是 Android5.0 引入的一个属性
@@ -120,7 +120,7 @@ public class TintUtils {
      */
     public static Drawable getDrawable(@DrawableRes int draId){
         Drawable drawable = null;
-        Context ctx = BaseApp.getAppCtx();
+        Context ctx = ContextUtils.getAppCtx();
 
         try {
             //png、shape 图等

@@ -4,7 +4,7 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.text.TextUtils;
 
-import com.fy.baselibrary.application.BaseApp;
+import com.fy.baselibrary.application.ContextUtils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -18,10 +18,12 @@ import java.util.Locale;
  */
 public class FileUtils {
 
-    /**
-     * 应用 所有 文件 根目录
-     */
-    public static String SAVE_FOLDER = "HJY";
+    /** 文件下载目录 */
+    public static String DOWN = "down";
+    /** 图片保存目录 */
+    public static String IMG = "picture";
+    /** 压缩文件目录 */
+    public static String ZIP = "zip.temp";
 
     private FileUtils() {
         /* cannot be instantiated */
@@ -92,7 +94,6 @@ public class FileUtils {
 
     /**
      * 到得文件的放置路径
-     * 如果文件目录不存在 会创建
      *
      * @param aModuleName 模块名字 (如："head.img.temp")
      * @return
@@ -106,22 +107,20 @@ public class FileUtils {
         File dirpath;
 
         if (isSDCardEnable())
-            dirpath = new File(BaseApp.getAppCtx().getExternalFilesDir(null), fDirStr);
+            dirpath = new File(ContextUtils.getAppCtx().getExternalFilesDir(null), fDirStr);
         else dirpath = Environment.getDataDirectory();
-
-        folderIsExists(dirpath.getPath());
 
         return dirpath.getPath();
     }
 
     /**
-     * 判断指定路径的 文件夹 是否存在，不存在创建文件夹
+     * 判断指定路径的 文件夹 是否存在，不存在创建文件夹 (内部执行了 getPath())
      *
      * @param filePath
      * @return
      */
     public static File folderIsExists(String filePath) {
-        File folder = new File(filePath);
+        File folder = new File(getPath(filePath));
         try {
             if (!folder.isDirectory()) {
                 folder.mkdirs();
@@ -196,6 +195,43 @@ public class FileUtils {
         return false;
     }
 
+    /**
+     * 根据系统时间、前缀、后缀产生一个文件
+     *
+     * @param folder 目标文件所在的 文件夹（目录）
+     * @param prefix 目标文件的 前缀 (如：IMG_)
+     * @param suffix 目标文件的 后缀名（如：.jpg）
+     * @return
+     */
+    public static File createFile(String folder, String prefix, String suffix) {
+        folderIsExists(folder);
+
+        String name = TimeUtils.Long2DataString(System.currentTimeMillis(), "yyyyMMdd_HHmmss");
+        String filename = prefix + name + suffix;
+
+        return fileIsExists(new File(folder, filename).getPath());
+    }
+
+    /**
+     * 根据 url 在本地生成一个文件
+     *
+     * @param url 下载 url【如：http://img5q.duitang.com/uploads/item/201505/01/20150501113308_QNmsf.jpeg】
+     * @return
+     */
+    public static File createFile(String url) {
+        String fileName;
+
+        if (url.indexOf("?") == -1){
+            fileName = url.substring(url.lastIndexOf("/"));
+        } else {
+            fileName = url.subSequence(url.lastIndexOf("/"), url.indexOf("?")).toString();
+        }
+
+        File file = new File(folderIsExists(DOWN), fileName);
+
+        return FileUtils.fileIsExists(file.getPath());
+    }
+
     /***
      * 获取文件类型
      *
@@ -252,59 +288,5 @@ public class FileUtils {
             }
         }
     }
-
-    /**
-     * 获取应用 图片保存目录
-     *
-     * @return
-     */
-    public static String getImgPath() {
-        String takeImageFilePath;
-
-        if (FileUtils.isSDCardEnable())
-            takeImageFilePath = FileUtils.getSDCardPath() + "pictures/";
-        else takeImageFilePath = Environment.getDataDirectory().getPath() + "/pictures/";
-
-        return takeImageFilePath;
-    }
-
-    /**
-     * 根据系统时间、前缀、后缀产生一个文件
-     *
-     * @param folder 目标文件所在的 文件夹（目录）
-     * @param prefix 目标文件的 前缀 (如：IMG_)
-     * @param suffix 目标文件的 后缀名（如：.jpg）
-     * @return
-     */
-    public static File createFile(String folder, String prefix, String suffix) {
-
-        folderIsExists(folder);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA);
-        String filename = prefix + dateFormat.format(new Date(System.currentTimeMillis())) + suffix;
-
-        return new File(folder, filename);
-    }
-
-    /**
-     * 根据 url 在本地生成一个文件
-     *
-     * @param url 下载 url【如：http://img5q.duitang.com/uploads/item/201505/01/20150501113308_QNmsf.jpeg】
-     * @return
-     */
-    public static File createFile(String url) {
-        String fileName;
-
-        if (url.indexOf("?") == -1){
-            fileName = url.substring(url.lastIndexOf("/"));
-        } else {
-            fileName = url.subSequence(url.lastIndexOf("/"), url.indexOf("?")).toString();
-        }
-
-        File file = new File(FileUtils.getPath("down"), fileName);
-
-        return FileUtils.fileIsExists(file.getPath());
-    }
-
 
 }

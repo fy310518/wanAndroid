@@ -15,6 +15,7 @@ import com.fy.baselibrary.R;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.load.down.DownManager;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
+import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.ScreenUtils;
@@ -88,7 +89,7 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
         if (BaseApp.mAppStatus == -1) {
             Bundle bundle = new Bundle();
             bundle.putString("action", "force_kill");
-            JumpUtils.jump(activity, "wanandroid.fy.com.main.MainActivity", bundle);
+            JumpUtils.jump(activity, AppUtils.getLocalPackageName() + ".main.MainActivity", bundle);
         }
 
     }

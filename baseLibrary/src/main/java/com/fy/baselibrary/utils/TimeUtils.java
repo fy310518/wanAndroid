@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -50,7 +51,7 @@ public class TimeUtils {
 
         Date date;
         try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.CHINA);
             simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+08"));
             date = simpleDateFormat .parse(timeStr);
 
@@ -70,7 +71,7 @@ public class TimeUtils {
      */
     public static String Data2String(Date date, String format){
 
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.CHINA);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT+08"));
         return sdf.format(date);
     }
