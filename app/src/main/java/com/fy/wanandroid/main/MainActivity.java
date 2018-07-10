@@ -23,7 +23,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.fy.baselibrary.application.BaseApp;
+import com.fy.baselibrary.application.ContextUtils;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.AnimUtils;
@@ -35,8 +35,6 @@ import com.fy.baselibrary.utils.ResourceUtils;
 import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.TintUtils;
 import com.fy.baselibrary.utils.cache.ACache;
-
-import butterknife.BindView;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.about.AboutActivity;
 import com.fy.wanandroid.collect.MyCollectActivity;
@@ -47,6 +45,8 @@ import com.fy.wanandroid.main.fragment.FragmentThree;
 import com.fy.wanandroid.main.fragment.FragmentTwo;
 import com.fy.wanandroid.search.SearchActivity;
 import com.fy.wanandroid.utils.SelectUtils;
+
+import butterknife.BindView;
 
 /**
  * 体育联盟 主界面
@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
                     tvUserName.setText(R.string.notLogin);
                     btnLoginOrExit.setText(R.string.clickLogin);
 
-                    ACache mCache = ACache.get(BaseApp.getAppCtx());
+                    ACache mCache = ACache.get(ContextUtils.getAppCtx());
                     mCache.clear();
                     SpfUtils.clear();
                 } else {

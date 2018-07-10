@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import com.fy.baselibrary.application.BaseApp;
+import com.fy.baselibrary.application.ContextUtils;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
@@ -20,17 +20,17 @@ import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.cache.ACache;
+import com.fy.wanandroid.R;
+import com.fy.wanandroid.api.ApiService;
+import com.fy.wanandroid.entity.LoginBean;
+import com.fy.wanandroid.main.MainActivity;
+import com.fy.wanandroid.utils.SelectUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import com.fy.wanandroid.R;
-import com.fy.wanandroid.api.ApiService;
-import com.fy.wanandroid.entity.LoginBean;
-import com.fy.wanandroid.main.MainActivity;
-import com.fy.wanandroid.utils.SelectUtils;
 
 /**
  * 注册
@@ -111,7 +111,7 @@ public class RegisterActivity extends AppCompatActivity implements IBaseActivity
                 .subscribe(new NetCallBack<LoginBean>(progressDialog) {
                     @Override
                     protected void onSuccess(LoginBean login) {
-                        ACache mCache = ACache.get(BaseApp.getAppCtx());
+                        ACache mCache = ACache.get(ContextUtils.getAppCtx());
                         mCache.put(Constant.userName, login);
 
                         SpfUtils.saveBooleanToSpf(Constant.isLogin, true);
