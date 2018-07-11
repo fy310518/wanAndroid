@@ -88,7 +88,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                 .getSerializableExtra("ActivityBean");
         slManager = activityBean.getSlManager();
 
-//        uploadFiles();
+        uploadFiles();
 
         loadImage();
     }

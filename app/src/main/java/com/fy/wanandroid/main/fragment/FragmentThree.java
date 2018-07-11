@@ -148,11 +148,11 @@ public class FragmentThree extends BaseFragment {
                   L.e(list.toString());
                   rvAdapter.setmDatas(list);
                   rvAdapter.notifyDataSetChanged();
-                  epl.stop();
               }
 
               @Override
               protected void updataLayout(int flag) {
+                  epl.stop();
               }
           });
     }

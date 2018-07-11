@@ -194,13 +194,15 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
                         holder.setText(R.id.tvPermissionCancel, R.string.cancel);
                         holder.setOnClickListener(R.id.tvPermissionCancel, v -> permissionEnd(CALL_BACK_RESULE_CODE_FAILURE));
                     }
-                }).show(getSupportFragmentManager());
+                })
+                .setWidthPercent(CommonDialog.WidthPercent)
+                .show(getSupportFragmentManager());
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_REQUEST_CODE && grantResults != null && grantResults.length > 0) {
+        if (requestCode == PERMISSION_REQUEST_CODE && null != grantResults && grantResults.length > 0) {
             List<Integer> failurePermissionCount = new ArrayList<>();
             for (int i = 0; i < grantResults.length; i++) {
                 if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {

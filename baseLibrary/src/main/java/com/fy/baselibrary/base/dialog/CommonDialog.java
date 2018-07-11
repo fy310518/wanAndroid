@@ -21,13 +21,19 @@ import com.fy.baselibrary.base.PopupDismissListner;
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.utils.DensityUtils;
 import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.ScreenUtils;
 
 /**
  * 应用 所有dialog 的父类
  * Created by fangs on 2017/3/13.
  */
 public abstract class CommonDialog extends DialogFragment {
+    /**
+     * 统一 弹窗宽度占屏幕百分比
+     */
+    public static final int WidthPercent = 75;
 
+    private static final String WIDTHPERCENT = "widthPercent";
     private static final String WIDTH = "width";
     private static final String HEIGHT = "height";
     private static final String DIM = "dim_amount";
@@ -56,6 +62,8 @@ public abstract class CommonDialog extends DialogFragment {
     protected int width = -2;
     /** 高度 -1：撑满 -2：自适应 其他固定数值 */
     protected int height = -2;
+    /** 宽度 百分比（如：屏幕宽度 的 50%）*/
+    protected int widthPercent = -1;
 
 
     static {
@@ -77,6 +85,7 @@ public abstract class CommonDialog extends DialogFragment {
 
         //恢复保存的数据
         if (null != savedInstanceState) {
+            widthPercent = savedInstanceState.getInt(WIDTHPERCENT);
             width = savedInstanceState.getInt(WIDTH);
             height = savedInstanceState.getInt(HEIGHT);
             dimAmount = savedInstanceState.getFloat(DIM);
@@ -120,11 +129,14 @@ public abstract class CommonDialog extends DialogFragment {
             // 使用ViewGroup.LayoutParams，以便Dialog 宽度或高度充满整个屏幕
             WindowManager.LayoutParams params = window.getAttributes();
 
-            params.width = width > 0 ? DensityUtils.dp2px(width) : width;
+            if (widthPercent > 0){
+                params.width = ScreenUtils.getScreenWidth() * widthPercent / 100;
+            } else {
+                params.width = width > 0 ? DensityUtils.dp2px(width) : width;
+            }
             params.height = height > 0 ? DensityUtils.dp2px(height) : height;
 
             params.dimAmount = dimAmount;//调节灰色背景透明度[0-1]，默认0.5f
-
             window.setGravity(gravity);  //设置dialog显示的位置
             window.setWindowAnimations(anim);  //添加动画
 
@@ -142,6 +154,7 @@ public abstract class CommonDialog extends DialogFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putInt(WIDTHPERCENT, widthPercent);
         outState.putInt(WIDTH, width);
         outState.putInt(HEIGHT, height);
         outState.putFloat(DIM, dimAmount);
@@ -176,6 +189,16 @@ public abstract class CommonDialog extends DialogFragment {
      */
     public CommonDialog setHide(boolean hide) {
         isHide = hide;
+        return this;
+    }
+
+    /**
+     * 设置 弹窗宽度占屏幕百分比
+     * @param widthPercent
+     * @return
+     */
+    public CommonDialog setWidthPercent(int widthPercent) {
+        this.widthPercent = widthPercent;
         return this;
     }
 

@@ -265,7 +265,7 @@ public class MdStatusBar {
     private static View createStatusBarView(Context context, @ColorInt int color) {
         View statusBarView = new View(context);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams
-                (FrameLayout.LayoutParams.MATCH_PARENT, ScreenUtils.getStatusHeight(context));
+                (FrameLayout.LayoutParams.MATCH_PARENT, ScreenUtils.getStatusHeight());
         params.gravity = Gravity.TOP;
         statusBarView.setLayoutParams(params);
         statusBarView.setBackgroundColor(color);
@@ -275,7 +275,7 @@ public class MdStatusBar {
     private static View createNavBarView(Context context, @ColorInt int color) {
         View navBarView = new View(context);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams
-                (FrameLayout.LayoutParams.MATCH_PARENT, ScreenUtils.getNavigationHeight(context));
+                (FrameLayout.LayoutParams.MATCH_PARENT, ScreenUtils.getNavigationHeight());
         params.gravity = Gravity.BOTTOM;
         navBarView.setLayoutParams(params);
         navBarView.setBackgroundColor(color);

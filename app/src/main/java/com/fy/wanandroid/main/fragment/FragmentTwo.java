@@ -103,12 +103,11 @@ public class FragmentTwo extends BaseFragment {
                     protected void onSuccess(List<TreeBean> treeBeanList) {
                         adapterTwo.setmDatas(treeBeanList);
                         adapterTwo.notifyDataSetChanged();
-                        epl.stop();
                     }
 
                     @Override
                     protected void updataLayout(int flag) {
-
+                        epl.stop();
                     }
                 });
     }

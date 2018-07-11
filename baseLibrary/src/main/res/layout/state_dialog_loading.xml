@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/spacing_medium"
     android:background="@drawable/shape_load_dialog_bg"
-    android:orientation="vertical">
+    android:padding="@dimen/spacing_medium_small">
 
     <ImageView
         android:id="@+id/imgLoadAnim"
-        android:layout_width="@dimen/load_anim"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/load_anim"
-        android:layout_gravity="center"
-        android:src="@mipmap/image_circular" />
+        android:src="@mipmap/image_circular"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
         android:id="@+id/txtLoadHint"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/spacing_small"
-        android:layout_gravity="center"
-        android:text="@string/data_loading"
         android:gravity="center"
+        android:paddingTop="@dimen/spacing_small"
         android:singleLine="true"
+        android:text="@string/data_loading"
+        android:textColor="@color/txtSuperColor"
         android:textSize="@dimen/txt_small"
-        android:textColor="@color/txtSuperColor"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imgLoadAnim" />
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

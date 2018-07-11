@@ -28,23 +28,26 @@ public class ScreenUtils {
     /**
      * 得到设备的 屏幕像素密度 比例
      */
-    public static float getScreenDensity(Context context) {
+    public static float getScreenDensity() {
+        Context context = ContextUtils.getAppCtx();
         return context.getResources().getDisplayMetrics().density;
     }
 
     /**
      * 得到设备的 屏幕像素密度 值
      */
-    public static int getScreenDensityDpi(Context context) {
+    public static int getScreenDensityDpi() {
+        Context context = ContextUtils.getAppCtx();
         return context.getResources().getDisplayMetrics().densityDpi;
     }
 
     /**
      * 获取 屏幕尺寸
-     * @param context
+     *
      * @return
      */
-    public static float getScreenSize(Context context){
+    public static float getScreenSize(){
+        Context context = ContextUtils.getAppCtx();
         float screenSize = 0;
 
         Point point = new Point();
@@ -64,10 +67,10 @@ public class ScreenUtils {
     /**
      * 获得屏幕宽度
      *
-     * @param context
      * @return
      */
-    public static int getScreenWidth(Context context) {
+    public static int getScreenWidth() {
+        Context context = ContextUtils.getAppCtx();
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(outMetrics);
@@ -77,10 +80,10 @@ public class ScreenUtils {
     /**
      * 获得屏幕高度
      *
-     * @param context
      * @return
      */
-    public static int getScreenHeight(Context context) {
+    public static int getScreenHeight() {
+        Context context = ContextUtils.getAppCtx();
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(outMetrics);
@@ -89,11 +92,11 @@ public class ScreenUtils {
 
     /**
      * 获得 状态栏 高度
-     * @param context
+     *
      * @return
      */
-    public static int getStatusHeight(Context context) {
-
+    public static int getStatusHeight() {
+        Context context = ContextUtils.getAppCtx();
         Resources resources = context.getResources();
         int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
         return resources.getDimensionPixelSize(resourceId);
@@ -101,10 +104,11 @@ public class ScreenUtils {
 
     /**
      * 获得 导航栏 高度
-     * @param context
+     *
      * @return
      */
-    public static int getNavigationHeight(Context context) {
+    public static int getNavigationHeight() {
+        Context context = ContextUtils.getAppCtx();
         Resources resources = context.getResources();
         int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
         return resources.getDimensionPixelSize(resourceId);
@@ -121,8 +125,8 @@ public class ScreenUtils {
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
         Bitmap bmp = view.getDrawingCache();
-        int width = getScreenWidth(activity);
-        int height = getScreenHeight(activity);
+        int width = getScreenWidth();
+        int height = getScreenHeight();
         Bitmap bp = null;
         bp = Bitmap.createBitmap(bmp, 0, 0, width, height);
         view.destroyDrawingCache();
@@ -145,8 +149,8 @@ public class ScreenUtils {
         activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
         int statusBarHeight = frame.top;
 
-        int width = getScreenWidth(activity);
-        int height = getScreenHeight(activity);
+        int width = getScreenWidth();
+        int height = getScreenHeight();
         Bitmap bp = null;
         bp = Bitmap.createBitmap(bmp, 0, statusBarHeight, width, height
                 - statusBarHeight);
@@ -160,12 +164,12 @@ public class ScreenUtils {
      */
     public static int getImageItemWidth() {
         Context context = ContextUtils.getAppCtx();
-        int screenWidth = getScreenWidth(context);
-        int densityDpi = getScreenDensityDpi(context);
+        int screenWidth = getScreenWidth();
+        int densityDpi = getScreenDensityDpi();
 
         int cols = screenWidth / densityDpi;
         cols = cols < 3 ? 3 : cols;
-        int columnSpace = (int) (2 * getScreenDensity(context));
+        int columnSpace = (int) (2 * getScreenDensity());
         return (screenWidth - columnSpace * (cols - 1)) / cols;
     }
 
