@@ -3,10 +3,10 @@
 
     <corners android:radius="200dp" />
 
-    <solid android:color="@color/white" />
+    <solid android:color="@android:color/white" />
 
-    <padding android:left="@dimen/spacing_small"
-        android:right="@dimen/spacing_small"
-        android:top="@dimen/spacing_small"
-        android:bottom="@dimen/spacing_small"/>
+    <padding android:left="8dp"
+        android:right="8dp"
+        android:top="8dp"
+        android:bottom="8dp"/>
 </shape>

@@ -7,19 +7,31 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
+/**
+ * 提供依赖对象
+ * Created by fangs on 2018/7/13.
+ */
 @Module
-public class ContextModule {
+public class ConfigModule {
 
     private Context context;
+    private String  url;
 
-    public ContextModule(Context context) {
+    public ConfigModule(Context context, String url) {
         this.context = context;
+        this.url     = url;
     }
 
     @Singleton
     @Provides
     public Context provideContext() {
         return context;
+    }
+
+    @Singleton
+    @Provides
+    public String provideUrl(){
+        return url;
     }
 
 }

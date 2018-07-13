@@ -27,7 +27,7 @@ import com.fy.baselibrary.utils.ScreenUtils;
 public class MdStatusBar {
 
     /** 状态栏透明度 */
-    public static int statusAlpha = 70;
+    public static int statusAlpha = 255;
 
     /** 导航栏透明度 */
     public static int navAlpha = 50;
@@ -38,13 +38,13 @@ public class MdStatusBar {
     }
 
     /**
-     * 自定义 状态栏和导航栏 的颜色
+     * 自定义 状态栏和导航栏 的颜色(为了 适配 状态栏 文字和图标颜色动态改变 此方法仅供学习 因此私有化)
      * @param act
      * @param statusColor StatusBar color
      * @param navColor    NavigationBar color
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    public static void setColorBar(Activity act, @ColorRes int statusColor, @ColorRes int navColor) {
+    private static void setColorBar(Activity act, @ColorRes int statusColor, @ColorRes int navColor) {
         int statusc = ContextCompat.getColor(act, statusColor);
         int navc = ContextCompat.getColor(act, navColor);
         setColorBar(act, statusc, statusAlpha, true, navc, navAlpha);
@@ -60,23 +60,24 @@ public class MdStatusBar {
      * @param navDepth    NavigationBar color depth (applyNav = true)
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    public static void setColorBar(Activity act, @ColorInt int statusColor, int statusDepth,
+    private static void setColorBar(Activity act, @ColorInt int statusColor, int statusDepth,
                              boolean applyNav,
                              @ColorInt int navColor, int navDepth) {
 
         int realStatusDepth = limitDepthOrAlpha(statusDepth);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//5.0及以上
             Window window = act.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
             int finalStatusColor = realStatusDepth == 0 ? statusColor : calculateColor(statusColor, realStatusDepth);
-            window.setStatusBarColor(finalStatusColor);
+            window.setStatusBarColor(finalStatusColor);//设置状态栏颜色
+
             if (applyNav) {
                 int realNavDepth = limitDepthOrAlpha(navDepth);
                 int finalNavColor = realNavDepth == 0 ? navColor : calculateColor(navColor, realNavDepth);
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-                window.setNavigationBarColor(finalNavColor);
+                window.setNavigationBarColor(finalNavColor);//设置导航栏的颜色
             }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = act.getWindow();
@@ -125,11 +126,12 @@ public class MdStatusBar {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = act.getWindow();
             View decorView = window.getDecorView();
-            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+
             int finalStatusColor = statusColor == 0 ? Color.TRANSPARENT :
-                    Color.argb(limitDepthOrAlpha(statusAlpha), Color.red(statusColor),
-                            Color.green(statusColor), Color.blue(statusColor));
+                    Color.argb(limitDepthOrAlpha(statusAlpha), Color.red(statusColor), Color.green(statusColor),
+                            Color.blue(statusColor));
+
             window.setStatusBarColor(finalStatusColor);
             if (applyNav) {
                 option = option | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
@@ -203,7 +205,7 @@ public class MdStatusBar {
      * @param navDepth
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    public static void setColorBarForDrawer(Activity act, @ColorInt int statusColor, int statusDepth,
+    private static void setColorBarForDrawer(Activity act, @ColorInt int statusColor, int statusDepth,
                                       boolean applyNav,
                                       @ColorInt int navColor, int navDepth) {
         int realStatusDepth = limitDepthOrAlpha(statusDepth);

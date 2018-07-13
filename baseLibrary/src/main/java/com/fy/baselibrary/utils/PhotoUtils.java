@@ -10,13 +10,10 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
-import android.util.Log;
 
-import com.fy.baselibrary.application.ContextUtils;
-import com.fy.baselibrary.utils.media.MediaScanner;
+import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.utils.media.UpdateMedia;
 
 import java.io.File;
@@ -149,7 +146,7 @@ public class PhotoUtils {
 
         // 其次把文件插入到系统图库
         try {
-            MediaStore.Images.Media.insertImage(ContextUtils.getAppCtx().getContentResolver(),
+            MediaStore.Images.Media.insertImage(ConfigUtils.getAppCtx().getContentResolver(),
                     file.getAbsolutePath(), file.getName(), null);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -167,7 +164,7 @@ public class PhotoUtils {
      * @return 获取图像的Bitmap
      */
     public static Bitmap getBitmapFromUri(Uri uri) {
-        Context mContext = ContextUtils.getAppCtx();
+        Context mContext = ConfigUtils.getAppCtx();
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), uri);
             return bitmap;

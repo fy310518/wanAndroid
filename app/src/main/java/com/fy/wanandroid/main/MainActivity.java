@@ -23,9 +23,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.fy.baselibrary.application.ContextUtils;
+import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
+import com.fy.baselibrary.statusbar.StatusBarContentColor;
 import com.fy.baselibrary.utils.AnimUtils;
 import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.Constant;
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
     @SuppressLint("ResourceAsColor")
     @Override
     public void setStatusBar(Activity activity) {
-        MdStatusBar.setColorBar(activity, R.color.statusBar, R.color.statusBar);
+        MdStatusBar.setTransparentBar(activity, R.color.statusBar, R.color.statusBar);
     }
 
     @Override
@@ -172,18 +173,23 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
 
         radioGlayout.setOnCheckedChangeListener((group, checkedId) -> {
             int position = 0;
+            boolean useDart = false;
             switch (checkedId) {
                 case R.id.rBtnOne:
                     position = 0;
+                    useDart = false;
                     break;
                 case R.id.rBtnTwo:
                     position = 1;
+                    useDart = true;
                     break;
                 case R.id.rBtnThree:
                     position = 2;
+                    useDart = false;
                     break;
             }
             beginTransaction(position);
+            StatusBarContentColor.setStatusTextColor(MainActivity.this, useDart);
         });
 
         rBtnOne.setChecked(true);
@@ -240,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
                     tvUserName.setText(R.string.notLogin);
                     btnLoginOrExit.setText(R.string.clickLogin);
 
-                    ACache mCache = ACache.get(ContextUtils.getAppCtx());
+                    ACache mCache = ACache.get(ConfigUtils.getAppCtx());
                     mCache.clear();
                     SpfUtils.clear();
                 } else {

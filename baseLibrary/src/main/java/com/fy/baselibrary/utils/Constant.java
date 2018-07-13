@@ -12,11 +12,6 @@ public class Constant {
     public static int DEFAULT_MILLISECONDS = 60000;
 
     /**
-     * 服务器地址
-     */
-    public static String BASE_URL = "http://www.wanandroid.com/";
-
-    /**
      * 动态服务器地址
      */
     public static String custom_Url = "";

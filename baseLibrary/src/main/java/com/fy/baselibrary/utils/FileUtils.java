@@ -4,13 +4,10 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.text.TextUtils;
 
-import com.fy.baselibrary.application.ContextUtils;
+import com.fy.baselibrary.application.ConfigUtils;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * 文件工具类
@@ -107,7 +104,7 @@ public class FileUtils {
         File dirpath;
 
         if (isSDCardEnable())
-            dirpath = new File(ContextUtils.getAppCtx().getExternalFilesDir(null), fDirStr);
+            dirpath = new File(ConfigUtils.getAppCtx().getExternalFilesDir(null), fDirStr);
         else dirpath = Environment.getDataDirectory();
 
         return dirpath.getPath();

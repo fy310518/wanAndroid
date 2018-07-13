@@ -14,7 +14,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
-import com.fy.baselibrary.application.ContextUtils;
+import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.permission.PermissionActivity;
 import com.fy.baselibrary.retrofit.NetCallBack;
@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
 
     @Override
     public void setStatusBar(Activity activity) {
-        MdStatusBar.setColorBar(activity, R.color.statusBar, R.color.statusBar);
+        MdStatusBar.setTransparentBar(activity, R.color.statusBar, R.color.statusBar);
     }
 
     @Override
@@ -164,7 +164,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
                 .subscribe(new NetCallBack<LoginBean>(progressDialog) {
                     @Override
                     protected void onSuccess(LoginBean login) {
-                        ACache mCache = ACache.get(ContextUtils.getAppCtx());
+                        ACache mCache = ACache.get(ConfigUtils.getAppCtx());
                         mCache.put(Constant.userName, login);
 
                         SpfUtils.saveBooleanToSpf(Constant.isLogin, true);

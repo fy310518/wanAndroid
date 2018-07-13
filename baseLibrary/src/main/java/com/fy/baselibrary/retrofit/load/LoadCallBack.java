@@ -3,7 +3,7 @@ package com.fy.baselibrary.retrofit.load;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.fy.baselibrary.application.ContextUtils;
+import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
 import com.fy.baselibrary.utils.Constant;
@@ -40,7 +40,7 @@ public abstract class LoadCallBack<T> extends NetCallBack<T> {
     public void setmSumLength(long mSumLength) {
         this.mSumLength = mSumLength;
 
-        ACache mCache = ACache.get(ContextUtils.getAppCtx());
+        ACache mCache = ACache.get(ConfigUtils.getAppCtx());
         //从缓存中获取 已经下载的总进度
         loaded.addAndGet(mCache.getAsLong(url + Constant.DownTask));
     }
@@ -91,7 +91,7 @@ public abstract class LoadCallBack<T> extends NetCallBack<T> {
     private void cachePercent(double percent) {
         //缓存 断点续传 进度百分比
         if (!TextUtils.isEmpty(url)) {
-            ACache mCache = ACache.get(ContextUtils.getAppCtx());
+            ACache mCache = ACache.get(ConfigUtils.getAppCtx());
             mCache.put(url + Constant.DownPercent, percent);
             mCache.put(url + Constant.DownTask, loaded.get());
         }

@@ -10,7 +10,7 @@ import android.support.annotation.DimenRes;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 
-import com.fy.baselibrary.application.ContextUtils;
+import com.fy.baselibrary.application.ConfigUtils;
 
 import java.util.Random;
 
@@ -32,7 +32,7 @@ public class ResourceUtils {
      * @return
      */
     public static float getDimen(@DimenRes int dimenId) {
-        return ContextUtils.getAppCtx().getResources().getDimension(dimenId);
+        return ConfigUtils.getAppCtx().getResources().getDimension(dimenId);
     }
 
     /**
@@ -42,7 +42,7 @@ public class ResourceUtils {
      * @return
      */
     public static int getColor(@ColorRes int colorId) {
-        return ContextCompat.getColor(ContextUtils.getAppCtx(), colorId);
+        return ContextCompat.getColor(ConfigUtils.getAppCtx(), colorId);
     }
 
     /**
@@ -66,7 +66,7 @@ public class ResourceUtils {
      * @return
      */
     public static String getStr(@StringRes int stringId) {
-        return ContextUtils.getAppCtx().getString(stringId);
+        return ConfigUtils.getAppCtx().getString(stringId);
     }
 
     /**
@@ -95,7 +95,7 @@ public class ResourceUtils {
         Object value = null;
 
         try {
-            Context context = ContextUtils.getAppCtx();
+            Context context = ConfigUtils.getAppCtx();
             ApplicationInfo ai = context.getPackageManager()
                     .getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
 

@@ -6,7 +6,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 
-import com.fy.baselibrary.application.ContextUtils;
+import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.utils.L;
 
 import java.io.File;
@@ -25,7 +25,7 @@ public class UpdateMedia implements MediaScannerConnection.MediaScannerConnectio
 
     public UpdateMedia(String filePath) {
         this.filePath = filePath;
-        this.mediaScanConn = new MediaScannerConnection(ContextUtils.getAppCtx(), this);
+        this.mediaScanConn = new MediaScannerConnection(ConfigUtils.getAppCtx(), this);
     }
 
     @Override

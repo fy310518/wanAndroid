@@ -32,7 +32,7 @@ import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 
-import com.fy.baselibrary.application.ContextUtils;
+import com.fy.baselibrary.application.ConfigUtils;
 
 import static android.graphics.BlurMaskFilter.Blur;
 
@@ -503,7 +503,7 @@ public class SpanUtils {
                 align = null;
             }
             if (imageIsBitmap || imageIsDrawable || imageIsUri || imageIsResourceId) {
-                Context context = ContextUtils.getAppCtx();
+                Context context = ConfigUtils.getAppCtx();
                 if (imageIsBitmap) {
                     mBuilder.setSpan(new ImageSpan(context, bitmap), start, end, flag);
                     bitmap = null;

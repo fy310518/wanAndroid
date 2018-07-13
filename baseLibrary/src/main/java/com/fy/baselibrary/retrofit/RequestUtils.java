@@ -1,7 +1,6 @@
 package com.fy.baselibrary.retrofit;
 
-import com.fy.baselibrary.application.BaseApp;
-import com.fy.baselibrary.application.ContextUtils;
+import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.cache.ACache;
 
@@ -72,7 +71,7 @@ public class RequestUtils {
         Observable<T> fromCache = Observable.create(new ObservableOnSubscribe<T>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<T> subscriber) throws Exception {
-                ACache mCache = ACache.get(ContextUtils.getAppCtx());
+                ACache mCache = ACache.get(ConfigUtils.getAppCtx());
                 T cache = (T) mCache.getAsObject(apiKey);
                 if (null != cache) {
                     L.e("net cache", cache.toString());
@@ -91,7 +90,7 @@ public class RequestUtils {
             @Override
             public void accept(T result) throws Exception {
                 L.e("net doOnNext", result.toString());
-                ACache mCache = ACache.get(ContextUtils.getAppCtx());
+                ACache mCache = ACache.get(ConfigUtils.getAppCtx());
                 mCache.put(apiKey, (Serializable)result);
             }
         });

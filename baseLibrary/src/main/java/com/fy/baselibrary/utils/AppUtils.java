@@ -7,8 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 
-import com.fy.baselibrary.application.BaseApp;
-import com.fy.baselibrary.application.ContextUtils;
+import com.fy.baselibrary.application.ConfigUtils;
 
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class AppUtils {
      */
     public static String getAppName() {
         try {
-            Context context = ContextUtils.getAppCtx();
+            Context context = ConfigUtils.getAppCtx();
             PackageManager packageManager = context.getPackageManager();
             PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
             int labelRes = packageInfo.applicationInfo.labelRes;
@@ -47,7 +46,7 @@ public class AppUtils {
      * @return
      */
     public static int getVersionCode() {
-        Context context = ContextUtils.getAppCtx();
+        Context context = ConfigUtils.getAppCtx();
         PackageInfo info = null;
         try {
             info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
@@ -64,7 +63,7 @@ public class AppUtils {
      * @return
      */
     public static String getVersionName() {
-        Context context = ContextUtils.getAppCtx();
+        Context context = ConfigUtils.getAppCtx();
         PackageManager packageManager = context.getPackageManager();
         PackageInfo packageInfo = null;
         try {
@@ -82,7 +81,7 @@ public class AppUtils {
      * @return
      */
     public static String getLocalPackageName() {
-        Context context = ContextUtils.getAppCtx();
+        Context context = ConfigUtils.getAppCtx();
         PackageManager packageManager = context.getPackageManager();
         PackageInfo info = null;
         try {
@@ -130,7 +129,7 @@ public class AppUtils {
      * @return the application's signature
      */
     public static Signature[] getAppSignature(final String packageName) {
-        Context context = ContextUtils.getAppCtx();
+        Context context = ConfigUtils.getAppCtx();
 
         if (isSpace(packageName)) return null;
         try {

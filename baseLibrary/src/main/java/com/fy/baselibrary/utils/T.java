@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.fy.baselibrary.R;
-import com.fy.baselibrary.application.ContextUtils;
+import com.fy.baselibrary.application.ConfigUtils;
 
 /**
  * Toast统一管理类 (解决多次弹出toast)
@@ -40,7 +40,7 @@ public class T {
      * @param message
      */
     public static void showShort(int message) {
-        show(ContextUtils.getAppCtx().getResources().getString(message), Toast.LENGTH_SHORT);
+        show(ConfigUtils.getAppCtx().getResources().getString(message), Toast.LENGTH_SHORT);
     }
 
     /**
@@ -58,7 +58,7 @@ public class T {
      * @param message
      */
     public static void showLong(int message) {
-        show(ContextUtils.getAppCtx().getResources().getString(message), Toast.LENGTH_LONG);
+        show(ConfigUtils.getAppCtx().getResources().getString(message), Toast.LENGTH_LONG);
     }
 
     /**
@@ -70,7 +70,7 @@ public class T {
         if (isShow) {
 
             if (null == toast) {
-                toast = Toast.makeText(ContextUtils.getAppCtx(), message, duration);
+                toast = Toast.makeText(ConfigUtils.getAppCtx(), message, duration);
             } else {
                 toast.setText(message);
             }
@@ -89,10 +89,10 @@ public class T {
      */
     public static void showQulifier(int duration, CharSequence message) {
         if (null == toast) {
-            LayoutInflater inflate = (LayoutInflater) ContextUtils.getAppCtx().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflate = (LayoutInflater) ConfigUtils.getAppCtx().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflate.inflate(R.layout.dialog_permission, null);// todo 布局待实现
 
-            toast = new Toast(ContextUtils.getAppCtx());
+            toast = new Toast(ConfigUtils.getAppCtx());
             toast.setView(view);
             toast.setDuration(duration);
         } else {

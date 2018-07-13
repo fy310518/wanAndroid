@@ -12,7 +12,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.fy.baselibrary.application.ContextUtils;
+import com.fy.baselibrary.application.ConfigUtils;
 
 /**
  * 屏幕相关的工具类
@@ -29,7 +29,7 @@ public class ScreenUtils {
      * 得到设备的 屏幕像素密度 比例
      */
     public static float getScreenDensity() {
-        Context context = ContextUtils.getAppCtx();
+        Context context = ConfigUtils.getAppCtx();
         return context.getResources().getDisplayMetrics().density;
     }
 
@@ -37,7 +37,7 @@ public class ScreenUtils {
      * 得到设备的 屏幕像素密度 值
      */
     public static int getScreenDensityDpi() {
-        Context context = ContextUtils.getAppCtx();
+        Context context = ConfigUtils.getAppCtx();
         return context.getResources().getDisplayMetrics().densityDpi;
     }
 
@@ -47,7 +47,7 @@ public class ScreenUtils {
      * @return
      */
     public static float getScreenSize(){
-        Context context = ContextUtils.getAppCtx();
+        Context context = ConfigUtils.getAppCtx();
         float screenSize = 0;
 
         Point point = new Point();
@@ -70,7 +70,7 @@ public class ScreenUtils {
      * @return
      */
     public static int getScreenWidth() {
-        Context context = ContextUtils.getAppCtx();
+        Context context = ConfigUtils.getAppCtx();
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(outMetrics);
@@ -83,7 +83,7 @@ public class ScreenUtils {
      * @return
      */
     public static int getScreenHeight() {
-        Context context = ContextUtils.getAppCtx();
+        Context context = ConfigUtils.getAppCtx();
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(outMetrics);
@@ -96,7 +96,7 @@ public class ScreenUtils {
      * @return
      */
     public static int getStatusHeight() {
-        Context context = ContextUtils.getAppCtx();
+        Context context = ConfigUtils.getAppCtx();
         Resources resources = context.getResources();
         int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
         return resources.getDimensionPixelSize(resourceId);
@@ -108,7 +108,7 @@ public class ScreenUtils {
      * @return
      */
     public static int getNavigationHeight() {
-        Context context = ContextUtils.getAppCtx();
+        Context context = ConfigUtils.getAppCtx();
         Resources resources = context.getResources();
         int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
         return resources.getDimensionPixelSize(resourceId);
@@ -163,7 +163,7 @@ public class ScreenUtils {
      * @return
      */
     public static int getImageItemWidth() {
-        Context context = ContextUtils.getAppCtx();
+        Context context = ConfigUtils.getAppCtx();
         int screenWidth = getScreenWidth();
         int densityDpi = getScreenDensityDpi();
 

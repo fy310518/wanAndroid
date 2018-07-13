@@ -40,7 +40,7 @@ public class AboutActivity extends AppCompatActivity implements IBaseActivity {
 
     @Override
     public void setStatusBar(Activity activity) {
-        MdStatusBar.setColorBar(activity, R.color.statusBar, R.color.statusBar);
+        MdStatusBar.setTransparentBar(activity, R.color.statusBar, R.color.statusBar);
     }
 
     @Override

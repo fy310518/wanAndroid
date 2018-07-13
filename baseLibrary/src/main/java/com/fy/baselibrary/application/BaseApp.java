@@ -21,7 +21,10 @@ public class BaseApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        new ContextUtils(this);
+        new ConfigUtils.ConfigBiuder()
+                .setCtx(this)
+                .setBASE_URL("http://www.wanandroid.com/")
+                .create();
 
         int designWidth = (int) ResourceUtils.getMetaData("Rudeness_Adapter_Screen_width", 0);
         ScreenUtils.setCustomDensity(this, designWidth);

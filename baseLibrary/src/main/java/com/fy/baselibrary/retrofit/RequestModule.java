@@ -2,6 +2,7 @@ package com.fy.baselibrary.retrofit;
 
 import android.text.TextUtils;
 
+import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.retrofit.cookie.AddCookiesInterceptor;
 import com.fy.baselibrary.retrofit.cookie.ReceivedCookiesInterceptor;
 import com.fy.baselibrary.utils.Constant;
@@ -42,7 +43,7 @@ public class RequestModule {
         return new Retrofit.Builder()
                 .addCallAdapterFactory(callAdapterFactory)
                 .addConverterFactory(gsonConverterFactory)
-                .baseUrl(Constant.BASE_URL)
+                .baseUrl(ConfigUtils.getBiuder())
                 .client(client)
                 .build();
     }
