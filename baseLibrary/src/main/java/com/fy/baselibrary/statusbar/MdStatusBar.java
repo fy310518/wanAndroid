@@ -27,7 +27,7 @@ import com.fy.baselibrary.utils.ScreenUtils;
 public class MdStatusBar {
 
     /** 状态栏透明度 */
-    public static int statusAlpha = 255;
+    public static int statusAlpha = 0;
 
     /** 导航栏透明度 */
     public static int navAlpha = 50;
@@ -44,7 +44,7 @@ public class MdStatusBar {
      * @param navColor    NavigationBar color
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    private static void setColorBar(Activity act, @ColorRes int statusColor, @ColorRes int navColor) {
+    public static void setColorBar(Activity act, @ColorRes int statusColor, @ColorRes int navColor) {
         int statusc = ContextCompat.getColor(act, statusColor);
         int navc = ContextCompat.getColor(act, navColor);
         setColorBar(act, statusc, statusAlpha, true, navc, navAlpha);
@@ -67,8 +67,8 @@ public class MdStatusBar {
         int realStatusDepth = limitDepthOrAlpha(statusDepth);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//5.0及以上
             Window window = act.getWindow();
-//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
             int finalStatusColor = realStatusDepth == 0 ? statusColor : calculateColor(statusColor, realStatusDepth);
             window.setStatusBarColor(finalStatusColor);//设置状态栏颜色
@@ -82,6 +82,7 @@ public class MdStatusBar {
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = act.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
             int finalStatusColor = realStatusDepth == 0 ? statusColor : calculateColor(statusColor, realStatusDepth);
             ViewGroup decorView = (ViewGroup) window.getDecorView();
             decorView.addView(createStatusBarView(act, finalStatusColor));

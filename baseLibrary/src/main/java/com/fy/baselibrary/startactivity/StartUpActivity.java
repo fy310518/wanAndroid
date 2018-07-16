@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,9 +14,9 @@ import com.fy.baselibrary.R;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.statusbar.MdStatusBar;
+import com.fy.baselibrary.statusbar.StatusBarContentColor;
 import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.JumpUtils;
-import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.ResourceUtils;
 import com.fy.baselibrary.utils.TintUtils;
 
@@ -50,6 +51,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity 
     @Override
     public void setStatusBar(Activity activity) {
         MdStatusBar.setTransparentBar(activity, R.color.transparent, R.color.transparent);
+        StatusBarContentColor.setStatusTextColor(this, true, true);
     }
 
     @Override

@@ -45,7 +45,7 @@ public class HierarchyActivity extends AppCompatActivity implements IBaseActivit
 
     @Override
     public void setStatusBar(Activity activity) {
-        MdStatusBar.setTransparentBar(activity, R.color.statusBar, R.color.statusBar);
+        MdStatusBar.setColorBar(activity, R.color.statusBar, R.color.statusBar);
     }
 
     @Override

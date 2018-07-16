@@ -1,16 +1,10 @@
 package com.fy.baselibrary.statusbar;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Build;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-
-import com.fy.baselibrary.R;
-import com.fy.baselibrary.utils.L;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -21,16 +15,16 @@ import java.lang.reflect.Method;
  * Created by fangs on 18/3/14.
  */
 public class StatusBarContentColor {
+//      1.View.SYSTEM_UI_FLAG_VISIBLE ：状态栏和Activity共存，Activity不全屏显示。也就是应用平常的显示画面
+//      2.View.SYSTEM_UI_FLAG_FULLSCREEN ：Activity全屏显示，且状态栏被覆盖掉
+//      4.View.INVISIBLE ： Activity全屏显示，隐藏状态栏
 
-//            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN 是从API 16 开始启用，实现效果：
-//            视图延伸至状态栏区域，状态栏悬浮于视图之上
-
-//            View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR 是从 API 23 开始启用，实现效果：
-//            设置状态栏图标和状态栏文字颜色为深色，为适应状态栏背景为浅色调而启用，该Flag只有在使用了 FLAG_DRWS_SYSTEM_BAR_BACKGROUNDS，
-//            并且没有使用 FLAG_TRANSLUCENT_STATUS 时才有效，即只有在透明状态栏时才有效
-
-//            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//            保持整个View稳定, 常和控制System UI悬浮, 隐藏的Flags共用, 使View不会因为System UI的变化而重新layout
+//      5.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN 是从API 16 开始启用，实现效果：视图延伸至状态栏区域，状态栏悬浮于视图之上
+//      6.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR 是从 API 23 开始启用，实现效果：
+//          设置状态栏图标和状态栏文字颜色为深色，为适应状态栏背景为浅色调而启用，该Flag只有在使用了 FLAG_DRWS_SYSTEM_BAR_BACKGROUNDS，
+//          并且没有使用 FLAG_TRANSLUCENT_STATUS 时才有效，即只有在【透明状态栏时才有效】
+//      7.View.SYSTEM_UI_FLAG_LAYOUT_STABLE 保持整个View稳定,
+//          常和控制System UI悬浮, 隐藏的Flags共用, 使View不会因为System UI的变化而重新layout
 
     private StatusBarContentColor() {
         /* cannot be instantiated */
@@ -38,22 +32,76 @@ public class StatusBarContentColor {
     }
 
     /**
-     * @param activity
+     * 判断手机是否是魅族
+     * @return
      */
-    private static void setStatusBar(Activity activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//5.0及以上
-            View decorView = activity.getWindow().getDecorView();
-            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
-            decorView.setSystemUiVisibility(option);
+    public static boolean isFlyme() {
+        try {
+            // Invoke Build.hasSmartBar()
+            final Method method = Build.class.getMethod("hasSmartBar");
+            return method != null;
+        } catch (final Exception e) {
+            return false;
+        }
+    }
 
-//            if (useThemestatusBarColor) {
-//                activity.getWindow().setStatusBarColor(activity.getResources().getColor(R.color.white));
-//            } else {
-//            }
-                activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {//4.4到5.0
-            WindowManager.LayoutParams localLayoutParams = activity.getWindow().getAttributes();
-            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
+    private static final String KEY_MIUI_VERSION_CODE = "ro.miui.ui.version.code";
+    private static final String KEY_MIUI_VERSION_NAME = "ro.miui.ui.version.name";
+    private static final String KEY_MIUI_INTERNAL_STORAGE = "ro.miui.internal.storage";
+
+    /**
+     * 判断手机是否是小米
+     * @return
+     */
+    public static boolean isMIUI() {
+        try {
+            final BuildProperties prop = BuildProperties.newInstance();
+            return prop.getProperty(KEY_MIUI_VERSION_CODE, null) != null
+                    || prop.getProperty(KEY_MIUI_VERSION_NAME, null) != null
+                    || prop.getProperty(KEY_MIUI_INTERNAL_STORAGE, null) != null;
+        } catch (final IOException e) {
+            return false;
+        }
+    }
+
+    /**
+     * 设置状态栏文字色值为深色调
+     * @param activity
+     * @param useDart 是否使用深色调
+     * @param isTransparentBar 布局是否延伸到状态栏
+     */
+    public static void setStatusTextColor(Activity activity, boolean useDart, boolean isTransparentBar) {
+        if (isFlyme()) {
+            processFlyMe(useDart, activity);
+        } else if (isMIUI()) {
+            MIUISetStatusBarLightMode(activity ,useDart, isTransparentBar);
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                setStatusTextColor2(activity, useDart, isTransparentBar);
+            }
+        }
+    }
+
+    private static void setStatusTextColor2(Activity activity, boolean useDart, boolean isTransparentBar){
+        int option = 0;
+        int option2 = 0;
+
+        if (isTransparentBar){
+            option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            option2 = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+        } else {
+            option = View.SYSTEM_UI_FLAG_VISIBLE | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            option2 = View.SYSTEM_UI_FLAG_VISIBLE;
+        }
+
+        if (useDart) {
+            activity.getWindow()
+                    .getDecorView()
+                    .setSystemUiVisibility(option);
+        } else {
+            activity.getWindow()
+                    .getDecorView()
+                    .setSystemUiVisibility(option2);
         }
     }
 
@@ -79,79 +127,37 @@ public class StatusBarContentColor {
     }
 
     /**
-     * 改变小米的状态栏字体颜色为黑色, 要求MIUI6以上  lightStatusBar为真时表示黑色字体
+     * 需要MIUIV6以上
+     *
+     * @param dark 是否把状态栏文字及图标颜色设置为深色
+     * @return boolean 成功执行返回true
      */
-    private static void processMIUI(boolean lightStatusBar, Activity activity) {
-        Class<? extends Window> clazz = activity.getWindow().getClass();
-        try {
-            int darkModeFlag;
-            Class<?> layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
-            Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
-            darkModeFlag = field.getInt(layoutParams);
-            Method extraFlagField = clazz.getMethod("setExtraFlags",int.class,int.class);
-            extraFlagField.invoke(activity.getWindow(), lightStatusBar? darkModeFlag : 0, darkModeFlag);
-        } catch (Exception ignored) {
-            ignored.printStackTrace();
-        }
-    }
-
-    private static final String KEY_MIUI_VERSION_CODE = "ro.miui.ui.version.code";
-    private static final String KEY_MIUI_VERSION_NAME = "ro.miui.ui.version.name";
-    private static final String KEY_MIUI_INTERNAL_STORAGE = "ro.miui.internal.storage";
-
-    /**
-     * 判断手机是否是小米
-     * @return
-     */
-    public static boolean isMIUI() {
-        try {
-            final BuildProperties prop = BuildProperties.newInstance();
-            return prop.getProperty(KEY_MIUI_VERSION_CODE, null) != null
-                    || prop.getProperty(KEY_MIUI_VERSION_NAME, null) != null
-                    || prop.getProperty(KEY_MIUI_INTERNAL_STORAGE, null) != null;
-        } catch (final IOException e) {
-            return false;
-        }
-    }
-
-    /**
-     * 判断手机是否是魅族
-     * @return
-     */
-    public static boolean isFlyme() {
-        try {
-            // Invoke Build.hasSmartBar()
-            final Method method = Build.class.getMethod("hasSmartBar");
-            return method != null;
-        } catch (final Exception e) {
-            return false;
-        }
-    }
-
-    /**
-     * 设置状态栏文字色值为深色调
-     * @param useDart 是否使用深色调
-     * @param activity
-     */
-    public static void setStatusTextColor(Activity activity, boolean useDart) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            //android6.0以后可以对状态栏文字和图标进行颜色修改
-            if (useDart) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    activity.getWindow()
-                            .getDecorView()
-                            .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+    private static boolean MIUISetStatusBarLightMode(Activity activity, boolean dark, boolean isTransparentBar) {
+        boolean result = false;
+        Window window = activity.getWindow();
+        if (window != null) {
+            Class clazz = window.getClass();
+            try {
+                int darkModeFlag = 0;
+                Class layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
+                Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
+                darkModeFlag = field.getInt(layoutParams);
+                Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
+                if (dark) {
+                    extraFlagField.invoke(window, darkModeFlag, darkModeFlag);//状态栏透明且黑色字体
+                } else {
+                    extraFlagField.invoke(window, 0, darkModeFlag);//清除黑色字体
                 }
-            } else {
-                activity.getWindow()
-                        .getDecorView()
-                        .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            }
-        } else if (isFlyme()) {
-            processFlyMe(useDart, activity);
-        } else if (isMIUI()) {
-            processMIUI(useDart, activity);
-        }
-    }
+                result = true;
 
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    //开发版 7.7.13 及以后版本采用了系统API，旧方法无效但不会报错，所以两个方式都要加上
+                    setStatusTextColor2(activity, dark, isTransparentBar);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
 }

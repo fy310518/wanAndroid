@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
     @SuppressLint("ResourceAsColor")
     @Override
     public void setStatusBar(Activity activity) {
-        MdStatusBar.setTransparentBar(activity, R.color.statusBar, R.color.statusBar);
+        MdStatusBar.setColorBar(activity, R.color.statusBar, R.color.statusBar);
     }
 
     @Override
@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
                     break;
             }
             beginTransaction(position);
-            StatusBarContentColor.setStatusTextColor(MainActivity.this, useDart);
+            StatusBarContentColor.setStatusTextColor(MainActivity.this, useDart, false);
         });
 
         rBtnOne.setChecked(true);

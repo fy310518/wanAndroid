@@ -23,6 +23,7 @@ import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
 import com.fy.baselibrary.startactivity.StartActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
+import com.fy.baselibrary.statusbar.StatusBarContentColor;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
@@ -72,7 +73,8 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
 
     @Override
     public void setStatusBar(Activity activity) {
-        MdStatusBar.setTransparentBar(activity, R.color.statusBar, R.color.statusBar);
+        MdStatusBar.setColorBar(activity, R.color.statusBar, R.color.statusBar);
+        StatusBarContentColor.setStatusTextColor(this, true, false);
     }
 
     @Override
