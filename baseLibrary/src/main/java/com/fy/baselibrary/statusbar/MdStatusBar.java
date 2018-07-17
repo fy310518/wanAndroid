@@ -79,6 +79,7 @@ public class MdStatusBar {
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
                 window.setNavigationBarColor(finalNavColor);//设置导航栏的颜色
             }
+
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = act.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -99,7 +100,7 @@ public class MdStatusBar {
 
 
     /**
-     * 设置 状态栏和导航栏 的 透明度
+     * 设置 状态栏和导航栏 的 透明度(注：经测试如果使用 【状态栏内容着色】 使用此方法和 setColorBarForDrawer())
      * @param act
      * @param statusColor  StatusBar color
      * @param navColor     NavigationBar color

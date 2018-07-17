@@ -1,5 +1,6 @@
 package com.fy.baselibrary.statusbar;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Build;
 import android.view.View;
@@ -45,6 +46,7 @@ public class StatusBarContentColor {
         }
     }
 
+
     private static final String KEY_MIUI_VERSION_CODE = "ro.miui.ui.version.code";
     private static final String KEY_MIUI_VERSION_NAME = "ro.miui.ui.version.name";
     private static final String KEY_MIUI_INTERNAL_STORAGE = "ro.miui.internal.storage";
@@ -72,7 +74,7 @@ public class StatusBarContentColor {
      */
     public static void setStatusTextColor(Activity activity, boolean useDart, boolean isTransparentBar) {
         if (isFlyme()) {
-            processFlyMe(useDart, activity);
+            processFlyMe(activity, useDart);
         } else if (isMIUI()) {
             MIUISetStatusBarLightMode(activity ,useDart, isTransparentBar);
         } else {
@@ -82,16 +84,27 @@ public class StatusBarContentColor {
         }
     }
 
+    @SuppressLint("InlinedApi")
     private static void setStatusTextColor2(Activity activity, boolean useDart, boolean isTransparentBar){
         int option = 0;
         int option2 = 0;
 
         if (isTransparentBar){
-            option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-            option2 = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+            option = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR |
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+
+            option2 = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
         } else {
-            option = View.SYSTEM_UI_FLAG_VISIBLE | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-            option2 = View.SYSTEM_UI_FLAG_VISIBLE;
+            option = View.SYSTEM_UI_FLAG_VISIBLE |
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+
+            option2 = View.SYSTEM_UI_FLAG_VISIBLE |
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
         }
 
         if (useDart) {
@@ -108,7 +121,7 @@ public class StatusBarContentColor {
     /**
      * 改变魅族的状态栏字体为黑色，要求FlyMe4以上
      */
-    private static void processFlyMe(boolean isLightStatusBar, Activity activity) {
+    private static void processFlyMe(Activity activity, boolean useDart) {
         WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
         try {
             Class<?> instance = Class.forName("android.view.WindowManager$LayoutParams");
@@ -116,7 +129,7 @@ public class StatusBarContentColor {
             Field field = instance.getDeclaredField("meizuFlags");
             field.setAccessible(true);
             int origin = field.getInt(lp);
-            if (isLightStatusBar) {
+            if (useDart) {
                 field.set(lp, origin | value);
             } else {
                 field.set(lp, (~value) & origin);
