@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
@@ -14,6 +15,8 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Streaming;
+
 import com.fy.wanandroid.entity.ArticleBean;
 import com.fy.wanandroid.entity.BannerBean;
 import com.fy.wanandroid.entity.Bookmark;
@@ -191,4 +194,11 @@ public interface ApiService {
     Observable<BeanModule<List<Object>>> booksByTag(@Path("link") String link);
 
 
+    /**************************** 测试 ***********************/
+    /**
+     * 搜索 非表单提交
+     */
+    @Headers({"url_name:user"})
+    @POST("http://192.168.100.251:8089/customer/updateToApp")
+    Observable<BeanModule<Object>> updateToApp(@Body Map<String, Object> options);
 }

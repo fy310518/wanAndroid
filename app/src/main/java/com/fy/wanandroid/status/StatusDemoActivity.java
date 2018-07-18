@@ -1,15 +1,27 @@
 package com.fy.wanandroid.status;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -34,7 +46,9 @@ import com.fy.baselibrary.utils.NightModeUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -46,10 +60,13 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
+import com.fy.baselibrary.utils.NotificationUtils;
 import com.fy.baselibrary.utils.imgload.ImgLoadUtils;
 import com.fy.baselibrary.utils.imgload.imgprogress.ProgressInterceptor;
 import com.fy.baselibrary.utils.imgload.imgprogress.ProgressListener;
 import com.fy.wanandroid.R;
+import com.fy.wanandroid.api.ApiService;
+import com.fy.wanandroid.login.LoginActivity;
 
 /**
  * 多状态布局 demo
@@ -88,18 +105,25 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                 .getSerializableExtra("ActivityBean");
         slManager = activityBean.getSlManager();
 
-        uploadFiles();
+        initNotificationChannel();
 
-        loadImage();
+//        updateUser();
+
+//        uploadFiles();
+
+//        loadImage();
     }
 
 
-    @OnClick({R.id.tvKing})
+    @OnClick({R.id.tvKing, R.id.tvKing2})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tvKing:
-                NightModeUtils.switchNightMode(this);
+                NotificationUtils.manageNotificationChannel(this, "chat");
+                NotificationUtils.sendSubscribeMsg(this, LoginActivity.class, "chat", "收到一条聊天消息", "今天中午吃什么？");
+
+//                NightModeUtils.switchNightMode(this);
 //                slManager.showNetWorkError();
 //                Observable.timer(3000, TimeUnit.MILLISECONDS)
 //                        .subscribeOn(Schedulers.io())
@@ -110,6 +134,9 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 //                                slManager.showError();
 //                            }
 //                        });
+                break;
+            case R.id.tvKing2:
+                NotificationUtils.sendSubscribeMsg(this, null, "subscribe", "收到一条订阅消息", "地铁沿线30万商铺抢购中！");
                 break;
         }
     }
@@ -233,4 +260,43 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                 })
                 .into(imgDemo);
     }
+
+    private void updateUser(){
+        Map<String, Object> parame = new HashMap<>();
+        parame.put("id", 2);
+        parame.put("nickname", "zs");
+        parame.put("sex", 0);
+
+        RequestUtils.create(ApiService.class)
+                .updateToApp(parame)
+                .compose(RxHelper.handleResult())
+                .doOnSubscribe(RequestUtils::addDispos)
+                .subscribe(new NetCallBack<Object>() {
+                    @Override
+                    protected void onSuccess(Object login) {
+
+                    }
+
+                    @Override
+                    protected void updataLayout(int flag) {
+                        L.e("net updataLayout", flag + "-----");
+                    }
+                });
+    }
+
+    private void initNotificationChannel(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String channelId = "chat";
+            String channelName = "聊天消息";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationUtils.createNotificationChannel(this, channelId, channelName, importance);
+
+            channelId = "subscribe";
+            channelName = "订阅消息";
+            importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationUtils.createNotificationChannel(this, channelId, channelName, importance);
+        }
+    }
+
+
 }
