@@ -1,9 +1,5 @@
 package com.fy.baselibrary.retrofit;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-
 import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.base.dialog.CommonDialog;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
@@ -11,28 +7,36 @@ import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NetUtils;
 import com.fy.baselibrary.utils.T;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializer;
+import com.google.gson.JsonSyntaxException;
 
+import org.apache.http.conn.ConnectTimeoutException;
+import org.json.JSONException;
+
+import java.io.NotSerializableException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+import java.text.ParseException;
 
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 
 /**
- * 自定义Subscribe
+ * 自定义 基础功能 Observer
  * Created by fangs on 2017/8/28.
  */
-public abstract class NetCallBack<V> implements Observer<V> {
+public abstract class RequestBaseObserver<V> implements Observer<V> {
 
     private Disposable disposed;
     private IProgressDialog progressDialog;
     private CommonDialog dialog;
 
-    public NetCallBack() {
-    }
+    public RequestBaseObserver() {}
 
-    public NetCallBack(IProgressDialog pDialog) {
+    public RequestBaseObserver(IProgressDialog pDialog) {
         this.progressDialog = pDialog;
         init();
     }
@@ -66,38 +70,41 @@ public abstract class NetCallBack<V> implements Observer<V> {
     public void onError(Throwable e) {
         L.e("net", "onError()");
         e.printStackTrace();
-        if (!NetUtils.isConnected(ConfigUtils.getAppCtx())) {
-            actionResponseError("网络不可用");
-            updataLayout(StatusLayoutManager.LAYOUT_NETWORK_ERROR_ID);
-        } else if (e instanceof ServerException) {
-            if (e.getMessage().equals("请先登录！")) {//token 失效 进入登录页面
-                try {
-                    Class cla = Class.forName("com.fy.wanandroid.login.LoginActivity");
-                    Context context = ConfigUtils.getAppCtx();
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("untoken",true);
-                    Intent intent = new Intent(context, cla);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                    intent.putExtras(bundle);
-                    context.startActivity(intent);
-                } catch (ClassNotFoundException e1) {
-                    e1.printStackTrace();
-                }
-            }
 
-            if (((ServerException) e).code != 401)actionResponseError(e.getMessage());
-            updataLayout(StatusLayoutManager.REQUEST_FAIL);
-        } else if (e instanceof ConnectException) {
-            actionResponseError("请求超时，请稍后再试...");
-            updataLayout(StatusLayoutManager.REQUEST_FAIL);
+        if (!NetUtils.isConnected(ConfigUtils.getAppCtx())) {
+            actionResponseError("网络不可用，请检查您的网络状态，稍后重试！");
+            updataLayout(StatusLayoutManager.LAYOUT_NETWORK_ERROR_ID);
         } else if (e instanceof SocketTimeoutException) {
             actionResponseError("服务器响应超时，请稍后再试...");
+            updataLayout(StatusLayoutManager.LAYOUT_NETWORK_ERROR_ID);
+        } else if (e instanceof ConnectException) {
+            actionResponseError("网络连接异常，请检查您的网络状态，稍后重试！");
+            updataLayout(StatusLayoutManager.LAYOUT_NETWORK_ERROR_ID);
+        } else if (e instanceof ConnectTimeoutException) {
+            actionResponseError("网络连接超时，请检查您的网络状态，稍后重试！");
+            updataLayout(StatusLayoutManager.LAYOUT_NETWORK_ERROR_ID);
+        } else if (e instanceof UnknownHostException) {
+            actionResponseError("域名解析错误，请联系管理员解决后重试！");
+            updataLayout(StatusLayoutManager.LAYOUT_NETWORK_ERROR_ID);
+        } else if (e instanceof javax.net.ssl.SSLHandshakeException) {
+            actionResponseError("证书验证失败！");
+            updataLayout(StatusLayoutManager.REQUEST_FAIL);
+        } else if (e instanceof ClassCastException) {
+            actionResponseError("类型转换错误！");
+            updataLayout(StatusLayoutManager.REQUEST_FAIL);
+        } else if (e instanceof JsonParseException
+                || e instanceof JSONException
+                || e instanceof JsonSyntaxException
+                || e instanceof JsonSerializer
+                || e instanceof NotSerializableException
+                || e instanceof ParseException) {
+            actionResponseError("数据解析错误！");
             updataLayout(StatusLayoutManager.REQUEST_FAIL);
         } else {
             actionResponseError("请求失败，请稍后再试...");
             updataLayout(StatusLayoutManager.REQUEST_FAIL);
         }
+
         dismissProgress();
     }
 
@@ -113,7 +120,7 @@ public abstract class NetCallBack<V> implements Observer<V> {
      *
      * @param msg
      */
-    private void actionResponseError(String msg) {
+    protected void actionResponseError(String msg) {
         T.showShort(msg);
     }
 

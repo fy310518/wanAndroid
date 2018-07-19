@@ -23,7 +23,8 @@ public class BaseApp extends Application {
 
         new ConfigUtils.ConfigBiuder()
                 .setCtx(this)
-                .setBASE_URL("http://www.wanandroid.com/")
+//                .setBASE_URL("http://www.wanandroid.com/")
+                .setBASE_URL("https://www.baidu.com")
                 .create();
 
         int designWidth = (int) ResourceUtils.getMetaData("Rudeness_Adapter_Screen_width", 0);

@@ -6,7 +6,6 @@ import android.text.Html;
 import android.widget.TextView;
 
 import com.fy.baselibrary.base.ViewHolder;
-import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.rv.adapter.RvCommonAdapter;
@@ -16,8 +15,9 @@ import com.fy.baselibrary.utils.TintUtils;
 import java.util.List;
 
 import com.fy.wanandroid.R;
-import com.fy.wanandroid.api.ApiService;
+import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.entity.ArticleBean;
+import com.fy.wanandroid.request.NetCallBack;
 
 /**
  * 首页列表实体类

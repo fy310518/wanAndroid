@@ -20,7 +20,7 @@ public class ConfigUtils {
         return configComponent.getContext();
     }
 
-    public static String getBiuder() {
+    public static String getBaseUrl() {
         return configComponent.getBaseUrl();
     }
 

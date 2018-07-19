@@ -1,27 +1,17 @@
 package com.fy.wanandroid.status;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -32,17 +22,22 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.fy.baselibrary.application.BaseActivityBean;
 import com.fy.baselibrary.application.IBaseActivity;
-import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
-import com.fy.baselibrary.retrofit.load.LoadService;
 import com.fy.baselibrary.retrofit.load.LoadCallBack;
+import com.fy.baselibrary.retrofit.load.LoadService;
 import com.fy.baselibrary.retrofit.load.up.UpLoadUtils;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.utils.NightModeUtils;
+import com.fy.baselibrary.utils.NotificationUtils;
+import com.fy.baselibrary.utils.imgload.imgprogress.ProgressInterceptor;
+import com.fy.baselibrary.utils.imgload.imgprogress.ProgressListener;
+import com.fy.wanandroid.R;
+import com.fy.wanandroid.login.LoginActivity;
+import com.fy.wanandroid.request.ApiService;
+import com.fy.wanandroid.request.NetCallBack;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -59,14 +54,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-
-import com.fy.baselibrary.utils.NotificationUtils;
-import com.fy.baselibrary.utils.imgload.ImgLoadUtils;
-import com.fy.baselibrary.utils.imgload.imgprogress.ProgressInterceptor;
-import com.fy.baselibrary.utils.imgload.imgprogress.ProgressListener;
-import com.fy.wanandroid.R;
-import com.fy.wanandroid.api.ApiService;
-import com.fy.wanandroid.login.LoginActivity;
 
 /**
  * 多状态布局 demo
@@ -107,7 +94,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
         initNotificationChannel();
 
-//        updateUser();
+        updateUser();
 
 //        uploadFiles();
 
@@ -262,14 +249,10 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
     }
 
     private void updateUser(){
-        Map<String, Object> parame = new HashMap<>();
-        parame.put("id", 2);
-        parame.put("nickname", "zs");
-        parame.put("sex", 0);
-
         RequestUtils.create(ApiService.class)
-                .updateToApp(parame)
-                .compose(RxHelper.handleResult())
+                .updateToApp()
+                .subscribeOn(Schedulers.io())//指定的是上游发送事件的线程
+                .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(RequestUtils::addDispos)
                 .subscribe(new NetCallBack<Object>() {
                     @Override

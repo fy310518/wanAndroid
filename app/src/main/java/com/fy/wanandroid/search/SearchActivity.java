@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 
 import com.fy.baselibrary.application.IBaseActivity;
-import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.rv.anim.FadeItemAnimator;
@@ -25,18 +24,19 @@ import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.T;
 import com.fy.baselibrary.widget.EasyPullLayout;
 import com.fy.baselibrary.widget.TransformerView;
+import com.fy.wanandroid.R;
+import com.fy.wanandroid.entity.ArticleBean;
+import com.fy.wanandroid.entity.Bookmark;
+import com.fy.wanandroid.main.fragment.AdapterOne;
+import com.fy.wanandroid.main.fragment.DiffCallBack;
+import com.fy.wanandroid.request.ApiService;
+import com.fy.wanandroid.request.NetCallBack;
+import com.fy.wanandroid.web.WebViewActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import com.fy.wanandroid.R;
-import com.fy.wanandroid.api.ApiService;
-import com.fy.wanandroid.entity.ArticleBean;
-import com.fy.wanandroid.entity.Bookmark;
-import com.fy.wanandroid.main.fragment.AdapterOne;
-import com.fy.wanandroid.main.fragment.DiffCallBack;
-import com.fy.wanandroid.web.WebViewActivity;
 
 /**
  * 搜索

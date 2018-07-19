@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.fy.baselibrary.application.ConfigUtils;
-import com.fy.baselibrary.retrofit.NetCallBack;
+import com.fy.baselibrary.retrofit.RequestBaseObserver;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.TransfmtUtils;
@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * 自定义文件上传、下载 观察者 (增强 NetCallBAck)
  * Created by fangs on 2018/5/21.
  */
-public abstract class LoadCallBack<T> extends NetCallBack<T> {
+public abstract class LoadCallBack<T> extends RequestBaseObserver<T> {
 
     public LoadCallBack() {}
 

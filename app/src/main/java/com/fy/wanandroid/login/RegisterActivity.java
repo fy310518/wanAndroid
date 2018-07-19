@@ -10,7 +10,6 @@ import android.widget.Button;
 
 import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.application.IBaseActivity;
-import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
@@ -21,9 +20,10 @@ import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.cache.ACache;
 import com.fy.wanandroid.R;
-import com.fy.wanandroid.api.ApiService;
 import com.fy.wanandroid.entity.LoginBean;
 import com.fy.wanandroid.main.MainActivity;
+import com.fy.wanandroid.request.ApiService;
+import com.fy.wanandroid.request.NetCallBack;
 import com.fy.wanandroid.utils.SelectUtils;
 
 import java.util.HashMap;
@@ -92,7 +92,7 @@ public class RegisterActivity extends AppCompatActivity implements IBaseActivity
 
     }
 
-    private void register() {
+    private void register() {//正则
         IProgressDialog progressDialog = new IProgressDialog().init(mContext)
                 .setDialogMsg(R.string.register_loading);
 

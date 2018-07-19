@@ -38,7 +38,7 @@ public class RequestUtils {
         mCompositeDisposable = new CompositeDisposable();
     }
 
-    public static synchronized RequestUtils getInstentce(){
+    public static synchronized RequestUtils getInstance(){
         if (null == instentce) {
             synchronized (RequestUtils.class) {
                 if (null == instentce) {
@@ -57,7 +57,7 @@ public class RequestUtils {
      * @return
      */
     public static <T> T create(Class<T> clazz) {
-        return getInstentce().netRetrofit.create(clazz);
+        return getInstance().netRetrofit.create(clazz);
     }
 
     /**
@@ -105,13 +105,13 @@ public class RequestUtils {
      * @param d
      */
     public static void addDispos(Disposable d){
-        getInstentce().mCompositeDisposable.add(d);
+        getInstance().mCompositeDisposable.add(d);
     }
 
     /**
      * 使用RxJava CompositeDisposable 清理所有的网络请求
      */
     public static void clearDispos(){
-        getInstentce().mCompositeDisposable.clear();
+        getInstance().mCompositeDisposable.clear();
     }
 }

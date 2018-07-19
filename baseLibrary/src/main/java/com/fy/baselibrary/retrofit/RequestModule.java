@@ -7,14 +7,17 @@ import com.fy.baselibrary.retrofit.cookie.AddCookiesInterceptor;
 import com.fy.baselibrary.retrofit.cookie.ReceivedCookiesInterceptor;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.SSLUtil;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
+import javax.net.ssl.SSLSocketFactory;
 
 import dagger.Module;
 import dagger.Provides;
@@ -43,7 +46,7 @@ public class RequestModule {
         return new Retrofit.Builder()
                 .addCallAdapterFactory(callAdapterFactory)
                 .addConverterFactory(gsonConverterFactory)
-                .baseUrl(ConfigUtils.getBiuder())
+                .baseUrl(ConfigUtils.getBaseUrl())
                 .client(client)
                 .build();
     }
@@ -70,16 +73,30 @@ public class RequestModule {
     @Singleton
     @Provides
     protected OkHttpClient getClient(HttpLoggingInterceptor interceptor, Interceptor header) {
-        return new OkHttpClient.Builder()
+        InputStream is = null;
+        try {
+            is = ConfigUtils.getAppCtx().getAssets().open("srca.cer");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        SSLSocketFactory sslSocketFactory = SSLUtil.getSSLSocketFactory(is);
+
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectTimeout(Constant.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
                 .readTimeout(Constant.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
                 .writeTimeout(Constant.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
                 .addInterceptor(new ReceivedCookiesInterceptor())
                 .addInterceptor(new AddCookiesInterceptor())
                 .addInterceptor(header)
-//                .addNetworkInterceptor(interceptor)
-                .protocols(Collections.singletonList(Protocol.HTTP_1_1))
-                .build();
+                .addNetworkInterceptor(interceptor)
+                .protocols(Collections.singletonList(Protocol.HTTP_1_1));
+
+
+//        if (ConfigUtils.getBaseUrl().startsWith("https://") && null != sslSocketFactory) {
+//            builder.sslSocketFactory(sslSocketFactory);
+//        }
+
+        return builder.build();
     }
 
     @Singleton

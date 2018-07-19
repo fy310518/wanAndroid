@@ -5,7 +5,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.fy.baselibrary.base.BaseFragment;
-import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
@@ -18,9 +17,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import com.fy.wanandroid.R;
-import com.fy.wanandroid.api.ApiService;
+import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.entity.TreeBean;
 import com.fy.wanandroid.hierarchy.HierarchyActivity;
+import com.fy.wanandroid.request.NetCallBack;
 
 /**
  * 数据

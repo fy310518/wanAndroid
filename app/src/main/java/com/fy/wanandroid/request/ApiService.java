@@ -1,4 +1,4 @@
-package com.fy.wanandroid.api;
+package com.fy.wanandroid.request;
 
 import com.fy.baselibrary.retrofit.BeanModule;
 
@@ -15,7 +15,6 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import retrofit2.http.Streaming;
 
 import com.fy.wanandroid.entity.ArticleBean;
 import com.fy.wanandroid.entity.BannerBean;
@@ -198,7 +197,6 @@ public interface ApiService {
     /**
      * 搜索 非表单提交
      */
-    @Headers({"url_name:user"})
-    @POST("http://192.168.100.251:8089/customer/updateToApp")
-    Observable<BeanModule<Object>> updateToApp(@Body Map<String, Object> options);
+    @GET("")
+    Observable<Object> updateToApp();
 }
