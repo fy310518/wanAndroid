@@ -10,9 +10,9 @@ public class ConfigUtils {
 
     static ConfigComponent configComponent;
 
-    public ConfigUtils(ConfigBiuder biuder) {
+    public ConfigUtils(Context context, ConfigBiuder biuder) {
         configComponent = DaggerConfigComponent.builder()
-                .configModule(new ConfigModule(biuder.ctx, biuder.BASE_URL))
+                .configModule(new ConfigModule(context, biuder))
                 .build();
     }
 
@@ -21,33 +21,34 @@ public class ConfigUtils {
     }
 
     public static String getBaseUrl() {
-        return configComponent.getBaseUrl();
+        return configComponent.getConfigBiuder().BASE_URL;
+    }
+
+    public static String getCer() {
+        return configComponent.getConfigBiuder().cer;
     }
 
 
-
-
     public static class ConfigBiuder {
-        /** 应用 环境 */
-        Context ctx;
 
         /** 网络请求 服务器地址 url */
         String BASE_URL = "";
 
-        public ConfigBiuder setCtx(Context ctx) {
-            this.ctx = ctx;
-            return this;
-        }
+        /** https 公钥证书字符串 */
+        String cer = "";
 
         public ConfigBiuder setBASE_URL(String BASE_URL) {
             this.BASE_URL = BASE_URL;
             return this;
         }
 
+        public ConfigBiuder setCer(String cer) {
+            this.cer = cer;
+            return this;
+        }
 
-
-        public ConfigUtils create(){
-            return new ConfigUtils(this);
+        public ConfigUtils create(Context context){
+            return new ConfigUtils(context, this);
         }
     }
 }

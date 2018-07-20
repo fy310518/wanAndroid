@@ -194,9 +194,8 @@ public interface ApiService {
 
 
     /**************************** 测试 ***********************/
-    /**
-     * 搜索 非表单提交
-     */
-    @GET("")
+//    @GET("https://kyfw.12306.cn/otn/")
+//    @GET("https://www.baidu.com")
+    @GET("https://192.168.100.251:8443/vip/login.html")
     Observable<Object> updateToApp();
 }

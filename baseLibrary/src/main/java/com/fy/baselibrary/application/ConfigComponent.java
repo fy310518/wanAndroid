@@ -14,5 +14,5 @@ public interface ConfigComponent {
 
     Context getContext();
 
-    String  getBaseUrl();
+    ConfigUtils.ConfigBiuder  getConfigBiuder();
 }

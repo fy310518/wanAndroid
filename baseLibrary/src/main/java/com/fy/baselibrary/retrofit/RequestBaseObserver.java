@@ -20,6 +20,8 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.text.ParseException;
 
+import javax.net.ssl.SSLException;
+
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
@@ -86,7 +88,7 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
         } else if (e instanceof UnknownHostException) {
             actionResponseError("域名解析错误，请联系管理员解决后重试！");
             updataLayout(StatusLayoutManager.LAYOUT_NETWORK_ERROR_ID);
-        } else if (e instanceof javax.net.ssl.SSLHandshakeException) {
+        } else if (e instanceof SSLException) {
             actionResponseError("证书验证失败！");
             updataLayout(StatusLayoutManager.REQUEST_FAIL);
         } else if (e instanceof ClassCastException) {

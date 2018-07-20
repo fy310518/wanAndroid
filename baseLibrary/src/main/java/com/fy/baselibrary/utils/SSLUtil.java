@@ -17,6 +17,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
 /**
+ * 证书工具类
  * Created by fangs on 2017/3/1.
  */
 public class SSLUtil {

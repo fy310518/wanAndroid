@@ -15,12 +15,14 @@ import dagger.Provides;
 public class ConfigModule {
 
     private Context context;
-    private String  url;
+    private ConfigUtils.ConfigBiuder  biuder;
 
-    public ConfigModule(Context context, String url) {
+    public ConfigModule(Context context, ConfigUtils.ConfigBiuder  biuder) {
         this.context = context;
-        this.url     = url;
+        this.biuder  = biuder;
     }
+
+
 
     @Singleton
     @Provides
@@ -30,8 +32,7 @@ public class ConfigModule {
 
     @Singleton
     @Provides
-    public String provideUrl(){
-        return url;
+    public ConfigUtils.ConfigBiuder provideCer() {
+        return biuder;
     }
-
 }

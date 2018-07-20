@@ -28,7 +28,7 @@ public abstract class NetCallBack<T> extends RequestBaseObserver<T>{
     public void onError(Throwable e) {
         if (e instanceof ServerException) {
             if (e.getMessage().equals("请先登录！")) {//token 失效 进入登录页面
-                try {
+                try {//SSlPeerUnverifiedException
                     Class cla = Class.forName(AppUtils.getLocalPackageName() + ".login.LoginActivity");
                     Context context = ConfigUtils.getAppCtx();
                     Bundle bundle = new Bundle();

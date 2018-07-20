@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 
 import dagger.Module;
@@ -28,6 +30,7 @@ import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
+import okio.Buffer;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -73,13 +76,6 @@ public class RequestModule {
     @Singleton
     @Provides
     protected OkHttpClient getClient(HttpLoggingInterceptor interceptor, Interceptor header) {
-        InputStream is = null;
-        try {
-            is = ConfigUtils.getAppCtx().getAssets().open("srca.cer");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        SSLSocketFactory sslSocketFactory = SSLUtil.getSSLSocketFactory(is);
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectTimeout(Constant.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
@@ -89,12 +85,17 @@ public class RequestModule {
                 .addInterceptor(new AddCookiesInterceptor())
                 .addInterceptor(header)
                 .addNetworkInterceptor(interceptor)
+                .hostnameVerifier((hostname, session) -> {
+                    return true;//强行返回true 即验证成功
+                })
                 .protocols(Collections.singletonList(Protocol.HTTP_1_1));
 
 
-//        if (ConfigUtils.getBaseUrl().startsWith("https://") && null != sslSocketFactory) {
-//            builder.sslSocketFactory(sslSocketFactory);
-//        }
+        InputStream is = new Buffer().writeUtf8(ConfigUtils.getCer()).inputStream();
+        SSLSocketFactory sslSocketFactory = SSLUtil.getSSLSocketFactory(is);
+        if (!TextUtils.isEmpty(ConfigUtils.getCer()) && null != sslSocketFactory) {
+            builder.sslSocketFactory(sslSocketFactory);
+        }
 
         return builder.build();
     }
