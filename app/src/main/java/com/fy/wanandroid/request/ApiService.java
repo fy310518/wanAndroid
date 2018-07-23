@@ -1,12 +1,15 @@
 package com.fy.wanandroid.request;
 
-import com.fy.baselibrary.retrofit.BeanModule;
+import com.fy.wanandroid.entity.ArticleBean;
+import com.fy.wanandroid.entity.BannerBean;
+import com.fy.wanandroid.entity.Bookmark;
+import com.fy.wanandroid.entity.LoginBean;
+import com.fy.wanandroid.entity.TreeBean;
 
 import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
@@ -15,12 +18,6 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-
-import com.fy.wanandroid.entity.ArticleBean;
-import com.fy.wanandroid.entity.BannerBean;
-import com.fy.wanandroid.entity.Bookmark;
-import com.fy.wanandroid.entity.LoginBean;
-import com.fy.wanandroid.entity.TreeBean;
 
 /**
  * api接口 </p>
@@ -192,10 +189,4 @@ public interface ApiService {
     @GET("http://chapterup.zhuishushenqi.com/chapter/{link}")
     Observable<BeanModule<List<Object>>> booksByTag(@Path("link") String link);
 
-
-    /**************************** 测试 ***********************/
-//    @GET("https://kyfw.12306.cn/otn/")
-//    @GET("https://www.baidu.com")
-    @GET("https://192.168.100.251:8443/vip/login.html")
-    Observable<Object> updateToApp();
 }

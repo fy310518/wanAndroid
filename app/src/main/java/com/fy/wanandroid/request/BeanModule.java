@@ -1,4 +1,6 @@
-package com.fy.baselibrary.retrofit;
+package com.fy.wanandroid.request;
+
+import com.fy.baselibrary.retrofit.BaseBean;
 
 import java.io.Serializable;
 
@@ -6,7 +8,7 @@ import java.io.Serializable;
  * 网络请求 返回数据 格式化对象
  * Created by fangs on 2017/11/6.
  */
-public class BeanModule<T> implements Serializable{
+public class BeanModule<T> implements BaseBean<T>, Serializable{
 
     /**
      * data : {}
@@ -17,10 +19,6 @@ public class BeanModule<T> implements Serializable{
     private T data;
     private int errorCode;
     private String errorMsg;
-
-    public T getData() {
-        return data;
-    }
 
     public void setData(T data) {
         this.data = data;
@@ -55,7 +53,23 @@ public class BeanModule<T> implements Serializable{
      * errorCode如果为负数则认为错误，此时errorMsg会包含错误信息
      * @return
      */
+    @Override
     public boolean isSuccess(){
         return errorCode >= 0;
+    }
+
+    @Override
+    public int getCode() {
+        return errorCode;
+    }
+
+    @Override
+    public String getMsg() {
+        return errorMsg;
+    }
+
+    @Override
+    public T getData() {
+        return data;
     }
 }

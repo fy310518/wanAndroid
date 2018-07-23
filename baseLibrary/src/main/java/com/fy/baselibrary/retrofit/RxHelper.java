@@ -23,18 +23,18 @@ public class RxHelper {
      * @param <T>
      * @return
      */
-    public static <T> ObservableTransformer<BeanModule<T>, T> handleResult() {
+    public static <T> ObservableTransformer<BaseBean<T>, T> handleResult() {
 
-        return new ObservableTransformer<BeanModule<T>, T>() {
+        return new ObservableTransformer<BaseBean<T>, T>() {
             @Override
-            public ObservableSource<T> apply(@NonNull Observable<BeanModule<T>> upstream) {
-                return upstream.flatMap(new Function<BeanModule<T>, ObservableSource<T>>() {
+            public ObservableSource<T> apply(@NonNull Observable<BaseBean<T>> upstream) {
+                return upstream.flatMap(new Function<BaseBean<T>, ObservableSource<T>>() {
                     @Override
-                    public ObservableSource<T> apply(@NonNull BeanModule<T> tBeanModule) throws Exception {
-                        if (tBeanModule.isSuccess()) {
-                            return createData(tBeanModule.getData());
+                    public ObservableSource<T> apply(@NonNull BaseBean<T> baseBean) throws Exception {
+                        if (baseBean.isSuccess()) {
+                            return createData(baseBean.getData());
                         } else {
-                            return Observable.error(new ServerException(tBeanModule.getErrorMsg(), tBeanModule.getErrorCode()));
+                            return Observable.error(new ServerException(baseBean.getMsg(), baseBean.getCode()));
                         }
                     }
                 })

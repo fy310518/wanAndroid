@@ -1,6 +1,6 @@
 package com.fy.baselibrary.retrofit.load;
 
-import com.fy.baselibrary.retrofit.BeanModule;
+import com.fy.baselibrary.retrofit.BaseBean;
 
 import java.util.List;
 
@@ -31,13 +31,13 @@ public interface LoadService {
     @Multipart
     @Headers({"url_name:user"})
     @POST("http://192.168.100.123/hfs/")
-    Observable<BeanModule<String>> uploadPostFile(@Part("token") RequestBody token,
+    Observable<BaseBean<String>> uploadPostFile(@Part("token") RequestBody token,
                                                   @Part("type") RequestBody type,
                                                   @Part List<MultipartBody.Part> files);
 
     @Multipart
     @POST("http://192.168.100.123/hfs/")
-    Observable<BeanModule<Object>> uploadFile1(@Part List<MultipartBody.Part> files);
+    Observable<BaseBean<Object>> uploadFile1(@Part List<MultipartBody.Part> files);
 
     /**
      * 多图片上传

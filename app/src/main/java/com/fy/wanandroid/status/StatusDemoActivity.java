@@ -36,14 +36,11 @@ import com.fy.baselibrary.utils.imgload.imgprogress.ProgressInterceptor;
 import com.fy.baselibrary.utils.imgload.imgprogress.ProgressListener;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.login.LoginActivity;
-import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -93,8 +90,6 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
         slManager = activityBean.getSlManager();
 
         initNotificationChannel();
-
-        updateUser();
 
 //        uploadFiles();
 
@@ -246,25 +241,6 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                     }
                 })
                 .into(imgDemo);
-    }
-
-    private void updateUser(){
-        RequestUtils.create(ApiService.class)
-                .updateToApp()
-                .subscribeOn(Schedulers.io())//指定的是上游发送事件的线程
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(RequestUtils::addDispos)
-                .subscribe(new NetCallBack<Object>() {
-                    @Override
-                    protected void onSuccess(Object login) {
-
-                    }
-
-                    @Override
-                    protected void updataLayout(int flag) {
-                        L.e("net updataLayout", flag + "-----");
-                    }
-                });
     }
 
     private void initNotificationChannel(){
