@@ -32,6 +32,10 @@ public class ConfigUtils {
         return configComponent.getConfigBiuder().loadImg;
     }
 
+    public static int getActHead(){
+        return configComponent.getConfigBiuder().activity_head;
+    }
+
 
     public static class ConfigBiuder {
 
@@ -44,6 +48,8 @@ public class ConfigUtils {
         /** 闪屏页图片 id */
         int loadImg;
 
+        /** 自定义标题栏 */
+        int activity_head;
 
         public ConfigBiuder setBASE_URL(String BASE_URL) {
             this.BASE_URL = BASE_URL;
@@ -60,7 +66,10 @@ public class ConfigUtils {
             return this;
         }
 
-
+        public ConfigBiuder setActivity_head(int activity_head) {
+            this.activity_head = activity_head;
+            return this;
+        }
 
         public ConfigUtils create(Context context){
             return new ConfigUtils(context, this);

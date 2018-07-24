@@ -146,6 +146,9 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
     private void initHead(Activity activity) {
 
         ViewStub vStubTitleBar = activity.findViewById(R.id.vStubTitleBar);
+        if (ConfigUtils.getActHead() != 0){
+            vStubTitleBar.setLayoutResource(ConfigUtils.getActHead());
+        }
         vStubTitleBar.inflate();
 
         //这里全局给Activity设置toolbar和title mate
