@@ -3,7 +3,7 @@
     package="com.fy.wanandroid">
 
     <application
-        android:name="com.fy.baselibrary.application.BaseApp"
+        android:name=".WanAndroidApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -18,10 +18,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/myTransparent">
             <intent-filter>
-                <action android:name="${applicationId}.startactivity.StartActivity" />
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="${applicationId}.startactivity.StartActivity" />
             </intent-filter>
         </activity>
 

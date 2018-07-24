@@ -1,16 +1,17 @@
-package com.fy.baselibrary.application;
+package com.fy.wanandroid;
 
 import android.app.Application;
 
+import com.fy.baselibrary.application.BaseActivityLifecycleCallbacks;
+import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.utils.NightModeUtils;
 import com.fy.baselibrary.utils.ResourceUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
 
 /**
- * 基础 application
- * Created by fangs on 2017/5/5.
+ * Created by fangs on 2018/7/24 17:36.
  */
-public class BaseApp extends Application {
+public class WanAndroidApp extends Application{
 
     @Override
     public void onCreate() {
@@ -18,6 +19,7 @@ public class BaseApp extends Application {
 
         new ConfigUtils.ConfigBiuder()
                 .setCer(CER)
+                .setLoadImg(R.drawable.loading)
                 .setBASE_URL("http://www.wanandroid.com/")
                 .create(this);
 

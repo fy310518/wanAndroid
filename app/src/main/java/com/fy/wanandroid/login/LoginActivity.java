@@ -44,7 +44,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * 登录
+ * 登录 
  * Created by fangs on 2017/12/12.
  */
 public class LoginActivity extends AppCompatActivity implements IBaseActivity {

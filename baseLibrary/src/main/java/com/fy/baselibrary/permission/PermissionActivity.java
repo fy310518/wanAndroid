@@ -73,7 +73,7 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
 
     @Override
     public void setStatusBar(Activity activity) {
-        MdStatusBar.setTransparentBar(activity, R.color.transparent, R.color.transparent);
+        MdStatusBar.setTransparentBar(activity, R.color.transparent, R.color.transparent, true);
     }
 
     @Override

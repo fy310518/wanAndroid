@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fy.baselibrary.R;
+import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.statusbar.MdStatusBar;
@@ -50,15 +51,15 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity 
 
     @Override
     public void setStatusBar(Activity activity) {
-        MdStatusBar.setTransparentBar(activity, R.color.transparent, R.color.transparent);
+        MdStatusBar.setTransparentBar(activity, R.color.transparent, R.color.statusBar, true);
         StatusBarContentColor.setStatusTextColor(this, true, true);
     }
 
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         loadImg = findViewById(R.id.loadImg);
-        int loadImgId = ResourceUtils.getDrableId(this, "loading");
-        loadImg.setImageDrawable(TintUtils.getDrawable(loadImgId));
+        int drawableId = ConfigUtils.getLoadImg();
+        if (drawableId > 0) loadImg.setImageDrawable(TintUtils.getDrawable(drawableId));
 
         Drawable back = TintUtils.getTintDrawable(R.drawable.shape_tag, R.color.alphaBlack);
         tvSkip = findViewById(R.id.tvSkip);

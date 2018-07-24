@@ -16,6 +16,7 @@ import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.load.down.DownManager;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.AppUtils;
+import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.ScreenUtils;
@@ -86,7 +87,7 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
         //基础配置 执行完成，再执行 初始化 activity 操作
         if (null != act) act.initData(activity, savedInstanceState);
 
-        if (BaseApp.mAppStatus == -1) {
+        if (Constant.mAppStatus == -1) {
             Bundle bundle = new Bundle();
             bundle.putString("action", "force_kill");
             JumpUtils.jump(activity, AppUtils.getLocalPackageName() + ".main.MainActivity", bundle);

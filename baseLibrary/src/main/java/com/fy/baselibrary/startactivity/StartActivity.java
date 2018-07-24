@@ -8,9 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.fy.baselibrary.R;
-import com.fy.baselibrary.application.BaseApp;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
+import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.L;
 
@@ -47,7 +47,7 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
     @SuppressLint("CheckResult")
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
-        BaseApp.mAppStatus = 0;
+        Constant.mAppStatus = 0;
 
         //rx 递归删除缓存的压缩文件
         Observable.create((ObservableOnSubscribe<Integer>) emitter -> {

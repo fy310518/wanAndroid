@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
     @SuppressLint("ResourceAsColor")
     @Override
     public void setStatusBar(Activity activity) {
-        MdStatusBar.setColorBar(activity, R.color.statusBar, R.color.statusBar);
+        MdStatusBar.setTransparentBar(activity, R.color.statusBar, R.color.statusBar, false);
     }
 
     @Override

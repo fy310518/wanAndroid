@@ -61,6 +61,10 @@ public class Constant {
 
 
 
+    /**
+     * 记录应用是否被强杀
+     */
+    public static int mAppStatus = -1;
 
     /**
      * APP 当前模式 （日间/夜间）
