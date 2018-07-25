@@ -51,7 +51,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity 
 
     @Override
     public void setStatusBar(Activity activity) {
-        MdStatusBar.setTransparentBar(activity, R.color.transparent, R.color.statusBar, true);
+        MdStatusBar.setTransparentBar(activity, R.color.transparent, R.color.transparent, true);
         StatusBarContentColor.setStatusTextColor(this, true, true);
     }
 

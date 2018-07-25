@@ -148,20 +148,21 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
         ViewStub vStubTitleBar = activity.findViewById(R.id.vStubTitleBar);
         if (ConfigUtils.getActHead() != 0){
             vStubTitleBar.setLayoutResource(ConfigUtils.getActHead());
-        }
-        vStubTitleBar.inflate();
-
-        //这里全局给Activity设置toolbar和title mate
-        Toolbar toolbar = activity.findViewById(R.id.toolbar);
-        toolbar.setTitle(activity.getTitle());
-        if (activity instanceof AppCompatActivity) {
-            AppCompatActivity act = (AppCompatActivity) activity;
-            //设置导航图标要在setSupportActionBar方法之后
-            act.setSupportActionBar(toolbar);
-//            在Toolbar左边显示一个返回按钮
-            act.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//            设置返回按钮监听事件
-            toolbar.setNavigationOnClickListener(v -> JumpUtils.exitActivity(act));
+            vStubTitleBar.inflate();
+        } else {
+            vStubTitleBar.inflate();
+            //这里全局给Activity设置toolbar和title mate
+            Toolbar toolbar = activity.findViewById(R.id.toolbar);
+            toolbar.setTitle(activity.getTitle());
+            if (activity instanceof AppCompatActivity) {
+                AppCompatActivity act = (AppCompatActivity) activity;
+                //设置导航图标要在setSupportActionBar方法之后
+                act.setSupportActionBar(toolbar);
+    //            在Toolbar左边显示一个返回按钮
+                act.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    //            设置返回按钮监听事件
+                toolbar.setNavigationOnClickListener(v -> JumpUtils.exitActivity(act));
+            }
         }
     }
 
