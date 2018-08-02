@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.fy.baselibrary.R;
 import com.fy.baselibrary.retrofit.RequestUtils;
@@ -19,6 +20,7 @@ import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.ResourceUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
 
 import butterknife.ButterKnife;
@@ -146,23 +148,32 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
     private void initHead(Activity activity) {
 
         ViewStub vStubTitleBar = activity.findViewById(R.id.vStubTitleBar);
-        if (ConfigUtils.getActHead() != 0){
-            vStubTitleBar.setLayoutResource(ConfigUtils.getActHead());
-            vStubTitleBar.inflate();
+        vStubTitleBar.inflate();
+        //这里全局给Activity设置toolbar和title mate
+        Toolbar toolbar = activity.findViewById(R.id.toolbar);
+
+        if (ConfigUtils.isTitleCenter()) {
+            toolbar.setTitle("");
+            TextView toolbarTitle = activity.findViewById(R.id.toolbarTitle);
+            toolbarTitle.setText(activity.getTitle());
+            toolbarTitle.setTextColor(ResourceUtils.getColor(ConfigUtils.getTitleColor()));
+            toolbarTitle.setVisibility(View.VISIBLE);
         } else {
-            vStubTitleBar.inflate();
-            //这里全局给Activity设置toolbar和title mate
-            Toolbar toolbar = activity.findViewById(R.id.toolbar);
             toolbar.setTitle(activity.getTitle());
-            if (activity instanceof AppCompatActivity) {
-                AppCompatActivity act = (AppCompatActivity) activity;
-                //设置导航图标要在setSupportActionBar方法之后
-                act.setSupportActionBar(toolbar);
-    //            在Toolbar左边显示一个返回按钮
-                act.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    //            设置返回按钮监听事件
-                toolbar.setNavigationOnClickListener(v -> JumpUtils.exitActivity(act));
-            }
+        }
+
+        if (activity instanceof AppCompatActivity) {
+            AppCompatActivity act = (AppCompatActivity) activity;
+            //设置导航图标要在setSupportActionBar方法之后
+            act.setSupportActionBar(toolbar);
+            //在Toolbar左边显示一个返回按钮
+            act.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            //替换toolbar 自带的返回按钮
+            if (ConfigUtils.getBackImg() > 0) toolbar.setNavigationIcon(ConfigUtils.getBackImg());
+            //设置返回按钮监听事件
+            toolbar.setNavigationOnClickListener(v -> JumpUtils.exitActivity(act));
+
+            if (ConfigUtils.getBgColor() > 0)toolbar.setBackgroundColor(ResourceUtils.getColor(ConfigUtils.getBgColor()));
         }
     }
 

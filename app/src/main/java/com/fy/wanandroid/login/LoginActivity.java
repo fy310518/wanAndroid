@@ -47,7 +47,7 @@ import butterknife.OnClick;
  * 登录 
  * Created by fangs on 2017/12/12.
  */
-public class LoginActivity extends AppCompatActivity implements IBaseActivity {
+public class LoginActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
     private AppCompatActivity mContext;
 
     @BindView(R.id.editName)

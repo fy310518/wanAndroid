@@ -1,17 +1,14 @@
 package com.fy.wanandroid.entity;
 
+import com.fy.baselibrary.rv.divider.sticky.StickyBean;
+
 import java.io.Serializable;
 
 /**
  * 热词 or 常用网站实体类
  * Created by fangs on 2018/4/11.
  */
-public class Bookmark implements Serializable {
-
-    /**
-     * item type
-     */
-    private int itemType;
+public class Bookmark extends StickyBean implements Serializable {
 
     /**
      * icon :
@@ -31,16 +28,12 @@ public class Bookmark implements Serializable {
 
     public Bookmark(String name, int itemType) {
         this.name = name;
-        this.itemType = itemType;
+        setItemType(itemType);
     }
 
     public Bookmark(String name, String link) {
         this.name = name;
         this.link = link;
-    }
-
-    public int getItemType() {
-        return itemType;
     }
 
     public String getIcon() {

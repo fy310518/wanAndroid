@@ -36,7 +36,7 @@ import com.fy.wanandroid.entity.Bookmark;
  * 通用 加载 web 网页 activity
  * Created by fangs on 2018/4/13.
  */
-public class WebViewActivity extends AppCompatActivity implements IBaseActivity {
+public class WebViewActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
     private static final String TAG = "WebViewActivity";
 
     StatusLayoutManager slm;

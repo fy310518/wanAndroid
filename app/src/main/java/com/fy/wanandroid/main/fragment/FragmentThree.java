@@ -12,7 +12,13 @@ import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.widget.EasyPullLayout;
 import com.fy.baselibrary.widget.TransformerView;
+import com.fy.wanandroid.R;
+import com.fy.wanandroid.entity.Bookmark;
+import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
+import com.fy.wanandroid.search.SearchActivity;
+import com.fy.wanandroid.utils.FlexboxStickyDecoration;
+import com.fy.wanandroid.web.WebViewActivity;
 import com.google.android.flexbox.AlignItems;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexWrap;
@@ -26,12 +32,6 @@ import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import com.fy.wanandroid.R;
-import com.fy.wanandroid.request.ApiService;
-import com.fy.wanandroid.entity.Bookmark;
-import com.fy.wanandroid.search.SearchActivity;
-import com.fy.wanandroid.utils.sticky.StickyItemDecoration;
-import com.fy.wanandroid.web.WebViewActivity;
 
 /**
  * 书签
@@ -67,7 +67,7 @@ public class FragmentThree extends BaseFragment {
         layoutManager.setJustifyContent(JustifyContent.SPACE_BETWEEN);
 
         rvBookmark.setLayoutManager(layoutManager);
-        rvBookmark.addItemDecoration(new StickyItemDecoration());
+        rvBookmark.addItemDecoration(new FlexboxStickyDecoration());
         rvAdapter = new AdapterThree(getContext(), new ArrayList<>());
         rvAdapter.setItemClickListner(view -> {
             Bookmark item = (Bookmark) view.getTag();

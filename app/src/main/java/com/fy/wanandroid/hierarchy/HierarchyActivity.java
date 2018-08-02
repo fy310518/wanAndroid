@@ -23,7 +23,7 @@ import com.fy.wanandroid.entity.TreeBean;
  * 知识体系 下的文章
  * Created by fangs on 2018/4/24.
  */
-public class HierarchyActivity extends AppCompatActivity implements IBaseActivity {
+public class HierarchyActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;

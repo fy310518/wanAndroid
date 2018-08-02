@@ -56,7 +56,7 @@ import io.reactivex.schedulers.Schedulers;
  * 多状态布局 demo
  * Created by fangs on 2018/3/16.
  */
-public class StatusDemoActivity extends AppCompatActivity implements IBaseActivity {
+public class StatusDemoActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
 
     @BindView(R.id.imgDemo)
     ImageView imgDemo;

@@ -35,7 +35,7 @@ import butterknife.BindView;
  * 我的收藏 列表
  * Created by fangs on 2018/4/19.
  */
-public class MyCollectActivity extends AppCompatActivity implements IBaseActivity {
+public class MyCollectActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
 
     @BindView(R.id.epl)
     EasyPullLayout epl;

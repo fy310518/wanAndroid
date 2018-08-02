@@ -53,7 +53,7 @@ import butterknife.BindView;
  * 体育联盟 主界面
  * Created by fangs on 2017/12/12.
  */
-public class MainActivity extends AppCompatActivity implements IBaseActivity {
+public class MainActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener{
 
     private AppCompatActivity mContext;
 

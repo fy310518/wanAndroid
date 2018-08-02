@@ -25,7 +25,7 @@ import io.reactivex.schedulers.Schedulers;
  * 不可见Activity 用于控制程序 退出(入口activity)
  * Created by fangs on 2017/4/26.
  */
-public class StartActivity extends AppCompatActivity implements IBaseActivity {
+public class StartActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
 
     private static final String FLAG_EXIT = "FLAG_EXIT_APP";
 

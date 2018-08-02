@@ -20,7 +20,7 @@ import com.fy.wanandroid.R;
  * 下载文件 演示 activity
  * Created by fangs on 2018/6/1.
  */
-public class DownFileActivity extends AppCompatActivity implements IBaseActivity {
+public class DownFileActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
 
     @BindView(R.id.rvDownList)
     RecyclerView rvDownList;

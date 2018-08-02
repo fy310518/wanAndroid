@@ -10,7 +10,7 @@ import android.view.View;
  * 项目自己新建的 activity 建议实现 此 接口
  * Created by fangs on 2018/3/13.
  */
-public interface IBaseActivity extends View.OnClickListener{
+public interface IBaseActivity {
 
     /**
      * 是否显示 头部 标题栏
@@ -33,12 +33,6 @@ public interface IBaseActivity extends View.OnClickListener{
      * 初始化Activity 数据
      */
     void initData(Activity activity, Bundle savedInstanceState);
-
-    /**
-     * 点击事件 回调
-     * @param v
-     */
-    void onClick(View v);
 
     /**
      * 多布局 点击重试

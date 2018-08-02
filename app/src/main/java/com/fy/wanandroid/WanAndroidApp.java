@@ -18,8 +18,11 @@ public class WanAndroidApp extends Application{
         super.onCreate();
 
         new ConfigUtils.ConfigBiuder()
-                .setCer(CER)
+                .setBgColor(R.color.appHeadBg)
+                .setTitleColor(R.color.red)
+                .setTitleCenter(true)
                 .setLoadImg(R.drawable.loading)
+                .setCer(CER)
                 .setBASE_URL("http://www.wanandroid.com/")
                 .create(this);
 

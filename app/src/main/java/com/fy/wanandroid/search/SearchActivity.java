@@ -42,7 +42,7 @@ import butterknife.BindView;
  * 搜索
  * Created by fangs on 2018/4/13.
  */
-public class SearchActivity extends AppCompatActivity implements IBaseActivity {
+public class SearchActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
 
     SearchView searchView;
 

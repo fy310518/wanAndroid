@@ -29,7 +29,7 @@ import java.util.List;
  * https://github.com/KCrason/PermissionGranted
  * Created by github on 2017/8/17.
  */
-public class PermissionActivity extends AppCompatActivity implements IBaseActivity {
+public class PermissionActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
 
     /** 权限请求 状态码 */
     private final static int PERMISSION_REQUEST_CODE = 0x01;

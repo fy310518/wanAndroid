@@ -32,8 +32,20 @@ public class ConfigUtils {
         return configComponent.getConfigBiuder().loadImg;
     }
 
-    public static int getActHead(){
-        return configComponent.getConfigBiuder().activity_head;
+    public static int getTitleColor(){
+        return configComponent.getConfigBiuder().titleColor;
+    }
+
+    public static int getBgColor(){
+        return configComponent.getConfigBiuder().bgColor;
+    }
+
+    public static boolean isTitleCenter(){
+        return configComponent.getConfigBiuder().isTitleCenter;
+    }
+
+    public static int getBackImg(){
+        return configComponent.getConfigBiuder().backImg;
     }
 
 
@@ -48,8 +60,16 @@ public class ConfigUtils {
         /** 闪屏页图片 id */
         int loadImg;
 
-        /** 自定义标题栏 */
-        int activity_head;
+
+        /** 标题栏背景色 */
+        int bgColor;
+        /** 标题是否居中 */
+        boolean isTitleCenter;
+        /** 标题字体颜色 */
+        int titleColor;
+
+        /** 标题栏返回按钮 图片 */
+        int backImg;
 
         public ConfigBiuder setBASE_URL(String BASE_URL) {
             this.BASE_URL = BASE_URL;
@@ -66,10 +86,26 @@ public class ConfigUtils {
             return this;
         }
 
-        public ConfigBiuder setActivity_head(int activity_head) {
-            this.activity_head = activity_head;
+        public ConfigBiuder setBgColor(int bgColor) {
+            this.bgColor = bgColor;
             return this;
         }
+
+        public ConfigBiuder setTitleColor(int titleColor) {
+            this.titleColor = titleColor;
+            return this;
+        }
+
+        public ConfigBiuder setTitleCenter(boolean titleCenter) {
+            isTitleCenter = titleCenter;
+            return this;
+        }
+
+        public ConfigBiuder setBackImg(int backImg) {
+            this.backImg = backImg;
+            return this;
+        }
+
 
         public ConfigUtils create(Context context){
             return new ConfigUtils(context, this);
