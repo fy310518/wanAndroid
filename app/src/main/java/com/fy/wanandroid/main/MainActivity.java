@@ -13,10 +13,10 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -53,7 +53,7 @@ import butterknife.BindView;
  * 体育联盟 主界面
  * Created by fangs on 2017/12/12.
  */
-public class MainActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
 
     private AppCompatActivity mContext;
 
@@ -240,6 +240,9 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.menuLayout://菜单按钮
+                JumpUtils.jump(this, SearchActivity.class, null);
+                break;
             case R.id.btnLoginOrExit://登录 or 退出登录
                 boolean isLogin = SpfUtils.getSpfSaveBoolean(Constant.isLogin);
                 if (isLogin) {
@@ -276,19 +279,13 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_search, menu);
+        getMenuInflater().inflate(R.menu.menu_icon_layout, menu);
+        View menuLayout = menu.findItem(R.id.menuSchedule).getActionView();
+        menuLayout.setOnClickListener(this);
+
+        AppCompatImageView imgMenu = menuLayout.findViewById(R.id.imgMenu);
+        imgMenu.setImageResource(R.drawable.svg_search);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.search://搜索
-                JumpUtils.jump(this, SearchActivity.class, null);
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     //    初始化导航视图
