@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.StyleRes;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,8 @@ public abstract class CommonPopupWindow extends PopupWindow {
     protected int layoutId;
     View view;
 
-    int mWidth, mHeight;//弹窗的宽和高
+    /** 宽度，高度 -1(ViewGroup.LayoutParams.MATCH_PARENT)：撑满；-2(ViewGroup.LayoutParams.WRAP_CONTENT)：自适应； 其他固定数值 */
+    int mWidth = -2, mHeight = -2;//弹窗的宽和高
 
     boolean isShowAnim;
     int anim;//动画Id
@@ -85,15 +87,8 @@ public abstract class CommonPopupWindow extends PopupWindow {
     protected void initParams(View view) {
         setContentView(view);
 
-        if (mWidth == 0 || mHeight == 0) {
-            //如果没设置宽高，默认是WRAP_CONTENT
-            setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
-            setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        } else {
-            setWidth(DensityUtils.dp2px(mWidth));
-            setHeight(DensityUtils.dp2px(mHeight));
-        }
-
+        setWidth(mWidth > 0 ?   DensityUtils.dp2px(mWidth)  : mWidth);
+        setHeight(mHeight > 0 ? DensityUtils.dp2px(mHeight) : mHeight);
 
         //设置动画
         if (isShowAnim)setAnimationStyle(anim);
@@ -115,7 +110,7 @@ public abstract class CommonPopupWindow extends PopupWindow {
      * 设置添加屏幕的背景透明度
      * @param bgAlpha
      */
-    public void bgAlpha(float bgAlpha) {
+    private void bgAlpha(float bgAlpha) {
         WindowManager.LayoutParams lp = ((Activity) mContext).getWindow().getAttributes();
         lp.alpha = bgAlpha;
         ((Activity) mContext).getWindow().setAttributes(lp);
@@ -165,12 +160,12 @@ public abstract class CommonPopupWindow extends PopupWindow {
     }
 
     /**
-     * 设置动画
+     * 设置进出动画（声明的动画样式 id）
      * @return CommonPopupWindow
      */
-    public CommonPopupWindow setAnim(int anim) {
+    public CommonPopupWindow setAnim(@StyleRes int animID) {
         isShowAnim = true;
-        this.anim = anim;
+        this.anim = animID;
         return this;
     }
 

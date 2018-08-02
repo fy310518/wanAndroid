@@ -19,8 +19,8 @@ public class WanAndroidApp extends Application{
 
         new ConfigUtils.ConfigBiuder()
                 .setBgColor(R.color.appHeadBg)
-                .setTitleColor(R.color.red)
-                .setTitleCenter(true)
+//                .setTitleColor(R.color.red)
+//                .setTitleCenter(true)
                 .setLoadImg(R.drawable.loading)
                 .setCer(CER)
                 .setBASE_URL("http://www.wanandroid.com/")
