@@ -304,7 +304,7 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
      * @param constraint    过滤条件
      * @return              满足过滤条件返回 true
      */
-    private boolean filterRule(Item value, CharSequence constraint){
+    public boolean filterRule(Item value, CharSequence constraint){
         return false;
     }
 }
