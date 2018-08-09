@@ -207,7 +207,28 @@ public class JumpUtils {
         }
     }
 
+    /**
+     * 跳转到浏览器 打开指定 URL链接
+     * @param act
+     * @param url
+     */
+    public static void jump(Activity act, String url){
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        act.startActivity(intent);
+    }
 
+    /**
+     * 跳转到 对应 action的设置界面
+     * @param act     如：Settings.ACTION_APPLICATION_DETAILS_SETTINGS(权限设置)
+     * @param action
+     */
+    public static void jumpSettting(Activity act, String action){
+        Intent localIntent = new Intent();
+        localIntent.setAction(action);
+        localIntent.setData(Uri.fromParts("package", act.getPackageName(), null));
+        act.startActivity(localIntent);
+    }
 
 
     /**
@@ -243,16 +264,7 @@ public class JumpUtils {
         }
     }
 
-    /**
-     * 跳转到浏览器 打开指定 URL链接
-     * @param act
-     * @param url
-     */
-    public static void jump(Activity act, String url){
-        Uri uri = Uri.parse(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        act.startActivity(intent);
-    }
+
 
 
 

@@ -3,8 +3,8 @@ package com.fy.baselibrary.permission;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -19,6 +19,7 @@ import com.fy.baselibrary.base.dialog.CommonDialog;
 import com.fy.baselibrary.base.dialog.DialogConvertListener;
 import com.fy.baselibrary.base.dialog.NiceDialog;
 import com.fy.baselibrary.statusbar.MdStatusBar;
+import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.ResourceUtils;
 
 import java.util.ArrayList;
@@ -153,10 +154,7 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
     public void onSurePermission(boolean isRefuse) {
         if (isRefuse) {
             isToSettingPermission = true;
-            Intent localIntent = new Intent();
-            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
-            localIntent.setData(Uri.fromParts("package", getPackageName(), null));
-            startActivity(localIntent);
+            JumpUtils.jumpSettting(this, Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         } else {
             checkPermission(mPermissions);
         }

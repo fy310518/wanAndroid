@@ -15,7 +15,6 @@
             android:name="com.fy.baselibrary.startactivity.StartActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
             android:theme="@style/myTransparent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

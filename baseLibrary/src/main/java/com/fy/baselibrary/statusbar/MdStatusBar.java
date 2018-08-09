@@ -254,27 +254,12 @@ public class MdStatusBar {
     }
 
     /**
-     * 颜色 透明度 判断（必须在 0 --- 255之间）
-     * @param depthOrAlpha
-     * @return
-     */
-    public static int limitDepthOrAlpha(int depthOrAlpha) {
-        if (depthOrAlpha < 0) {
-            return 0;
-        }
-        if (depthOrAlpha > 255) {
-            return 255;
-        }
-        return depthOrAlpha;
-    }
-
-    /**
      * 创建一个 状态栏 高度的 view
      * @param context
      * @param color
      * @return
      */
-    private static View createStatusBarView(Context context, @ColorInt int color) {
+    public static View createStatusBarView(Context context, @ColorInt int color) {
         View statusBarView = new View(context);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams
                 (FrameLayout.LayoutParams.MATCH_PARENT, ScreenUtils.getStatusHeight());
@@ -284,7 +269,13 @@ public class MdStatusBar {
         return statusBarView;
     }
 
-    private static View createNavBarView(Context context, @ColorInt int color) {
+    /**
+     * 创建一个导航栏高度的 view
+     * @param context
+     * @param color
+     * @return
+     */
+    public static View createNavBarView(Context context, @ColorInt int color) {
         View navBarView = new View(context);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams
                 (FrameLayout.LayoutParams.MATCH_PARENT, ScreenUtils.getNavigationHeight());
@@ -294,8 +285,12 @@ public class MdStatusBar {
         return navBarView;
     }
 
-
-    private static boolean navigationBarExist(Activity activity) {
+    /**
+     * 判断导航栏是否存在
+     * @param activity
+     * @return
+     */
+    public static boolean navigationBarExist(Activity activity) {
         WindowManager windowManager = activity.getWindowManager();
         Display d = windowManager.getDefaultDisplay();
 
@@ -317,19 +312,6 @@ public class MdStatusBar {
     }
 
 
-    @ColorInt
-    private static int calculateColor(@ColorInt int color, int alpha) {
-        float a = 1 - alpha / 255f;
-        int red = color >> 16 & 0xff;
-        int green = color >> 8 & 0xff;
-        int blue = color & 0xff;
-        red = (int) (red * a + 0.5);
-        green = (int) (green * a + 0.5);
-        blue = (int) (blue * a + 0.5);
-        return 0xff << 24 | red << 16 | green << 8 | blue;
-    }
-
-
     public static void setRootView(Activity activity, boolean fit) {
         ViewGroup parent = activity.findViewById(android.R.id.content);
         for (int i = 0; i < parent.getChildCount(); i++) {
@@ -339,6 +321,40 @@ public class MdStatusBar {
                 ((ViewGroup) childView).setClipToPadding(fit);
             }
         }
+    }
+
+
+    /**
+     * 颜色 透明度 判断（必须在 0 --- 255之间）
+     * @param depthOrAlpha
+     * @return
+     */
+    public static int limitDepthOrAlpha(int depthOrAlpha) {
+        if (depthOrAlpha < 0) {
+            return 0;
+        }
+        if (depthOrAlpha > 255) {
+            return 255;
+        }
+        return depthOrAlpha;
+    }
+
+    /**
+     * 根据颜色 值和颜色深度（透明度）计算 颜色值
+     * @param color
+     * @param alpha
+     * @return
+     */
+    @ColorInt
+    public static int calculateColor(@ColorInt int color, int alpha) {
+        float a = 1 - alpha / 255f;
+        int red = color >> 16 & 0xff;
+        int green = color >> 8 & 0xff;
+        int blue = color & 0xff;
+        red = (int) (red * a + 0.5);
+        green = (int) (green * a + 0.5);
+        blue = (int) (blue * a + 0.5);
+        return 0xff << 24 | red << 16 | green << 8 | blue;
     }
 
 }

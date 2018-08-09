@@ -41,22 +41,22 @@ public class DensityUtils {
     /**
      * sp转px
      *
-     * @param context
      * @param spVal
      * @return
      */
-    public static int sp2px(Context context, float spVal) {
+    public static int sp2px(float spVal) {
+        Context context = ConfigUtils.getAppCtx();
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, spVal, context.getResources().getDisplayMetrics());
     }
 
     /**
      * px转dp
      *
-     * @param context
      * @param pxVal
      * @return
      */
-    public static float px2dp(Context context, float pxVal) {
+    public static float px2dp(float pxVal) {
+        Context context = ConfigUtils.getAppCtx();
         final float scale = context.getResources().getDisplayMetrics().density;
         return (pxVal / scale);
     }
@@ -64,22 +64,21 @@ public class DensityUtils {
     /**
      * px转sp
      *
-     * @param context
      * @param pxVal
      * @return
      */
-    public static float px2sp(Context context, float pxVal) {
+    public static float px2sp(float pxVal) {
+        Context context = ConfigUtils.getAppCtx();
         return (pxVal / context.getResources().getDisplayMetrics().scaledDensity);
     }
 
     /**
      * px 转 pt （1pt＝1/72英寸）
-     * @param context
      * @param pxVal
      * @return
      */
-    public static float px2pt(Context context, float pxVal){
-
+    public static float px2pt(float pxVal){
+        Context context = ConfigUtils.getAppCtx();
         return (pxVal / context.getResources().getDisplayMetrics().xdpi) * 72;
     }
 

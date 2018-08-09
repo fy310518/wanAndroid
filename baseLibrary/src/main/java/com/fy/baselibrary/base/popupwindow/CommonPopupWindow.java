@@ -2,7 +2,9 @@ package com.fy.baselibrary.base.popupwindow;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.StyleRes;
@@ -123,7 +125,27 @@ public abstract class CommonPopupWindow extends PopupWindow {
         if (null != dismissListner) dismissListner.onDismiss();
     }
 
+    @Override
+    public void showAsDropDown(View anchor) {
+        popupShowAdapter(anchor);
+        super.showAsDropDown(anchor);
+    }
 
+    @Override
+    public void showAsDropDown(View anchor, int xoff, int yoff) {
+        popupShowAdapter(anchor);
+        super.showAsDropDown(anchor, xoff, yoff);
+    }
+
+    /** 适配 7.0 以上版本 popupwindow 显示全屏问题 */
+    private void popupShowAdapter(View anchor){
+        if(Build.VERSION.SDK_INT >= 24) {
+            Rect rect = new Rect();
+            anchor.getGlobalVisibleRect(rect);
+            int h = anchor.getResources().getDisplayMetrics().heightPixels - rect.bottom;
+            setHeight(h);
+        }
+    }
 
     /**
      * 设置宽度和高度 如果不设置 默认是wrap_content
