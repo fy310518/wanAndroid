@@ -20,6 +20,11 @@ import io.reactivex.functions.Consumer;
  */
 public class BleUtils {
 
+    private BleUtils() {
+        /* cannot be instantiated */
+        throw new UnsupportedOperationException("cannot be instantiated");
+    }
+
     /**
      * 获取本机的 蓝牙adapter
      * @param context

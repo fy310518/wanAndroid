@@ -2,7 +2,6 @@ package com.fy.wanandroid.login;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -16,7 +15,7 @@ import android.widget.Button;
 
 import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.application.IBaseActivity;
-import com.fy.baselibrary.permission.PermissionActivity;
+import com.fy.baselibrary.permission.PermissionFragment;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
@@ -30,14 +29,15 @@ import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.T;
 import com.fy.baselibrary.utils.cache.ACache;
 import com.fy.wanandroid.R;
-import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.entity.LoginBean;
 import com.fy.wanandroid.main.MainActivity;
+import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
 import com.fy.wanandroid.status.StatusDemoActivity;
 import com.fy.wanandroid.utils.SelectUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -81,15 +81,8 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         mContext = this;
-
-        Bundle bundle = new Bundle();
-        bundle.putStringArray(PermissionActivity.KEY_PERMISSIONS_ARRAY,
-                new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO});
-
-        JumpUtils.jump(this, PermissionActivity.class, bundle, PermissionActivity.CALL_BACK_PERMISSION_REQUEST_CODE);
-
         btnLogin.setBackground(SelectUtils.getBtnSelector(R.drawable.shape_btn));
-
+        requestPermission();
         editPass.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -117,7 +110,8 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnLogin:
-                login();
+//                login();
+                requestPermission();
                 break;
             case R.id.tvRegister:
 //                JumpUtils.jump(mContext, RegisterActivity.class, null);
@@ -185,21 +179,6 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
                 });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PermissionActivity.CALL_BACK_PERMISSION_REQUEST_CODE) {
-            switch (resultCode) {
-                case PermissionActivity.CALL_BACK_RESULT_CODE_SUCCESS:
-                    T.showLong("权限申请成功！");
-                    break;
-                case PermissionActivity.CALL_BACK_RESULE_CODE_FAILURE:
-                    T.showLong("权限申请失败！");
-                    break;
-            }
-        }
-    }
-
     //保存点击的时间
     private long exitTime = 0;
     @Override
@@ -218,4 +197,24 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    /**
+     * 请求权限 demo
+     */
+    private void requestPermission(){
+        String[] permission = new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
+        PermissionFragment.newInstant(permission)
+                .prepareRequest(this, new PermissionFragment.OnPermission() {
+                    @Override
+                    public void hasPermission(List<String> denied, boolean isAll) {
+                        T.showLong("权限请求成功" + isAll);
+                    }
+
+                    @Override
+                    public void noPermission(List<String> denied) {
+                        T.showLong("权限请求失败");
+                    }
+                });
+    }
+
 }

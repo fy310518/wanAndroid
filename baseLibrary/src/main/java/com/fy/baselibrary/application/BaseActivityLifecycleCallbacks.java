@@ -44,7 +44,7 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-        L.e(TAG, activity.getClass().getName() + "--Create()");
+        L.e(TAG, activity.getClass().getName() + "--Create()   " + activity.getTaskId());
         ScreenUtils.setCustomDensity(activity, designWidth);
 
         BaseActivityBean activityBean = new BaseActivityBean();

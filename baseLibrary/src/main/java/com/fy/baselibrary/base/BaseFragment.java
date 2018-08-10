@@ -38,8 +38,10 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (null == mRootView) {
-            mRootView = inflater.inflate(setContentLayout(), container, false);
-            unbinder = ButterKnife.bind(this, mRootView);
+            if (setContentLayout() > 0){
+                mRootView = inflater.inflate(setContentLayout(), container, false);
+                unbinder = ButterKnife.bind(this, mRootView);
+            }
 
             baseInit();
         } else {

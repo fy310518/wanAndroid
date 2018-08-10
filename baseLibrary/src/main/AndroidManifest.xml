@@ -12,11 +12,6 @@
             android:label="@string/srartUpTitle"
             android:screenOrientation="portrait" />
 
-        <!-- 全局 权限管理 -->
-        <activity
-            android:name=".permission.PermissionActivity"
-            android:label="@string/permission"
-            android:theme="@style/myTransparent" />
 
         <!-- Android 7.0 在应用间共享文件 -->
         <provider
