@@ -80,6 +80,8 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
     @Override
     public void setStatusBar(Activity activity) {
+        MdStatusBar.statusAlpha = 0;
+        MdStatusBar.navAlpha = 0;
         MdStatusBar.setColorBar(activity, R.color.statusBar, R.color.statusBar);
     }
 

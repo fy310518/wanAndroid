@@ -30,6 +30,7 @@ import com.fy.baselibrary.statusbar.StatusBarContentColor;
 import com.fy.baselibrary.utils.AnimUtils;
 import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.Constant;
+import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NightModeUtils;
@@ -137,11 +138,6 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
         Intent intent1 = getIntent();
         Bundle bundle = intent.getExtras();
         if (null != bundle) {
-            String action = bundle.getString("action");
-            if (!TextUtils.isEmpty(action) && "force_kill".equals(action)) {
-                JumpUtils.jump(this, AppUtils.getLocalPackageName() + ".startactivity.StartActivity", null);
-            }
-
             intent1 = intent1.putExtras(bundle);
             super.onNewIntent(intent1);
             setIntent(intent1);//intent传值 接收不到问题，关键在这句

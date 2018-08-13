@@ -164,12 +164,13 @@ public class AppUtils {
 
         for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
             if (appProcess.processName.equals(context.getPackageName())) {
-                /*
-                BACKGROUND=400 EMPTY=500 FOREGROUND=100
-                GONE=1000 PERCEPTIBLE=130 SERVICE=300 ISIBLE=200
-                 */
-                L.i(context.getPackageName(), "此appimportace =" + appProcess.importance + ",context.getClass().getName()=" + context.getClass().getName());
+//                BACKGROUND=400 EMPTY=500 FOREGROUND=100
+//                GONE=1000 PERCEPTIBLE=130 SERVICE=300 ISIBLE=200
+
+                int pid = appProcess.pid;
+
                 if (appProcess.importance != ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+
                     L.i(context.getPackageName(), "处于后台" + appProcess.processName);
                     return true;
                 } else {
@@ -179,6 +180,27 @@ public class AppUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * 获取当前应用 进程id
+     * @param context
+     * @return
+     */
+    public static int getProcessId(Context context) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+
+        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+            if (appProcess.processName.equals(context.getPackageName())) {
+//                BACKGROUND=400 EMPTY=500 FOREGROUND=100
+//                GONE=1000 PERCEPTIBLE=130 SERVICE=300 ISIBLE=200
+
+                return appProcess.pid;
+
+            }
+        }
+        return -1;
     }
 
 

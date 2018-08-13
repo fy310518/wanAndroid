@@ -12,7 +12,6 @@
             android:label="@string/srartUpTitle"
             android:screenOrientation="portrait" />
 
-
         <!-- Android 7.0 在应用间共享文件 -->
         <provider
             android:name="android.support.v4.content.FileProvider"

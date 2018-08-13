@@ -2,6 +2,7 @@ package com.fy.baselibrary.application;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
@@ -15,13 +16,16 @@ import android.widget.TextView;
 import com.fy.baselibrary.R;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.load.down.DownManager;
+import com.fy.baselibrary.startactivity.StartActivity;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.Constant;
+import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.ResourceUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
+import com.fy.baselibrary.utils.SpfUtils;
 
 import butterknife.ButterKnife;
 
@@ -45,10 +49,23 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         L.e(TAG, activity.getClass().getName() + "--Create()   " + activity.getTaskId());
+
+        //通过缓存的 进程id 判断应用是否被强杀
+        int processId = SpfUtils.getSpfSaveInt(Constant.appProcessId);
+        if (processId != -1 && processId != AppUtils.getProcessId(activity)) {
+            SpfUtils.remove(Constant.appProcessId);
+
+            Intent intent = new Intent(activity, StartActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  //注意
+            activity.startActivity(intent);
+            activity.finish();
+
+            return;
+        }
+
         ScreenUtils.setCustomDensity(activity, designWidth);
 
         BaseActivityBean activityBean = new BaseActivityBean();
-
         IBaseActivity act = null;
         if (activity instanceof IBaseActivity) {
             act = (IBaseActivity) activity;
@@ -88,13 +105,6 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
         //基础配置 执行完成，再执行 初始化 activity 操作
         if (null != act) act.initData(activity, savedInstanceState);
-
-        if (Constant.mAppStatus == -1) {
-            Bundle bundle = new Bundle();
-            bundle.putString("action", "force_kill");
-            JumpUtils.jump(activity, AppUtils.getLocalPackageName() + ".main.MainActivity", bundle);
-        }
-
     }
 
     @Override
@@ -112,6 +122,9 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
         L.e(TAG, activity.getClass().getName() + "--Pause()");
         RequestUtils.clearDispos();
         DownManager.getInstentce().clieanDownData();
+
+        //缓存应用进程id
+        SpfUtils.saveIntToSpf(Constant.appProcessId, AppUtils.getProcessId(activity));
     }
 
     @Override
@@ -173,7 +186,8 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
             //设置返回按钮监听事件
             toolbar.setNavigationOnClickListener(v -> JumpUtils.exitActivity(act));
 
-            if (ConfigUtils.getBgColor() > 0)toolbar.setBackgroundColor(ResourceUtils.getColor(ConfigUtils.getBgColor()));
+            if (ConfigUtils.getBgColor() > 0)
+                toolbar.setBackgroundColor(ResourceUtils.getColor(ConfigUtils.getBgColor()));
         }
     }
 
@@ -201,4 +215,5 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
         return slManager;
     }
+
 }

@@ -4,9 +4,13 @@ import android.app.Application;
 
 import com.fy.baselibrary.application.BaseActivityLifecycleCallbacks;
 import com.fy.baselibrary.application.ConfigUtils;
+import com.fy.baselibrary.utils.AppUtils;
+import com.fy.baselibrary.utils.Constant;
+import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.NightModeUtils;
 import com.fy.baselibrary.utils.ResourceUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
+import com.fy.baselibrary.utils.SpfUtils;
 
 /**
  * Created by fangs on 2018/7/24 17:36.
@@ -28,6 +32,7 @@ public class WanAndroidApp extends Application{
 
         int designWidth = (int) ResourceUtils.getMetaData("Rudeness_Adapter_Screen_width", 0);
         ScreenUtils.setCustomDensity(this, designWidth);
+
 
 //        设置activity 生命周期回调
         registerActivityLifecycleCallbacks(new BaseActivityLifecycleCallbacks(designWidth));

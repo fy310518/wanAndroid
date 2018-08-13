@@ -60,11 +60,10 @@ public class Constant {
     public static String userName = "User_Name";
 
 
-
     /**
-     * 记录应用是否被强杀
+     * 保存应用进程id
      */
-    public static int mAppStatus = -1;
+    public static final String appProcessId = "AppProcessId";
 
     /**
      * APP 当前模式 （日间/夜间）
