@@ -56,10 +56,9 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
             SpfUtils.remove(Constant.appProcessId);
 
             Intent intent = new Intent(activity, StartActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  //注意
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             activity.startActivity(intent);
             activity.finish();
-
             return;
         }
 
@@ -122,9 +121,6 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
         L.e(TAG, activity.getClass().getName() + "--Pause()");
         RequestUtils.clearDispos();
         DownManager.getInstentce().clieanDownData();
-
-        //缓存应用进程id
-        SpfUtils.saveIntToSpf(Constant.appProcessId, AppUtils.getProcessId(activity));
     }
 
     @Override

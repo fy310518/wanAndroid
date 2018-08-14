@@ -1,5 +1,9 @@
 <resources>
 
+    <style name="wanAndroidTheme" parent="BaseAppTheme">
+        <item name="android:listDivider">@drawable/divider_bg</item>
+    </style>
+
     <!-- 自定义EditText下划线 样式 -->
     <style name="customLineColor" parent="Theme.AppCompat.Light">
         <!-- 没有获取焦点时的颜色 -->

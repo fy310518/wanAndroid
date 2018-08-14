@@ -51,6 +51,7 @@
         android:background="@color/BgColor"
         app:headerLayout="@layout/main_navigation_layout"
         app:itemBackground="@color/transparent"
-        app:menu="@menu/main_sideslip_menu" />
+        app:menu="@menu/main_sideslip_menu"
+        app:itemTextColor="@color/button_normal"/>
 
 </android.support.v4.widget.DrawerLayout>

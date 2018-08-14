@@ -49,6 +49,9 @@
     <string name="man">男</string>
     <string name="woman">女</string>
 
+    <string name="daytimeMode">日间模式</string>
+    <string name="nightMode">夜间模式</string>
+
     <string name="dialog_title">提示</string>
     <string name="set">设置</string>
     <string name="search">搜索</string>

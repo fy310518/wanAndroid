@@ -10,6 +10,7 @@ import android.view.View;
 import com.fy.baselibrary.R;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
+import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.L;
@@ -48,6 +49,8 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
     @SuppressLint("CheckResult")
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
+        //缓存应用进程id
+        SpfUtils.saveIntToSpf(Constant.appProcessId, AppUtils.getProcessId(activity));
 
         //rx 递归删除缓存的压缩文件
         Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
@@ -57,14 +60,7 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(integer -> L.e("aaaab", "" + Thread.currentThread().getName() ));
 
-        Intent intent = getIntent();
-        if ((Intent.FLAG_ACTIVITY_CLEAR_TOP & intent.getFlags()) != 0 && intent.getBooleanExtra("exitApp", false)) {
-            L.e("StartActivity", "----- 1");
-            exitApp();
-        } else {
-            L.e("StartActivity", "----- 2");
-            isStartActivityOnly();
-        }
+        exitOrIn(getIntent());
     }
 
     @Override
@@ -74,10 +70,7 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         L.e("StartActivity", "onNewIntent- false");
-        if ((Intent.FLAG_ACTIVITY_CLEAR_TOP & intent.getFlags()) != 0 && intent.getBooleanExtra("exitApp", false)) {
-            L.e("StartActivity", "onNewIntent");
-            exitApp();
-        }
+        exitOrIn(intent);
     }
 
     // 避免从桌面启动程序后，会重新实例化入口类的activity
@@ -93,6 +86,20 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
             }
         } else {
             startActivity(new Intent(this, StartUpActivity.class));
+        }
+    }
+
+    /**
+     * 根据intent 判断进入应用还是退出应用
+     * @param intent
+     */
+    private void exitOrIn(Intent intent){
+        if ((Intent.FLAG_ACTIVITY_CLEAR_TOP & intent.getFlags()) != 0 && intent.getBooleanExtra("exitApp", false)) {
+            L.e("StartActivity", "----- 1");
+            exitApp();
+        } else {
+            L.e("StartActivity", "----- 2");
+            isStartActivityOnly();
         }
     }
 

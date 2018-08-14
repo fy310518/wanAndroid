@@ -73,6 +73,8 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
         L.e("net", "onError()");
         e.printStackTrace();
 
+        dismissProgress();
+
         if (!NetUtils.isConnected(ConfigUtils.getAppCtx())) {
             actionResponseError("网络不可用，请检查您的网络状态，稍后重试！");
             updataLayout(StatusLayoutManager.LAYOUT_NETWORK_ERROR_ID);
@@ -106,8 +108,6 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
             actionResponseError("请求失败，请稍后再试...");
             updataLayout(StatusLayoutManager.REQUEST_FAIL);
         }
-
-        dismissProgress();
     }
 
     @Override
@@ -129,7 +129,7 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
     /**
      * 取消进度框
      */
-    private void dismissProgress() {
+    protected void dismissProgress() {
         if (null != progressDialog) {
             progressDialog.close();
         }

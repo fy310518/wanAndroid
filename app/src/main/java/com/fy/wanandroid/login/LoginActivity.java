@@ -110,8 +110,8 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnLogin:
-//                login();
-                requestPermission();
+                login();
+//                requestPermission();
                 break;
             case R.id.tvRegister:
 //                JumpUtils.jump(mContext, RegisterActivity.class, null);

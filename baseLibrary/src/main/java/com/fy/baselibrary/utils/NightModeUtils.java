@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatDelegate;
 public class NightModeUtils {
 
     /** 日间/夜间 key */
-    private static final String isNightMode = "isNightMode";
+    public static final String isNightMode = "isNightMode";
 
     private NightModeUtils() {
         /* cannot be instantiated */
@@ -33,6 +33,7 @@ public class NightModeUtils {
         }
 
         SpfUtils.saveBooleanToSpf(isNightMode, !isNight);
+//        activity.getWindow().setWindowAnimations(R.style.WindowAnimationFadeInOut);
         activity.recreate(); // 这个是刷新，不然不起作用
     }
 
@@ -49,4 +50,5 @@ public class NightModeUtils {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
+
 }

@@ -17,6 +17,7 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -125,6 +126,11 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
                 ResourceUtils.getStr(R.string.notLogin));
 
         btnLoginOrExit.setText(isLogin ? R.string.exitLogin : R.string.clickLogin);
+
+        MenuItem nightModel = navView.getMenu().findItem(R.id.atNightModel);
+        nightModel.setIcon(SpfUtils.getSpfSaveBoolean(NightModeUtils.isNightMode) ? R.drawable.svg_daytime_model : R.drawable.svg_at_night_model);//图标
+        int id = SpfUtils.getSpfSaveBoolean(NightModeUtils.isNightMode) ? R.string.daytimeMode : R.string.nightMode;
+        nightModel.setTitle(id);
     }
 
     /**
@@ -297,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
                     JumpUtils.jump(mContext, DownFileActivity.class, null);
                     break;
                 case R.id.atNightModel:
-                    NightModeUtils.switchNightMode(mContext);//todo 有 bug 后期优化
+                    NightModeUtils.switchNightMode(mContext);
                     break;
                 case R.id.about:
                     JumpUtils.jump(mContext, AboutActivity.class, null);
