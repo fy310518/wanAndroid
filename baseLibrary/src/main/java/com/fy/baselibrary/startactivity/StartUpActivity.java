@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -61,7 +60,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
         int drawableId = ConfigUtils.getLoadImg();
         if (drawableId > 0) loadImg.setImageDrawable(TintUtils.getDrawable(drawableId));
 
-        Drawable back = TintUtils.getTintDrawable(R.drawable.shape_tag, R.color.alphaBlack);
+        Drawable back = TintUtils.getTintDrawable(R.drawable.shape_ellipse_rect, R.color.alphaBlack);
         tvSkip = findViewById(R.id.tvSkip);
         tvSkip.setOnClickListener(this);
         tvSkip.setText(ResourceUtils.getReplaceStr(R.string.skip, skip));

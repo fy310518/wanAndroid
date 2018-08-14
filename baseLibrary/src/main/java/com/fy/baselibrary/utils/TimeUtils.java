@@ -95,29 +95,31 @@ public class TimeUtils {
     }
 
     /**
-     * 获取指定时间戳 所在的一周的日期集合
+     * 获取指定时间戳 所在的一周的时间集合
      * @param time
-     * @param isToDayStart 用于 返回的日期集合是否 以指定的时间戳为第一天
+     * @param isMoudel isMoudel == 0 以指定的时间戳为第一天；
+     *                 isMoudel == 1 以指定的时间戳为最后一天；
+     *                 isMoudel == 2 以指定的时间戳为一个礼拜其中一天；
      * @return
      */
-    public static List<Date> dateToWeek(long time, boolean isToDayStart){
-        //今天零点零分零秒的毫秒数
+    public static List<Date> dateToWeek(long time, int isMoudel) {
+        //指定毫秒数所在的日期 零点零分零秒的毫秒数
         long zero = time - TimeZone.getDefault().getRawOffset();
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(zero);
 
         int d = calendar.get(Calendar.DAY_OF_WEEK);
-        long startTime = isToDayStart ? calendar.getTimeInMillis() : calendar.getTimeInMillis() - d * 24 * 3600000;
+        long startTime = isMoudel == 0 ? calendar.getTimeInMillis() :
+                isMoudel == 1 ? calendar.getTimeInMillis() - 7 * 24 * 3600000 : calendar.getTimeInMillis() - d * 24 * 3600000;
 
         Date fdate;
         List<Date> list = new ArrayList<>();
-        for (int a = 1; a < 8; a++) {
+        for (int a = 0; a < 7; a++) {
             fdate = new Date();
-            if (isToDayStart)fdate.setTime(startTime + (a - 1) * 24 * 3600000);
-            else fdate.setTime(startTime + a * 24 * 3600000);
+            fdate.setTime(startTime + a * 24 * 3600000);
 
-            list.add(a - 1, fdate);
+            list.add(fdate);
         }
         return list;
     }
