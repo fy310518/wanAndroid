@@ -39,8 +39,6 @@ public class WanAndroidApp extends Application{
             Constant.isRunState = "isRunState";//说明重启
         }
 
-        FileUtils.fileToInputContent("log", "日志.txt", "Application" + AppUtils.getProcessId(this));
-
 //        设置activity 生命周期回调
         registerActivityLifecycleCallbacks(new BaseActivityLifecycleCallbacks(designWidth));
 
