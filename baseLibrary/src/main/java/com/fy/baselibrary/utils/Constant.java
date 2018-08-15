@@ -59,7 +59,7 @@ public class Constant {
      */
     public static String userName = "User_Name";
 
-
+    public static String isRunState = "";
     /**
      * 保存应用进程id
      */

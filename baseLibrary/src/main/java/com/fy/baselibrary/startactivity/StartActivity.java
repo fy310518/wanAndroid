@@ -43,7 +43,7 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
 
     @Override
     public void setStatusBar(Activity activity) {
-        MdStatusBar.setColorBar(activity, R.color.transparent, R.color.transparent);
+//        MdStatusBar.setColorBar(activity, R.color.transparent, R.color.transparent);
     }
 
     @SuppressLint("CheckResult")
@@ -60,17 +60,37 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(integer -> L.e("aaaab", "" + Thread.currentThread().getName() ));
 
+//        if (null != savedInstanceState && savedInstanceState.getBoolean(FLAG_EXIT)) {
+//            FileUtils.fileToInputContent("log", "日志.txt", "onCreate(): savedInstanceState" + AppUtils.getProcessId(this));
+//            exitApp();
+//            return;
+//        }
+
         exitOrIn(getIntent());
     }
 
     @Override
     public void reTry() {}
 
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        if (null != outState) {
+//            outState.putBoolean(FLAG_EXIT, true);
+//            L.e("StartActivity", "onSaveInstanceState");
+//        }
+//    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         L.e("StartActivity", "onNewIntent- false");
-        exitOrIn(intent);
+
+        boolean b = (Intent.FLAG_ACTIVITY_CLEAR_TOP & intent.getFlags()) != 0;
+        boolean c = intent.getBooleanExtra("exitApp", false);
+        if (b && c) {
+            exitApp();
+        }
     }
 
     // 避免从桌面启动程序后，会重新实例化入口类的activity
@@ -94,11 +114,12 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
      * @param intent
      */
     private void exitOrIn(Intent intent){
-        if ((Intent.FLAG_ACTIVITY_CLEAR_TOP & intent.getFlags()) != 0 && intent.getBooleanExtra("exitApp", false)) {
-            L.e("StartActivity", "----- 1");
+        boolean b = (Intent.FLAG_ACTIVITY_CLEAR_TOP & intent.getFlags()) != 0;
+        boolean c = intent.getBooleanExtra("exitApp", false);
+
+        if (b && c) {
             exitApp();
         } else {
-            L.e("StartActivity", "----- 2");
             isStartActivityOnly();
         }
     }

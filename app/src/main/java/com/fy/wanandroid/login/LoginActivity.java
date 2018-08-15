@@ -48,7 +48,6 @@ import butterknife.OnClick;
  * Created by fangs on 2017/12/12.
  */
 public class LoginActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
-    private AppCompatActivity mContext;
 
     @BindView(R.id.editName)
     TextInputEditText editName;
@@ -80,7 +79,6 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
 
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
-        mContext = this;
         btnLogin.setBackground(SelectUtils.getBtnSelector(R.drawable.shape_btn));
         requestPermission();
         editPass.addTextChangedListener(new TextWatcher() {
@@ -115,7 +113,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
                 break;
             case R.id.tvRegister:
 //                JumpUtils.jump(mContext, RegisterActivity.class, null);
-                JumpUtils.jump(mContext, StatusDemoActivity.class, null);
+                JumpUtils.jump(this, StatusDemoActivity.class, null);
                 break;
         }
     }
@@ -144,7 +142,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
     }
 
     private void login() {
-        IProgressDialog progressDialog = new IProgressDialog().init(mContext)
+        IProgressDialog progressDialog = new IProgressDialog().init(this)
                 .setDialogMsg(R.string.user_login);
 
         String mUserName = editName.getText().toString().trim();//"fangshuai"
@@ -169,7 +167,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
 
                         Bundle bundle = new Bundle();
                         bundle.putString("大王", "大王叫我来巡山");
-                        JumpUtils.jump(mContext, MainActivity.class, bundle);
+                        JumpUtils.jump(LoginActivity.this, MainActivity.class, bundle);
                     }
 
                     @Override
@@ -191,7 +189,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
                 T.showLong(com.fy.baselibrary.R.string.exit_app);
                 exitTime = System.currentTimeMillis();
             } else {
-                JumpUtils.exitApp(mContext, StartActivity.class);
+                JumpUtils.exitApp(this, StartActivity.class);
             }
             return false;
         }

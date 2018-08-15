@@ -25,7 +25,6 @@ import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.ResourceUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
-import com.fy.baselibrary.utils.SpfUtils;
 
 import butterknife.ButterKnife;
 
@@ -50,16 +49,14 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         L.e(TAG, activity.getClass().getName() + "--Create()   " + activity.getTaskId());
 
-        //通过缓存的 进程id 判断应用是否被强杀
-        int processId = SpfUtils.getSpfSaveInt(Constant.appProcessId);
-        if (processId != -1 && processId != AppUtils.getProcessId(activity)) {
-            SpfUtils.remove(Constant.appProcessId);
-
+        if (!(activity instanceof StartActivity) && Constant.isRunState.equals("isRunState")) {
             Intent intent = new Intent(activity, StartActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             activity.startActivity(intent);
-            activity.finish();
+            //            activity.finish();
             return;
+        } else {
+            Constant.isRunState = "";
         }
 
         ScreenUtils.setCustomDensity(activity, designWidth);

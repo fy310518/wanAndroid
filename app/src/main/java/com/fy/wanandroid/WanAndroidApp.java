@@ -33,6 +33,13 @@ public class WanAndroidApp extends Application{
         int designWidth = (int) ResourceUtils.getMetaData("Rudeness_Adapter_Screen_width", 0);
         ScreenUtils.setCustomDensity(this, designWidth);
 
+        //通过缓存的 进程id 判断应用是否被强杀
+        int processId = SpfUtils.getSpfSaveInt(Constant.appProcessId);
+        if (processId != -1 && processId != AppUtils.getProcessId(this)) {
+            Constant.isRunState = "isRunState";//说明重启
+        }
+
+        FileUtils.fileToInputContent("log", "日志.txt", "Application" + AppUtils.getProcessId(this));
 
 //        设置activity 生命周期回调
         registerActivityLifecycleCallbacks(new BaseActivityLifecycleCallbacks(designWidth));
