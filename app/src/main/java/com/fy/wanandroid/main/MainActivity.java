@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.application.IBaseActivity;
+import com.fy.baselibrary.startactivity.StartActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.statusbar.StatusBarContentColor;
 import com.fy.baselibrary.utils.AnimUtils;
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         mContext = this;
-
+        L.e(getTaskId() + "----> MainActivity");
         initNav();
         initRadioGroup();
     }
@@ -307,6 +308,9 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
                     break;
                 case R.id.about:
                     JumpUtils.jump(mContext, AboutActivity.class, null);
+                    break;
+                case R.id.exit:
+                    JumpUtils.exitApp(this, StartActivity.class);
                     break;
             }
             return false;

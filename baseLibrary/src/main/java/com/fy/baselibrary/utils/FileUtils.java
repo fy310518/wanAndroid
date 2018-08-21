@@ -37,75 +37,123 @@ public class FileUtils {
     }
 
     /**
-     * 获取SD卡路径
+     * 获取 内置SD卡路径
      *
-     * @return
+     * @return "/mnt/sdcard
      */
     public static String getSDCardPath() {
         return Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;
     }
 
     /**
-     * 获取SD卡的剩余容量 单位byte
-     *
+     * 获取 内置SD卡 指定目录类型的 路径
+     * @param directoryTpye 目录类型 如：Environment.DIRECTORY_DCIM --> /storage/sdcard0/DCIM
      * @return
      */
-    public static long getSDCardAllSize() {
-        if (isSDCardEnable()) {
-            StatFs stat = new StatFs(getSDCardPath());
-            // 获取空闲的数据块的数量
-            long availableBlocks = (long) stat.getAvailableBlocks() - 4;
-            // 获取单个数据块的大小（byte）
-            long freeBlocks = stat.getAvailableBlocks();
-            return freeBlocks * availableBlocks;
-        }
-        return 0;
+    public static String getSDCardDirectoryTpye(String directoryTpye){
+        return Environment.getExternalStoragePublicDirectory(directoryTpye)
+                .getAbsolutePath() + File.separator;
+    }
+
+
+    /**
+     * 获取应用 在SD卡保存数据的私有路径
+     * @return "SDCard/Android/data/你的应用的包名/files/ "
+     */
+    public static String getExternalFiles(){
+        return ConfigUtils.getAppCtx().getExternalFilesDir(null)
+                .getAbsolutePath() + File.separator;
     }
 
     /**
-     * 获取指定路径所在空间的剩余可用容量字节数，单位byte
-     *
-     * @param filePath
-     * @return 容量字节 SDCard可用空间，内部存储可用空间
+     * 获取应用 在SD卡缓存数据的私有路径
+     * @return "SDCard/Android/data/你的应用包名/cache/"
      */
-    public static long getFreeBytes(String filePath) {
-        // 如果是sd卡的下的路径，则获取sd卡可用容量
-        if (filePath.startsWith(getSDCardPath())) {
-            filePath = getSDCardPath();
-        } else {// 如果是内部存储的路径，则获取内存存储的可用容量
-            filePath = Environment.getDataDirectory().getAbsolutePath();
-        }
-        StatFs stat = new StatFs(filePath);
-        long availableBlocks = (long) stat.getAvailableBlocks() - 4;
-        return stat.getBlockSize() * availableBlocks;
+    public static String getExternalCacheDir(){
+        return ConfigUtils.getAppCtx().getExternalCacheDir()
+                .getAbsolutePath() + File.separator;
     }
 
     /**
      * 获取系统存储路径
-     *
-     * @return
+     * @return "/system/"
      */
     public static String getRootDirectoryPath() {
-        return Environment.getRootDirectory().getAbsolutePath();
+        return Environment.getRootDirectory()
+                .getAbsolutePath() + File.separator;
     }
+
+    /**
+     * 获取应用 内部存储 路径
+     * @return "/data/"
+     */
+    public static String getDataDirectoryPath(){
+        return Environment.getDataDirectory().getAbsolutePath() + File.separator;
+    }
+
+    /**
+     * 获取应用 内部缓存 路径
+     * @return "/cache/"
+     */
+    public static String getCacheDirectoryPath(){
+        return Environment.getDownloadCacheDirectory().getAbsolutePath() + File.separator;
+    }
+
+    /**
+     * 获取应用 内部具体数据存储目录
+     * @return "/data/data/你的应用包名/files/"
+     */
+    public static String getFilesDir(){
+        return ConfigUtils.getAppCtx().getFilesDir()
+                .getAbsolutePath() + File.separator;
+    }
+
+    /**
+     * 获取应用 内部具体缓存目录
+     * @return "/data/data/你的应用包名/cache/"
+     */
+    public static String getCacheDir() {
+        return ConfigUtils.getAppCtx().getCacheDir()
+                .getAbsolutePath() + File.separator;
+    }
+
 
     /**
      * 到得文件的放置路径
      *
      * @param aModuleName 模块名字 (如："head.img.temp")
+     * @param type        类型 0：应用私有存储路径；1：应用私有缓存路径 （是否存在SD卡，存在则表示 应用SD卡，否则表示应用内部存储）
      * @return
-     * @author fangs
      */
-    public static String getPath(String aModuleName) {
-        String sp = File.separator;
-        String modulePath = aModuleName.replace(".", sp);
-        String fDirStr = sp + modulePath + sp;
+    public static String getPath(String aModuleName, int type) {
+        String modulePath = aModuleName.replace(".", File.separator);
+        String fDirStr = File.separator + modulePath + File.separator;
 
         File dirpath;
-
         if (isSDCardEnable())
-            dirpath = new File(ConfigUtils.getAppCtx().getExternalFilesDir(null), fDirStr);
-        else dirpath = Environment.getDataDirectory();
+            switch (type) {
+                case 0:
+                    dirpath = new File(getExternalFiles(), fDirStr);
+                    break;
+                case 1:
+                    dirpath = new File(getExternalCacheDir(), fDirStr);
+                    break;
+                default:
+                    dirpath = new File(getSDCardPath(), fDirStr);//需要存储权限
+                    break;
+            }
+        else
+            switch (type) {
+                case 0:
+                    dirpath = new File(getFilesDir(), fDirStr);
+                    break;
+                case 1:
+                    dirpath = new File(getCacheDir(), fDirStr);
+                    break;
+                default:
+                    dirpath = new File(getDataDirectoryPath(), fDirStr);
+                    break;
+            }
 
         return dirpath.getPath();
     }
@@ -117,7 +165,7 @@ public class FileUtils {
      * @return
      */
     public static File folderIsExists(String filePath) {
-        File folder = new File(getPath(filePath));
+        File folder = new File(getPath(filePath, 0));
         try {
             if (!folder.isDirectory()) {
                 folder.mkdirs();
@@ -268,7 +316,7 @@ public class FileUtils {
 
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 
-            File dir = new File(getPath(path));
+            File dir = new File(getPath(path, 0));
             if (!dir.exists()) {
                 dir.mkdir();
             }
@@ -286,4 +334,43 @@ public class FileUtils {
         }
     }
 
+
+
+
+
+
+    /**
+     * 获取SD卡的剩余容量 单位byte
+     *
+     * @return
+     */
+    public static long getSDCardAllSize() {
+        if (isSDCardEnable()) {
+            StatFs stat = new StatFs(getSDCardPath());
+            // 获取空闲的数据块的数量
+            long availableBlocks = (long) stat.getAvailableBlocks() - 4;
+            // 获取单个数据块的大小（byte）
+            long freeBlocks = stat.getAvailableBlocks();
+            return freeBlocks * availableBlocks;
+        }
+        return 0;
+    }
+
+    /**
+     * 获取指定路径所在空间的剩余可用容量字节数，单位byte
+     *
+     * @param filePath
+     * @return 容量字节 SDCard可用空间，内部存储可用空间
+     */
+    public static long getFreeBytes(String filePath) {
+        // 如果是sd卡的下的路径，则获取sd卡可用容量
+        if (filePath.startsWith(getSDCardPath())) {
+            filePath = getSDCardPath();
+        } else {// 如果是内部存储的路径，则获取内存存储的可用容量
+            filePath = Environment.getDataDirectory().getAbsolutePath();
+        }
+        StatFs stat = new StatFs(filePath);
+        long availableBlocks = (long) stat.getAvailableBlocks() - 4;
+        return stat.getBlockSize() * availableBlocks;
+    }
 }

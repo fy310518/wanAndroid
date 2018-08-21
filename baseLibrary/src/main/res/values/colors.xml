@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorAccent">#FF4081</color>
+
     <!-- UI设计原色之 红色 -->
     <color name="red">#e84c3d</color>
     <!-- UI设计原色之 粉色 -->

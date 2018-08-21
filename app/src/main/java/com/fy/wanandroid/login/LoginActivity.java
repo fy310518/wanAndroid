@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -19,9 +18,7 @@ import com.fy.baselibrary.permission.PermissionFragment;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
-import com.fy.baselibrary.startactivity.StartActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
-import com.fy.baselibrary.statusbar.StatusBarContentColor;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
@@ -29,6 +26,7 @@ import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.T;
 import com.fy.baselibrary.utils.cache.ACache;
 import com.fy.wanandroid.R;
+import com.fy.wanandroid.animation.RevealEffectActivity;
 import com.fy.wanandroid.entity.LoginBean;
 import com.fy.wanandroid.main.MainActivity;
 import com.fy.wanandroid.request.ApiService;
@@ -73,12 +71,14 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
 
     @Override
     public void setStatusBar(Activity activity) {
+        MdStatusBar.statusAlpha = 0;
+        MdStatusBar.navAlpha = 0;
         MdStatusBar.setColorBar(activity, R.color.statusBar, R.color.statusBar);
-        StatusBarContentColor.setStatusTextColor(this, true, false);
     }
 
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
+        L.e(getTaskId() + "----> LoginActivity");
         btnLogin.setBackground(SelectUtils.getBtnSelector(R.drawable.shape_btn));
         requestPermission();
         editPass.addTextChangedListener(new TextWatcher() {
@@ -113,7 +113,8 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
                 break;
             case R.id.tvRegister:
 //                JumpUtils.jump(mContext, RegisterActivity.class, null);
-                JumpUtils.jump(this, StatusDemoActivity.class, null);
+//                JumpUtils.jump(this, StatusDemoActivity.class, null);
+                JumpUtils.jump(this, RevealEffectActivity.class, null);
                 break;
         }
     }
@@ -175,25 +176,6 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
                         L.e("net updataLayout", flag + "-----");
                     }
                 });
-    }
-
-    //保存点击的时间
-    private long exitTime = 0;
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-            //处理 退出界面
-            if ((System.currentTimeMillis() - exitTime) > 2000) {
-
-                T.showLong(com.fy.baselibrary.R.string.exit_app);
-                exitTime = System.currentTimeMillis();
-            } else {
-                JumpUtils.exitApp(this, StartActivity.class);
-            }
-            return false;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
     /**

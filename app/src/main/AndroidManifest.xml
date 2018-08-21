@@ -72,6 +72,8 @@
             android:label=""
             android:screenOrientation="portrait"/>
 
+        <!-- 设计稿 宽度 （用于屏幕适配）  -->
+        <meta-data android:name="Rudeness_Adapter_Screen_width" android:value="360" />
 
 
         <activity
@@ -83,8 +85,11 @@
             android:label="@string/fileDown"
             android:screenOrientation="portrait" />
 
-        <!-- 设计稿 宽度 （用于屏幕适配）  -->
-        <meta-data android:name="Rudeness_Adapter_Screen_width" android:value="360" />
+        <activity
+            android:name=".animation.RevealEffectActivity"
+            android:label="@string/revealEffect"
+            android:screenOrientation="portrait" />
+
 
     </application>
 

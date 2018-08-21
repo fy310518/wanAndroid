@@ -32,7 +32,7 @@ public class BaseApp extends Application {
         if (processId != -1 && processId != AppUtils.getProcessId(this)) {
             Constant.isRunState = "isRunState";//说明重启
         }
-        
+
 //        设置activity 生命周期回调
         registerActivityLifecycleCallbacks(new BaseActivityLifecycleCallbacks(designWidth));
 

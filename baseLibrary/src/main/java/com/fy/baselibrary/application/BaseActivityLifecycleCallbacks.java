@@ -178,7 +178,6 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
             if (ConfigUtils.getBackImg() > 0) toolbar.setNavigationIcon(ConfigUtils.getBackImg());
             //设置返回按钮监听事件
             toolbar.setNavigationOnClickListener(v -> JumpUtils.exitActivity(act));
-
             if (ConfigUtils.getBgColor() > 0)
                 toolbar.setBackgroundColor(ResourceUtils.getColor(ConfigUtils.getBgColor()));
         }

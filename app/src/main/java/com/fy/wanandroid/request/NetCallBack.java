@@ -32,12 +32,10 @@ public abstract class NetCallBack<T> extends RequestBaseObserver<T>{
                 try {//SSlPeerUnverifiedException
                     Class cla = Class.forName(AppUtils.getLocalPackageName() + ".login.LoginActivity");
                     Context context = ConfigUtils.getAppCtx();
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("untoken", true);
+
                     Intent intent = new Intent(context, cla);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                    intent.putExtras(bundle);
                     context.startActivity(intent);
                 } catch (ClassNotFoundException e1) {
                     e1.printStackTrace();

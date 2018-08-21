@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion var.minSdkVersion
         targetSdkVersion var.targetSdkVersion
-        versionCode 20
-        versionName "1.2.0"
+        versionCode 21
+        versionName "1.2.1"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true//配置5.0 版本以下可以使用svg
@@ -112,7 +112,7 @@ publish {
     //项目名称
     artifactId = 'baselibrary'
     //版本号
-    publishVersion = '1.2.0'
+    publishVersion = '1.2.1'
     //描述，不重要
     desc = 'Elegant Android application development base library'
     //网站，不重要
