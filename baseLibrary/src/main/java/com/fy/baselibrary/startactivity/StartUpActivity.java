@@ -58,9 +58,9 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
     public void initData(Activity activity, Bundle savedInstanceState) {
         loadImg = findViewById(R.id.loadImg);
         int drawableId = ConfigUtils.getLoadImg();
-        if (drawableId > 0) loadImg.setImageDrawable(TintUtils.getDrawable(drawableId));
+        if (drawableId > 0) loadImg.setImageDrawable(TintUtils.getDrawable(drawableId, 0));
 
-        Drawable back = TintUtils.getTintDrawable(R.drawable.shape_ellipse_rect, R.color.alphaBlack);
+        Drawable back = TintUtils.getTintDrawable(R.drawable.shape_ellipse_rect, 0, R.color.alphaBlack);
         tvSkip = findViewById(R.id.tvSkip);
         tvSkip.setOnClickListener(this);
         tvSkip.setText(ResourceUtils.getReplaceStr(R.string.skip, skip));

@@ -26,12 +26,11 @@ import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.T;
 import com.fy.baselibrary.utils.cache.ACache;
 import com.fy.wanandroid.R;
-import com.fy.wanandroid.animation.RevealEffectActivity;
+import com.fy.wanandroid.animation.revealeffect.RevealEffectActivity;
 import com.fy.wanandroid.entity.LoginBean;
 import com.fy.wanandroid.main.MainActivity;
 import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
-import com.fy.wanandroid.status.StatusDemoActivity;
 import com.fy.wanandroid.utils.SelectUtils;
 
 import java.util.HashMap;
@@ -79,7 +78,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         L.e(getTaskId() + "----> LoginActivity");
-        btnLogin.setBackground(SelectUtils.getBtnSelector(R.drawable.shape_btn));
+        btnLogin.setBackground(SelectUtils.getBtnSelector(R.drawable.shape_btn, 0));
         requestPermission();
         editPass.addTextChangedListener(new TextWatcher() {
             @Override

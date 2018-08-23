@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
+import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -35,8 +36,8 @@ public class TintUtils {
      * @param colorId       将要改变的 颜色 id
      * @return
      */
-    public static Drawable getTintDrawable(@DrawableRes int drawableId, @ColorRes int colorId) {
-        Drawable drawable = getDrawable(drawableId);
+    public static Drawable getTintDrawable(@DrawableRes int drawableId, int drawableType, @ColorRes int colorId) {
+        Drawable drawable = getDrawable(drawableId, drawableType);
         int color = ResourceUtils.getColor(colorId);
 
         Drawable.ConstantState state = drawable.getConstantState();
@@ -116,19 +117,26 @@ public class TintUtils {
     /**
      * 获取 指定 ID 的 drawable 资源
      * @param draId
+     * @param drawableType drawable 类型（0：png、shape 图标等；1：svg 图标；2：动画 svg 图标）
      * @return 返回的 drawable 注意空指针(目前没有遇到空的情况 ^_^)
      */
-    public static Drawable getDrawable(@DrawableRes int draId){
+    public static Drawable getDrawable(@DrawableRes int draId, int drawableType) {
         Drawable drawable = null;
         Context ctx = ConfigUtils.getAppCtx();
 
-        try {
-            //png、shape 图等
-            drawable = ContextCompat.getDrawable(ctx, draId);
-        } catch (Resources.NotFoundException e) {
-//            e.printStackTrace();
-            //vector图标
-            drawable = VectorDrawableCompat.create(ctx.getResources(), draId, ctx.getTheme());
+        switch (drawableType) {
+            case 0:
+                //png、shape 图等
+                drawable = ContextCompat.getDrawable(ctx, draId);
+                break;
+            case 1:
+                //vector图标
+                drawable = VectorDrawableCompat.create(ctx.getResources(), draId, ctx.getTheme());
+                break;
+            case 2:
+                //动态svg 图标
+                drawable = AnimatedVectorDrawableCompat.create(ctx, draId);
+                break;
         }
 
         return drawable;

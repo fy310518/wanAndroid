@@ -25,7 +25,7 @@ public class SelectUtils {
      * @param draId
      * @return
      */
-    public static Drawable getSelector(@DrawableRes int draId){
+    public static Drawable getSelector(@DrawableRes int draId, int drawableType){
         int[] colors = new int[]{ResourceUtils.getColor(R.color.button_pressed),
                 ResourceUtils.getColor(R.color.button_pressed),
                 ResourceUtils.getColor(R.color.button_pressed),
@@ -37,7 +37,7 @@ public class SelectUtils {
         states[2] = new int[]{android.R.attr.state_checked};
         states[3] = new int[]{};
 
-        Drawable drawable = TintUtils.getDrawable(draId);
+        Drawable drawable = TintUtils.getDrawable(draId, drawableType);
         StateListDrawable stateListDrawable = TintUtils.getStateListDrawable(drawable, states);
 
         return TintUtils.tintSelector(stateListDrawable, colors, states);
@@ -50,7 +50,7 @@ public class SelectUtils {
      * @param draId
      * @return
      */
-    public static Drawable getTagSelector(@DrawableRes int draId){
+    public static Drawable getTagSelector(@DrawableRes int draId, int drawableType){
         int[] colors = new int[]{
                 ResourceUtils.getColor(R.color.button_pressed2),
                 ResourceUtils.getColor(R.color.button_normal2)};
@@ -59,7 +59,7 @@ public class SelectUtils {
         states[0] = new int[]{android.R.attr.state_pressed};
         states[1] = new int[]{};
 
-        Drawable drawable = TintUtils.getDrawable(draId);
+        Drawable drawable = TintUtils.getDrawable(draId, drawableType);
 //        设置 着色器模式
 //        DrawableCompat.setTintMode(drawable, PorterDuff.Mode.MULTIPLY);
         return TintUtils.tintSelector(drawable, colors, states);
@@ -72,7 +72,7 @@ public class SelectUtils {
      * @param draId
      * @return
      */
-    public static Drawable getBtnSelector(@DrawableRes int draId){
+    public static Drawable getBtnSelector(@DrawableRes int draId, int drawableType){
         int[] colors = new int[]{
                 ResourceUtils.getColor(R.color.button_pressed),
                 ResourceUtils.getColor(R.color.button_normal)};
@@ -81,7 +81,7 @@ public class SelectUtils {
         states[0] = new int[]{android.R.attr.state_pressed};
         states[1] = new int[]{};
 
-        Drawable drawable = TintUtils.getDrawable(draId);
+        Drawable drawable = TintUtils.getDrawable(draId, drawableType);
 //        设置 着色器模式
 //        DrawableCompat.setTintMode(drawable, PorterDuff.Mode.MULTIPLY);
         return TintUtils.tintSelector(drawable, colors, states);

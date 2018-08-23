@@ -86,8 +86,14 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".animation.RevealEffectActivity"
+            android:name=".animation.revealeffect.RevealEffectActivity"
             android:label="@string/revealEffect"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".animation.revealeffect.RevealEffectJumpActivity"
+            android:label="@string/revealEffectJump"
+            android:theme="@style/revealEffect"
             android:screenOrientation="portrait" />
 
 

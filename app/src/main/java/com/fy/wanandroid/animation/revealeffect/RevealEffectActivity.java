@@ -1,7 +1,8 @@
-package com.fy.wanandroid.animation;
+package com.fy.wanandroid.animation.revealeffect;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
+import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.wanandroid.R;
 
 import butterknife.BindView;
@@ -55,17 +57,24 @@ public class RevealEffectActivity extends AppCompatActivity implements IBaseActi
         MdStatusBar.setColorBar(activity, R.color.statusBar, R.color.statusBar);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
 
     }
 
-    @OnClick({R.id.btn})
+    @OnClick({R.id.btn, R.id.head})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn:
                 runRevealEffect();
+                break;
+            case R.id.head:
+                Bundle bundle = new Bundle();
+                bundle.putInt("x", head.getWidth() / 2);
+                bundle.putInt("y", head.getHeight() / 2);
+                JumpUtils.jump(RevealEffectActivity.this, RevealEffectJumpActivity.class, bundle);
                 break;
         }
     }
@@ -90,6 +99,7 @@ public class RevealEffectActivity extends AppCompatActivity implements IBaseActi
             circularReveal.start();
             flag = false;
         } else {
+
             Animator circularReveal = ViewAnimationUtils.createCircularReveal(imgAngel, centerX, centerY, hypotenuse, 0);
             circularReveal.setDuration(1000);
             circularReveal.addListener(new AnimatorListenerAdapter() {

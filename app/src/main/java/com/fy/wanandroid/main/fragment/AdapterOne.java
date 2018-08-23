@@ -47,7 +47,7 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
     private void setCollectImg(ViewHolder holder, boolean collect){
         AppCompatImageView imgCollect = holder.getView(R.id.imgCollect);
         if (collect) {//已收藏
-            imgCollect.setImageDrawable(TintUtils.getTintDrawable(R.drawable.svg_collect, R.color.txtHighlight));
+            imgCollect.setImageDrawable(TintUtils.getTintDrawable(R.drawable.svg_collect, 1, R.color.txtHighlight));
         } else {
             imgCollect.setImageResource(R.drawable.svg_collect);
         }

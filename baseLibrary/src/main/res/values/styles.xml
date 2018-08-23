@@ -27,8 +27,14 @@
         <item name="android:windowFullscreen">true</item> <!-- 全屏 -->
 
         <!-- 避免启动应用后，出现短暂的黑屏或白屏现象 -->
-        <item name="android:windowIsTranslucent">true</item>  <!--窗体是否半透明-->
+        <item name="android:windowIsTranslucent">true</item><!--窗体是否半透明-->
         <item name="android:windowContentOverlay">@android:color/transparent</item><!--设置窗体内容背景-->
+    </style>
+
+    <!-- 揭露动画 demo 清理 activity 切换动画 -->
+    <style name="revealEffect" parent="BaseAppTheme">
+        <item name="android:windowIsTranslucent">true</item><!--窗体是否半透明-->
+        <item name="android:windowAnimationStyle">@null</item>
     </style>
 
 
