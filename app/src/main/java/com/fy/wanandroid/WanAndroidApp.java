@@ -1,12 +1,12 @@
 package com.fy.wanandroid;
 
 import android.app.Application;
+import android.view.View;
 
 import com.fy.baselibrary.application.BaseActivityLifecycleCallbacks;
 import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.Constant;
-import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.NightModeUtils;
 import com.fy.baselibrary.utils.ResourceUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
@@ -43,6 +43,7 @@ public class WanAndroidApp extends Application{
         registerActivityLifecycleCallbacks(new BaseActivityLifecycleCallbacks(designWidth));
 
         NightModeUtils.setNightMode();
+
     }
 
     public static String CER = "-----BEGIN CERTIFICATE-----\n" +

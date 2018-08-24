@@ -4,10 +4,12 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 
+import com.fy.baselibrary.aop.annotation.ClickFilter;
 import com.fy.baselibrary.base.ViewHolder;
 
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ import java.util.List;
  * RecyclerView 通用的Adapter
  * Created by fangs on 2017/7/31.
  */
-public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHolder> implements Filterable {
+public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHolder> implements Filterable, View.OnClickListener {
 
     private final static int TYPE_HEAD = 0;
     private final static int TYPE_CONTENT = 1;
@@ -95,8 +97,14 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
 //        避免 在onBindViewHolder里面频繁创建事件回调，应该在 onCreateViewHolder()中每次为新建的 View 设置一次即可
         if (null != itemClickListner) {
 //            需要在 convert() 最后使用 holder.itemView.setTag(Item)
-            viewHolder.itemView.setOnClickListener(v -> itemClickListner.onItemClick(v));
+            viewHolder.itemView.setOnClickListener(this);
         }
+    }
+
+    @ClickFilter()
+    @Override
+    public void onClick(View v) {
+        itemClickListner.onItemClick(v);
     }
 
     public void setmDatas(List<Item> list) {
@@ -240,6 +248,8 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
 //            holder.ivSelect.setSelected(true);
 //        }
 //    });
+
+
 
 
     //过滤器上的锁可以同步复制原始数据。

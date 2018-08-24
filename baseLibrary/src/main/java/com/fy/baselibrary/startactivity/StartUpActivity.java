@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fy.baselibrary.R;
+import com.fy.baselibrary.aop.annotation.ClickFilter;
 import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
@@ -28,7 +29,7 @@ import io.reactivex.schedulers.Schedulers;
 
 /**
  * 欢迎页
- * 注意：1、欢迎页，背景图片名称必须为“loading”，必须放在drawable 类型目录如：drawable-xhdpi
+ * 注意：1、欢迎页，背景图片不能是 svg图片
  *      2、使用此欢迎页项目应用id 需要和项目包名一致
  * Created by fangs on 2017/12/12.
  */
@@ -69,6 +70,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
         hideLoadView();
     }
 
+    @ClickFilter()
     @Override
     public void onClick(View v) {
         int i = v.getId();
@@ -78,9 +80,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
     }
 
     @Override
-    public void reTry() {
-
-    }
+    public void reTry() {}
 
     @SuppressLint("CheckResult")
     private void hideLoadView() {

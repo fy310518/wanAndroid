@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion var.minSdkVersion
         targetSdkVersion var.targetSdkVersion
-        versionCode 23
-        versionName "1.2.3"
+        versionCode 24
+        versionName "1.2.4"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true//配置5.0 版本以下可以使用svg
@@ -51,6 +51,7 @@ dependencies {
     //    butterknife
     api 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
     //    dagger2
     api 'com.google.dagger:dagger:2.9'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.9'
@@ -61,31 +62,47 @@ dependencies {
 
     //    retrofit2
     api 'com.squareup.retrofit2:retrofit:2.3.0'
+
     //    为retrofit添加gson转换器的依赖
     api 'com.squareup.retrofit2:converter-gson:2.3.0'
+
     //    Retrofit与RxJava结合
     api 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+
     //    通过OkHttp中的interceptor来实现实际的底层的请求和响应日志
     api 'com.squareup.okhttp3:logging-interceptor:3.10.0'
 
     //    glide
     api 'com.github.bumptech.glide:glide:4.7.1'
-    api "com.github.bumptech.glide:okhttp3-integration:4.7.1"
+    api 'com.github.bumptech.glide:okhttp3-integration:4.7.1'
     api 'com.github.bumptech.glide:annotations:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 
-//    //circleimageview 圆形图片
-//    api 'de.hdodenhof:circleimageview:2.1.0'
-//    //baseRecyclerViewAdapterHelper
-//    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
-//    //下拉刷新上拉加载
-//    api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
-//    //PhotoView
-//    api 'com.github.chrisbanes:PhotoView:2.0.0'
-//    //takephoto
-//    api 'com.jph.takephoto:takephoto_library:4.0.3'
-//    //性能更好的MD风格的RatingBar
-//    api 'me.zhanghai.android.materialratingbar:library:1.2.0'
+    //    //circleimageview 圆形图片
+
+    //    api 'de.hdodenhof:circleimageview:2.1.0'
+
+    //    //baseRecyclerViewAdapterHelper
+
+    //    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+
+    //    //下拉刷新上拉加载
+
+    //    api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
+
+    //    //PhotoView
+
+    //    api 'com.github.chrisbanes:PhotoView:2.0.0'
+
+    //    //takephoto
+
+    //    api 'com.jph.takephoto:takephoto_library:4.0.3'
+
+    //    //性能更好的MD风格的RatingBar
+
+    //    api 'me.zhanghai.android.materialratingbar:library:1.2.0'
+//    aop
+    api 'org.aspectj:aspectjrt:1.8.13'
 }
 
 
@@ -112,14 +129,64 @@ publish {
     //项目名称
     artifactId = 'baselibrary'
     //版本号
-    publishVersion = '1.2.3'
+    publishVersion = '1.2.4'
     //描述，不重要
     desc = 'Elegant Android application development base library'
     //网站，不重要
     website = 'https://github.com/fy310518/wanAndroid'
 }
 
-//gradlew clean build bintrayUpload -PbintrayUser=fy310518 -PbintrayKey=54c46159b02281fdabc355fb3912291e0d390994 -PdryRun=false -x releaseAndroidJavadocs
+//gradlew clean build bintrayUpload -PbintrayUser=fy310518 -PbintrayKey=54c46159b02281fdabc355fb3912291e0d390994 -PdryRun=false
 //测试 是否上传成功
 //https://jcenter.bintray.com/fy310518.maven
 
+
+/** 以下开始是将 Android aop 相关配置**/
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.aspectj:aspectjtools:1.8.13'
+        classpath 'org.aspectj:aspectjweaver:1.8.13'
+    }
+}
+
+import org.aspectj.bridge.IMessage
+import org.aspectj.bridge.MessageHandler
+import org.aspectj.tools.ajc.Main
+
+android.libraryVariants.all { variant ->
+    JavaCompile javaCompile = variant.javaCompile
+    javaCompile.doLast {
+        String[] args = ["-showWeaveInfo",
+                         "-1.5",
+                         "-inpath", javaCompile.destinationDir.toString(),
+                         "-aspectpath", javaCompile.classpath.asPath,
+                         "-d", javaCompile.destinationDir.toString(),
+                         "-classpath", javaCompile.classpath.asPath,
+                         "-bootclasspath", android.bootClasspath.join(
+                File.pathSeparator)]
+
+        MessageHandler handler = new MessageHandler(true)
+        new Main().run(args, handler)
+
+        def log = project.logger
+        for (IMessage message : handler.getMessages(null, true)) {
+            switch (message.getKind()) {
+                case IMessage.ABORT:
+                case IMessage.ERROR:
+                case IMessage.FAIL:
+                    log.error message.message, message.thrown
+                    break
+                case IMessage.WARNING:
+                case IMessage.INFO:
+                    log.info message.message, message.thrown
+                    break
+                case IMessage.DEBUG:
+                    log.debug message.message, message.thrown
+                    break
+            }
+        }
+    }
+}
