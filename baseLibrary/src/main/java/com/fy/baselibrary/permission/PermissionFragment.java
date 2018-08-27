@@ -1,18 +1,27 @@
 package com.fy.baselibrary.permission;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.Service;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
 import com.fy.baselibrary.R;
-import com.fy.baselibrary.base.BaseFragment;
+import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.base.dialog.CommonDialog;
 import com.fy.baselibrary.base.dialog.DialogConvertListener;
 import com.fy.baselibrary.base.dialog.NiceDialog;
+import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.JumpUtils;
 
 import java.util.ArrayList;
@@ -24,7 +33,7 @@ import java.util.List;
  * 参考 https://github.com/KCrason/PermissionGranted
  * Created by fangs on 2018/8/10 09:57.
  */
-public class PermissionFragment extends BaseFragment {
+public class PermissionFragment extends AppCompatActivity implements IBaseActivity {
 
     public final static String KEY_PERMISSIONS_ARRAY = "key_permission_array";
 
@@ -49,20 +58,33 @@ public class PermissionFragment extends BaseFragment {
 
     private boolean isToSettingPermission;
 
-    private OnPermission call;
+    private static OnPermission call;
 
     @Override
-    protected int setContentLayout() {
+    public void reTry() {}
+
+    @Override
+    public boolean isShowHeadView() {
+        return false;
+    }
+
+    @Override
+    public int setView() {
         return 0;
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void setStatusBar(Activity activity) {
+        MdStatusBar.statusAlpha = 0;
+        MdStatusBar.navAlpha = 0;
+        MdStatusBar.setColorBar(activity, R.color.transparent, R.color.transparent);
+    }
 
+    @Override
+    public void initData(Activity activity, Bundle savedInstanceState) {
         mFirstRefuseMessage = getString(R.string.defaule_always_message);
 
-        Bundle bundle = getArguments();
+        Bundle bundle = getIntent().getExtras();
         if (null != bundle) {
             mPermissions = bundle.getStringArray(KEY_PERMISSIONS_ARRAY);
             mFirstRefuseMessage = bundle.getString(KEY_FIRST_MESSAGE);
@@ -105,7 +127,7 @@ public class PermissionFragment extends BaseFragment {
                 permissionEnd(CALL_BACK_RESULT_CODE_SUCCESS, true);
             } else {
                 //失败
-                List<String> rationaleList = PermissionUtils.getShouldRationaleList(mContext, mPermissions);
+                List<String> rationaleList = PermissionUtils.getShouldRationaleList(this, mPermissions);
                 if (null != rationaleList && rationaleList.size() > 0) {
                     if (rationaleList.size() < mPermissions.length){
                         showPermissionDialog(false, false);
@@ -120,9 +142,10 @@ public class PermissionFragment extends BaseFragment {
     }
 
     /** 请求多个权限 */
+    @TargetApi(Build.VERSION_CODES.M)
     public void checkPermission(String... permissions) {
         if (null != permissions) {
-            List<String> requestPermissionCount = PermissionUtils.getRequestPermissionList(mContext, permissions);
+            List<String> requestPermissionCount = PermissionUtils.getRequestPermissionList(this, permissions);
             if (null != requestPermissionCount && requestPermissionCount.size() > 0) {
                 requestPermissions(requestPermissionCount.toArray(new String[0]), PERMISSION_REQUEST_CODE);
             } else {
@@ -141,7 +164,7 @@ public class PermissionFragment extends BaseFragment {
     public void onSurePermission(boolean isRefuse) {
         if (isRefuse) {
             isToSettingPermission = true;
-            JumpUtils.jumpSettting(mContext, Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            JumpUtils.jumpSettting(this, Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         } else {
             checkPermission(mPermissions);
         }
@@ -175,36 +198,7 @@ public class PermissionFragment extends BaseFragment {
                     }
                 })
                 .setWidthPercent(CommonDialog.WidthPercent)
-                .show(getFragmentManager());
-    }
-
-
-    /**
-     * 工具方法 得到 权限管理fragment
-     * @param permissions
-     * @return
-     */
-    public static PermissionFragment newInstant(String... permissions) {
-        PermissionFragment fragment = new PermissionFragment();
-
-        Bundle bundle = new Bundle();
-        bundle.putStringArray(KEY_PERMISSIONS_ARRAY, permissions);
-
-        fragment.setArguments(bundle);
-
-        return fragment;
-    }
-
-    /**
-     * 准备请求权限
-     */
-    public void prepareRequest(AppCompatActivity activity, OnPermission call) {
-        //将当前的请求码和对象添加到集合中
-        this.call = call;
-        activity.getSupportFragmentManager()
-                .beginTransaction()
-                .add(this, activity.getClass().getName())
-                .commit();
+                .show(getSupportFragmentManager());
     }
 
     /**
@@ -219,11 +213,44 @@ public class PermissionFragment extends BaseFragment {
             } else if (resultCode == CALL_BACK_RESULE_CODE_FAILURE && isStatus){
                 call.noPermission(Arrays.asList(mPermissions));
             } else {
-                call.hasPermission(PermissionUtils.getRequestPermissionList(mContext, mPermissions), isStatus);
+                call.hasPermission(PermissionUtils.getRequestPermissionList(this, mPermissions), isStatus);
             }
         }
 
-        getFragmentManager().beginTransaction().remove(this).commit();
+        JumpUtils.exitActivity(this);
+    }
+
+
+    /**
+     * 准备请求权限
+     * @param object
+     * @param permissions
+     * @return
+     */
+    public static void newInstant(Object object, String[] permissions, OnPermission callListener) {
+        call = callListener;
+
+        Bundle bundle = new Bundle();
+        bundle.putStringArray(KEY_PERMISSIONS_ARRAY, permissions);
+
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+
+        if (object instanceof AppCompatActivity) {
+            Activity act = ((Activity)object);
+            intent.setClass(act, PermissionFragment.class);
+
+            act.startActivity(intent);
+        } else if (object instanceof Fragment) {
+            Activity act = ((Fragment)object).getActivity();
+            intent.setClass(act, PermissionFragment.class);
+
+            act.startActivity(intent);
+        } else if (object instanceof Service){
+            intent.setClass((Service) object, PermissionFragment.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            ((Service) object).startActivity(intent);
+        }
     }
 
 
@@ -234,16 +261,16 @@ public class PermissionFragment extends BaseFragment {
         /**
          * 有权限被授予时回调（部分或全部授予）
          *
-         * @param denied    请求失败的权限组
-         * @param isAll     是否全部授予了
+         * @param denyList    请求失败的权限组
+         * @param isAll       是否全部授予了
          */
-        void hasPermission(List<String> denied, boolean isAll);
+        void hasPermission(List<String> denyList, boolean isAll);
 
         /**
          * 权限被全部拒绝时回调
          *
-         * @param denied 请求失败的权限组
+         * @param denyList 请求失败的权限组
          */
-        void noPermission(List<String> denied);
+        void noPermission(List<String> denyList);
     }
 }

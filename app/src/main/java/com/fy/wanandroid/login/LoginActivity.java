@@ -12,9 +12,10 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 
+import com.fy.baselibrary.aop.annotation.NeedPermission;
+import com.fy.baselibrary.aop.annotation.PermissionDenied;
 import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.application.IBaseActivity;
-import com.fy.baselibrary.permission.PermissionFragment;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
@@ -33,6 +34,7 @@ import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
 import com.fy.wanandroid.utils.SelectUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +81,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
     public void initData(Activity activity, Bundle savedInstanceState) {
         L.e(getTaskId() + "----> LoginActivity");
         btnLogin.setBackground(SelectUtils.getBtnSelector(R.drawable.shape_btn, 0));
-        requestPermission();
+//        requestPermission();
         editPass.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -107,8 +109,8 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnLogin:
-                login();
-//                requestPermission();
+//                login();
+                requestPermission();
                 break;
             case R.id.tvRegister:
 //                JumpUtils.jump(mContext, RegisterActivity.class, null);
@@ -180,20 +182,14 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
     /**
      * 请求权限 demo
      */
+    @NeedPermission(value = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
     private void requestPermission(){
-        String[] permission = new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
-        PermissionFragment.newInstant(permission)
-                .prepareRequest(this, new PermissionFragment.OnPermission() {
-                    @Override
-                    public void hasPermission(List<String> denied, boolean isAll) {
-                        T.showLong("权限请求成功" + isAll);
-                    }
 
-                    @Override
-                    public void noPermission(List<String> denied) {
-                        T.showLong("权限请求失败");
-                    }
-                });
+        @PermissionDenied(value = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
+        List<String> permissList = new ArrayList<>();
+        if (null == permissList || permissList.size() == 0){
+//            T.showLong("成功");
+        }
     }
 
 }

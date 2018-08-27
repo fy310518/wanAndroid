@@ -29,7 +29,7 @@ public class PermissionUtils {
      * @param permissions
      * @return
      */
-    public static List<String> getRequestPermissionList(Context context, String... permissions) {
+    public static List<String> getRequestPermissionList(Context context, String[] permissions) {
         List<String> reequestPermissionCount = new ArrayList<>();
         for (String permission : permissions){
             if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {

@@ -10,7 +10,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
 /**
- * 处理 添加，对这些方法做统一的切面处理
+ * 对添加 @ClickFilter 注解的方法做统一的切面处理
  * Created by fangs on 2018/8/23 17:54.
  */
 @Aspect
