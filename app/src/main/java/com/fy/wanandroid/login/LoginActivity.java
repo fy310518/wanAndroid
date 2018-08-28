@@ -13,9 +13,9 @@ import android.view.View;
 import android.widget.Button;
 
 import com.fy.baselibrary.aop.annotation.NeedPermission;
-import com.fy.baselibrary.aop.annotation.PermissionDenied;
 import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.application.IBaseActivity;
+import com.fy.baselibrary.permission.PermissionUtils;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
@@ -24,7 +24,6 @@ import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.SpfUtils;
-import com.fy.baselibrary.utils.T;
 import com.fy.baselibrary.utils.cache.ACache;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.animation.revealeffect.RevealEffectActivity;
@@ -34,7 +33,6 @@ import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
 import com.fy.wanandroid.utils.SelectUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,10 +41,11 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * 登录 
+ * 登录
  * Created by fangs on 2017/12/12.
  */
 public class LoginActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
+    private static final String TAG = "LoginActivity";
 
     @BindView(R.id.editName)
     TextInputEditText editName;
@@ -84,17 +83,21 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
 //        requestPermission();
         editPass.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
             @Override
             public void afterTextChanged(Editable s) {
                 String text = editPass.getText().toString().trim();
 
-                if (!TextUtils.isEmpty(text) && text.length() > 12){
+                if (!TextUtils.isEmpty(text) && text.length() > 12) {
                     iLayoutPass.setError("密码不符合规则!!!");
                 } else {
-                    if(null != iLayoutPass.getError()){
+                    if (null != iLayoutPass.getError()) {
                         iLayoutPass.setError(null);
                     }
                 }
@@ -125,7 +128,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
         login();
     }
 
-    private void weiyu(){
+    private void weiyu() {
         RequestUtils.create(ApiService.class)
                 .booksByTag("奇幻", 1)
                 .compose(RxHelper.handleResult())
@@ -183,13 +186,8 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
      * 请求权限 demo
      */
     @NeedPermission(value = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
-    private void requestPermission(){
-
-        @PermissionDenied(value = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
-        List<String> permissList = new ArrayList<>();
-        if (null == permissList || permissList.size() == 0){
-//            T.showLong("成功");
-        }
+    private void requestPermission() {
+        L.e(TAG, "Around 失败");
     }
 
 }

@@ -14,6 +14,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface NeedPermission {
 
-    String[] value();
+    String[] value() default {};
 
 }

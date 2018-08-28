@@ -1,14 +1,7 @@
 package com.fy.baselibrary.aop.permissionfilter;
 
-import android.Manifest;
-import android.app.Service;
-import android.content.Context;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-
 import com.fy.baselibrary.aop.annotation.NeedPermission;
-import com.fy.baselibrary.permission.PermissionFragment;
+import com.fy.baselibrary.permission.PermissionActivity;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.T;
 
@@ -34,29 +27,34 @@ public class PermissionFilterAspect {
     public void PermissionFilter(NeedPermission needPermission) {}
 
 //    @Around 注解表示这个方法执行时机的前后都可以做切面处理
-//    常用到的还有@Before、@After等等。@Before即方法执行前做处理，@After反之。
+//    常用到的还有@Before、@After等等。@Before 即方法执行前做处理，@After 反之。
     @Around("PermissionFilter(needPermission)")
-    public void AroundJoinPoint(ProceedingJoinPoint joinPoint, NeedPermission needPermission) throws Throwable {
+    public void BeforeJoinPoint(ProceedingJoinPoint joinPoint, NeedPermission needPermission) {
 //        此方法就是对切面的具体实现，ProceedingJoinPoint 参数意为环绕通知，这个类里面可以获取到方法的签名等各种信息
 
         final Object object = joinPoint.getThis();
         if (null == object || null == needPermission) return;
 
-        PermissionFragment.newInstant(object, needPermission.value(), new PermissionFragment.OnPermission() {
+        L.e(TAG, "权限请求");
+
+        PermissionActivity.newInstant(object, needPermission.value(), new PermissionActivity.OnPermission() {
             @Override
             public void hasPermission(List<String> denied, boolean isAll) {
-                T.showLong("权限请求成功" + isAll);
-                proceed(joinPoint);
+
+                String permission = isAll ? "权限请求成功" : "有权限没有授权部分功能无法使用";
+                T.showLong(permission);
+
+                L.e(TAG, permission);
+                if (isAll)proceed(joinPoint);
             }
 
             @Override
             public void noPermission(List<String> denied) {
                 T.showLong("权限请求失败");
-                proceed(joinPoint);
+                L.e(TAG, "失败");
             }
         });
     }
-
 
     private void proceed(ProceedingJoinPoint joinPoint){
         try {
@@ -65,4 +63,5 @@ public class PermissionFilterAspect {
             throwable.printStackTrace();
         }
     }
+
 }

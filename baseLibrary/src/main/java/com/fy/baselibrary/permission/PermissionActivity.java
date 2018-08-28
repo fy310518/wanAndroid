@@ -1,10 +1,8 @@
 package com.fy.baselibrary.permission;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -33,7 +31,7 @@ import java.util.List;
  * 参考 https://github.com/KCrason/PermissionGranted
  * Created by fangs on 2018/8/10 09:57.
  */
-public class PermissionFragment extends AppCompatActivity implements IBaseActivity {
+public class PermissionActivity extends AppCompatActivity implements IBaseActivity {
 
     public final static String KEY_PERMISSIONS_ARRAY = "key_permission_array";
 
@@ -144,6 +142,8 @@ public class PermissionFragment extends AppCompatActivity implements IBaseActivi
     /** 请求多个权限 */
     @TargetApi(Build.VERSION_CODES.M)
     public void checkPermission(String... permissions) {
+        PermissionUtils.checkPermissions(this, permissions);
+
         if (null != permissions) {
             List<String> requestPermissionCount = PermissionUtils.getRequestPermissionList(this, permissions);
             if (null != requestPermissionCount && requestPermissionCount.size() > 0) {
@@ -164,7 +164,7 @@ public class PermissionFragment extends AppCompatActivity implements IBaseActivi
     public void onSurePermission(boolean isRefuse) {
         if (isRefuse) {
             isToSettingPermission = true;
-            JumpUtils.jumpSettting(this, Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            PermissionUtils.jumpPermiSettting(this);
         } else {
             checkPermission(mPermissions);
         }
@@ -238,16 +238,16 @@ public class PermissionFragment extends AppCompatActivity implements IBaseActivi
 
         if (object instanceof AppCompatActivity) {
             Activity act = ((Activity)object);
-            intent.setClass(act, PermissionFragment.class);
+            intent.setClass(act, PermissionActivity.class);
 
             act.startActivity(intent);
         } else if (object instanceof Fragment) {
             Activity act = ((Fragment)object).getActivity();
-            intent.setClass(act, PermissionFragment.class);
+            intent.setClass(act, PermissionActivity.class);
 
             act.startActivity(intent);
         } else if (object instanceof Service){
-            intent.setClass((Service) object, PermissionFragment.class);
+            intent.setClass((Service) object, PermissionActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             ((Service) object).startActivity(intent);
         }
