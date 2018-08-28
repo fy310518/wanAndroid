@@ -225,7 +225,6 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
      * 准备请求权限
      * @param object
      * @param permissions
-     * @return
      */
     public static void newInstant(Object object, String[] permissions, OnPermission callListener) {
         call = callListener;

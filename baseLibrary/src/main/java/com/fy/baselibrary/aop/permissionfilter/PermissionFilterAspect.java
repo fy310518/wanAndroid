@@ -1,7 +1,13 @@
 package com.fy.baselibrary.aop.permissionfilter;
 
+import android.app.Activity;
+import android.app.Service;
+import android.content.Context;
+import android.support.v4.app.Fragment;
+
 import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.permission.PermissionActivity;
+import com.fy.baselibrary.permission.PermissionUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.T;
 
@@ -35,7 +41,22 @@ public class PermissionFilterAspect {
         final Object object = joinPoint.getThis();
         if (null == object || null == needPermission) return;
 
-        L.e(TAG, "权限请求");
+        Context context = null;
+        if (object instanceof Activity) {
+            context = ((Activity)object);
+        } else if (object instanceof Fragment) {
+            context = ((Fragment)object).getActivity();
+        } else if (object instanceof Service){
+            context = ((Service) object);
+        }
+
+        if (null == context) return;
+        //获取需要申请的权限，如果返回的权限列表为空 则 已经获取了对应的权限列表
+        List<String> requestPermi = PermissionUtils.getRequestPermissionList(context, needPermission.value());
+        if (null == requestPermi || requestPermi.size() == 0){
+            proceed(joinPoint);
+            return;
+        }
 
         PermissionActivity.newInstant(object, needPermission.value(), new PermissionActivity.OnPermission() {
             @Override
@@ -43,15 +64,12 @@ public class PermissionFilterAspect {
 
                 String permission = isAll ? "权限请求成功" : "有权限没有授权部分功能无法使用";
                 T.showLong(permission);
-
-                L.e(TAG, permission);
                 if (isAll)proceed(joinPoint);
             }
 
             @Override
             public void noPermission(List<String> denied) {
                 T.showLong("权限请求失败");
-                L.e(TAG, "失败");
             }
         });
     }

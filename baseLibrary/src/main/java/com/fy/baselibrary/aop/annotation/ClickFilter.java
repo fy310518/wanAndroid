@@ -7,7 +7,6 @@ import java.lang.annotation.Target;
 
 /**
  * 定义一个注解 ClickFilter，用来注解方法，
- * 以便在编译期被编译器检测到需要做切面的方法
  * Created by fangs on 2018/8/24 14:00.
  */
 @Retention(RetentionPolicy.RUNTIME)

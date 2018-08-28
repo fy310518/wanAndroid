@@ -26,8 +26,6 @@ public class DeviceUtils {
 
     /**
      * 获取 手机 版本号
-     *
-     * @return
      */
     public static String getDeviceVersion() {
         return Build.VERSION.RELEASE;
@@ -71,7 +69,7 @@ public class DeviceUtils {
 
     /**
      * 获取手机IMEI(需要“android.permission.READ_PHONE_STATE”权限)
-     *
+     * @param ctx
      * @return 手机IMEI
      */
     @SuppressLint({"MissingPermission", "HardwareIds"})
@@ -85,7 +83,7 @@ public class DeviceUtils {
 
     /**
      * 获取当前APP所在手机的 IP 地址
-     * @return
+     * @return ""
      */
     public static String getCurIp() {
         WifiManager wifiManager = (WifiManager) ConfigUtils.getAppCtx().getApplicationContext().

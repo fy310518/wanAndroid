@@ -29,9 +29,7 @@ public class DensityUtils {
 
     /**
      * dp转 px
-     *
      * @param dpVal
-     * @return
      */
     public static int dp2px(float dpVal) {
         Context context = ConfigUtils.getAppCtx();
@@ -40,9 +38,7 @@ public class DensityUtils {
 
     /**
      * sp转px
-     *
      * @param spVal
-     * @return
      */
     public static int sp2px(float spVal) {
         Context context = ConfigUtils.getAppCtx();
@@ -51,9 +47,7 @@ public class DensityUtils {
 
     /**
      * px转dp
-     *
      * @param pxVal
-     * @return
      */
     public static float px2dp(float pxVal) {
         Context context = ConfigUtils.getAppCtx();
@@ -63,9 +57,7 @@ public class DensityUtils {
 
     /**
      * px转sp
-     *
      * @param pxVal
-     * @return
      */
     public static float px2sp(float pxVal) {
         Context context = ConfigUtils.getAppCtx();
@@ -75,7 +67,6 @@ public class DensityUtils {
     /**
      * px 转 pt （1pt＝1/72英寸）
      * @param pxVal
-     * @return
      */
     public static float px2pt(float pxVal){
         Context context = ConfigUtils.getAppCtx();
@@ -85,7 +76,6 @@ public class DensityUtils {
 
     /**
      * 测量View的宽高
-     *
      * @param view View
      */
     public static void measureWidthAndHeight(View view) {
