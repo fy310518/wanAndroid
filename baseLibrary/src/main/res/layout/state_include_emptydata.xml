@@ -17,18 +17,18 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:singleLine="true"
-        android:text="点击空白区域重试"
+        android:text="@string/clickRetry"
         android:textColor="@color/txtLight"
-        android:textSize="@dimen/txt_small" />
+        android:textSize="14dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/tvHint"
         android:layout_centerHorizontal="true"
-        android:paddingBottom="@dimen/spacing_small"
-        android:text="空数据"
+        android:paddingBottom="8dp"
+        android:text="@string/dataNull"
         android:textColor="@color/txtSuperColor"
-        android:textSize="@dimen/txt_large" />
+        android:textSize="22dp" />
 
 </RelativeLayout>

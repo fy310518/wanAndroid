@@ -5,7 +5,7 @@ import android.app.Application;
 import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.NightModeUtils;
-import com.fy.baselibrary.utils.ResourceUtils;
+import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
 import com.fy.baselibrary.utils.SpfUtils;
 
@@ -24,7 +24,7 @@ public class BaseApp extends Application {
                 .setBASE_URL("http://www.wanandroid.com/")
                 .create(this);
 
-        int designWidth = (int) ResourceUtils.getMetaData("Rudeness_Adapter_Screen_width", 0);
+        int designWidth = (int) ResUtils.getMetaData("Rudeness_Adapter_Screen_width", 0);
         ScreenUtils.setCustomDensity(this, designWidth);
 
         //通过缓存的 进程id 判断应用是否被强杀

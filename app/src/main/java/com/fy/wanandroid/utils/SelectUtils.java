@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.DrawableRes;
 
-import com.fy.baselibrary.utils.ResourceUtils;
+import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.TintUtils;
 
 import com.fy.wanandroid.R;
@@ -26,10 +26,10 @@ public class SelectUtils {
      * @return
      */
     public static Drawable getSelector(@DrawableRes int draId, int drawableType){
-        int[] colors = new int[]{ResourceUtils.getColor(R.color.button_pressed),
-                ResourceUtils.getColor(R.color.button_pressed),
-                ResourceUtils.getColor(R.color.button_pressed),
-                ResourceUtils.getColor(R.color.button_normal)};
+        int[] colors = new int[]{ResUtils.getColor(R.color.button_pressed),
+                ResUtils.getColor(R.color.button_pressed),
+                ResUtils.getColor(R.color.button_pressed),
+                ResUtils.getColor(R.color.button_normal)};
 
         int[][] states = new int[4][];
         states[0] = new int[]{android.R.attr.state_pressed};
@@ -52,8 +52,8 @@ public class SelectUtils {
      */
     public static Drawable getTagSelector(@DrawableRes int draId, int drawableType){
         int[] colors = new int[]{
-                ResourceUtils.getColor(R.color.button_pressed2),
-                ResourceUtils.getColor(R.color.button_normal2)};
+                ResUtils.getColor(R.color.button_pressed2),
+                ResUtils.getColor(R.color.button_normal2)};
 
         int[][] states = new int[2][];
         states[0] = new int[]{android.R.attr.state_pressed};
@@ -74,8 +74,8 @@ public class SelectUtils {
      */
     public static Drawable getBtnSelector(@DrawableRes int draId, int drawableType){
         int[] colors = new int[]{
-                ResourceUtils.getColor(R.color.button_pressed),
-                ResourceUtils.getColor(R.color.button_normal)};
+                ResUtils.getColor(R.color.button_pressed),
+                ResUtils.getColor(R.color.button_normal)};
 
         int[][] states = new int[2][];
         states[0] = new int[]{android.R.attr.state_pressed};

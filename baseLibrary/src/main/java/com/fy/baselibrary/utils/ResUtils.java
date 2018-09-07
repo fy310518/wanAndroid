@@ -18,9 +18,9 @@ import java.util.Random;
  * 获取项目资源 （如：res目录下的，assets 目录下的，manifest文件配置的资源等）
  * Created by fangs on 2017/9/13.
  */
-public class ResourceUtils {
+public class ResUtils {
 
-    private ResourceUtils() {
+    private ResUtils() {
         /* cannot be instantiated */
         throw new UnsupportedOperationException("cannot be instantiated");
     }

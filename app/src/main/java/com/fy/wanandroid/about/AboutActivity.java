@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.AppUtils;
-import com.fy.baselibrary.utils.ResourceUtils;
+import com.fy.baselibrary.utils.ResUtils;
 import com.fy.wanandroid.R;
 
 import butterknife.BindView;
@@ -47,7 +47,7 @@ public class AboutActivity extends AppCompatActivity implements IBaseActivity, V
     public void initData(Activity activity, Bundle savedInstanceState) {
         tvAppInformation.setText(AppUtils.getAppName() + "\n" + AppUtils.getVersionName());
 
-        tvAbout.setText(Html.fromHtml(ResourceUtils.getStr(R.string.about_content)));
+        tvAbout.setText(Html.fromHtml(ResUtils.getStr(R.string.about_content)));
         tvAbout.setMovementMethod(LinkMovementMethod.getInstance());
     }
 

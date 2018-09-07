@@ -18,12 +18,10 @@ import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.load.down.DownManager;
 import com.fy.baselibrary.startactivity.StartActivity;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
-import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.Constant;
-import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.utils.ResourceUtils;
+import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
 
 import butterknife.ButterKnife;
@@ -162,7 +160,7 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
             toolbar.setTitle("");
             TextView toolbarTitle = activity.findViewById(R.id.toolbarTitle);
             toolbarTitle.setText(activity.getTitle());
-            toolbarTitle.setTextColor(ResourceUtils.getColor(ConfigUtils.getTitleColor()));
+            toolbarTitle.setTextColor(ResUtils.getColor(ConfigUtils.getTitleColor()));
             toolbarTitle.setVisibility(View.VISIBLE);
         } else {
             toolbar.setTitle(activity.getTitle());
@@ -179,7 +177,7 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
             //设置返回按钮监听事件
             toolbar.setNavigationOnClickListener(v -> JumpUtils.exitActivity(act));
             if (ConfigUtils.getBgColor() > 0)
-                toolbar.setBackgroundColor(ResourceUtils.getColor(ConfigUtils.getBgColor()));
+                toolbar.setBackgroundColor(ResUtils.getColor(ConfigUtils.getBgColor()));
         }
     }
 

@@ -6,13 +6,11 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DimenRes;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.fy.baselibrary.utils.DensityUtils;
-import com.fy.baselibrary.utils.ResourceUtils;
+import com.fy.baselibrary.utils.ResUtils;
 
 /**
  * RecycleView LinearLayoutManager 样式分割线
@@ -142,7 +140,7 @@ public class ListItemDecoration extends RecyclerView.ItemDecoration {
         }
 
         public Builder setmSpace(@DimenRes int dimenId) {
-            this.mSpace = (int) ResourceUtils.getDimen(dimenId);
+            this.mSpace = (int) ResUtils.getDimen(dimenId);
             return this;
         }
 

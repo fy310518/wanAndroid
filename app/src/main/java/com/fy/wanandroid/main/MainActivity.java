@@ -15,7 +15,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,13 +29,11 @@ import com.fy.baselibrary.startactivity.StartActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.statusbar.StatusBarContentColor;
 import com.fy.baselibrary.utils.AnimUtils;
-import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.Constant;
-import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NightModeUtils;
-import com.fy.baselibrary.utils.ResourceUtils;
+import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.TintUtils;
 import com.fy.baselibrary.utils.cache.ACache;
@@ -124,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
         boolean isLogin = SpfUtils.getSpfSaveBoolean(Constant.isLogin);
         tvUserName.setText(isLogin ?
                 SpfUtils.getSpfSaveStr(Constant.userName) :
-                ResourceUtils.getStr(R.string.notLogin));
+                ResUtils.getStr(R.string.notLogin));
 
         btnLoginOrExit.setText(isLogin ? R.string.exitLogin : R.string.clickLogin);
 

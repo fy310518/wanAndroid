@@ -105,7 +105,12 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
         switch (v.getId()) {
             case R.id.tvKing:
                 NotificationUtils.manageNotificationChannel(this, "chat");
-                NotificationUtils.sendSubscribeMsg(this, LoginActivity.class, "chat", "收到一条聊天消息", "今天中午吃什么？");
+                NotificationUtils.FyBuild.init()
+                        .setChannel(1, "chat")
+                        .setIcon(R.mipmap.ic_launcher, R.color.appHeadBg)
+                        .setMsgTitle("收到一条聊天消息")
+                        .setMsgContent("今天中午吃什么？")
+                        .sendNotify(this, LoginActivity.class);
 
 //                NightModeUtils.switchNightMode(this);
 //                slManager.showNetWorkError();
@@ -120,7 +125,12 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 //                        });
                 break;
             case R.id.tvKing2:
-                NotificationUtils.sendSubscribeMsg(this, null, "subscribe", "收到一条订阅消息", "地铁沿线30万商铺抢购中！");
+                NotificationUtils.FyBuild.init()
+                        .setChannel(2, "subscribe")
+                        .setIcon(R.mipmap.ic_launcher, R.color.appHeadBg)
+                        .setMsgTitle("收到一条订阅消息")
+                        .setMsgContent("地铁沿线30万商铺抢购中！")
+                        .sendNotify(this, null);
                 break;
         }
     }

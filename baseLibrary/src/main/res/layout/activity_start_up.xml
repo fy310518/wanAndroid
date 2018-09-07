@@ -15,9 +15,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right|top"
         android:layout_marginTop="33dp"
-        android:layout_marginRight="@dimen/spacing_small"
+        android:layout_marginRight="8dp"
         android:textColor="@color/white"
-        android:textSize="@dimen/txt_small"
+        android:textSize="14dp"
         android:text="@string/skip"/>
 
 </FrameLayout>

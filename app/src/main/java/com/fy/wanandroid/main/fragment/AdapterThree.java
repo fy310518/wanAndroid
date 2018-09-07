@@ -7,7 +7,7 @@ import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.rv.adapter.MultiCommonAdapter;
 import com.fy.baselibrary.rv.adapter.MultiTypeSupport;
 import com.fy.baselibrary.utils.Constant;
-import com.fy.baselibrary.utils.ResourceUtils;
+import com.fy.baselibrary.utils.ResUtils;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class AdapterThree extends MultiCommonAdapter<Bookmark> {
         } else {
             TextView te = holder.getView(R.id.tvTag);
             te.setText(bookmark.getName());
-            te.setTextColor(ResourceUtils.getRandomColor());
+            te.setTextColor(ResUtils.getRandomColor());
             te.setBackground(SelectUtils.getTagSelector(R.drawable.shape_ellipse_rect, 0));
         }
     }

@@ -2,7 +2,6 @@ package com.fy.baselibrary.utils;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.ColorRes;
@@ -38,7 +37,7 @@ public class TintUtils {
      */
     public static Drawable getTintDrawable(@DrawableRes int drawableId, int drawableType, @ColorRes int colorId) {
         Drawable drawable = getDrawable(drawableId, drawableType);
-        int color = ResourceUtils.getColor(colorId);
+        int color = ResUtils.getColor(colorId);
 
         Drawable.ConstantState state = drawable.getConstantState();
         Drawable drawable1 = DrawableCompat

@@ -50,6 +50,11 @@ public class Constant {
     public static String token = "";
 
     /**
+     * 程序是否必须登录
+     */
+    public static boolean isMustAppLogin = false;
+
+    /**
      * 用户是否登录 key
      */
     public static String isLogin = "is_Login";
@@ -59,7 +64,11 @@ public class Constant {
      */
     public static String userName = "User_Name";
 
+    /**
+     * 说明重启 key
+     */
     public static String isRunState = "";
+
     /**
      * 保存应用进程id
      */

@@ -17,8 +17,10 @@ import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.statusbar.StatusBarContentColor;
 import com.fy.baselibrary.utils.AppUtils;
+import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
-import com.fy.baselibrary.utils.ResourceUtils;
+import com.fy.baselibrary.utils.ResUtils;
+import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.TintUtils;
 
 import java.util.concurrent.TimeUnit;
@@ -64,7 +66,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
         Drawable back = TintUtils.getTintDrawable(R.drawable.shape_ellipse_rect, 0, R.color.alphaBlack);
         tvSkip = findViewById(R.id.tvSkip);
         tvSkip.setOnClickListener(this);
-        tvSkip.setText(ResourceUtils.getReplaceStr(R.string.skip, skip));
+        tvSkip.setText(ResUtils.getReplaceStr(R.string.skip, skip));
         tvSkip.setBackground(back);
 
         hideLoadView();
@@ -75,7 +77,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.tvSkip) {
-            intoMainAct();
+            intoMainOrLogin();
         }
     }
 
@@ -88,15 +90,23 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
                 .take(skip + 1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(aLong -> tvSkip.setText(ResourceUtils.getReplaceStr(R.string.skip, skip - aLong)))
+                .doOnNext(aLong -> tvSkip.setText(ResUtils.getReplaceStr(R.string.skip, skip - aLong)))
                 .doOnSubscribe(RequestUtils::addDispos)
                 .subscribe(aLong -> {
-                    if (aLong == 4L)intoMainAct();
+                    if (aLong == 4L)intoMainOrLogin();
                 });
     }
 
-    private void intoMainAct() {
-        JumpUtils.jump(this,  AppUtils.getLocalPackageName() + ".main.MainActivity", null);
+    /**
+     * 根据条件 判断进入登录页还是主界面
+     */
+    private void intoMainOrLogin() {
+        if (Constant.isMustAppLogin && !SpfUtils.getSpfSaveBoolean(Constant.isLogin)) {
+            JumpUtils.jump(this, AppUtils.getLocalPackageName() + ".login.LoginActivity", null);
+        } else {
+            JumpUtils.jump(this, AppUtils.getLocalPackageName() + ".main.MainActivity", null);
+        }
+
         finish();
     }
 }

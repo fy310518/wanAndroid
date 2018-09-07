@@ -4,28 +4,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <!-- App 统一字体大小     超  小 号-->
-    <dimen name="txt_small_much">12sp</dimen>
-    <!-- App 统一字体大小     小号-->
-    <dimen name="txt_small">14sp</dimen>
-    <!-- App 统一字体大小     中 号-->
-    <dimen name="txt_medium">18sp</dimen>
-    <!-- App 统一字体大小     大 号-->
-    <dimen name="txt_large">22sp</dimen>
-
-
-    <!-- APP 统一间距  超 小 号-->
-    <dimen name="spacing_small_much">4dp</dimen>
-    <!-- App 统一间距  小 号-->
-    <dimen name="spacing_small">8dp</dimen>
-    <!-- App 统一间距  小 中 号-->
-    <dimen name="spacing_medium_small">12dp</dimen>
-    <!-- App 统一间距  中 号-->
-    <dimen name="spacing_medium">16dp</dimen>
-    <!-- App 统一间距  大 中 号-->
-    <dimen name="spacing_medium_large">30dp</dimen>
-
-
+    <!-- dialog 加载动画图片 宽度、高度 -->
+    <dimen name="load_anim">60dp</dimen>
 
     <!-- 自定义 列表刷新控件 高度 -->
     <dimen name="refreshHeight">75dp</dimen>
@@ -35,10 +15,5 @@
     <dimen name="rvDropDown">50dp</dimen>
     <!-- 下拉刷新 加载动画 图片 宽度、高度 -->
     <dimen name="rvRefreshAnim">30dp</dimen>
-
-
-    <!-- dialog 加载动画图片 宽度、高度 -->
-    <dimen name="load_anim">60dp</dimen>
-
 
 </resources>

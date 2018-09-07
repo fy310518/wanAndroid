@@ -39,7 +39,12 @@
         <activity
             android:name=".login.LoginActivity"
             android:label="@string/logingTitle"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="${applicationId}.login.LoginActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".login.RegisterActivity"

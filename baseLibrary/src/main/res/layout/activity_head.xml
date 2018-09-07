@@ -22,7 +22,7 @@
             android:singleLine="true"
             android:text="ToolBar"
             android:visibility="gone"
-            android:textSize="@dimen/txt_medium" />
+            android:textSize="18dp" />
 
     </android.support.v7.widget.Toolbar>
 

@@ -10,7 +10,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.fy.baselibrary.utils.ResourceUtils;
+import com.fy.baselibrary.utils.ResUtils;
 
 /**
  * RecycleView GridLayoutManager 样式分割线
@@ -155,7 +155,7 @@ public class GridItemDecoration extends RecyclerView.ItemDecoration {
         }
 
         public Builder setmSpace(@DimenRes int dimenId) {
-            this.mSpace = (int) ResourceUtils.getDimen(dimenId);
+            this.mSpace = (int) ResUtils.getDimen(dimenId);
             return this;
         }
 

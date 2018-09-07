@@ -64,4 +64,11 @@
     <string name="defaule_first_message">为了您的安全，您需要授权该权限才可以正常使用相关功能哦。</string>
     <string name="defaule_always_message">当前应用缺少相应的权限，您需要设置相应的权限后才可正常使用相关功能。</string>
 
+    <string name="dataNull">没有数据</string>
+    <string name="accessError">访问出错</string>
+    <string name="clickRetry">点击空白区域重试</string>
+    <string name="internetError">网络错误</string>
+    <string name="confirmInternetRetry">请确认网络连接后点击空白区域重试</string>
+
+
 </resources>

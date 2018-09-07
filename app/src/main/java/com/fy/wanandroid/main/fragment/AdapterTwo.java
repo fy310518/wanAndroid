@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.rv.adapter.RvCommonAdapter;
-import com.fy.baselibrary.utils.ResourceUtils;
+import com.fy.baselibrary.utils.ResUtils;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class AdapterTwo extends RvCommonAdapter<TreeBean> {
         if (null != childrenList) {
             StringBuilder strBuilder = new StringBuilder();
             for (TreeBean.ChildrenBean children : childrenList) {
-                String str = ResourceUtils.getReplaceStr(R.string.space, children.getName());
+                String str = ResUtils.getReplaceStr(R.string.space, children.getName());
                 strBuilder.append(str);
             }
 

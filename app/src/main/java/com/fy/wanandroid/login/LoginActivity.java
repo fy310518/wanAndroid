@@ -31,6 +31,7 @@ import com.fy.wanandroid.entity.LoginBean;
 import com.fy.wanandroid.main.MainActivity;
 import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
+import com.fy.wanandroid.status.StatusDemoActivity;
 import com.fy.wanandroid.utils.SelectUtils;
 
 import java.util.HashMap;
@@ -117,8 +118,8 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
                 break;
             case R.id.tvRegister:
 //                JumpUtils.jump(mContext, RegisterActivity.class, null);
-//                JumpUtils.jump(this, StatusDemoActivity.class, null);
-                JumpUtils.jump(this, RevealEffectActivity.class, null);
+                JumpUtils.jump(this, StatusDemoActivity.class, null);
+//                JumpUtils.jump(this, RevealEffectActivity.class, null);
                 break;
         }
     }
