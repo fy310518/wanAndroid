@@ -221,10 +221,17 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
     }
 
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        call = null;
+    }
+
     /**
      * 准备请求权限
      * @param object
      * @param permissions
+     * @return
      */
     public static void newInstant(Object object, String[] permissions, OnPermission callListener) {
         call = callListener;

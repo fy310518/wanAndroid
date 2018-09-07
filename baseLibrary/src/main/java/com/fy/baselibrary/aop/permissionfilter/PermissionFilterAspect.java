@@ -35,12 +35,13 @@ public class PermissionFilterAspect {
 //    @Around 注解表示这个方法执行时机的前后都可以做切面处理
 //    常用到的还有@Before、@After等等。@Before 即方法执行前做处理，@After 反之。
     @Around("PermissionFilter(needPermission)")
-    public void BeforeJoinPoint(ProceedingJoinPoint joinPoint, NeedPermission needPermission) {
+    public void BeforeJoinPoint(ProceedingJoinPoint joinPoint, NeedPermission needPermission) throws Throwable {
 //        此方法就是对切面的具体实现，ProceedingJoinPoint 参数意为环绕通知，这个类里面可以获取到方法的签名等各种信息
 
         final Object object = joinPoint.getThis();
         if (null == object || null == needPermission) return;
 
+        L.e(TAG, "权限请求");
         Context context = null;
         if (object instanceof Activity) {
             context = ((Activity)object);
@@ -54,32 +55,32 @@ public class PermissionFilterAspect {
         //获取需要申请的权限，如果返回的权限列表为空 则 已经获取了对应的权限列表
         List<String> requestPermi = PermissionUtils.getRequestPermissionList(context, needPermission.value());
         if (null == requestPermi || requestPermi.size() == 0){
-            proceed(joinPoint);
+            joinPoint.proceed();
             return;
         }
 
         PermissionActivity.newInstant(object, needPermission.value(), new PermissionActivity.OnPermission() {
             @Override
             public void hasPermission(List<String> denied, boolean isAll) {
-
                 String permission = isAll ? "权限请求成功" : "有权限没有授权部分功能无法使用";
                 T.showLong(permission);
-                if (isAll)proceed(joinPoint);
+
+                L.e(TAG, permission);
+                if (isAll) {
+                    try {
+                        joinPoint.proceed();
+                    } catch (Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
+                }
             }
 
             @Override
             public void noPermission(List<String> denied) {
                 T.showLong("权限请求失败");
+                L.e(TAG, "失败");
             }
         });
-    }
-
-    private void proceed(ProceedingJoinPoint joinPoint){
-        try {
-            joinPoint.proceed();
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
     }
 
 }

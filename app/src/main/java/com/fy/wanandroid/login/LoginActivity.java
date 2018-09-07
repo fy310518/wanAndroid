@@ -186,9 +186,9 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
     /**
      * 请求权限 demo
      */
-    @NeedPermission(value = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
+    @NeedPermission({Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
     private void requestPermission() {
-        L.e(TAG, "Around 失败");
+        L.e(TAG, "Login 失败");
     }
 
 }
