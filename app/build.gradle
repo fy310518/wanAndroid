@@ -55,7 +55,7 @@ dependencies {
 }
 
 
-/** 以下开始是将Android Library上传到jcenter的相关配置**/
+/** 以下开始是 Android aop 相关配置**/
 buildscript {
     repositories {
         mavenCentral()

@@ -141,7 +141,7 @@ publish {
 //https://jcenter.bintray.com/fy310518.maven
 
 
-/** 以下开始是将 Android aop 相关配置**/
+/** 以下开始是 Android aop 相关配置**/
 buildscript {
     repositories {
         mavenCentral()

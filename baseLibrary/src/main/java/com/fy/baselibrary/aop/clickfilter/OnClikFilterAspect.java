@@ -18,7 +18,7 @@ public class OnClikFilterAspect {
 
     private static int viewId = 0;
     private static Long sLastclick = 0L;
-    private static final Long FILTER_TIMEM = 100L;
+    private static final Long FILTER_TIMEM = 300L;
 
 
     @Pointcut("execution(@com.fy.baselibrary.aop.annotation.ClickFilter * *(..))")
