@@ -1,6 +1,5 @@
 package com.fy.baselibrary.utils;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Notification;
@@ -10,22 +9,15 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 
-import com.fy.baselibrary.R;
-import com.fy.baselibrary.aop.annotation.NeedPermission;
-
 /**
- * 通知 工具类
+ * 简单通知 工具类
  * Created by fangs on 2018/3/18.
  */
 public class NotificationUtils {
@@ -78,7 +70,6 @@ public class NotificationUtils {
      * @param actClass       点击通知 跳转的 目标activity（可空）
      * @param fyBuild        通知关键数据 包装类
      */
-    @NeedPermission(value = {Manifest.permission.VIBRATE})
     public static void sendSubscribeMsg(Activity act, Class actClass, FyBuild fyBuild) {
 
         manageNotificationChannel(act, fyBuild.channelName);
@@ -92,20 +83,27 @@ public class NotificationUtils {
         }
 
         NotificationManager manager = (NotificationManager) act.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = new NotificationCompat.Builder(act, fyBuild.channelName)
-                .setContentTitle(fyBuild.msgTitle)
-                .setContentText(fyBuild.msgContent)
-                .setContentIntent(pendingIntent) //设置通知栏点击意图
-                .setWhen(System.currentTimeMillis())
-                .setSmallIcon(fyBuild.icon)
-                .setLargeIcon(BitmapFactory.decodeResource(act.getResources(), fyBuild.icon))
-                .setColor(ResUtils.getColor(fyBuild.iconBgColor))
-                .setAutoCancel(true)
-                .setDefaults(Notification.DEFAULT_SOUND|
-                        Notification.DEFAULT_VIBRATE|
-                        Notification.DEFAULT_LIGHTS|
-                        Notification.FLAG_ONLY_ALERT_ONCE)//系统默认声音、震动、呼吸灯（只响应一次）
-                .build();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(act, fyBuild.channelName)
+                    .setContentTitle(fyBuild.msgTitle)
+                    .setContentText(fyBuild.msgContent)
+                    .setContentIntent(pendingIntent) //设置通知栏点击意图
+                    .setWhen(System.currentTimeMillis())
+                    .setSmallIcon(fyBuild.icon)
+                    .setLargeIcon(BitmapFactory.decodeResource(act.getResources(), fyBuild.icon))
+                    .setColor(ResUtils.getColor(fyBuild.iconBgColor))
+                    .setAutoCancel(true)
+                    .setDefaults(NotificationCompat.DEFAULT_ALL)//系统默认声音、震动、呼吸灯（只响应一次）
+                    ;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // requestCode是0的时候三星手机点击通知栏通知不起作用
+            PendingIntent pendingIntent1 = PendingIntent.getActivity(act, 1, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
+            // 关联PendingIntent
+            builder.setVisibility(Notification.VISIBILITY_PUBLIC)
+                    .setFullScreenIntent(pendingIntent1, false);// 横幅
+        }
+
+        Notification notification = builder.build();
 
         assert manager != null;
         manager.notify(fyBuild.channelId, notification);

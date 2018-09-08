@@ -37,7 +37,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class StartUpActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
 
-    private int skip = 5;
+    private int skip = 3;
     TextView tvSkip;
     ImageView loadImg;
 
@@ -93,7 +93,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
                 .doOnNext(aLong -> tvSkip.setText(ResUtils.getReplaceStr(R.string.skip, skip - aLong)))
                 .doOnSubscribe(RequestUtils::addDispos)
                 .subscribe(aLong -> {
-                    if (aLong == 4L)intoMainOrLogin();
+                    if (aLong == 2L)intoMainOrLogin();
                 });
     }
 
