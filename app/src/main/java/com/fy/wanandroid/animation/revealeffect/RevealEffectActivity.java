@@ -52,9 +52,9 @@ public class RevealEffectActivity extends AppCompatActivity implements IBaseActi
 
     @Override
     public void setStatusBar(Activity activity) {
-        MdStatusBar.statusAlpha = 0;
-        MdStatusBar.navAlpha = 0;
-        MdStatusBar.setColorBar(activity, R.color.statusBar, R.color.statusBar);
+        MdStatusBar.StatusBuilder.init().setStatusColor(R.color.statusBar, 0)
+                .setNavColor(R.color.statusBar, 0)
+                .setColorBar(activity);
     }
 
     @SuppressLint("ClickableViewAccessibility")

@@ -40,7 +40,10 @@ public class AboutActivity extends AppCompatActivity implements IBaseActivity, V
 
     @Override
     public void setStatusBar(Activity activity) {
-        MdStatusBar.setColorBar(activity, R.color.statusBar, R.color.statusBar);
+        MdStatusBar.StatusBuilder.init()
+                .setStatusColor(R.color.statusBar, 0)
+                .setNavColor(R.color.statusBar, 0)
+                .setColorBar(activity);
     }
 
     @Override

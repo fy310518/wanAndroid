@@ -32,6 +32,12 @@
         <item name="android:textColor">@color/colorHintError</item>
     </style>
 
+    <!-- 揭露动画 demo 清理 activity 切换动画 -->
+    <style name="revealEffect" parent="BaseAppTheme">
+        <item name="android:windowIsTranslucent">true</item><!--窗体是否半透明-->
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
     <!-- 主界面底部导航栏按钮样式 -->
     <style name="mainBottomBtnStyle">
         <item name="android:layout_width">0dp</item>

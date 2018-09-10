@@ -72,9 +72,10 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
 
     @Override
     public void setStatusBar(Activity activity) {
-        MdStatusBar.statusAlpha = 0;
-        MdStatusBar.navAlpha = 0;
-        MdStatusBar.setColorBar(activity, R.color.statusBar, R.color.statusBar);
+        MdStatusBar.StatusBuilder.init()
+                .setStatusColor(R.color.statusBar, 0)
+                .setNavColor(R.color.statusBar, 0)
+                .setColorBar(activity);
     }
 
     @Override
@@ -113,8 +114,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnLogin:
-//                login();
-                requestPermission();
+                login();
                 break;
             case R.id.tvRegister:
 //                JumpUtils.jump(mContext, RegisterActivity.class, null);
@@ -129,24 +129,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
         login();
     }
 
-    private void weiyu() {
-        RequestUtils.create(ApiService.class)
-                .booksByTag("奇幻", 1)
-                .compose(RxHelper.handleResult())
-                .doOnSubscribe(RequestUtils::addDispos)
-                .subscribe(new NetCallBack<Object>() {
-                    @Override
-                    protected void onSuccess(Object login) {
-
-                    }
-
-                    @Override
-                    protected void updataLayout(int flag) {
-                        L.e("net updataLayout", flag + "-----");
-                    }
-                });
-    }
-
+    @NeedPermission(value = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
     private void login() {
         IProgressDialog progressDialog = new IProgressDialog().init(this)
                 .setDialogMsg(R.string.user_login);
@@ -181,14 +164,6 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
                         L.e("net updataLayout", flag + "-----");
                     }
                 });
-    }
-
-    /**
-     * 请求权限 demo
-     */
-    @NeedPermission(value = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
-    private void requestPermission() {
-        L.e(TAG, "Around 失败");
     }
 
 }
