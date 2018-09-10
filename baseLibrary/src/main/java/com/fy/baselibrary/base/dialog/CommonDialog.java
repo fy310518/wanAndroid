@@ -39,6 +39,7 @@ public abstract class CommonDialog extends DialogFragment {
     private static final String DIM = "dim_amount";
     private static final String GRAVITY = "show_gravity";
     private static final String CANCEL = "out_cancel";
+    private static final String IS_KEY_BACK = "KEY_BACK";
     private static final String ANIM = "anim_style";
     private static final String LAYOUT = "layout_id";
 
@@ -53,6 +54,8 @@ public abstract class CommonDialog extends DialogFragment {
     @LayoutRes
     protected int layoutId;
 
+    /** 是否拦截返回按钮 */
+    protected boolean isKeyBack = false;
     /** 点击window外的区域 是否消失 */
     protected boolean isHide = false;
     /** 灰度深浅 */
@@ -91,6 +94,7 @@ public abstract class CommonDialog extends DialogFragment {
             dimAmount = savedInstanceState.getFloat(DIM);
             gravity = savedInstanceState.getInt(GRAVITY);
             isHide = savedInstanceState.getBoolean(CANCEL);
+            isKeyBack = savedInstanceState.getBoolean(IS_KEY_BACK);
             anim = savedInstanceState.getInt(ANIM);
             layoutId = savedInstanceState.getInt(LAYOUT);
         }
@@ -117,7 +121,7 @@ public abstract class CommonDialog extends DialogFragment {
         super.onStart();
         initParams();
 
-        setOnKeyListener();
+        if (isKeyBack)setOnKeyListener();
     }
 
     /**
@@ -160,6 +164,7 @@ public abstract class CommonDialog extends DialogFragment {
         outState.putFloat(DIM, dimAmount);
         outState.putInt(GRAVITY, gravity);
         outState.putBoolean(CANCEL, isHide);
+        outState.putBoolean(IS_KEY_BACK, isKeyBack);
         outState.putInt(ANIM, anim);
         outState.putInt(LAYOUT, layoutId);
     }
@@ -180,6 +185,16 @@ public abstract class CommonDialog extends DialogFragment {
      */
     public CommonDialog setAnim(int anim) {
         this.anim = anim;
+        return this;
+    }
+
+    /**
+     * 设置 是否拦截返回按钮
+     * @param keyBack
+     * @return
+     */
+    public CommonDialog setKeyBack(boolean keyBack) {
+        this.isKeyBack = keyBack;
         return this;
     }
 

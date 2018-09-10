@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
+import android.support.annotation.IntRange;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -26,29 +27,85 @@ import com.fy.baselibrary.utils.ScreenUtils;
  */
 public class MdStatusBar {
 
-    /** 状态栏透明度 */
-    public static int statusAlpha = 255;
-
-    /** 导航栏透明度 */
-    public static int navAlpha = 255;
-
     private MdStatusBar() {
         /* cannot be instantiated */
         throw new UnsupportedOperationException("cannot be instantiated");
     }
 
-    /**
-     * 自定义 状态栏和导航栏 的颜色(为了 适配 状态栏 文字和图标颜色动态改变 此方法仅供学习 因此私有化)
-     * @param act
-     * @param statusColor StatusBar color
-     * @param navColor    NavigationBar color
-     */
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    public static void setColorBar(Activity act, @ColorRes int statusColor, @ColorRes int navColor) {
-        int statusc = ContextCompat.getColor(act, statusColor);
-        int navc = ContextCompat.getColor(act, navColor);
-        setColorBar(act, statusc, statusAlpha, true, navc, navAlpha);
+    public static class StatusBuilder{
+        /** 状态栏颜色 */
+        public int statusColor;
+        /** 状态栏透明度 */
+        public int statusAlpha;
+
+        /** 是否设置导航栏颜色 */
+        boolean applyNav = false;
+
+        /** 导航栏颜色 */
+        public int navColor;
+        /** 导航栏透明度 */
+        public int navAlpha;
+
+        /**
+         * 设置状态栏颜色 和 透明度
+         * @param statusColor
+         * @param statusAlpha  透明度（0 完全透明，255 完全不透明）
+         * @return
+         */
+        public StatusBuilder setStatusColor(@ColorRes int statusColor, @IntRange(from = 0, to = 255) int statusAlpha) {
+            this.statusColor = statusColor;
+            this.statusAlpha = statusAlpha;
+            return this;
+        }
+
+        /**
+         * 设置导航栏颜色 和 透明度
+         * @param navColor
+         * @param navAlpha 透明度（0 完全透明，255 完全不透明）
+         * @return
+         */
+        public StatusBuilder setNavColor(@ColorRes int navColor, @IntRange(from = 0, to = 255) int navAlpha) {
+            this.navColor = navColor;
+            this.navAlpha = navAlpha;
+            this.applyNav = true;
+            return this;
+        }
+
+        public static StatusBuilder init() {
+            return new StatusBuilder();
+        }
+
+        /**
+         * 自定义 状态栏和导航栏 的颜色
+         * @param act
+         */
+        public void setColorBar(Activity act){
+            int statusc = ContextCompat.getColor(act, this.statusColor);
+            int navc = ContextCompat.getColor(act, this.navColor);
+            MdStatusBar.setColorBar(act, statusc, this.statusAlpha, this.applyNav, navc, this.navAlpha);
+        }
+
+        /**
+         * 设置 状态栏和导航栏 的 透明度
+         * @param act
+         */
+        public void setTransparentBar(Activity act){
+            int statusc = ContextCompat.getColor(act, this.statusColor);
+            int navc = ContextCompat.getColor(act, this.navColor);
+            MdStatusBar.setTransparentBar(act, statusc, this.statusAlpha, this.applyNav, navc, this.navAlpha);
+        }
+
+        /**
+         * DrawerLayout 实现状态栏和导航栏
+         * @param act
+         */
+        public void setColorBarForDrawer(Activity act) {
+            int statusc = ContextCompat.getColor(act, this.statusColor);
+            int navc = ContextCompat.getColor(act, this.navColor);
+            MdStatusBar.setColorBarForDrawer(act, statusc, this.statusAlpha, this.applyNav, navc, this.navAlpha);
+        }
     }
+
 
     /**
      * 自定义 状态栏和导航栏 的颜色
@@ -60,9 +117,8 @@ public class MdStatusBar {
      * @param navDepth    NavigationBar color depth (applyNav = true)
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    private static void setColorBar(Activity act, @ColorInt int statusColor, int statusDepth,
-                             boolean applyNav,
-                             @ColorInt int navColor, int navDepth) {
+    public static void setColorBar(Activity act, @ColorInt int statusColor, int statusDepth,
+                             boolean applyNav, @ColorInt int navColor, int navDepth) {
 
         int realStatusDepth = limitDepthOrAlpha(statusDepth);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//5.0及以上
@@ -98,20 +154,6 @@ public class MdStatusBar {
         }
     }
 
-
-    /**
-     * 设置 状态栏和导航栏 的 透明度(注：经测试如果使用 【状态栏内容着色】 使用此方法和 setColorBarForDrawer())
-     * @param act
-     * @param statusColor  StatusBar color
-     * @param navColor     NavigationBar color
-     * @param applyNav     布局是否延伸到导航栏
-     */
-    public static void setTransparentBar(Activity act, @ColorRes int statusColor, @ColorRes int navColor, boolean applyNav) {
-        int statusc = ContextCompat.getColor(act, statusColor);
-        int navc = ContextCompat.getColor(act, navColor);
-        setTransparentBar(act, statusc, statusAlpha, applyNav, navc, navAlpha);
-    }
-
     /**
      * 设置 状态栏和导航栏 的 透明度
      *
@@ -123,26 +165,22 @@ public class MdStatusBar {
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public static void setTransparentBar(Activity act, @ColorInt int statusColor, int statusAlpha,
-                                   boolean applyNav,
-                                   @ColorInt int navColor, int navAlpha) {
+                                   boolean applyNav, @ColorInt int navColor, int navAlpha) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = act.getWindow();
             View decorView = window.getDecorView();
             int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
 
-            int finalStatusColor = statusColor == 0 ? Color.TRANSPARENT :
-                    Color.argb(limitDepthOrAlpha(statusAlpha), Color.red(statusColor), Color.green(statusColor),
-                            Color.blue(statusColor));
+            int finalStatusColor = statusColor == 0 ? Color.TRANSPARENT : calculateColor(statusColor, statusAlpha);
 
             window.setStatusBarColor(finalStatusColor);
 
             if (applyNav) {
                 option = option | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
             }
-            int finalNavColor = navColor == 0 ? Color.TRANSPARENT :
-                    Color.argb(limitDepthOrAlpha(navAlpha), Color.red(navColor),
-                            Color.green(navColor), Color.blue(navColor));
+            int finalNavColor = navColor == 0 ? Color.TRANSPARENT : calculateColor(navColor, navAlpha);
+
             window.setNavigationBarColor(finalNavColor);
 
             decorView.setSystemUiVisibility(option);
@@ -151,55 +189,17 @@ public class MdStatusBar {
             Window window = act.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             ViewGroup decorView = (ViewGroup) window.getDecorView();
-            int finalStatusColor = statusColor == 0 ? Color.TRANSPARENT :
-                    Color.argb(limitDepthOrAlpha(statusAlpha), Color.red(statusColor),
-                            Color.green(statusColor), Color.blue(statusColor));
+            int finalStatusColor = statusColor == 0 ? Color.TRANSPARENT : calculateColor(statusColor, statusAlpha);
+
             decorView.addView(createStatusBarView(act, finalStatusColor));
 
             if (navigationBarExist(act)) {
                 window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-                int finalNavColor = navColor == 0 ? Color.TRANSPARENT :
-                        Color.argb(limitDepthOrAlpha(navAlpha), Color.red(navColor),
-                                Color.green(navColor), Color.blue(navColor));
+                int finalNavColor = navColor == 0 ? Color.TRANSPARENT : calculateColor(navColor, navAlpha);
+
                 decorView.addView(createNavBarView(act, finalNavColor));
             }
         }
-    }
-
-
-    /**
-     * 隐藏状态栏和导航栏
-     * 注：实现这种效果，必须重写 Activity 的 onWindowFocusChanged 方法，在onWindowFocusChanged()中执行
-     * @param applyNav apply NavigationBar
-     */
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    private void setHideBar(Activity act, boolean applyNav) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            View decorView = act.getWindow().getDecorView();
-            int option = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-            if (applyNav) {
-                option = option | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-            }
-            decorView.setSystemUiVisibility(option);
-        }
-    }
-
-
-    /**
-     * DrawerLayout 实现状态栏和导航栏
-     * @param act
-     * @param statusColor
-     * @param navColor
-     * @param applyNav     布局是否延伸到导航栏
-     */
-    public static void setColorBarForDrawer(Activity act, @ColorRes int statusColor, @ColorRes int navColor, boolean applyNav) {
-        int statusc = ContextCompat.getColor(act, statusColor);
-        int navc = ContextCompat.getColor(act, navColor);
-        setColorBarForDrawer(act, statusc, statusAlpha, applyNav, navc, navAlpha);
     }
 
     /**
@@ -250,6 +250,28 @@ public class MdStatusBar {
                 int finalNavColor = realNavDepth == 0 ? navColor : calculateColor(navColor, realNavDepth);
                 decorView.addView(createNavBarView(act, finalNavColor), 1);
             }
+        }
+    }
+
+
+    /**
+     * 隐藏状态栏和导航栏
+     * 注：实现这种效果，必须重写 Activity 的 onWindowFocusChanged 方法，在onWindowFocusChanged()中执行
+     * @param applyNav apply NavigationBar
+     */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void setHideBar(Activity act, boolean applyNav) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            View decorView = act.getWindow().getDecorView();
+            int option = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+            if (applyNav) {
+                option = option | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+            }
+            decorView.setSystemUiVisibility(option);
         }
     }
 
@@ -330,31 +352,21 @@ public class MdStatusBar {
      * @return
      */
     public static int limitDepthOrAlpha(int depthOrAlpha) {
-        if (depthOrAlpha < 0) {
-            return 0;
-        }
-        if (depthOrAlpha > 255) {
-            return 255;
-        }
-        return depthOrAlpha;
+        return depthOrAlpha < 0 ? 0 : (depthOrAlpha > 255 ? 255 : depthOrAlpha);
     }
 
     /**
-     * 根据颜色 值和颜色深度（透明度）计算 颜色值
+     * 根据颜色值 和 颜色深度（透明度）计算 颜色值
      * @param color
      * @param alpha
      * @return
      */
     @ColorInt
     public static int calculateColor(@ColorInt int color, int alpha) {
-        float a = 1 - alpha / 255f;
-        int red = color >> 16 & 0xff;
-        int green = color >> 8 & 0xff;
-        int blue = color & 0xff;
-        red = (int) (red * a + 0.5);
-        green = (int) (green * a + 0.5);
-        blue = (int) (blue * a + 0.5);
-        return 0xff << 24 | red << 16 | green << 8 | blue;
+        return Color.argb(limitDepthOrAlpha(255 - alpha),
+                Color.red(color),
+                Color.green(color),
+                Color.blue(color));
     }
 
 }

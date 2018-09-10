@@ -73,9 +73,10 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
 
     @Override
     public void setStatusBar(Activity activity) {
-        MdStatusBar.statusAlpha = 0;
-        MdStatusBar.navAlpha = 0;
-        MdStatusBar.setColorBar(activity, R.color.transparent, R.color.transparent);
+        MdStatusBar.StatusBuilder.init()
+                .setStatusColor(R.color.transparent, 0)
+                .setNavColor(R.color.transparent, 0)
+                .setTransparentBar(activity);
     }
 
     @Override
