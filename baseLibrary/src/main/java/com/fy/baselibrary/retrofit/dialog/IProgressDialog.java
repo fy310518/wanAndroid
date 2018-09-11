@@ -16,51 +16,33 @@ import com.fy.baselibrary.base.dialog.NiceDialog;
  * 自定义对话框的dialog
  * Created by fangs on 2017/11/7.
  */
-public class IProgressDialog {
+public abstract class IProgressDialog {
 
-    AppCompatActivity mContext;
-    CommonDialog dialog;
+    protected AppCompatActivity mContext;
+    protected CommonDialog dialog;
 
-    public IProgressDialog init(AppCompatActivity mContext) {
-        this.mContext = mContext;
-
-        return this;
-    }
-
-    /** 创建对话框 */
-    public IProgressDialog setDialogMsg(int msg) {
-        if (null == dialog) {
-            dialog = NiceDialog.init()
-                    .setLayoutId(R.layout.state_dialog_loading)
-                    .setDialogConvertListener(new DialogConvertListener() {
-                        @Override
-                        protected void convertView(ViewHolder holder, CommonDialog dialog) {
-                            // 加载动画
-                            Animation loadAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_loading);
-                            // 使用ImageView显示动画
-                            ImageView imgLoadAnim = holder.getView(R.id.imgLoadAnim);
-                            imgLoadAnim.setAnimation(loadAnim);
-
-                            holder.setText(R.id.txtLoadHint, msg);
-                        }
-                    })
-                    .setWidthPercent(CommonDialog.WidthPercent);
-        }
-
-        return this;
-    }
+    /**
+     * 创建对话框 子类实现此方法
+     * @param msg
+     * @return
+     */
+    public abstract IProgressDialog setDialogMsg(int msg);
 
     public CommonDialog getDialog() {
         return dialog;
     }
 
-    /** 显示对话框 */
-    public void show(){
+    /**
+     * 显示对话框
+     */
+    public void show() {
         if (null != dialog && null != mContext)
-        dialog.show(mContext.getSupportFragmentManager());
+            dialog.show(mContext.getSupportFragmentManager());
     }
 
-    /** 关闭对话框 */
+    /**
+     * 关闭对话框
+     */
     public void close() {
         if (null != dialog && null != mContext) {
             dialog.dismiss(false);

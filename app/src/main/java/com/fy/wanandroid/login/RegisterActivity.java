@@ -24,6 +24,7 @@ import com.fy.wanandroid.entity.LoginBean;
 import com.fy.wanandroid.main.MainActivity;
 import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
+import com.fy.wanandroid.request.NetDialog;
 import com.fy.wanandroid.utils.SelectUtils;
 
 import java.util.HashMap;
@@ -95,7 +96,7 @@ public class RegisterActivity extends AppCompatActivity implements IBaseActivity
     }
 
     private void register() {//正则
-        IProgressDialog progressDialog = new IProgressDialog().init(mContext)
+        IProgressDialog progressDialog = new NetDialog().init(mContext)
                 .setDialogMsg(R.string.register_loading);
 
         String mUserName = editRegisterName.getText().toString().trim();

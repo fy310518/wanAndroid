@@ -32,6 +32,10 @@ public class ConfigUtils {
         return configComponent.getConfigBiuder().loadImg;
     }
 
+    public static int getLogoImg() {
+        return configComponent.getConfigBiuder().logoImg;
+    }
+
     public static int getTitleColor(){
         return configComponent.getConfigBiuder().titleColor;
     }
@@ -59,6 +63,8 @@ public class ConfigUtils {
 
         /** 闪屏页图片 id */
         int loadImg;
+        /** logo图片 id */
+        int logoImg;
 
 
         /** 标题栏背景色 */
@@ -83,6 +89,11 @@ public class ConfigUtils {
 
         public ConfigBiuder setLoadImg(int loadImg) {
             this.loadImg = loadImg;
+            return this;
+        }
+
+        public ConfigBiuder setLogoImg(int logoImg) {
+            this.logoImg = logoImg;
             return this;
         }
 

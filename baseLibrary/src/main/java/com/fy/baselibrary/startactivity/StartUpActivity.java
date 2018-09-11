@@ -40,6 +40,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
     private int skip = 3;
     TextView tvSkip;
     ImageView loadImg;
+    ImageView imgLogo;
 
     @Override
     public boolean isShowHeadView() {
@@ -63,8 +64,13 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         loadImg = findViewById(R.id.loadImg);
+        imgLogo = findViewById(R.id.imgLogo);
+
         int drawableId = ConfigUtils.getLoadImg();
         if (drawableId > 0) loadImg.setImageDrawable(TintUtils.getDrawable(drawableId, 0));
+
+        int logoId = ConfigUtils.getLogoImg();
+        if (logoId > 0)imgLogo.setBackground(TintUtils.getDrawable(logoId, 0));
 
         Drawable back = TintUtils.getTintDrawable(R.drawable.shape_ellipse_rect, 0, R.color.alphaBlack);
         tvSkip = findViewById(R.id.tvSkip);

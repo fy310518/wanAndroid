@@ -15,7 +15,6 @@ import android.widget.Button;
 import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.application.IBaseActivity;
-import com.fy.baselibrary.permission.PermissionUtils;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
@@ -26,16 +25,15 @@ import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.cache.ACache;
 import com.fy.wanandroid.R;
-import com.fy.wanandroid.animation.revealeffect.RevealEffectActivity;
 import com.fy.wanandroid.entity.LoginBean;
 import com.fy.wanandroid.main.MainActivity;
 import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
+import com.fy.wanandroid.request.NetDialog;
 import com.fy.wanandroid.status.StatusDemoActivity;
 import com.fy.wanandroid.utils.SelectUtils;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -131,7 +129,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
 
     @NeedPermission(value = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
     private void login() {
-        IProgressDialog progressDialog = new IProgressDialog().init(this)
+        IProgressDialog progressDialog = new NetDialog().init(this)
                 .setDialogMsg(R.string.user_login);
 
         String mUserName = editName.getText().toString().trim();//"fangshuai"

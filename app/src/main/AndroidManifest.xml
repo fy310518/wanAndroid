@@ -16,7 +16,7 @@
             android:name="com.fy.baselibrary.startactivity.StartActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
-            android:theme="@style/myTransparent">
+            android:theme="@style/startUpTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

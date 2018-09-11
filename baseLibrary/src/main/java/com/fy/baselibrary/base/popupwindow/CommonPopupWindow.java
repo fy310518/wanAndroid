@@ -141,7 +141,7 @@ public abstract class CommonPopupWindow extends PopupWindow {
     private void popupShowAdapter(View anchor){
         if(Build.VERSION.SDK_INT >= 24) {
             Rect rect = new Rect();
-            anchor.getGlobalVisibleRect(rect);
+            anchor.getWindowVisibleDisplayFrame(rect);
             int h = anchor.getResources().getDisplayMetrics().heightPixels - rect.bottom;
             setHeight(h);
         }
