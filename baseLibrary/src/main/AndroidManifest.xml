@@ -15,7 +15,6 @@
         <!-- 权限管理 -->
         <activity android:name=".permission.PermissionActivity"
             android:label="@string/permission"
-            android:screenOrientation="portrait"
             android:theme="@style/permissionTheme"/>
 
         <!-- Android 7.0 在应用间共享文件 -->

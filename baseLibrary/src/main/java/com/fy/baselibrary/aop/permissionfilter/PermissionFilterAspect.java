@@ -54,33 +54,34 @@ public class PermissionFilterAspect {
         if (null == context) return;
         //获取需要申请的权限，如果返回的权限列表为空 则 已经获取了对应的权限列表
         List<String> requestPermi = PermissionUtils.getRequestPermissionList(context, needPermission.value());
-        if (null == requestPermi || requestPermi.size() == 0){
+        L.e(TAG, "权限请求" + requestPermi.size());
+        if (requestPermi.size() == 0){
             joinPoint.proceed();
-            return;
-        }
+        } else {
+            PermissionActivity.newInstant(object, needPermission.value(), new PermissionActivity.OnPermission() {
+                @Override
+                public void hasPermission(List<String> denied, boolean isAll) {
 
-        PermissionActivity.newInstant(object, needPermission.value(), new PermissionActivity.OnPermission() {
-            @Override
-            public void hasPermission(List<String> denied, boolean isAll) {
+                    String permission = isAll ? "权限请求成功" : "有权限没有授权部分功能无法使用";
+                    T.showLong(permission);
 
-                String permission = isAll ? "权限请求成功" : "有权限没有授权部分功能无法使用";
-                T.showLong(permission);
-
-                L.e(TAG, permission);
-                if (isAll) {
-                    try {
-                        joinPoint.proceed();
-                    } catch (Throwable throwable) {
-                        throwable.printStackTrace();
+                    L.e(TAG, permission);
+                    if (isAll) {
+                        try {
+                            joinPoint.proceed();
+                        } catch (Throwable throwable) {
+                            throwable.printStackTrace();
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void noPermission(List<String> denied) {
-                T.showLong("权限请求失败");
-            }
-        });
+                @Override
+                public void noPermission(List<String> denied) {
+                    T.showLong("权限请求失败");
+                }
+            });
+        }
+
     }
 
 }

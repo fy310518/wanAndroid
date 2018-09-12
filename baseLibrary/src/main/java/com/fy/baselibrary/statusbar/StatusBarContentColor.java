@@ -16,15 +16,16 @@ import java.lang.reflect.Method;
  * Created by fangs on 18/3/14.
  */
 public class StatusBarContentColor {
-//      1.View.SYSTEM_UI_FLAG_VISIBLE ：状态栏和Activity共存，Activity不全屏显示。也就是应用平常的显示画面
-//      2.View.SYSTEM_UI_FLAG_FULLSCREEN ：Activity全屏显示，且状态栏被覆盖掉
-//      4.View.INVISIBLE ： Activity全屏显示，隐藏状态栏
+//      1、View.SYSTEM_UI_FLAG_VISIBLE ：状态栏和Activity共存，Activity不全屏显示。也就是应用平常的显示画面
+//      2、View.SYSTEM_UI_FLAG_FULLSCREEN ：Activity全屏显示，且状态栏被覆盖掉
+//      4、View.INVISIBLE ： Activity全屏显示，隐藏状态栏
 
-//      5.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN 是从API 16 开始启用，实现效果：视图延伸至状态栏区域，状态栏悬浮于视图之上
-//      6.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR 是从 API 23 开始启用，实现效果：
+//      5、View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN 是从API 16 开始启用，实现效果：视图延伸至状态栏区域，状态栏悬浮于视图之上
+//      5.1、View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION 视图延伸至导航栏区域，导航栏栏悬浮于视图之上
+//      6、View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR 是从 API 23 开始启用，实现效果：
 //          设置状态栏图标和状态栏文字颜色为深色，为适应状态栏背景为浅色调而启用，该Flag只有在使用了 FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS，
 //          并且没有使用 FLAG_TRANSLUCENT_STATUS 时才有效，即只有在【透明状态栏时才有效】
-//      7.View.SYSTEM_UI_FLAG_LAYOUT_STABLE 保持整个View稳定,
+//      7、View.SYSTEM_UI_FLAG_LAYOUT_STABLE 保持整个View稳定,
 //          常和控制System UI悬浮, 隐藏的Flags共用, 使View不会因为System UI的变化而重新layout
 
     private StatusBarContentColor() {

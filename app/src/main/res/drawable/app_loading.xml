@@ -3,9 +3,9 @@
 
     <item android:drawable="@color/blue" />
 
-    <item
-        android:bottom="50dp" >
-        <bitmap android:gravity="bottom"
-            android:src="@mipmap/ic_launcher" />
-    </item>
+    <!--<item-->
+        <!--android:bottom="50dp" >-->
+        <!--<bitmap android:gravity="bottom"-->
+            <!--android:src="@mipmap/ic_launcher" />-->
+    <!--</item>-->
 </layer-list>
