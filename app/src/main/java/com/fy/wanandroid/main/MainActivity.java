@@ -101,7 +101,8 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
         MdStatusBar.StatusBuilder.init()
                 .setStatusColor(R.color.statusBar, 0)
                 .setNavColor(R.color.statusBar, 0)
-                .setTransparentBar(activity);
+                .setApplyNav(false)
+                .setColorBar(activity);
     }
 
     @Override

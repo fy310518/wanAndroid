@@ -103,6 +103,10 @@
             android:screenOrientation="portrait" />
 
 
+        <activity android:name=".test.TestActivity"
+            android:label="@string/test"
+            android:screenOrientation="portrait"/>
+
     </application>
 
     <!-- 允许访问摄像头 -->

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <declare-styleable name="ArcView">
+        <!-- 小圆距离屏幕左边距离 -->
+        <attr name="arcMaginLeft" format="dimension" />
+        <!-- 小圆距离屏幕右边距离 -->
+        <attr name="arcMarginRight" format="dimension" />
+        <!-- 小圆之间的间距 -->
+        <attr name="arcMargin" format="dimension" />
+
+        <attr name="bgColor" format="color" />
+    </declare-styleable>
+
+</resources>
