@@ -106,7 +106,6 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tvKing:
-                NotificationUtils.manageNotificationChannel(this, "chat");
                 NotificationUtils.FyBuild.init()
                         .setChannel(1, "chat")
                         .setIcon(R.mipmap.ic_launcher, R.color.appHeadBg)
@@ -257,18 +256,16 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                 .into(imgDemo);
     }
 
-    private void initNotificationChannel(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            String channelId = "chat";
-            String channelName = "聊天消息";
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationUtils.createNotificationChannel(this, channelId, channelName, importance);
+    private void initNotificationChannel() {
+        String channelId = "chat";
+        String channelName = "聊天消息";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+        NotificationUtils.createNotificationChannel(this, channelId, channelName, importance);
 
-            channelId = "subscribe";
-            channelName = "订阅消息";
-            importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationUtils.createNotificationChannel(this, channelId, channelName, importance);
-        }
+        channelId = "subscribe";
+        channelName = "订阅消息";
+        importance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationUtils.createNotificationChannel(this, channelId, channelName, importance);
     }
 
 

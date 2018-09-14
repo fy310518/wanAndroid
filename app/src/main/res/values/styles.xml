@@ -4,7 +4,7 @@
         <item name="android:listDivider">@drawable/divider_bg</item>
     </style>
 
-    <!-- 启动界面 权限管理界面 主题 -->
+    <!-- 启动界面主题 -->
     <style name="startUpTheme" parent="BaseAppTheme">
         <item name="android:windowBackground">@drawable/app_loading</item>
         <item name="android:windowFullscreen">true</item> <!-- 全屏 -->

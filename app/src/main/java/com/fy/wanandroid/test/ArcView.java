@@ -123,20 +123,25 @@ public class ArcView extends View {
 //        float top = fontMetrics.top;//为基线到字体上边框的距离,即上图中的top
 //        float bottom = fontMetrics.bottom;//为基线到字体下边框的距离,即上图中的bottom
 //        int baseLineY = (int) (centerCircleY - top/2 - bottom/2);//基线中间点的y轴计算公式
-        canvas.drawText("92", centerCircleX - DensityUtils.dp2px(5), centerCircleY, mPaint);
-        canvas.drawText("67", leftCircleX - 15, leftCircleY, mPaint);
-        canvas.drawText("87", rightCircleX - 15, rightCircleY, mPaint);
+        int left = DensityUtils.dp2px(5);
+        canvas.drawText("92", centerCircleX - left, centerCircleY, mPaint);
+        canvas.drawText("67", leftCircleX - left, leftCircleY, mPaint);
+        canvas.drawText("87", rightCircleX - left, rightCircleY, mPaint);
 
         mPaint.setTextSize(DensityUtils.sp2px(14));
         mPaint.setColor(Color.parseColor("#ccf39b39"));
-        canvas.drawText("分", centerCircleX + DensityUtils.dp2px(15), centerCircleY, mPaint);
-        canvas.drawText("分", leftCircleX + 45, leftCircleY, mPaint);
-        canvas.drawText("分", rightCircleX + 45, rightCircleY, mPaint);
+        int right = DensityUtils.dp2px(15);
+        canvas.drawText("分", centerCircleX + right, centerCircleY, mPaint);
+        canvas.drawText("分", leftCircleX + right, leftCircleY, mPaint);
+        canvas.drawText("分", rightCircleX + right, rightCircleY, mPaint);
+
 
         mPaint.setColor(Color.parseColor("#666666"));
-        canvas.drawText("总分", centerCircleX + DensityUtils.dp2px(2), centerCircleY + DensityUtils.dp2px(20), mPaint);
-        canvas.drawText("生理", leftCircleX + 5, leftCircleY + 50, mPaint);
-        canvas.drawText("心理", rightCircleX + 5, rightCircleY + 50, mPaint);
+        int bottom = DensityUtils.dp2px(2);
+        int bottomY = DensityUtils.dp2px(20);
+        canvas.drawText("总分", centerCircleX + bottom, centerCircleY + bottomY, mPaint);
+        canvas.drawText("生理", leftCircleX + bottom, leftCircleY + bottomY, mPaint);
+        canvas.drawText("心理", rightCircleX + bottom, rightCircleY + bottomY, mPaint);
 
 
     }
