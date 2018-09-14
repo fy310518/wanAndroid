@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.Constant;
+import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.SpfUtils;
 
@@ -86,7 +87,7 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
                 }
             }
         } else {
-            startActivity(new Intent(this, StartUpActivity.class));
+            JumpUtils.jump(this, AppUtils.getLocalPackageName() + ".login.StartUpActivity", null);
         }
     }
 

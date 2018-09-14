@@ -76,6 +76,21 @@ public class TimeUtils {
         return sdf.format(date);
     }
 
+
+    /**
+     * 获得给定时间戳表示的日期 零时零分零秒的时间戳
+     * @return
+     */
+    public static long initDateByDay(long time){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        return calendar.getTimeInMillis();
+    }
+
     /**
      * 计算 年龄
      * @param birthday
@@ -104,7 +119,7 @@ public class TimeUtils {
      */
     public static List<Date> dateToWeek(long time, int isMoudel) {
         //指定毫秒数所在的日期 零点零分零秒的毫秒数
-        long zero = time - TimeZone.getDefault().getRawOffset();
+        long zero = initDateByDay(time);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(zero);

@@ -31,7 +31,7 @@ public abstract class CommonDialog extends DialogFragment {
     /**
      * 统一 弹窗宽度占屏幕百分比
      */
-    public static final int WidthPercent = 75;
+    public static final int WidthPercent = 80;
 
     private static final String WIDTHPERCENT = "widthPercent";
     private static final String WIDTH = "width";

@@ -71,6 +71,11 @@ public class MdStatusBar {
             return this;
         }
 
+        /**
+         * 单独定义这个方法，作用是配合 setTransparentBar() 灵活控制导航栏【是否】悬浮在界面之上
+         * @param applyNav
+         * @return
+         */
         public StatusBuilder setApplyNav(boolean applyNav) {
             this.applyNav = applyNav;
             return this;

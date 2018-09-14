@@ -28,9 +28,9 @@ public class NotificationUtils {
     }
 
     /**
-     * 创建一个通知渠道(此方法一般在 发送通知消息前执行, 或者再 启动页 等待的时间执行)
+     * 创建一个通知渠道(此方法一般在 发送通知消息前执行, 或者在 启动页 等待的时间执行)
      * @param ctx
-     * @param channelId     渠道id
+     * @param channelId     渠道id （创建通知渠道的 channelId 和 发送通知时候的渠道名称 channelName 一致）
      * @param channelName   渠道名称
      * @param importance    渠道重要级别 (NotificationManager.IMPORTANCE_DEFAULT)
      */

@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
- * 状态栏内容着色 工具类
+ * 状态栏内容着色 工具类（使用此工具类 需 配合使用 MdStatusBar工具类设置状态栏和导航栏）
  * Created by fangs on 18/3/14.
  */
 public class StatusBarContentColor {
@@ -86,37 +86,34 @@ public class StatusBarContentColor {
     }
 
     @SuppressLint("InlinedApi")
-    private static void setStatusTextColor2(Activity activity, boolean useDart, boolean isTransparentBar){
-        int option = 0;
-        int option2 = 0;
+    private static void setStatusTextColor2(Activity activity, boolean useDart, boolean isTransparentBar) {
+        //一般情况 activity已经设置了状态栏 导航栏的模式，所以在设置状态栏内容颜色时候，需合并之前的模式
+        int o = activity.getWindow().getDecorView().getSystemUiVisibility();
 
-        if (isTransparentBar){
+        //option 深色调，option2浅色调
+        int option, option2;
+
+        if (isTransparentBar) {
             option = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR |
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+//                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+//                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
 
-            option2 = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            option2 = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+//                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+//                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         } else {
-            option = View.SYSTEM_UI_FLAG_VISIBLE |
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            option = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR |
+                    View.SYSTEM_UI_FLAG_VISIBLE |
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
 
             option2 = View.SYSTEM_UI_FLAG_VISIBLE |
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
         }
 
-        if (useDart) {
-            activity.getWindow()
-                    .getDecorView()
-                    .setSystemUiVisibility(option);
-        } else {
-            activity.getWindow()
-                    .getDecorView()
-                    .setSystemUiVisibility(option2);
-        }
+        activity.getWindow()
+                .getDecorView()
+                .setSystemUiVisibility((useDart ? option : option2) | o);
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.fy.baselibrary.startactivity;
+package com.fy.wanandroid.login;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.fy.baselibrary.R;
 import com.fy.baselibrary.aop.annotation.ClickFilter;
 import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.application.IBaseActivity;
@@ -22,6 +21,8 @@ import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.TintUtils;
+import com.fy.wanandroid.R;
+import com.fy.wanandroid.main.MainActivity;
 
 import java.util.concurrent.TimeUnit;
 
@@ -39,8 +40,6 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
 
     private int skip = 3;
     TextView tvSkip;
-    ImageView loadImg;
-    ImageView imgLogo;
 
     @Override
     public boolean isShowHeadView() {
@@ -56,21 +55,14 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
     public void setStatusBar(Activity activity) {
         MdStatusBar.StatusBuilder.init()
                 .setStatusColor(R.color.transparent, 0)
-                .setNavColor(R.color.transparent, 0)
+                .setNavColor(R.color.blue, 0)
+                .setApplyNav(false)
                 .setTransparentBar(activity);
         StatusBarContentColor.setStatusTextColor(this, true, true);
     }
 
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
-        loadImg = findViewById(R.id.loadImg);
-        imgLogo = findViewById(R.id.imgLogo);
-
-        int drawableId = ConfigUtils.getLoadImg();
-        if (drawableId > 0) loadImg.setImageDrawable(TintUtils.getDrawable(drawableId, 0));
-
-        int logoId = ConfigUtils.getLogoImg();
-        if (logoId > 0)imgLogo.setBackground(TintUtils.getDrawable(logoId, 0));
 
         Drawable back = TintUtils.getTintDrawable(R.drawable.shape_ellipse_rect, 0, R.color.alphaBlack);
         tvSkip = findViewById(R.id.tvSkip);
@@ -113,7 +105,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
         if (Constant.isMustAppLogin && !SpfUtils.getSpfSaveBoolean(Constant.isLogin)) {
             JumpUtils.jump(this, AppUtils.getLocalPackageName() + ".login.LoginActivity", null);
         } else {
-            JumpUtils.jump(this, AppUtils.getLocalPackageName() + ".main.MainActivity", null);
+            JumpUtils.jump(this, MainActivity.class, null);
         }
 
         finish();
