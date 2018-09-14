@@ -89,11 +89,6 @@ public class SearchActivity extends AppCompatActivity implements IBaseActivity, 
     public void onClick(View v) {}
 
     @Override
-    public void reTry() {
-
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_edit, menu);
         //得到SearchView对象，SearchView一些属性可以直接使用，比如：setSubmitButtonEnabled，setQueryHint等

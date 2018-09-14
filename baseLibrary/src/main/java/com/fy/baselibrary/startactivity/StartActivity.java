@@ -51,9 +51,6 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
         exitOrIn(getIntent());
     }
 
-    @Override
-    public void reTry() {}
-
 //    @Override
 //    protected void onSaveInstanceState(Bundle outState) {
 //        super.onSaveInstanceState(outState);

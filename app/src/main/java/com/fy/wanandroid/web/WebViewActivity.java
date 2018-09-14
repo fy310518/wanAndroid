@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 
 import com.fy.baselibrary.application.BaseActivityBean;
 import com.fy.baselibrary.application.IBaseActivity;
+import com.fy.baselibrary.application.IreTryActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.L;
@@ -36,7 +37,7 @@ import com.fy.wanandroid.entity.Bookmark;
  * 通用 加载 web 网页 activity
  * Created by fangs on 2018/4/13.
  */
-public class WebViewActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
+public class WebViewActivity extends AppCompatActivity implements IreTryActivity, View.OnClickListener {
     private static final String TAG = "WebViewActivity";
 
     StatusLayoutManager slm;

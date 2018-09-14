@@ -37,7 +37,4 @@ public class TestActivity extends AppCompatActivity implements IBaseActivity{
 
     }
 
-    @Override
-    public void reTry() {}
-
 }

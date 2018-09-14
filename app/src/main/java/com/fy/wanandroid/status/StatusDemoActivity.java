@@ -1,11 +1,9 @@
 package com.fy.wanandroid.status;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -21,9 +19,8 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.application.BaseActivityBean;
-import com.fy.baselibrary.application.IBaseActivity;
+import com.fy.baselibrary.application.IreTryActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.load.LoadCallBack;
@@ -58,7 +55,7 @@ import io.reactivex.schedulers.Schedulers;
  * 多状态布局 demo
  * Created by fangs on 2018/3/16.
  */
-public class StatusDemoActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
+public class StatusDemoActivity extends AppCompatActivity implements IreTryActivity, View.OnClickListener {
 
     @BindView(R.id.imgDemo)
     ImageView imgDemo;

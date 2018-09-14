@@ -3,6 +3,7 @@ package com.fy.baselibrary.application;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.view.OrientationEventListener;
 
 import com.fy.baselibrary.utils.L;
@@ -13,11 +14,19 @@ import com.fy.baselibrary.utils.L;
  */
 public class BaseOrientoinListener extends OrientationEventListener {
 
-    /**
-     * android:configChanges="keyboardHidden|orientation|screenSize"
-     * android:screenOrientation="sensor"
-     * 注册activity （配置 则屏幕旋转 不重启activity，不配置 则屏幕旋转 会重启activity）
-     */
+//     * android:screenOrientation="sensor" 此属性表示 屏幕根据物理传感器方向转动
+//     * android:configChanges="keyboardHidden|orientation|screenSize" 添加此属性表示横竖屏切换activity不重启
+//     * activity 或者 fragment 重写 onConfigurationChanged() 以监听屏幕旋转 如下：
+
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+//        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//            //横屏
+//        } else {
+//            //竖屏
+//        }
+//    }
 
     public static final String TAG = "activity";
     private Activity context;

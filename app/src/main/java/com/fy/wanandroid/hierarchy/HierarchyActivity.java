@@ -76,6 +76,4 @@ public class HierarchyActivity extends AppCompatActivity implements IBaseActivit
     @Override
     public void onClick(View v) {}
 
-    @Override
-    public void reTry() {}
 }

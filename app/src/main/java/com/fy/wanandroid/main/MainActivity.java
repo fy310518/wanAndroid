@@ -3,7 +3,6 @@ package com.fy.wanandroid.main;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -154,21 +153,6 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
         }
     }
 
-    /**
-     * activity fragment 横竖屏切换监听回调方法
-     *
-     * @param newConfig
-     */
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            //横屏
-        } else {
-            //竖屏
-        }
-    }
-
     //初始化底部导航按钮
     private void initRadioGroup() {
         //设置 选择器
@@ -262,10 +246,6 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
                 }
                 break;
         }
-    }
-
-    @Override
-    public void reTry() {
     }
 
     @Override

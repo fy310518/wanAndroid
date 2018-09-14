@@ -59,9 +59,6 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
     private static OnPermission call;
 
     @Override
-    public void reTry() {}
-
-    @Override
     public boolean isShowHeadView() {
         return false;
     }

@@ -37,10 +37,6 @@ public class RevealEffectActivity extends AppCompatActivity implements IBaseActi
     Button btn;
 
     @Override
-    public void reTry() {
-    }
-
-    @Override
     public boolean isShowHeadView() {
         return true;
     }

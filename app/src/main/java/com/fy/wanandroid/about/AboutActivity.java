@@ -58,9 +58,4 @@ public class AboutActivity extends AppCompatActivity implements IBaseActivity, V
     public void onClick(View v) {
 
     }
-
-    @Override
-    public void reTry() {
-
-    }
 }

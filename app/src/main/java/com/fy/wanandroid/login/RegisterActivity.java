@@ -90,11 +90,6 @@ public class RegisterActivity extends AppCompatActivity implements IBaseActivity
         }
     }
 
-    @Override
-    public void reTry() {
-
-    }
-
     private void register() {//正则
         IProgressDialog progressDialog = new NetDialog().init(mContext)
                 .setDialogMsg(R.string.register_loading);

@@ -15,6 +15,7 @@ import android.widget.Button;
 import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.application.IBaseActivity;
+import com.fy.baselibrary.application.IreTryActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
@@ -44,7 +45,7 @@ import butterknife.OnClick;
  * 登录
  * Created by fangs on 2017/12/12.
  */
-public class LoginActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements IreTryActivity, View.OnClickListener {
     private static final String TAG = "LoginActivity";
 
     @BindView(R.id.editName)

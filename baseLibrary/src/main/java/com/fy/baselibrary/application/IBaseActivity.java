@@ -34,8 +34,4 @@ public interface IBaseActivity {
      */
     void initData(Activity activity, Bundle savedInstanceState);
 
-    /**
-     * 多布局 点击重试
-     */
-    void reTry();
 }

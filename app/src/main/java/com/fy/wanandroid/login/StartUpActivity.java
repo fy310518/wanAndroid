@@ -82,9 +82,6 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
         }
     }
 
-    @Override
-    public void reTry() {}
-
     @SuppressLint("CheckResult")
     private void hideLoadView() {
         Observable.interval(0, 1, TimeUnit.SECONDS)

@@ -54,9 +54,6 @@ public class RevealEffectJumpActivity extends AppCompatActivity implements IBase
         });
     }
 
-    @Override
-    public void reTry() {}
-
     private boolean flag = true;
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void runRevealEffect(int centerX, int centerY) {

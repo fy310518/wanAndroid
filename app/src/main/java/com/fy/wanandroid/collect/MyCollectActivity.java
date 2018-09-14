@@ -78,10 +78,6 @@ public class MyCollectActivity extends AppCompatActivity implements IBaseActivit
     public void onClick(View v) {
     }
 
-    @Override
-    public void reTry() {
-    }
-
     private void initRvAdapter() {
         rvAdapter = new AdapterOne(this, new ArrayList<>());
         rvAdapter.setDelete(true);
