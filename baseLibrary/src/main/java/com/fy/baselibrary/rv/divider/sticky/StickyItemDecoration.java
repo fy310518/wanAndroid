@@ -16,59 +16,30 @@ import java.util.List;
  */
 public class StickyItemDecoration extends RecyclerView.ItemDecoration {
 
-    /**
-     * 吸附的itemView
-     */
+    /** 吸附的itemView */
     private View mStickyItemView;
 
-    /**
-     * 吸附itemView 距离顶部
-     */
+    /** 吸附itemView 距离顶部 */
     private int mStickyItemViewMarginTop;
 
-    /**
-     * 吸附itemView 高度
-     */
+    /** 吸附itemView 高度 */
     private int mStickyItemViewHeight;
 
-    /**
-     *  通过它获取到需要吸附view的相关信息
-     */
+    /** 通过它获取到需要吸附view的相关信息 */
     private StickyView mStickyView;
 
-    /**
-     * 滚动过程中当前的UI是否可以找到吸附的view
-     */
+    /** 滚动过程中当前的UI是否可以找到吸附的view */
     private boolean mCurrentUIFindStickView;
 
-    /**
-     * adapter
-     */
-    private RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter;
-
-    /**
-     * viewHolder
-     */
-    private RecyclerView.ViewHolder mViewHolder;
-
-    /**
-     * position list
-     */
+    /** 需要吸附的View在列表当中的下标 list */
     private List<Integer> mStickyPositionList = new ArrayList<>();
 
-    /**
-     * layout manager
-     */
-    private LinearLayoutManager mLayoutManager;
-
-    /**
-     * 绑定数据的position
-     */
+    /** 绑定数据的position */
     private int mBindDataPosition = -1;
 
-    /**
-     * paint
-     */
+    private RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter;
+    private RecyclerView.ViewHolder mViewHolder;
+    private LinearLayoutManager mLayoutManager;
     private Paint mPaint;
 
     public StickyItemDecoration() {
@@ -87,21 +58,23 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
     @Override
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
         super.onDrawOver(c, parent, state);
-
         if (parent.getAdapter().getItemCount() <= 0) return;
-        mLayoutManager = (LinearLayoutManager) parent.getLayoutManager();
 
+        //得到当前RecyclerView的布局管理器
+        mLayoutManager = (LinearLayoutManager) parent.getLayoutManager();
         mCurrentUIFindStickView = false;
 
         for (int m = 0, size = parent.getChildCount(); m < size; m++) {
             View view = parent.getChildAt(m);
 
-            /** 如果是吸附的view */
+            /** 这里用到了 ExampleStickyView 的isStickyView方法 用来判断是否是需要吸附效果的View 是的话才会进入到if逻辑当中 */
             if (mStickyView.isStickyView(view)) {
-                mCurrentUIFindStickView = true;
+                mCurrentUIFindStickView = true; //当前UI当中是否找到了需要吸附的View，此时设置为true
+
                 getStickyViewHolder(parent);
                 cacheStickyViewPosition(m);
 
+                //如果当前吸附的view距离 顶部小于等于0，然后给吸附的View绑定数据，计算View的宽高
                 if (view.getTop() <= 0) {
                     bindDataForStickyView(mLayoutManager.findFirstVisibleItemPosition(), parent.getMeasuredWidth());
                 } else {
@@ -175,7 +148,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
     }
 
     /**
-     * 缓存吸附的view position
+     * 缓存需要吸附的View在列表当中的下标
      * @param m
      */
     private void cacheStickyViewPosition(int m) {
@@ -195,7 +168,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
     }
 
     /**
-     * 得到吸附viewHolder
+     * 得到吸附view 的 viewHolder
      * @param recyclerView
      */
     private void getStickyViewHolder(RecyclerView recyclerView) {
