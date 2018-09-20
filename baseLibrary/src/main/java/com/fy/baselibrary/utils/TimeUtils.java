@@ -78,7 +78,7 @@ public class TimeUtils {
 
 
     /**
-     * 获得给定时间戳表示的日期 零时零分零秒的时间戳
+     * 获得给定时间戳表示的日期 零时零分零秒零毫秒的时间戳
      * @return
      */
     public static long initDateByDay(long time){
@@ -87,6 +87,7 @@ public class TimeUtils {
         calendar.set(Calendar.HOUR, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
 
         return calendar.getTimeInMillis();
     }

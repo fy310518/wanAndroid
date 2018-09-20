@@ -55,6 +55,11 @@ public class Constant {
     public static boolean isMustAppLogin = false;
 
     /**
+     * 程序是否需要横竖屏切换
+     */
+    public static boolean isOrientation = false;
+
+    /**
      * 用户是否登录 key
      */
     public static String isLogin = "is_Login";

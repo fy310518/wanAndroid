@@ -6,10 +6,25 @@
     android:background="@color/BgColor">
 
     <com.fy.wanandroid.test.ArcView
+        android:id="@+id/avTile"
         android:layout_width="0dp"
         android:layout_height="240dp"
+        app:bgColor="@color/white"
+        app:itemColor="@color/colorHintError"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:bgColor="@color/white"/>
+        app:leftCircleItem="生理"
+        app:leftCircleNum="78"
+        app:leftCircleUnit="分"
+        app:numColor="@color/statusBar"
+        app:unitColor="@color/button_pressed2" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

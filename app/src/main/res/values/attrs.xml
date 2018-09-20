@@ -3,14 +3,41 @@
 
 
     <declare-styleable name="ArcView">
-        <!-- 小圆距离屏幕左边距离 -->
-        <attr name="arcMaginLeft" format="dimension" />
-        <!-- 小圆距离屏幕右边距离 -->
-        <attr name="arcMarginRight" format="dimension" />
-        <!-- 小圆之间的间距 -->
-        <attr name="arcMargin" format="dimension" />
-
+        <!-- 弧形背景图片 -->
+        <attr name="arcBackground" format="reference"/>
+        <!-- 小圆背景色 -->
         <attr name="bgColor" format="color" />
+
+        <!-- 数值颜色 -->
+        <attr name="numColor" format="color"/>
+        <!-- 单位颜色 -->
+        <attr name="unitColor" format="color"/>
+        <!-- 项目颜色 -->
+        <attr name="itemColor" format="color"/>
+
+        <!-- 左边 -->
+        <!-- 数值 -->
+        <attr name="leftCircleNum" format="string"/>
+        <!-- 单位 -->
+        <attr name="leftCircleUnit" format="string"/>
+        <!-- 项目 -->
+        <attr name="leftCircleItem" format="string"/>
+
+        <!-- 中间 -->
+        <!-- 数值 -->
+        <attr name="centerCircleNum" format="string"/>
+        <!-- 单位 -->
+        <attr name="centerCircleUnit" format="string"/>
+        <!-- 项目 -->
+        <attr name="centerCircleItem" format="string"/>
+
+        <!-- 右间 -->
+        <!-- 数值 -->
+        <attr name="rightCircleNum" format="string" />
+        <!-- 单位 -->
+        <attr name="rightCircleUnit" format="string" />
+        <!-- 项目 -->
+        <attr name="rightCircleItem" format="string" />
     </declare-styleable>
 
 </resources>

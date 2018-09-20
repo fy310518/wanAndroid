@@ -83,20 +83,21 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
         }
 
 //        注册屏幕旋转监听
-        BaseOrientoinListener orientoinListener = new BaseOrientoinListener(activity);
-        boolean autoRotateOn = (android.provider.Settings.System.getInt(activity.getContentResolver(),
-                Settings.System.ACCELEROMETER_ROTATION, 0) == 1);
+        if (Constant.isOrientation){
+            BaseOrientoinListener orientoinListener = new BaseOrientoinListener(activity);
+            boolean autoRotateOn = (android.provider.Settings.System.getInt(activity.getContentResolver(),
+                    Settings.System.ACCELEROMETER_ROTATION, 0) == 1);
 
-        //检查系统是否开启自动旋转
-        if (autoRotateOn) {
-            orientoinListener.enable();
+            //检查系统是否开启自动旋转
+            if (autoRotateOn) {
+                orientoinListener.enable();
+            }
+
+            activityBean.setOrientoinListener(orientoinListener);
         }
-
-        activityBean.setOrientoinListener(orientoinListener);
 
         //设置 黄油刀 简化 Android 样板代码
         activityBean.setUnbinder(ButterKnife.bind(activity));
-
         activity.getIntent().putExtra("ActivityBean", activityBean);
 
         //基础配置 执行完成，再执行 初始化 activity 操作

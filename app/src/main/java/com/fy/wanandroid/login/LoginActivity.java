@@ -118,9 +118,9 @@ public class LoginActivity extends AppCompatActivity implements IreTryActivity, 
                 break;
             case R.id.tvRegister:
 //                JumpUtils.jump(mContext, RegisterActivity.class, null);
-                JumpUtils.jump(this, StatusDemoActivity.class, null);
+//                JumpUtils.jump(this, StatusDemoActivity.class, null);
 //                JumpUtils.jump(this, RevealEffectActivity.class, null);
-//                JumpUtils.jump(this, TestActivity.class, null);
+                JumpUtils.jump(this, TestActivity.class, null);
                 break;
         }
     }

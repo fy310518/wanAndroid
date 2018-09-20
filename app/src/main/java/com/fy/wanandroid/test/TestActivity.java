@@ -8,11 +8,16 @@ import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.wanandroid.R;
 
+import butterknife.BindView;
+
 /**
  * 测试 某些功能
  * Created by fangs on 2018/9/11 15:20.
  */
 public class TestActivity extends AppCompatActivity implements IBaseActivity{
+
+    @BindView(R.id.avTile)
+    ArcView avTitle;
 
     @Override
     public boolean isShowHeadView() {
@@ -34,7 +39,7 @@ public class TestActivity extends AppCompatActivity implements IBaseActivity{
 
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
-
+        avTitle.setLeftText("75", "分", "大王");
     }
 
 }
