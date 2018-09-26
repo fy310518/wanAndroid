@@ -157,7 +157,7 @@ public class JumpUtils {
 //  如果违反了上面两种情况，那么onActivityResult只能够传递到activity中的，无法传递到Fragment中的。
 //  没有违反上面两种情况的前提下，可以直接在Fragment中使用startActivityForResult和onActivityResult，和在activity中使用的一样。
     /**
-     * 从fragment 跳转到指定的 activity; 带回调结果的跳转
+     * 从fragment 跳转到指定的 activity
      * @param act
      * @param bundle
      * @param actClass

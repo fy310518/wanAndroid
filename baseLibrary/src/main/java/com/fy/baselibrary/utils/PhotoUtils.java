@@ -34,13 +34,13 @@ public class PhotoUtils {
     }
 
     /**
-     * 调用系统相机 拍照
+     * 调用系统相机 拍照(监听返回数据时候不要 判断 data是否为空)
      *
      * @param activity      当前activity
      * @param takeImageFile 拍照成功后的图片文件
-     * @param requestCode   调用系统相机请求码
+     * @return Intent 为了方便 activity 或者 fragment中启动拍照
      */
-    public static void takePicture(Activity activity, File takeImageFile, int requestCode) {
+    public static Intent takePicture(Activity activity, File takeImageFile) {
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -77,7 +77,9 @@ public class PhotoUtils {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
             }
         }
-        activity.startActivityForResult(takePictureIntent, requestCode);
+
+        return takePictureIntent;
+//        activity.startActivityForResult(takePictureIntent, requestCode);
     }
 
     /**
