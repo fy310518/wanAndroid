@@ -53,4 +53,6 @@
         ]]>
     </string>
 
+
+    <string name="easyPullAnimatorTop">com.fy.baselibrary.widget.refresh.TransformerView</string>
 </resources>

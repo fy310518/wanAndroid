@@ -1,5 +1,6 @@
 package com.fy.wanandroid.main.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,19 +14,21 @@ import com.fy.baselibrary.rv.adapter.HeaderAndFooterWrapper;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
 import com.fy.baselibrary.utils.DensityUtils;
 import com.fy.baselibrary.utils.JumpUtils;
-import com.fy.baselibrary.widget.EasyPullLayout;
-import com.fy.baselibrary.widget.TransformerView;
+import com.fy.baselibrary.widget.refresh.EasyPullLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.schedulers.Schedulers;
+
+import com.fy.baselibrary.widget.refresh.OnRefreshListener;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.entity.ArticleBean;
@@ -43,8 +46,6 @@ public class FragmentOne extends BaseFragment {
 
     @BindView(R.id.epl)
     EasyPullLayout epl;
-    @BindView(R.id.topView)
-    TransformerView topView;
     @BindView(R.id.rvArticle)
     RecyclerView rvArticle;
     HeaderAndFooterWrapper adapter;
@@ -59,11 +60,20 @@ public class FragmentOne extends BaseFragment {
         return R.layout.fragment_main_one;
     }
 
+    @SuppressLint("CheckResult")
     @Override
     protected void baseInit() {
         initRvAdapter();
 
-        epl.start(EasyPullLayout.TYPE_EDGE_TOP);
+        Observable.timer(5, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(RequestUtils::addDispos)
+                .subscribe(aLong -> {
+                    epl.start(EasyPullLayout.TYPE_EDGE_TOP);
+//                    RefreshAnimView view = epl.getAnimView(EasyPullLayout.TYPE_EDGE_TOP);
+//                    if (null != view) view.idle();
+                });
     }
 
     private void initRvAdapter(){
@@ -86,33 +96,11 @@ public class FragmentOne extends BaseFragment {
         adapter = new HeaderAndFooterWrapper(rvAdapter);
         rvArticle.setAdapter(adapter);
 
-        epl.addOnPullListenerAdapter(new EasyPullLayout.OnPullListenerAdapter() {
+        epl.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onPull(int type, float fraction, boolean changed) {
-                if (!changed) return;
-
-                if (type == EasyPullLayout.TYPE_EDGE_TOP) {
-                    if (fraction == 1f) topView.ready();
-                    else topView.idle();
-                }
-            }
-
-            @Override
-            public void onTriggered(int type) {
-                if (type == EasyPullLayout.TYPE_EDGE_TOP) {
-                    topView.triggered(getContext());
-                    pageNum = 0;
-                    getData();
-                } else if (type == EasyPullLayout.TYPE_EDGE_BOTTOM){
-
-                }
-            }
-
-            @Override
-            public void onRollBack(int rollBackType) {
-                if (rollBackType == EasyPullLayout.ROLL_BACK_TYPE_TOP) {
-                    topView.idle();
-                }
+            public void onRefresh() {
+                pageNum = 0;
+                getData();
             }
         });
     }

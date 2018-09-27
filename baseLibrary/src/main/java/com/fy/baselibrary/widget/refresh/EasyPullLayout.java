@@ -1,11 +1,13 @@
-package com.fy.baselibrary.widget;
+package com.fy.baselibrary.widget.refresh;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,14 +15,20 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 
 import com.fy.baselibrary.R;
+import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.widget.refresh.OnLoadMoreListener;
+import com.fy.baselibrary.widget.refresh.OnPullListenerAdapter;
+import com.fy.baselibrary.widget.refresh.OnRefreshListener;
+import com.fy.baselibrary.widget.refresh.OnRefreshLoadMoreListener;
+import com.fy.baselibrary.widget.refresh.RefreshAnimView;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Very light Pull Layout that support both VERTICAL and HORIZONTAL
- * http://blog.csdn.net/u012199331/article/details/77014607
- * https://github.com/huzenan/EasyPullLayoutJavaDemo
+ * 支持上下左右 拉动刷新控件
+ * http://blog.csdn.net/u012199331/article/details/77014607（核心来源）
  */
 public class EasyPullLayout extends ViewGroup {
 
@@ -38,6 +46,12 @@ public class EasyPullLayout extends ViewGroup {
     private boolean fixed_content_bottom = false;
     private long roll_back_duration = 0L; // default 300
     private float sticky_factor = 0f; // default 0.66f (0f~1f)
+
+    private String animLeftClass;
+    private String animTopClass;
+    private String animRightClass;
+    private String animBottomClass;
+
 
     /** key对应View，value对应View的一些参数 */
     private HashMap<View, ChildViewAttr> childViews = new HashMap<>(4);
@@ -76,8 +90,11 @@ public class EasyPullLayout extends ViewGroup {
     public static final int ROLL_BACK_TYPE_RIGHT = 2;
     public static final int ROLL_BACK_TYPE_BOTTOM = 3;
 
-    private OnPullListenerAdapter onPullListenerAdapter = new OnPullListenerAdapter() {};
     private OnEdgeListener onEdgeListener;
+    private OnPullListenerAdapter onPullListenerAdapter;
+    private OnRefreshLoadMoreListener onRefreshLoadMoreListener;
+    private OnRefreshListener onRefreshListener;
+    private OnLoadMoreListener onLoadMoreListener;
 
     public EasyPullLayout(Context context) {
         this(context, null);
@@ -90,6 +107,7 @@ public class EasyPullLayout extends ViewGroup {
     public EasyPullLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.EasyPullLayout, defStyleAttr, 0);
+
         trigger_offset_left = a.getDimensionPixelOffset(R.styleable.EasyPullLayout_trigger_offset_left,
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -1f, context.getResources().getDisplayMetrics()));
         trigger_offset_top = a.getDimensionPixelOffset(R.styleable.EasyPullLayout_trigger_offset_top,
@@ -98,6 +116,7 @@ public class EasyPullLayout extends ViewGroup {
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -1f, context.getResources().getDisplayMetrics()));
         trigger_offset_bottom = a.getDimensionPixelOffset(R.styleable.EasyPullLayout_trigger_offset_bottom,
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -1f, context.getResources().getDisplayMetrics()));
+
         max_offset_left = a.getDimensionPixelOffset(R.styleable.EasyPullLayout_max_offset_left,
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -1f, context.getResources().getDisplayMetrics()));
         max_offset_top = a.getDimensionPixelOffset(R.styleable.EasyPullLayout_max_offset_top,
@@ -106,14 +125,55 @@ public class EasyPullLayout extends ViewGroup {
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -1f, context.getResources().getDisplayMetrics()));
         max_offset_bottom = a.getDimensionPixelOffset(R.styleable.EasyPullLayout_max_offset_bottom,
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -1f, context.getResources().getDisplayMetrics()));
+
         fixed_content_left = a.getBoolean(R.styleable.EasyPullLayout_fixed_content_left, false);
         fixed_content_top = a.getBoolean(R.styleable.EasyPullLayout_fixed_content_top, false);
         fixed_content_right = a.getBoolean(R.styleable.EasyPullLayout_fixed_content_right, false);
         fixed_content_bottom = a.getBoolean(R.styleable.EasyPullLayout_fixed_content_bottom, false);
+
         roll_back_duration = a.getInteger(R.styleable.EasyPullLayout_roll_back_duration, 300);
         sticky_factor = a.getFloat(R.styleable.EasyPullLayout_sticky_factor, 0.66f);
         sticky_factor = sticky_factor < 0f ? 0f : sticky_factor > 1f ? 1f : sticky_factor; // limit 0f~1f
+
+        animLeftClass   = a.getString(R.styleable.EasyPullLayout_pull_animator_left);
+        animTopClass    = a.getString(R.styleable.EasyPullLayout_pull_animator_top);
+        animRightClass  = a.getString(R.styleable.EasyPullLayout_pull_animator_right);
+        animBottomClass = a.getString(R.styleable.EasyPullLayout_pull_animator_bottom);
         a.recycle();
+
+        init();
+        addOnPullListenerAdapter();
+    }
+
+    /**
+     * 将加载动画类路径 转换为对应的加载动画view 并添加到 EasyPullLayout
+     */
+    private void init(){
+        SparseArray<String> animArray = new SparseArray<>();
+        animArray.put(TYPE_EDGE_LEFT, animLeftClass);
+        animArray.put(TYPE_EDGE_TOP, animTopClass);
+        animArray.put(TYPE_EDGE_RIGHT, animRightClass);
+        animArray.put(TYPE_EDGE_BOTTOM, animBottomClass);
+
+        for (int i = 0; i < animArray.size(); i++){
+            String animClass = animArray.valueAt(i);
+            if (!TextUtils.isEmpty(animClass)){
+                try {
+                    Class<?> cls = Class.forName(animTopClass);
+                    Constructor constructor = cls.getConstructor(Context.class);
+                    RefreshAnimView view = (RefreshAnimView) constructor.newInstance(getContext());
+                    LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                    layoutParams.type = animArray.keyAt(i);
+
+                    view.setLayoutParams(layoutParams);
+                    addView(view);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override
@@ -126,28 +186,30 @@ public class EasyPullLayout extends ViewGroup {
             View child = getChildAt(i++);
 
             LayoutParams lp = (LayoutParams) child.getLayoutParams();
-            if (null != getByType(childViews, lp.type))
+            if (null != getByType(lp.type)) {
                 throw new IllegalArgumentException("Each child type can only be defined once!");
-            else
+            } else {
                 childViews.put(child, new ChildViewAttr());// 存储子View
+
+            }
         }
 
+
         // 确保有一个子View的layout_type为content
-        final View contentView = getByType(childViews, TYPE_CONTENT);
-        if (null == contentView)
-            throw new IllegalArgumentException("Child type \"content\" must be defined!");
+        final View contentView = getByType(TYPE_CONTENT);
+        if (null == contentView) throw new IllegalArgumentException("Child type \"content\" must be defined!");
 
         // 设置默认的OnEdgeListener，可以被覆盖
         setOnEdgeListener(new OnEdgeListener() {
             @Override
             public int onEdge() {
-                if (null != getByType(childViews, TYPE_EDGE_LEFT) && !contentView.canScrollHorizontally(-1))
+                if (null != getByType(TYPE_EDGE_LEFT) && !contentView.canScrollHorizontally(-1))
                     return TYPE_EDGE_LEFT;
-                else if (null != getByType(childViews, TYPE_EDGE_RIGHT) && !contentView.canScrollHorizontally(1))
+                else if (null != getByType(TYPE_EDGE_RIGHT) && !contentView.canScrollHorizontally(1))
                     return TYPE_EDGE_RIGHT;
-                else if (null != getByType(childViews, TYPE_EDGE_TOP) && !contentView.canScrollVertically(-1))
+                else if (null != getByType(TYPE_EDGE_TOP) && !contentView.canScrollVertically(-1))
                     return TYPE_EDGE_TOP;
-                else if (null != getByType(childViews, TYPE_EDGE_BOTTOM) && !contentView.canScrollVertically(1))
+                else if (null != getByType(TYPE_EDGE_BOTTOM) && !contentView.canScrollVertically(1))
                     return TYPE_EDGE_BOTTOM;
                 else
                     return TYPE_NONE;
@@ -195,7 +257,7 @@ public class EasyPullLayout extends ViewGroup {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         // 首先获取content，得到宽高用于给其他子View做参考
-        View contentView = getByType(childViews, TYPE_CONTENT);
+        View contentView = getByType(TYPE_CONTENT);
         if (null == contentView)
             throw new IllegalArgumentException("EasyPullLayout must have and only have one layout_type \"content\"!");
 
@@ -237,17 +299,17 @@ public class EasyPullLayout extends ViewGroup {
         }
 
         // bring the child to front if fixed
-        View child = getByType(childViews, TYPE_EDGE_LEFT);
+        View child = getByType(TYPE_EDGE_LEFT);
 
         if (fixed_content_left && null != child)// 若设置了左侧拖拽时固定
             child.bringToFront();// 改变左侧边缘视图z-order，使其在顶部
-        child = getByType(childViews, TYPE_EDGE_TOP);
+        child = getByType(TYPE_EDGE_TOP);
         if (fixed_content_top && null != child)
             child.bringToFront();
-        child = getByType(childViews, TYPE_EDGE_RIGHT);
+        child = getByType(TYPE_EDGE_RIGHT);
         if (fixed_content_right && null != child)
             child.bringToFront();
-        child = getByType(childViews, TYPE_EDGE_BOTTOM);
+        child = getByType(TYPE_EDGE_BOTTOM);
         if (fixed_content_bottom && null != child)
             child.bringToFront();
     }
@@ -300,9 +362,9 @@ public class EasyPullLayout extends ViewGroup {
             case MotionEvent.ACTION_MOVE:
                 float x = event.getX();
                 float y = event.getY();
-                offsetX = (x - downX) * (1 - sticky_factor * 0.75f);
+                offsetX = (x - downX) * (1 - sticky_factor * 0.75f);// 限制 offsetX 的最小和最大值
                 offsetY = (y - downY) * (1 - sticky_factor * 0.75f);
-                float pullFraction = 0f;
+                float pullFraction = 0f;// 计算出当前拖拽进度，未拖拽时为0，到达触发位置时为1
 
                 // limit the offset
                 switch (currentType) {
@@ -365,16 +427,14 @@ public class EasyPullLayout extends ViewGroup {
     }
 
     private void rollBackHorizontal() {
-        final float rollBackOffset =
-                offsetX > trigger_offset_left ? offsetX - trigger_offset_left
-                        : offsetX < -trigger_offset_right ? offsetX + trigger_offset_right
-                        : offsetX;
-        final float triggerOffset =
-                rollBackOffset != offsetX ?
-                        currentType == TYPE_EDGE_LEFT ? trigger_offset_left :
-                                currentType == TYPE_EDGE_RIGHT ? -trigger_offset_right :
-                                        0
-                        : 0;
+        final float rollBackOffset = offsetX > trigger_offset_left ? offsetX - trigger_offset_left :
+                offsetX < -trigger_offset_right ? offsetX + trigger_offset_right : offsetX;
+
+        final float triggerOffset = rollBackOffset != offsetX ?
+                currentType == TYPE_EDGE_LEFT ? trigger_offset_left :
+                        (currentType == TYPE_EDGE_RIGHT ? -trigger_offset_right : 0)
+                : 0;
+
         horizontalAnimator = ValueAnimator.ofFloat(1f, 0f);
         horizontalAnimator.setDuration(roll_back_duration).setInterpolator(new DecelerateInterpolator());
         horizontalAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -417,15 +477,16 @@ public class EasyPullLayout extends ViewGroup {
     }
 
     private void rollBackVertical() {
-        final float rollBackOffset =
-                offsetY > trigger_offset_top ? offsetY - trigger_offset_top
-                        : offsetY < -trigger_offset_bottom ? offsetY + trigger_offset_bottom
-                        : offsetY;
-        final float triggerOffset =
-                rollBackOffset != offsetY ? (currentType == TYPE_EDGE_TOP ? trigger_offset_top :
-                                (currentType == TYPE_EDGE_BOTTOM ? -trigger_offset_bottom : 0))
-                        : 0;
-        verticalAnimator = ValueAnimator.ofFloat(1f, 0f);
+        // 需要还原的偏移量
+        final float rollBackOffset = offsetY > trigger_offset_top ?
+                offsetY - trigger_offset_top : offsetY < -trigger_offset_bottom ?
+                offsetY + trigger_offset_bottom : offsetY;
+        // 触发位置的偏移量
+        final float triggerOffset = rollBackOffset != offsetY ?
+                (currentType == TYPE_EDGE_TOP ?
+                        trigger_offset_top : (currentType == TYPE_EDGE_BOTTOM ? -trigger_offset_bottom : 0)) : 0;
+
+        verticalAnimator = ValueAnimator.ofFloat(1f, 0f);// 动画，值从1->0
         verticalAnimator.setDuration(roll_back_duration)
                 .setInterpolator(new DecelerateInterpolator());
         verticalAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -453,14 +514,17 @@ public class EasyPullLayout extends ViewGroup {
             }
         });
 
+        // 动画结束后，还原一些参数，回调监听
         verticalAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 if (triggerOffset != 0 && currentState == STATE_ROLLING) {
+                    // 还原到触发位置
                     currentState = STATE_TRIGGERING;
                     offsetY = triggerOffset;
-                    onPullListenerAdapter.onTriggered(currentType);
+                    onPullListenerAdapter.onTriggered(currentType);// 回调触发监听
                 } else {
+                    // 还原到初始位置
                     currentState = STATE_IDLE;
                     offsetY = 0f;
                     rollBackEnd();
@@ -606,43 +670,88 @@ public class EasyPullLayout extends ViewGroup {
 
     /**
      * 遍历 map 获取指定 type的 view
-     * @param map
      * @param type
      * @return
      */
-    private View getByType(HashMap<View, ChildViewAttr> map, int type) {
-        for (Map.Entry<View, ChildViewAttr> entry : map.entrySet()) {
+    public View getByType(int type) {
+        for (Map.Entry<View, ChildViewAttr> entry : childViews.entrySet()) {
             if (((LayoutParams) entry.getKey().getLayoutParams()).type == type)
                 return entry.getKey();
         }
         return null;
     }
 
-
-    public abstract static class OnPullListenerAdapter {
-        /**
-         * invoke while pulling
-         */
-        public void onPull(int type, float fraction, boolean changed) {
+    /**
+     * 根据 type 获取对应的动画view
+     * @param type
+     * @return
+     */
+    public RefreshAnimView getAnimView(int type){
+        RefreshAnimView view = null;
+        if (type == TYPE_EDGE_TOP) {
+            view = (RefreshAnimView) getByType(TYPE_EDGE_TOP);
+        } else if (type == TYPE_EDGE_BOTTOM) {
+            view = (RefreshAnimView) getByType(TYPE_EDGE_BOTTOM);
+        } else if (type == TYPE_EDGE_LEFT) {
+            view = (RefreshAnimView) getByType(TYPE_EDGE_LEFT);
+        } else if (type == TYPE_EDGE_RIGHT) {
+            view = (RefreshAnimView) getByType(TYPE_EDGE_RIGHT);
         }
 
-        /**
-         * invoke while triggered
-         */
-        public void onTriggered(int type) {
-        }
-
-        /**
-         * invoke while rolling back
-         */
-        public void onRollBack(int rollBackType) {
-        }
+        return view;
     }
 
-    public void addOnPullListenerAdapter(OnPullListenerAdapter onPullListenerAdapter) {
-        this.onPullListenerAdapter = onPullListenerAdapter;
+    /**
+     * 定义手势 滑动监听
+     */
+    public void addOnPullListenerAdapter() {
+        this.onPullListenerAdapter = new OnPullListenerAdapter() {
+            @Override
+            public void onPull(int type, float fraction, boolean changed) {
+                if (!changed) return;
+
+                L.e("OnPull", "---" + fraction + "---");
+                RefreshAnimView view = getAnimView(type);
+                if (null != view) {
+                    if (fraction == 1f) view.ready();
+                    else view.idle();
+                }
+            }
+
+            @Override
+            public void onTriggered(int type) {
+                RefreshAnimView view = getAnimView(type);
+                if (null != view) view.triggered();
+
+                if (type == TYPE_EDGE_LEFT || type == TYPE_EDGE_TOP) {
+                    if (null != onRefreshLoadMoreListener) onRefreshLoadMoreListener.onRefresh();
+                    if (null != onRefreshListener) onRefreshListener.onRefresh();
+                } else if (type == TYPE_EDGE_RIGHT || type == TYPE_EDGE_BOTTOM) {
+                    if (null != onRefreshLoadMoreListener) onRefreshLoadMoreListener.onLoadMore();
+                    if (null != onLoadMoreListener) onLoadMoreListener.onLoadMore();
+                }
+            }
+
+            @Override
+            public void onRollBack(int type) {
+                RefreshAnimView view = getAnimView(type);
+                if (null != view) view.idle();
+            }
+        };
     }
 
+
+    public void setOnRefreshLoadMoreListener(OnRefreshLoadMoreListener onRefreshLoadMoreListener) {
+        this.onRefreshLoadMoreListener = onRefreshLoadMoreListener;
+    }
+
+    public void setOnRefreshListener(OnRefreshListener onRefreshListener) {
+        this.onRefreshListener = onRefreshListener;
+    }
+
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
+        this.onLoadMoreListener = onLoadMoreListener;
+    }
 
     public interface OnEdgeListener {
         /**

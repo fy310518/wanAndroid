@@ -11,8 +11,8 @@ import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.rv.anim.FadeItemAnimator;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
 import com.fy.baselibrary.utils.JumpUtils;
-import com.fy.baselibrary.widget.EasyPullLayout;
-import com.fy.baselibrary.widget.TransformerView;
+import com.fy.baselibrary.widget.refresh.EasyPullLayout;
+import com.fy.baselibrary.widget.refresh.OnRefreshListener;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.entity.ArticleBean;
 import com.fy.wanandroid.entity.Bookmark;
@@ -35,8 +35,6 @@ public class TabFragment extends BaseFragment {
 
     @BindView(R.id.epl)
     EasyPullLayout epl;
-    @BindView(R.id.topView)
-    TransformerView topView;
     @BindView(R.id.rvHierarchy)
     RecyclerView rvHierarchy;
     AdapterOne rvAdapter;
@@ -82,32 +80,11 @@ public class TabFragment extends BaseFragment {
 
         rvHierarchy.setAdapter(rvAdapter);
 
-        epl.addOnPullListenerAdapter(new EasyPullLayout.OnPullListenerAdapter() {
+        epl.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onPull(int type, float fraction, boolean changed) {
-                if (!changed) return;
-
-                if (type == EasyPullLayout.TYPE_EDGE_TOP) {
-                    if (fraction == 1f) topView.ready();
-                    else topView.idle();
-                }
-            }
-
-            @Override
-            public void onTriggered(int type) {
-                if (type == EasyPullLayout.TYPE_EDGE_TOP) {
-                    topView.triggered(getContext());
-                    getData();
-                } else if (type == EasyPullLayout.TYPE_EDGE_BOTTOM) {
-
-                }
-            }
-
-            @Override
-            public void onRollBack(int rollBackType) {
-                if (rollBackType == EasyPullLayout.ROLL_BACK_TYPE_TOP) {
-                    topView.idle();
-                }
+            public void onRefresh() {
+                pageNum = 0;
+                getData();
             }
         });
     }

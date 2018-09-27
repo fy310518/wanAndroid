@@ -22,8 +22,8 @@ import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.T;
-import com.fy.baselibrary.widget.EasyPullLayout;
-import com.fy.baselibrary.widget.TransformerView;
+import com.fy.baselibrary.widget.refresh.EasyPullLayout;
+import com.fy.baselibrary.widget.refresh.OnRefreshListener;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.entity.ArticleBean;
 import com.fy.wanandroid.entity.Bookmark;
@@ -48,8 +48,6 @@ public class SearchActivity extends AppCompatActivity implements IBaseActivity, 
 
     @BindView(R.id.epl)
     EasyPullLayout epl;
-    @BindView(R.id.topView)
-    TransformerView topView;
     @BindView(R.id.rvSearch)
     RecyclerView rvSearch;
     AdapterOne rvAdapter;
@@ -145,33 +143,11 @@ public class SearchActivity extends AppCompatActivity implements IBaseActivity, 
 
         rvSearch.setAdapter(rvAdapter);
 
-        epl.addOnPullListenerAdapter(new EasyPullLayout.OnPullListenerAdapter() {
+        epl.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onPull(int type, float fraction, boolean changed) {
-                if (!changed) return;
-
-                if (type == EasyPullLayout.TYPE_EDGE_TOP) {
-                    if (fraction == 1f) topView.ready();
-                    else topView.idle();
-                }
-            }
-
-            @Override
-            public void onTriggered(int type) {
-                if (type == EasyPullLayout.TYPE_EDGE_TOP) {
-                    topView.triggered(SearchActivity.this);
-                    pageNum = 0;
-                    getData();
-                } else if (type == EasyPullLayout.TYPE_EDGE_BOTTOM) {
-
-                }
-            }
-
-            @Override
-            public void onRollBack(int rollBackType) {
-                if (rollBackType == EasyPullLayout.ROLL_BACK_TYPE_TOP) {
-                    topView.idle();
-                }
+            public void onRefresh() {
+                pageNum = 0;
+                getData();
             }
         });
     }
