@@ -2,6 +2,7 @@ package com.fy.baselibrary.widget.refresh;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -10,21 +11,17 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
 import com.fy.baselibrary.R;
 import com.fy.baselibrary.utils.TimeUtils;
-import com.fy.baselibrary.widget.refresh.RefreshAnimView;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * 列表刷新 视图（自定义组合控件）
  * Created by fangs on 2017/11/22.
  */
-public class TransformerView extends RefreshAnimView {
+public class EasyTopRefreshView extends RefreshAnimView {
 
     ConstraintLayout topRefreshLayout;
     AppCompatImageView imgArrow;
@@ -32,17 +29,17 @@ public class TransformerView extends RefreshAnimView {
     TextView tvLoadTip;
     TextView tvDate;
 
-    public TransformerView(Context context) {
+    public EasyTopRefreshView(Context context) {
         this(context, null);
     }
 
-    public TransformerView(Context context, @Nullable AttributeSet attrs) {
+    public EasyTopRefreshView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public TransformerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public EasyTopRefreshView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        View view = LayoutInflater.from(context).inflate(R.layout.view_transformer, this, true);
+        View view = LayoutInflater.from(context).inflate(R.layout.view_top_refresh, this, true);
 
         topRefreshLayout = view.findViewById(R.id.topRefreshLayout);
         imgArrow = view.findViewById(R.id.imgArrow);
@@ -81,7 +78,7 @@ public class TransformerView extends RefreshAnimView {
                 .rotation(180)
                 .start();
 
-
+        bgAnim();
     }
 
     @Override
@@ -93,6 +90,24 @@ public class TransformerView extends RefreshAnimView {
         Animator animator = AnimatorInflater.loadAnimator(getContext(), R.animator.refresh_rotate);
         animator.setTarget(imgTurn);
         animator.start();
+    }
+
+
+    public void bgAnim(){
+        ValueAnimator verticalAnimator = ValueAnimator.ofFloat(1f, 0f);// 动画，值从1->0
+        verticalAnimator.setDuration(300).setInterpolator(new DecelerateInterpolator());
+
+//        verticalAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator animation) {
+//                for (Map.Entry<View, EasyPullLayout.ChildViewAttr> entry : childViews.entrySet()) {
+//                    View childView = entry.getKey();
+//                    EasyPullLayout.ChildViewAttr childViewAttr = entry.getValue();
+//                    if (((EasyPullLayout.LayoutParams) childView.getLayoutParams()).type != TYPE_CONTENT || !fixed_content_top)
+//                        childView.setY(childViewAttr.top + triggerOffset + rollBackOffset * (float) animation.getAnimatedValue());
+//                }
+//            }
+//        });
     }
 
 }

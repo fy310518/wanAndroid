@@ -29,6 +29,7 @@ import io.reactivex.functions.BiFunction;
 import io.reactivex.schedulers.Schedulers;
 
 import com.fy.baselibrary.widget.refresh.OnRefreshListener;
+import com.fy.baselibrary.widget.refresh.OnRefreshLoadMoreListener;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.entity.ArticleBean;
@@ -96,7 +97,13 @@ public class FragmentOne extends BaseFragment {
         adapter = new HeaderAndFooterWrapper(rvAdapter);
         rvArticle.setAdapter(adapter);
 
-        epl.setOnRefreshListener(new OnRefreshListener() {
+        epl.setOnRefreshListener(new OnRefreshLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                pageNum++;
+                getData();
+            }
+
             @Override
             public void onRefresh() {
                 pageNum = 0;

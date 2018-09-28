@@ -4,11 +4,12 @@
     android:id="@+id/epl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:max_offset_bottom="@dimen/max_offset"
+    app:max_offset_bottom="70dp"
     app:max_offset_top="@dimen/max_offset"
     app:sticky_factor="0.1"
     app:pull_animator_top="@string/easyPullAnimatorTop"
-    app:trigger_offset_bottom="@dimen/refreshHeight"
+    app:pull_animator_bottom="@string/easyPullAnimatorBottom"
+    app:trigger_offset_bottom="@dimen/loadMoreHeight"
     app:trigger_offset_top="@dimen/refreshHeight">
 
     <android.support.v7.widget.RecyclerView

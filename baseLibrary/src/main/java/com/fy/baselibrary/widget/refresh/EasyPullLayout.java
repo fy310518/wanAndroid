@@ -710,7 +710,6 @@ public class EasyPullLayout extends ViewGroup {
             public void onPull(int type, float fraction, boolean changed) {
                 if (!changed) return;
 
-                L.e("OnPull", "---" + fraction + "---");
                 RefreshAnimView view = getAnimView(type);
                 if (null != view) {
                     if (fraction == 1f) view.ready();
