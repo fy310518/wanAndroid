@@ -4,17 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/loadMoreHeight"
-    android:background="@color/blue">
+    android:background="@color/red">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/imgTurn"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginRight="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/tvLoadTip"
         app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:srcCompat="@drawable/svg_refresh"
         tools:ignore="VectorDrawableCompat" />
@@ -32,5 +33,18 @@
         app:layout_constraintLeft_toRightOf="@id/imgTurn"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/imgArrow"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/imgTurn"
+        app:layout_constraintRight_toLeftOf="@+id/tvLoadTip"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:srcCompat="@drawable/svg_arrow"
+        tools:ignore="VectorDrawableCompat" />
 
 </android.support.constraint.ConstraintLayout>

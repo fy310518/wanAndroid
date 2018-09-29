@@ -16,6 +16,6 @@
     <!-- 下拉刷新 加载动画 图片 宽度、高度 -->
     <dimen name="rvRefreshAnim">30dp</dimen>
     <!-- 加载更多控件高度 -->
-    <dimen name="loadMoreHeight">50dp</dimen>
+    <dimen name="loadMoreHeight">40dp</dimen>
 
 </resources>

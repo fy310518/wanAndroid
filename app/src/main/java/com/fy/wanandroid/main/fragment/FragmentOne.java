@@ -97,7 +97,7 @@ public class FragmentOne extends BaseFragment {
         adapter = new HeaderAndFooterWrapper(rvAdapter);
         rvArticle.setAdapter(adapter);
 
-        epl.setOnRefreshListener(new OnRefreshLoadMoreListener() {
+        epl.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
             public void onLoadMore() {
                 pageNum++;
@@ -112,11 +112,14 @@ public class FragmentOne extends BaseFragment {
         });
     }
 
+    /**
+     * 网络请求
+     */
     private void getData() {
         Observable<List<BannerBean>> observable1 = RequestUtils.create(ApiService.class)
-                    .getBannerList()
-                    .compose(RxHelper.handleResult())
-                    .observeOn(Schedulers.io());
+                .getBannerList()
+                .compose(RxHelper.handleResult())
+                .observeOn(Schedulers.io());
 
         Observable<ArticleBean> observable2 = RequestUtils.create(ApiService.class)
                 .getArticleList(pageNum)
@@ -132,39 +135,39 @@ public class FragmentOne extends BaseFragment {
                 return map;
             }
         }).doOnSubscribe(RequestUtils::addDispos)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new NetCallBack<Map<String, Object>>() {
-                @Override
-                protected void onSuccess(Map<String, Object> map) {
-                    if (pageNum == 0) {
-                        adapter.cleanHeader();
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new NetCallBack<Map<String, Object>>() {
+                    @Override
+                    protected void onSuccess(Map<String, Object> map) {
+                        if (pageNum == 0) {
+                            adapter.cleanHeader();
 
-                        List<BannerBean> bannerdata = (List<BannerBean>) map.get("banner");
-                        if (null != bannerdata && bannerdata.size() > 0){
-                            bannerBeans = bannerdata;
-                            setBanner();
-                            adapter.addHeaderView(bannerView);
-                        }
+                            List<BannerBean> bannerdata = (List<BannerBean>) map.get("banner");
+                            if (null != bannerdata && bannerdata.size() > 0) {
+                                bannerBeans = bannerdata;
+                                setBanner();
+                                adapter.addHeaderView(bannerView);
+                            }
 
-                        ArticleBean article = (ArticleBean) map.get("article");
-                        List<ArticleBean.DatasBean> list = article.getDatas();
-                        if (null != list) {
+                            ArticleBean article = (ArticleBean) map.get("article");
+                            List<ArticleBean.DatasBean> list = article.getDatas();
+                            if (null != list) {
 //                            DiffUtil.DiffResult diffResult = DiffUtil
 //                                    .calculateDiff(new DownFileDiffCall(rvAdapter.getmDatas(), list), true);
 //
 //                            diffResult.dispatchUpdatesTo(adapter);
-                            rvAdapter.setmDatas(list);
-                            adapter.notifyDataSetChanged();
+                                rvAdapter.setmDatas(list);
+                                adapter.notifyDataSetChanged();
+                            }
+
                         }
-
                     }
-                }
 
-                @Override
-                protected void updataLayout(int flag) {
-                    epl.stop();
-                }
-            });
+                    @Override
+                    protected void updataLayout(int flag) {
+                        epl.stop();
+                    }
+                });
     }
 
     private void setBanner(){

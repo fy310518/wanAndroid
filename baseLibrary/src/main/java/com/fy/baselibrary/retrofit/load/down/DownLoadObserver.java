@@ -1,7 +1,5 @@
 package com.fy.baselibrary.retrofit.load.down;
 
-import com.fy.baselibrary.utils.L;
-
 import java.net.SocketException;
 
 import io.reactivex.Observer;

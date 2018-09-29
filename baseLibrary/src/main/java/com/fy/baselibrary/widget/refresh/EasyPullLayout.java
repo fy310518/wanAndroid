@@ -15,12 +15,6 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 
 import com.fy.baselibrary.R;
-import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.widget.refresh.OnLoadMoreListener;
-import com.fy.baselibrary.widget.refresh.OnPullListenerAdapter;
-import com.fy.baselibrary.widget.refresh.OnRefreshListener;
-import com.fy.baselibrary.widget.refresh.OnRefreshLoadMoreListener;
-import com.fy.baselibrary.widget.refresh.RefreshAnimView;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -159,7 +153,7 @@ public class EasyPullLayout extends ViewGroup {
             String animClass = animArray.valueAt(i);
             if (!TextUtils.isEmpty(animClass)){
                 try {
-                    Class<?> cls = Class.forName(animTopClass);
+                    Class<?> cls = Class.forName(animClass);
                     Constructor constructor = cls.getConstructor(Context.class);
                     RefreshAnimView view = (RefreshAnimView) constructor.newInstance(getContext());
                     LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
