@@ -15,6 +15,15 @@ import com.fy.baselibrary.rv.divider.ListItemDecoration;
 import com.fy.baselibrary.utils.DensityUtils;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.widget.refresh.EasyPullLayout;
+import com.fy.baselibrary.widget.refresh.OnRefreshLoadMoreListener;
+import com.fy.wanandroid.R;
+import com.fy.wanandroid.entity.ArticleBean;
+import com.fy.wanandroid.entity.BannerBean;
+import com.fy.wanandroid.entity.Bookmark;
+import com.fy.wanandroid.request.ApiService;
+import com.fy.wanandroid.request.NetCallBack;
+import com.fy.wanandroid.utils.LocalImageHolderView;
+import com.fy.wanandroid.web.WebViewActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,17 +36,6 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.schedulers.Schedulers;
-
-import com.fy.baselibrary.widget.refresh.OnRefreshListener;
-import com.fy.baselibrary.widget.refresh.OnRefreshLoadMoreListener;
-import com.fy.wanandroid.R;
-import com.fy.wanandroid.request.ApiService;
-import com.fy.wanandroid.entity.ArticleBean;
-import com.fy.wanandroid.entity.BannerBean;
-import com.fy.wanandroid.entity.Bookmark;
-import com.fy.wanandroid.request.NetCallBack;
-import com.fy.wanandroid.utils.LocalImageHolderView;
-import com.fy.wanandroid.web.WebViewActivity;
 
 /**
  * 首页 // todo 主体 上拉加载更多 没有实现
@@ -130,7 +128,7 @@ public class FragmentOne extends BaseFragment {
             @Override
             public Map<String, Object> apply(List<BannerBean> bannerBeans, ArticleBean articleBean) throws Exception {
                 Map<String, Object> map = new HashMap<>();
-                map.put("banner", bannerBeans);
+                if(pageNum == 0) map.put("banner", bannerBeans);
                 map.put("article", articleBean);
                 return map;
             }
@@ -139,9 +137,11 @@ public class FragmentOne extends BaseFragment {
                 .subscribe(new NetCallBack<Map<String, Object>>() {
                     @Override
                     protected void onSuccess(Map<String, Object> map) {
+                        ArticleBean article = (ArticleBean) map.get("article");
+                        List<ArticleBean.DatasBean> list = article.getDatas();
+
                         if (pageNum == 0) {
                             adapter.cleanHeader();
-
                             List<BannerBean> bannerdata = (List<BannerBean>) map.get("banner");
                             if (null != bannerdata && bannerdata.size() > 0) {
                                 bannerBeans = bannerdata;
@@ -149,18 +149,21 @@ public class FragmentOne extends BaseFragment {
                                 adapter.addHeaderView(bannerView);
                             }
 
-                            ArticleBean article = (ArticleBean) map.get("article");
-                            List<ArticleBean.DatasBean> list = article.getDatas();
                             if (null != list) {
-//                            DiffUtil.DiffResult diffResult = DiffUtil
-//                                    .calculateDiff(new DownFileDiffCall(rvAdapter.getmDatas(), list), true);
-//
-//                            diffResult.dispatchUpdatesTo(adapter);
                                 rvAdapter.setmDatas(list);
                                 adapter.notifyDataSetChanged();
                             }
-
+                        } else {
+                            if (null != list) {
+//                                DiffUtil.DiffResult diffResult = DiffUtil
+//                                        .calculateDiff(new DownFileDiffCall(rvAdapter.getmDatas(), list), true);
+//                                diffResult.dispatchUpdatesTo(adapter);
+//
+                                rvAdapter.addData(list);
+                                adapter.notifyDataSetChanged();
+                            }
                         }
+
                     }
 
                     @Override

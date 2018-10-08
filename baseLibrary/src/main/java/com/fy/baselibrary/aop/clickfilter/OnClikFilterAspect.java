@@ -2,12 +2,15 @@ package com.fy.baselibrary.aop.clickfilter;
 
 import android.view.View;
 
-import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.aop.annotation.ClickFilter;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
+
+import java.lang.reflect.Method;
 
 /**
  * 对添加 @ClickFilter 注解的方法做统一的切面处理
@@ -16,28 +19,32 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public class OnClikFilterAspect {
 
-    private static int viewId = 0;
-    private static Long sLastclick = 0L;
-    private static final Long FILTER_TIMEM = 300L;
-
-
     @Pointcut("execution(@com.fy.baselibrary.aop.annotation.ClickFilter * *(..))")
     public void clickFilter() {}
 
     @Around("clickFilter()")
     public void clickFilterHook(ProceedingJoinPoint joinPoint) throws Throwable {
-
-        View view = (View) joinPoint.getArgs()[0];
-
-        if (viewId == view.getId()) {
-            if (System.currentTimeMillis() - sLastclick >= FILTER_TIMEM) {
-                sLastclick = System.currentTimeMillis();
-                joinPoint.proceed();
+        // 取出方法的参数
+        View view = null;
+        for (Object arg : joinPoint.getArgs()) {
+            if (arg instanceof View) {
+                view = (View) arg;
+                break;
             }
-        } else {
+        }
+        if (null == view) return;
+
+        // 取出方法的注解
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        Method method = methodSignature.getMethod();
+        if (!method.isAnnotationPresent(ClickFilter.class)) return;
+
+        ClickFilter singleClick = method.getAnnotation(ClickFilter.class);
+        // 判断是否快速点击
+        if (!ClickUtils.isFastClick(view, singleClick.value())) {
+            // 不是快速点击，执行原方法
             joinPoint.proceed();
         }
-
-        viewId = view.getId();
     }
+
 }

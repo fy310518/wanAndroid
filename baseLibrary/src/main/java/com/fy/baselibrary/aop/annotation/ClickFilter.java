@@ -13,4 +13,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface ClickFilter {
 
+    /** 点击时间间隔 */
+    long value() default 900;
+
 }

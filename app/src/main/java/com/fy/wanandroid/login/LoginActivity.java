@@ -12,9 +12,9 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 
+import com.fy.baselibrary.aop.annotation.ClickFilter;
 import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.application.ConfigUtils;
-import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.application.IreTryActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
@@ -31,7 +31,6 @@ import com.fy.wanandroid.main.MainActivity;
 import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
 import com.fy.wanandroid.request.NetDialog;
-import com.fy.wanandroid.status.StatusDemoActivity;
 import com.fy.wanandroid.test.TestActivity;
 import com.fy.wanandroid.utils.SelectUtils;
 
@@ -108,7 +107,7 @@ public class LoginActivity extends AppCompatActivity implements IreTryActivity, 
         });
     }
 
-
+    @ClickFilter
     @OnClick({R.id.btnLogin, R.id.tvRegister})
     @Override
     public void onClick(View view) {
