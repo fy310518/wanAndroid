@@ -14,6 +14,7 @@ import android.widget.Button;
 
 import com.fy.baselibrary.aop.annotation.ClickFilter;
 import com.fy.baselibrary.aop.annotation.NeedPermission;
+import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.application.IreTryActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
@@ -71,12 +72,13 @@ public class LoginActivity extends AppCompatActivity implements IreTryActivity, 
 
     @Override
     public void setStatusBar(Activity activity) {
-        MdStatusBar.StatusBuilder.init()
-                .setStatusColor(R.color.statusBar, 0)
-                .setNavColor(R.color.statusBar, 0)
-                .setColorBar(activity);
+//        MdStatusBar.StatusBuilder.init()
+//                .setStatusColor(R.color.statusBar, 0)
+//                .setNavColor(R.color.statusBar, 0)
+//                .setColorBar(activity);
     }
 
+    @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         L.e(getTaskId() + "----> LoginActivity");
