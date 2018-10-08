@@ -77,30 +77,6 @@ dependencies {
     api 'com.github.bumptech.glide:okhttp3-integration:4.7.1'
     api 'com.github.bumptech.glide:annotations:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
-
-    //    //circleimageview 圆形图片
-
-    //    api 'de.hdodenhof:circleimageview:2.1.0'
-
-    //    //baseRecyclerViewAdapterHelper
-
-    //    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
-
-    //    //下拉刷新上拉加载
-
-    //    api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
-
-    //    //PhotoView
-
-    //    api 'com.github.chrisbanes:PhotoView:2.0.0'
-
-    //    //takephoto
-
-    //    api 'com.jph.takephoto:takephoto_library:4.0.3'
-
-    //    //性能更好的MD风格的RatingBar
-
-    //    api 'me.zhanghai.android.materialratingbar:library:1.2.0'
 //    aop
     api 'org.aspectj:aspectjrt:1.8.13'
 }
