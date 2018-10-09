@@ -1,4 +1,4 @@
-package com.fy.baselibrary.utils;
+package com.fy.baselibrary.utils.security;
 
 import android.os.Build;
 import android.text.Html;
@@ -10,6 +10,7 @@ import java.net.URLEncoder;
 
 /**
  * 编码、解码工具类
+ * Created by fangs on 2017/5/18.
  */
 public final class EncodeUtils {
 

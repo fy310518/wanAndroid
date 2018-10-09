@@ -33,7 +33,7 @@ import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NightModeUtils;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.SpfUtils;
-import com.fy.baselibrary.utils.TintUtils;
+import com.fy.baselibrary.utils.drawable.TintUtils;
 import com.fy.baselibrary.utils.cache.ACache;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.about.AboutActivity;

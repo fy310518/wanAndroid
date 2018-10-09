@@ -1,4 +1,4 @@
-package com.fy.baselibrary.utils;
+package com.fy.baselibrary.utils.security;
 
 import java.io.IOException;
 import java.io.InputStream;

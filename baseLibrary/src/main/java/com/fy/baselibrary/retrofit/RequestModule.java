@@ -7,7 +7,7 @@ import com.fy.baselibrary.retrofit.cookie.AddCookiesInterceptor;
 import com.fy.baselibrary.retrofit.cookie.ReceivedCookiesInterceptor;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.utils.SSLUtil;
+import com.fy.baselibrary.utils.security.SSLUtil;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 
 import dagger.Module;

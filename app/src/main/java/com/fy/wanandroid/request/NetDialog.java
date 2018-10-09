@@ -10,6 +10,7 @@ import com.fy.baselibrary.base.dialog.CommonDialog;
 import com.fy.baselibrary.base.dialog.DialogConvertListener;
 import com.fy.baselibrary.base.dialog.NiceDialog;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
+import com.fy.baselibrary.utils.drawable.ShapeBuilder;
 import com.fy.wanandroid.R;
 
 /**
@@ -31,6 +32,12 @@ public class NetDialog extends IProgressDialog {
                     .setDialogConvertListener(new DialogConvertListener() {
                         @Override
                         protected void convertView(ViewHolder holder, CommonDialog dialog) {
+                            ShapeBuilder.create()
+                                    .solid(R.color.white)
+                                    .stroke(2, R.color.stroke)
+                                    .radius(24)
+                                    .setBackBg(holder.getView(R.id.loadDialogLayout));
+
                             // 加载动画
                             Animation loadAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_loading);
                             // 使用ImageView显示动画

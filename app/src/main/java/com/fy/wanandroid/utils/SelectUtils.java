@@ -5,7 +5,7 @@ import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.DrawableRes;
 
 import com.fy.baselibrary.utils.ResUtils;
-import com.fy.baselibrary.utils.TintUtils;
+import com.fy.baselibrary.utils.drawable.TintUtils;
 
 import com.fy.wanandroid.R;
 

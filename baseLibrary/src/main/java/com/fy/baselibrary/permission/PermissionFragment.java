@@ -2,6 +2,7 @@ package com.fy.baselibrary.permission;
 
 import android.annotation.TargetApi;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +17,7 @@ import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.base.dialog.CommonDialog;
 import com.fy.baselibrary.base.dialog.DialogConvertListener;
 import com.fy.baselibrary.base.dialog.NiceDialog;
+import com.fy.baselibrary.utils.drawable.ShapeBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -160,6 +162,12 @@ public class PermissionFragment extends BaseFragment {
                 .setDialogConvertListener(new DialogConvertListener() {
                     @Override
                     protected void convertView(ViewHolder holder, CommonDialog dialog) {
+                        ShapeBuilder.create()
+                                .solid(R.color.white)
+                                .stroke(2, R.color.stroke)
+                                .radius(24)
+                                .setBackBg(holder.getView(R.id.permissionLayout));
+
                         holder.setText(R.id.tvPermissionTitle, R.string.dialog_title);
                         holder.setText(R.id.tvPermissionDescribe, isAlwaysRefuse ? mAlwaysRefuseMessage : mFirstRefuseMessage);
 

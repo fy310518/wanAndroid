@@ -1,4 +1,4 @@
-package com.fy.baselibrary.utils;
+package com.fy.baselibrary.utils.drawable;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -13,9 +13,10 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.widget.TextView;
 
 import com.fy.baselibrary.application.ConfigUtils;
+import com.fy.baselibrary.utils.ResUtils;
 
 /**
- * Tint 是 Android5.0 引入的一个属性
+ * Tint 是 Android5.0 引入的一个属性，对drawable进行着色
  * Created by fangs on 2018/2/11.
  */
 public class TintUtils {

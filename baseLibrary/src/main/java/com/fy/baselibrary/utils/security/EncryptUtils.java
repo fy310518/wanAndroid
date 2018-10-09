@@ -1,5 +1,4 @@
-package com.fy.baselibrary.utils;
-
+package com.fy.baselibrary.utils.security;
 
 import android.util.Base64;
 

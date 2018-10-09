@@ -31,6 +31,8 @@
     <!-- 界面字体颜色 超浅色-->
     <color name="txtLight">#999999</color>
 
+    <!-- 描边颜色 -->
+    <color name="stroke">#cacaca</color>
 
     <!-- 下拉刷新 背景色 -->
     <color name="transforTop">#333333</color>

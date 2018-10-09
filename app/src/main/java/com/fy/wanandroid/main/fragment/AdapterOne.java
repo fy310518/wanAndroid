@@ -10,7 +10,7 @@ import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.rv.adapter.RvCommonAdapter;
 import com.fy.baselibrary.utils.T;
-import com.fy.baselibrary.utils.TintUtils;
+import com.fy.baselibrary.utils.drawable.TintUtils;
 
 import java.util.List;
 
