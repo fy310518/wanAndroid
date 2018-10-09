@@ -9,15 +9,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
-import com.fy.baselibrary.statusbar.MdStatusBar;
+import com.fy.wanandroid.R;
+import com.fy.wanandroid.entity.TreeBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import com.fy.wanandroid.R;
-import com.fy.wanandroid.entity.TreeBean;
 
 /**
  * 知识体系 下的文章
@@ -43,13 +43,7 @@ public class HierarchyActivity extends AppCompatActivity implements IBaseActivit
         return R.layout.activity_hierarchy;
     }
 
-    @Override
-    public void setStatusBar(Activity activity) {
-        MdStatusBar.StatusBuilder.init().setStatusColor(R.color.statusBar, 0)
-                .setNavColor(R.color.statusBar, 0)
-                .setColorBar(activity);
-    }
-
+    @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
 

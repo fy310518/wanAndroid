@@ -7,7 +7,7 @@
     <!-- 启动界面主题 -->
     <style name="startUpTheme" parent="BaseAppTheme">
         <item name="android:windowBackground">@drawable/app_loading</item>
-        <item name="android:windowFullscreen">true</item> <!-- 全屏 -->
+        <item name="android:windowFullscreen">false</item> <!-- 全屏 -->
     </style>
 
 

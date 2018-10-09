@@ -31,11 +31,6 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
         return 0;
     }
 
-    @Override
-    public void setStatusBar(Activity activity) {
-//        MdStatusBar.setColorBar(activity, R.color.transparent, R.color.transparent);
-    }
-
     @SuppressLint("CheckResult")
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {

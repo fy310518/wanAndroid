@@ -6,11 +6,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true">
 
-        <!-- 权限管理 -->
-        <activity android:name=".permission.PermissionActivity"
-            android:label="@string/permission"
-            android:theme="@style/permissionTheme"/>
-
         <!-- Android 7.0 在应用间共享文件 -->
         <provider
             android:name="android.support.v4.content.FileProvider"

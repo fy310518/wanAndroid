@@ -8,12 +8,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.rv.anim.FadeItemAnimator;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
-import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.widget.refresh.EasyPullLayout;
 import com.fy.baselibrary.widget.refresh.OnRefreshListener;
@@ -58,13 +58,7 @@ public class MyCollectActivity extends AppCompatActivity implements IBaseActivit
         return R.layout.fragment_main_one;
     }
 
-    @Override
-    public void setStatusBar(Activity activity) {
-        MdStatusBar.StatusBuilder.init().setStatusColor(R.color.statusBar, 0)
-                .setNavColor(R.color.statusBar, 0)
-                .setColorBar(activity);
-    }
-
+    @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         initRvAdapter();

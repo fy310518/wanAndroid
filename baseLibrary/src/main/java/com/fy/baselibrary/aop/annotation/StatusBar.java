@@ -6,7 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 定义一个注解 StatusBar，用来注解方法，
+ * 定义一个 方法注解 StatusBar，
+ * 设置当前 activity 状态栏导航栏颜色和透明度
  * Created by fangs on 2018/8/24 14:00.
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -35,5 +36,18 @@ public @interface StatusBar {
      * @return
      */
     int navAlpha() default 0;
+
+
+    /**
+     * 设置状态栏、导航栏 模式 值为0、1、2
+     * @return
+     */
+    int statusOrNavModel() default 0;
+
+    /**
+     * 导航栏【是否】悬浮在界面之上
+     * @return
+     */
+    boolean applyNav() default true;
 
 }

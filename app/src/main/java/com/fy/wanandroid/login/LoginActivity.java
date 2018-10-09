@@ -20,7 +20,6 @@ import com.fy.baselibrary.application.IreTryActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
-import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
@@ -68,14 +67,6 @@ public class LoginActivity extends AppCompatActivity implements IreTryActivity, 
     @Override
     public int setView() {
         return R.layout.activity_login;
-    }
-
-    @Override
-    public void setStatusBar(Activity activity) {
-//        MdStatusBar.StatusBuilder.init()
-//                .setStatusColor(R.color.statusBar, 0)
-//                .setNavColor(R.color.statusBar, 0)
-//                .setColorBar(activity);
     }
 
     @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar)

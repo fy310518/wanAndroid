@@ -78,8 +78,6 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
                 StatusLayoutManager slManager = initSLManager(activity);
                 if (null != slManager) activityBean.setSlManager(slManager);
             }
-
-            act.setStatusBar(activity);
         }
 
 //        注册屏幕旋转监听

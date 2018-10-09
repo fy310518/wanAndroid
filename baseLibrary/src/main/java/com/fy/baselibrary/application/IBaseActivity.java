@@ -13,24 +13,19 @@ import android.view.View;
 public interface IBaseActivity {
 
     /**
-     * 是否显示 头部 标题栏
+     * 是否显示 标题栏
      * @return
      */
     boolean isShowHeadView();
 
     /**
-     * 设置Activity 界面布局文件
+     * 设置Activity 界面布局文件id
      * @return
      */
     int setView();
 
     /**
-     * 设置当前 activity 状态栏导航栏
-     */
-    void setStatusBar(Activity activity);
-
-    /**
-     * 初始化Activity 数据
+     * 初始化
      */
     void initData(Activity activity, Bundle savedInstanceState);
 

@@ -49,7 +49,7 @@ public class PermissionUtils {
      * 检查是否需要提示用户对该权限的授权进行说明，返回boolean类型
      * @return
      */
-    public static List<String> getShouldRationaleList(AppCompatActivity activity, String... permissions) {
+    public static List<String> getShouldRationaleList(Activity activity, String... permissions) {
         if (null != permissions) {
             List<String> strings = new ArrayList<>();
             for (String permission : permissions) {

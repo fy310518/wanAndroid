@@ -8,8 +8,8 @@ import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 
+import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
-import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.wanandroid.R;
@@ -38,14 +38,7 @@ public class AboutActivity extends AppCompatActivity implements IBaseActivity, V
         return R.layout.activity_about;
     }
 
-    @Override
-    public void setStatusBar(Activity activity) {
-        MdStatusBar.StatusBuilder.init()
-                .setStatusColor(R.color.statusBar, 0)
-                .setNavColor(R.color.statusBar, 0)
-                .setColorBar(activity);
-    }
-
+    @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         tvAppInformation.setText(AppUtils.getAppName() + "\n" + AppUtils.getVersionName());

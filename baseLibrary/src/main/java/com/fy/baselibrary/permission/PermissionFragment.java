@@ -1,37 +1,31 @@
 package com.fy.baselibrary.permission;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.Service;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
 import com.fy.baselibrary.R;
-import com.fy.baselibrary.application.IBaseActivity;
+import com.fy.baselibrary.base.BaseFragment;
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.base.dialog.CommonDialog;
 import com.fy.baselibrary.base.dialog.DialogConvertListener;
 import com.fy.baselibrary.base.dialog.NiceDialog;
-import com.fy.baselibrary.statusbar.MdStatusBar;
-import com.fy.baselibrary.utils.JumpUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * 统一 权限管理
- * 参考 https://github.com/KCrason/PermissionGranted
- * Created by fangs on 2018/8/10 09:57.
+ * 动态权限管理 fragment
+ * Created by fangs on 2018/8/27 15:36.
  */
-public class PermissionActivity extends AppCompatActivity implements IBaseActivity {
+public class PermissionFragment extends BaseFragment {
 
     public final static String KEY_PERMISSIONS_ARRAY = "key_permission_array";
 
@@ -59,28 +53,15 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
     private static OnPermission call;
 
     @Override
-    public boolean isShowHeadView() {
-        return false;
-    }
-
-    @Override
-    public int setView() {
+    protected int setContentLayout() {
         return 0;
     }
 
     @Override
-    public void setStatusBar(Activity activity) {
-        MdStatusBar.StatusBuilder.init()
-                .setStatusColor(R.color.transparent, 0)
-                .setNavColor(R.color.transparent, 0)
-                .setTransparentBar(activity);
-    }
-
-    @Override
-    public void initData(Activity activity, Bundle savedInstanceState) {
+    protected void baseInit() {
         mFirstRefuseMessage = getString(R.string.defaule_always_message);
 
-        Bundle bundle = getIntent().getExtras();
+        Bundle bundle = getArguments();
         if (null != bundle) {
             mPermissions = bundle.getStringArray(KEY_PERMISSIONS_ARRAY);
             mFirstRefuseMessage = bundle.getString(KEY_FIRST_MESSAGE);
@@ -123,7 +104,7 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
                 permissionEnd(CALL_BACK_RESULT_CODE_SUCCESS, true);
             } else {
                 //失败
-                List<String> rationaleList = PermissionUtils.getShouldRationaleList(this, mPermissions);
+                List<String> rationaleList = PermissionUtils.getShouldRationaleList(getActivity(), mPermissions);
                 if (null != rationaleList && rationaleList.size() > 0) {
                     if (rationaleList.size() < mPermissions.length){
                         showPermissionDialog(false, false);
@@ -140,10 +121,10 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
     /** 请求多个权限 */
     @TargetApi(Build.VERSION_CODES.M)
     public void checkPermission(String... permissions) {
-        PermissionUtils.checkPermissions(this, permissions);
+        PermissionUtils.checkPermissions(getActivity(), permissions);
 
         if (null != permissions) {
-            List<String> requestPermissionCount = PermissionUtils.getRequestPermissionList(this, permissions);
+            List<String> requestPermissionCount = PermissionUtils.getRequestPermissionList(getContext(), permissions);
             if (null != requestPermissionCount && requestPermissionCount.size() > 0) {
                 requestPermissions(requestPermissionCount.toArray(new String[0]), PERMISSION_REQUEST_CODE);
             } else {
@@ -162,7 +143,7 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
     public void onSurePermission(boolean isRefuse) {
         if (isRefuse) {
             isToSettingPermission = true;
-            PermissionUtils.jumpPermiSettting(this);
+            PermissionUtils.jumpPermiSettting(getContext());
         } else {
             checkPermission(mPermissions);
         }
@@ -184,9 +165,9 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
 
                         holder.setText(R.id.tvpermissionConfirm, isAlwaysRefuse ? R.string.set : R.string.ok);
                         holder.setOnClickListener(R.id.tvpermissionConfirm, v -> {
-                                    onSurePermission(isAlwaysRefuse);
-                                    dialog.dismiss(false);
-                                });
+                            onSurePermission(isAlwaysRefuse);
+                            dialog.dismiss(false);
+                        });
 
                         holder.setText(R.id.tvPermissionCancel, R.string.cancel);
                         holder.setOnClickListener(R.id.tvPermissionCancel, v -> {
@@ -196,7 +177,7 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
                     }
                 })
                 .setWidthPercent(CommonDialog.WidthPercent)
-                .show(getSupportFragmentManager());
+                .show(getFragmentManager());
     }
 
     /**
@@ -211,16 +192,14 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
             } else if (resultCode == CALL_BACK_RESULE_CODE_FAILURE && isStatus){
                 call.noPermission(Arrays.asList(mPermissions));
             } else {
-                call.hasPermission(PermissionUtils.getRequestPermissionList(this, mPermissions), isStatus);
+                call.hasPermission(PermissionUtils.getRequestPermissionList(getContext(), mPermissions), isStatus);
             }
         }
-
-        JumpUtils.exitActivity(this);
     }
 
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         call = null;
     }
@@ -236,44 +215,24 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
         Bundle bundle = new Bundle();
         bundle.putStringArray(KEY_PERMISSIONS_ARRAY, permissions);
 
-        Intent intent = new Intent();
-        intent.putExtras(bundle);
+//        Intent intent = new Intent();
+//        intent.putExtras(bundle);
+
+        PermissionFragment fragment = new PermissionFragment();
+        fragment.setArguments(bundle);
+        FragmentManager manager = null;
 
         if (object instanceof AppCompatActivity) {
-            Activity act = ((Activity)object);
-            intent.setClass(act, PermissionActivity.class);
+            AppCompatActivity act = ((AppCompatActivity)object);
+            manager = act.getSupportFragmentManager();
 
-            act.startActivity(intent);
         } else if (object instanceof Fragment) {
-            Activity act = ((Fragment)object).getActivity();
-            intent.setClass(act, PermissionActivity.class);
-
-            act.startActivity(intent);
-        } else if (object instanceof Service){
-            intent.setClass((Service) object, PermissionActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            ((Service) object).startActivity(intent);
+            Fragment fm = ((Fragment)object);
+            manager = fm.getFragmentManager();
         }
+
+        assert manager != null;
+        manager.beginTransaction().add(fragment, "PermissionFragment").commit();
     }
 
-
-    /**
-     * 权限管理 回调接口
-     */
-    public interface OnPermission {
-        /**
-         * 有权限被授予时回调（部分或全部授予）
-         *
-         * @param denyList    请求失败的权限组
-         * @param isAll       是否全部授予了
-         */
-        void hasPermission(List<String> denyList, boolean isAll);
-
-        /**
-         * 权限被全部拒绝时回调
-         *
-         * @param denyList 请求失败的权限组
-         */
-        void noPermission(List<String> denyList);
-    }
 }

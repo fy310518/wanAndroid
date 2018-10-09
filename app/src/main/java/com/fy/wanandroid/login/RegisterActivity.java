@@ -8,12 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
-import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
@@ -67,13 +67,7 @@ public class RegisterActivity extends AppCompatActivity implements IBaseActivity
         return R.layout.activity_register;
     }
 
-    @Override
-    public void setStatusBar(Activity activity) {
-        MdStatusBar.StatusBuilder.init().setStatusColor(R.color.statusBar, 0)
-                .setNavColor(R.color.statusBar, 0)
-                .setColorBar(activity);
-    }
-
+    @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         mContext = this;

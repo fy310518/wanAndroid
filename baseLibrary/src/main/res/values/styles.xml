@@ -15,19 +15,18 @@
         <item name="android:colorBackgroundCacheHint">@null</item><!-- 背景缓存颜色 -->
         <item name="android:windowBackground">@android:color/transparent</item><!-- 背景 -->
 
-        <!-- 系统分割线 -->
-        <!--<item name="android:listDivider">@drawable/divider_bg</item>-->
-
         <item name="android:windowAnimationStyle">@style/animfade</item>
     </style>
 
-    <!-- 权限管理界面主题 -->
-    <style name="permissionTheme" parent="BaseAppTheme">
-        <item name="android:windowFullscreen">false</item> <!-- 全屏 -->
-        <!-- 避免启动应用后，出现短暂的黑屏或白屏现象 -->
-        <item name="android:windowIsTranslucent">true</item><!--窗体是否半透明-->
-        <item name="android:windowContentOverlay">@android:color/transparent</item><!--设置窗体内容背景-->
-    </style>
+    <!-- 系统分割线 -->
+    <!--<item name="android:listDivider">@drawable/divider_bg</item>-->
+    <!-- 全屏 -->
+    <!--<item name="android:windowFullscreen">false</item> -->
+    <!-- 避免启动应用后，出现短暂的黑屏或白屏现象 -->
+    <!--窗体是否半透明-->
+    <!--<item name="android:windowIsTranslucent">true</item>-->
+    <!--设置窗体内容背景-->
+    <!--<item name="android:windowContentOverlay">@android:color/transparent</item>-->
 
 
     <!-- dialog 样式 -->

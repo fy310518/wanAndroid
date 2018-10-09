@@ -1,6 +1,5 @@
 package com.fy.wanandroid.web;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -21,17 +20,16 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.BaseActivityBean;
-import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.application.IreTryActivity;
-import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.T;
-
-import butterknife.BindView;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.entity.Bookmark;
+
+import butterknife.BindView;
 
 /**
  * 通用 加载 web 网页 activity
@@ -62,14 +60,7 @@ public class WebViewActivity extends AppCompatActivity implements IreTryActivity
         return R.layout.activity_web;
     }
 
-    @Override
-    public void setStatusBar(Activity activity) {
-        MdStatusBar.StatusBuilder.init().setStatusColor(R.color.statusBar, 0)
-                .setNavColor(R.color.statusBar, 0)
-                .setColorBar(activity);
-    }
-
-    @SuppressLint("NewApi")
+    @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         BaseActivityBean activityBean = (BaseActivityBean) getIntent()

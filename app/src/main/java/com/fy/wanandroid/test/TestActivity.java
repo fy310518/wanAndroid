@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
-import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.wanandroid.R;
 
 import butterknife.BindView;
@@ -29,14 +29,7 @@ public class TestActivity extends AppCompatActivity implements IBaseActivity{
         return R.layout.arc_view_layout;
     }
 
-    @Override
-    public void setStatusBar(Activity activity) {
-        MdStatusBar.StatusBuilder.init()
-                .setStatusColor(R.color.black, 255)
-                .setNavColor(R.color.statusBar, 0)
-                .setTransparentBar(activity);
-    }
-
+    @StatusBar(statusColor = R.color.statusBar, statusAlpha = 105, navColor = R.color.statusBar)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         avTitle.setLeftText("75", "分", "大王");

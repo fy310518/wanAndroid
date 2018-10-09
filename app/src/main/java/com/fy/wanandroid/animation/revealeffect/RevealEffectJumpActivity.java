@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.LinearLayout;
 
+import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
-import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.wanandroid.R;
 
 import butterknife.BindView;
@@ -36,13 +36,7 @@ public class RevealEffectJumpActivity extends AppCompatActivity implements IBase
         return R.layout.demo_revea_effect_jump;
     }
 
-    @Override
-    public void setStatusBar(Activity activity) {
-        MdStatusBar.StatusBuilder.init().setStatusColor(R.color.statusBar, 0)
-                .setNavColor(R.color.statusBar, 0)
-                .setColorBar(activity);
-    }
-
+    @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         Bundle bundle = getIntent().getExtras();

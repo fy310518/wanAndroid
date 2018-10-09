@@ -1,6 +1,5 @@
 package com.fy.wanandroid.main;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,10 +21,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.startactivity.StartActivity;
-import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.statusbar.StatusBarContentColor;
 import com.fy.baselibrary.utils.AnimUtils;
 import com.fy.baselibrary.utils.Constant;
@@ -94,16 +93,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
         return R.layout.main_activity;
     }
 
-    @SuppressLint("ResourceAsColor")
-    @Override
-    public void setStatusBar(Activity activity) {
-        MdStatusBar.StatusBuilder.init()
-                .setStatusColor(R.color.statusBar, 0)
-                .setNavColor(R.color.statusBar, 0)
-                .setApplyNav(false)
-                .setColorBar(activity);
-    }
-
+    @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         mContext = this;

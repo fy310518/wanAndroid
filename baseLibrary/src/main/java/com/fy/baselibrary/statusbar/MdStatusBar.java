@@ -96,7 +96,6 @@ public class MdStatusBar {
         }
 
         /**
-         *
          * 设置 状态栏和导航栏 的 透明度
          * @param act
          */

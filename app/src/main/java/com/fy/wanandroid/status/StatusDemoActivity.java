@@ -19,6 +19,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.BaseActivityBean;
 import com.fy.baselibrary.application.IreTryActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
@@ -26,7 +27,6 @@ import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.load.LoadCallBack;
 import com.fy.baselibrary.retrofit.load.LoadService;
 import com.fy.baselibrary.retrofit.load.up.UpLoadUtils;
-import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.L;
@@ -77,13 +77,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IreTryActiv
         return R.layout.activity_status;
     }
 
-    @Override
-    public void setStatusBar(Activity activity) {
-        MdStatusBar.StatusBuilder.init().setStatusColor(R.color.statusBar, 0)
-                .setNavColor(R.color.statusBar, 0)
-                .setColorBar(activity);
-    }
-
+    @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         BaseActivityBean activityBean = (BaseActivityBean) activity.getIntent()

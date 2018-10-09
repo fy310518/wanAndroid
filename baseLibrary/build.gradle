@@ -72,8 +72,9 @@ dependencies {
     api 'com.github.bumptech.glide:okhttp3-integration:4.7.1'
     api 'com.github.bumptech.glide:annotations:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
-//    aop
-    implementation 'org.aspectj:aspectjrt:1.8.13'
+
+    //noinspection GradleDependency  aop
+    implementation 'org.aspectj:aspectjrt:1.8.9'
 }
 
 
@@ -113,51 +114,51 @@ publish {
 
 
 /** 以下开始是 Android aop 相关配置**/
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'org.aspectj:aspectjtools:1.8.13'
-        classpath 'org.aspectj:aspectjweaver:1.8.13'
-    }
-}
-
-import org.aspectj.bridge.IMessage
-import org.aspectj.bridge.MessageHandler
-import org.aspectj.tools.ajc.Main
-
-android.libraryVariants.all { variant ->
-    JavaCompile javaCompile = variant.javaCompile
-    javaCompile.doLast {
-        String[] args = ["-showWeaveInfo",
-                         "-1.5",
-                         "-inpath", javaCompile.destinationDir.toString(),
-                         "-aspectpath", javaCompile.classpath.asPath,
-                         "-d", javaCompile.destinationDir.toString(),
-                         "-classpath", javaCompile.classpath.asPath,
-                         "-bootclasspath", android.bootClasspath.join(
-                File.pathSeparator)]
-
-        MessageHandler handler = new MessageHandler(true)
-        new Main().run(args, handler)
-
-        def log = project.logger
-        for (IMessage message : handler.getMessages(null, true)) {
-            switch (message.getKind()) {
-                case IMessage.ABORT:
-                case IMessage.ERROR:
-                case IMessage.FAIL:
-                    log.error message.message, message.thrown
-                    break
-                case IMessage.WARNING:
-                case IMessage.INFO:
-                    log.info message.message, message.thrown
-                    break
-                case IMessage.DEBUG:
-                    log.debug message.message, message.thrown
-                    break
-            }
-        }
-    }
-}
+//buildscript {
+//    repositories {
+//        mavenCentral()
+//    }
+//    dependencies {
+//        classpath 'org.aspectj:aspectjtools:1.8.13'
+//        classpath 'org.aspectj:aspectjweaver:1.8.13'
+//    }
+//}
+//
+//import org.aspectj.bridge.IMessage
+//import org.aspectj.bridge.MessageHandler
+//import org.aspectj.tools.ajc.Main
+//
+//android.libraryVariants.all { variant ->
+//    JavaCompile javaCompile = variant.javaCompile
+//    javaCompile.doLast {
+//        String[] args = ["-showWeaveInfo",
+//                         "-1.5",
+//                         "-inpath", javaCompile.destinationDir.toString(),
+//                         "-aspectpath", javaCompile.classpath.asPath,
+//                         "-d", javaCompile.destinationDir.toString(),
+//                         "-classpath", javaCompile.classpath.asPath,
+//                         "-bootclasspath", android.bootClasspath.join(
+//                File.pathSeparator)]
+//
+//        MessageHandler handler = new MessageHandler(true)
+//        new Main().run(args, handler)
+//
+//        def log = project.logger
+//        for (IMessage message : handler.getMessages(null, true)) {
+//            switch (message.getKind()) {
+//                case IMessage.ABORT:
+//                case IMessage.ERROR:
+//                case IMessage.FAIL:
+//                    log.error message.message, message.thrown
+//                    break
+//                case IMessage.WARNING:
+//                case IMessage.INFO:
+//                    log.info message.message, message.thrown
+//                    break
+//                case IMessage.DEBUG:
+//                    log.debug message.message, message.thrown
+//                    break
+//            }
+//        }
+//    }
+//}

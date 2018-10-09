@@ -2,7 +2,6 @@ package com.fy.wanandroid.animation.revealeffect;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
@@ -14,8 +13,8 @@ import android.view.ViewAnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
-import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.wanandroid.R;
 
@@ -46,14 +45,7 @@ public class RevealEffectActivity extends AppCompatActivity implements IBaseActi
         return R.layout.demo_revea_effect_layout;
     }
 
-    @Override
-    public void setStatusBar(Activity activity) {
-        MdStatusBar.StatusBuilder.init().setStatusColor(R.color.statusBar, 0)
-                .setNavColor(R.color.statusBar, 0)
-                .setColorBar(activity);
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
+    @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
 
@@ -76,6 +68,7 @@ public class RevealEffectActivity extends AppCompatActivity implements IBaseActi
     }
 
     private boolean flag;
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void runRevealEffect() {
         //求出第2个和第3个参数
@@ -87,7 +80,7 @@ public class RevealEffectActivity extends AppCompatActivity implements IBaseActi
         //求出要揭露 View 的对角线，来作为扩散圆的最大半径
         int hypotenuse = (int) Math.hypot(imgAngel.getWidth(), imgAngel.getHeight());
 
-        if (flag){//显示揭露对象
+        if (flag) {//显示揭露对象
             Animator circularReveal = ViewAnimationUtils.createCircularReveal(imgAngel, centerX, centerY, 0, hypotenuse);
             circularReveal.setDuration(1000);
             //注意：这里显示 head 调用并没有在监听方法里，并且是在动画开始前调用。

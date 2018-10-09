@@ -6,14 +6,12 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fy.baselibrary.aop.annotation.ClickFilter;
-import com.fy.baselibrary.application.ConfigUtils;
+import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
-import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.statusbar.StatusBarContentColor;
 import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.Constant;
@@ -51,18 +49,10 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
         return R.layout.activity_start_up;
     }
 
-    @Override
-    public void setStatusBar(Activity activity) {
-        MdStatusBar.StatusBuilder.init()
-                .setStatusColor(R.color.transparent, 0)
-                .setNavColor(R.color.blue, 0)
-                .setApplyNav(false)
-                .setTransparentBar(activity);
-        StatusBarContentColor.setStatusTextColor(this, true, true);
-    }
-
+    @StatusBar(statusColor = R.color.transparent, navColor = R.color.blue, applyNav = false, statusOrNavModel = 1)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
+        StatusBarContentColor.setStatusTextColor(this, true, true);
 
         Drawable back = TintUtils.getTintDrawable(R.drawable.shape_ellipse_rect, 0, R.color.alphaBlack);
         tvSkip = findViewById(R.id.tvSkip);

@@ -5,16 +5,15 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
+import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.load.down.DownLoadListener;
 import com.fy.baselibrary.retrofit.load.down.DownManager;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
-import com.fy.baselibrary.statusbar.MdStatusBar;
+import com.fy.wanandroid.R;
 
 import butterknife.BindView;
-import com.fy.wanandroid.R;
 
 /**
  * 下载文件 演示 activity
@@ -36,19 +35,13 @@ public class DownFileActivity extends AppCompatActivity implements IBaseActivity
         return R.layout.activity_file_down;
     }
 
-    @Override
-    public void setStatusBar(Activity activity) {
-        MdStatusBar.StatusBuilder.init().setStatusColor(R.color.statusBar, 0)
-                .setNavColor(R.color.statusBar, 0)
-                .setColorBar(activity);
-    }
-
+    @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
 
         initRv();
 
-        for (int i = 0; i < rvAdapter.getItemCount(); i++){
+        for (int i = 0; i < rvAdapter.getItemCount(); i++) {
             DownManager.getInstentce()
                     .addDownTask(rvAdapter.getmDatas().get(i), new DownLoadCall(i));
         }
@@ -56,7 +49,7 @@ public class DownFileActivity extends AppCompatActivity implements IBaseActivity
         DownManager.getInstentce().runDownTask();
     }
 
-    private void initRv(){
+    private void initRv() {
         rvDownList.setLayoutManager(new LinearLayoutManager(this));
         rvDownList.addItemDecoration(new ListItemDecoration.Builder()
                 .setmSpace(R.dimen.rv_divider_height).create(this));
@@ -92,11 +85,11 @@ public class DownFileActivity extends AppCompatActivity implements IBaseActivity
 
         @Override
         public void onProgress(long finished, long total, double progress) {
-                runOnUiThread(() -> {
-                            if (isCurrentListViewItemVisible(position))
-                                rvAdapter.changeItemListener.onChange(position);
-                        }
-                );
+            runOnUiThread(() -> {
+                        if (isCurrentListViewItemVisible(position))
+                            rvAdapter.changeItemListener.onChange(position);
+                    }
+            );
         }
 
         @Override
