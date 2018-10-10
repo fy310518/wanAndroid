@@ -100,4 +100,23 @@ public class Constant {
      */
     public static final String queryKey = "QueryKey";
 
+
+
+
+
+
+// Activity life Events
+    public static final String CREATE = "CREATE";
+    public static final String START = "START";
+    public static final String RESUME = "RESUME";
+    public static final String PAUSE = "PAUSE";
+    public static final String STOP = "STOP";
+    public static final String DESTROY = "DESTROY";
+
+// Fragment life  Events
+    public static final String ATTACH = "ATTACH";
+    public static final String CREATE_VIEW = "CREATE_VIEW";
+    public static final String DESTROY_VIEW = "DESTROY_VIEW";
+    public static final String DETACH = "DETACH";
+
 }

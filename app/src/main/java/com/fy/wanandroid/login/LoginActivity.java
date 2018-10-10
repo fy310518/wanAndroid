@@ -11,10 +11,12 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.fy.baselibrary.aop.annotation.ClickFilter;
 import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.aop.annotation.StatusBar;
+import com.fy.baselibrary.application.BaseActivityBean;
 import com.fy.baselibrary.application.ConfigUtils;
 import com.fy.baselibrary.application.IreTryActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
@@ -34,11 +36,23 @@ import com.fy.wanandroid.request.NetDialog;
 import com.fy.wanandroid.test.TestActivity;
 import com.fy.wanandroid.utils.SelectUtils;
 
+import org.reactivestreams.Subscriber;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
+import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * 登录
@@ -46,7 +60,6 @@ import butterknife.OnClick;
  */
 public class LoginActivity extends AppCompatActivity implements IreTryActivity, View.OnClickListener {
     private static final String TAG = "LoginActivity";
-
     @BindView(R.id.editName)
     TextInputEditText editName;
 
@@ -98,6 +111,8 @@ public class LoginActivity extends AppCompatActivity implements IreTryActivity, 
 
             }
         });
+
+        as();
     }
 
     @ClickFilter
@@ -137,7 +152,12 @@ public class LoginActivity extends AppCompatActivity implements IreTryActivity, 
         RequestUtils.create(ApiService.class)
                 .login(param)
                 .compose(RxHelper.handleResult())
-                .doOnSubscribe(RequestUtils::addDispos)
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        RequestUtils.addDispos(disposable);
+                    }
+                })
                 .subscribe(new NetCallBack<LoginBean>(progressDialog) {
                     @Override
                     protected void onSuccess(LoginBean login) {
@@ -158,5 +178,33 @@ public class LoginActivity extends AppCompatActivity implements IreTryActivity, 
                     }
                 });
     }
+
+    private void as(){
+        BaseActivityBean activityBean = (BaseActivityBean) getIntent()
+                .getSerializableExtra("ActivityBean");
+
+        Observable.interval(3, TimeUnit.SECONDS)
+                .compose(RxHelper.bindToLifecycle(activityBean.getSubject()))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onError(Throwable e) {}
+
+                    @Override
+                    public void onComplete() {
+                        Toast.makeText(LoginActivity.this, "onCompleted", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {}
+
+                    @Override
+                    public void onNext(final Long aLong) {
+                        Toast.makeText(LoginActivity.this, "aLong:" + aLong, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+
 
 }

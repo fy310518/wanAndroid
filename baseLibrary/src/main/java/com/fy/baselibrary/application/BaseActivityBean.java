@@ -5,6 +5,7 @@ import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import java.io.Serializable;
 
 import butterknife.Unbinder;
+import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * 使用 ActivityLifecycleCallbacks 实现给所有 Activity 执行 ButterKnife.bind
@@ -35,7 +36,7 @@ public class BaseActivityBean implements Serializable {
     }
 
 
-    StatusLayoutManager slManager;
+    private StatusLayoutManager slManager;
 
     public StatusLayoutManager getSlManager() {
         return slManager;
@@ -43,5 +44,16 @@ public class BaseActivityBean implements Serializable {
 
     public void setSlManager(StatusLayoutManager slManager) {
         this.slManager = slManager;
+    }
+
+
+    private BehaviorSubject<String> subject;
+
+    public BehaviorSubject<String> getSubject() {
+        return subject;
+    }
+
+    public void setSubject(BehaviorSubject<String> subject) {
+        this.subject = subject;
     }
 }

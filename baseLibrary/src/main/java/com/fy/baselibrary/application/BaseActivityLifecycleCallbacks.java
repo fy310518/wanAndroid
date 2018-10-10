@@ -26,6 +26,7 @@ import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
 
 import butterknife.ButterKnife;
+import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * activity 生命周期回调 (api 14+)
@@ -96,6 +97,8 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
         //设置 黄油刀 简化 Android 样板代码
         activityBean.setUnbinder(ButterKnife.bind(activity));
+
+        activityBean.setSubject(BehaviorSubject.create());
         activity.getIntent().putExtra("ActivityBean", activityBean);
 
         //基础配置 执行完成，再执行 初始化 activity 操作
@@ -115,8 +118,8 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
     @Override
     public void onActivityPaused(Activity activity) {
         L.e(TAG, activity.getClass().getName() + "--Pause()");
-        RequestUtils.clearDispos();
-        DownManager.getInstentce().clieanDownData();
+//        RequestUtils.clearDispos();
+//        DownManager.getInstentce().clieanDownData();
     }
 
     @Override
@@ -142,6 +145,9 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
             //销毁 屏幕旋转监听
             if (null != activityBean.getOrientoinListener())
                 activityBean.getOrientoinListener().disable();
+
+            if (null != activityBean.getSubject())
+                activityBean.getSubject().onNext(Constant.DESTROY);
         }
     }
 

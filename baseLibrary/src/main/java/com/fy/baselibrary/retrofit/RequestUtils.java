@@ -114,4 +114,5 @@ public class RequestUtils {
     public static void clearDispos(){
         getInstance().mCompositeDisposable.clear();
     }
+
 }

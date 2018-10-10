@@ -1,5 +1,6 @@
 package com.fy.baselibrary.retrofit;
 
+import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.L;
 
 import io.reactivex.Observable;
@@ -11,10 +12,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.BehaviorSubject;
 
 /**
- * Description: Rx 一些巧妙的处理
- * Created by Jam on 16-6-12
+ * Rx 一些巧妙的处理
+ * Created by fangs on 2018/3/13.
  */
 public class RxHelper {
     /**
@@ -24,7 +26,6 @@ public class RxHelper {
      * @return
      */
     public static <T> ObservableTransformer<BaseBean<T>, T> handleResult() {
-
         return new ObservableTransformer<BaseBean<T>, T>() {
             @Override
             public ObservableSource<T> apply(@NonNull Observable<BaseBean<T>> upstream) {
@@ -70,4 +71,31 @@ public class RxHelper {
             }
         });
     }
+
+
+    public static <T> ObservableTransformer<T, T> bindToLifecycle(BehaviorSubject<String> subject) {
+        return upstream -> upstream.takeUntil(
+                subject.filter(Constant.DESTROY::equals)
+        );
+    }
+
+    /**
+     //  ┏┓　　　┏┓
+     //┏┛┻━━━┛┻┓
+     //┃　　　　　　　┃
+     //┃　　　━　　　┃
+     //┃　┳┛　┗┳　┃
+     //┃　　　　　　　┃
+     //┃　　　┻　　　┃
+     //┗━┓　　　┏━┛
+     //   ┃　　　┃   阿弥陀佛
+     //   ┃　　　┃   神兽保佑
+     //   ┃      ┃  代码无BUG
+     //   ┃　　　┗━━━┓
+     //   ┃　　　　　　　┣━┓
+     //   ┃　　　　　　　┏━┛
+     //   ┗┓┓┏━┳┓┏┛
+     //     ┃┫┫　┃┫┫
+     //     ┗┻┛　┗┻┛
+     */
 }
