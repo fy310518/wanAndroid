@@ -1,6 +1,6 @@
 package com.fy.baselibrary.retrofit;
 
-import com.fy.baselibrary.application.ConfigUtils;
+import com.fy.baselibrary.ioc.ConfigUtils;
 import com.fy.baselibrary.base.dialog.CommonDialog;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;

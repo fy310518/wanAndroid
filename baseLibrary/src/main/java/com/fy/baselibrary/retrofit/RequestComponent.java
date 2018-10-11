@@ -5,7 +5,8 @@ import javax.inject.Singleton;
 import dagger.Component;
 
 /**
- * 作为桥梁，沟通调用者和依赖对象库
+ * 网络请求 ioc
+ * 作为桥梁，沟通调用者和依赖对象
  * Created by fangs on 2017/5/15.
  */
 @Singleton

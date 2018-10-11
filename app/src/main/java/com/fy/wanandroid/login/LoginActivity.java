@@ -1,6 +1,7 @@
 package com.fy.wanandroid.login;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
@@ -17,7 +18,7 @@ import com.fy.baselibrary.aop.annotation.ClickFilter;
 import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.BaseActivityBean;
-import com.fy.baselibrary.application.ConfigUtils;
+import com.fy.baselibrary.ioc.ConfigUtils;
 import com.fy.baselibrary.application.IreTryActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
@@ -26,6 +27,7 @@ import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.SpfUtils;
+import com.fy.baselibrary.utils.T;
 import com.fy.baselibrary.utils.cache.ACache;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.entity.LoginBean;
@@ -36,8 +38,6 @@ import com.fy.wanandroid.request.NetDialog;
 import com.fy.wanandroid.test.TestActivity;
 import com.fy.wanandroid.utils.SelectUtils;
 
-import org.reactivestreams.Subscriber;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -45,14 +45,10 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.ObservableTransformer;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Predicate;
-import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * 登录
@@ -113,6 +109,8 @@ public class LoginActivity extends AppCompatActivity implements IreTryActivity, 
         });
 
         as();
+        bs();
+        cs();
     }
 
     @ClickFilter
@@ -180,11 +178,8 @@ public class LoginActivity extends AppCompatActivity implements IreTryActivity, 
     }
 
     private void as(){
-        BaseActivityBean activityBean = (BaseActivityBean) getIntent()
-                .getSerializableExtra("ActivityBean");
-
         Observable.interval(3, TimeUnit.SECONDS)
-                .compose(RxHelper.bindToLifecycle(activityBean.getSubject()))
+                .compose(RxHelper.bindToLifecycle(this))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Long>() {
                     @Override
@@ -192,7 +187,7 @@ public class LoginActivity extends AppCompatActivity implements IreTryActivity, 
 
                     @Override
                     public void onComplete() {
-                        Toast.makeText(LoginActivity.this, "onCompleted", Toast.LENGTH_SHORT).show();
+                        L.e("线程a -- onCompleted", "" + Thread.currentThread().getName());
                     }
 
                     @Override
@@ -200,11 +195,27 @@ public class LoginActivity extends AppCompatActivity implements IreTryActivity, 
 
                     @Override
                     public void onNext(final Long aLong) {
-                        Toast.makeText(LoginActivity.this, "aLong:" + aLong, Toast.LENGTH_SHORT).show();
+                        L.e("线程a", "" + Thread.currentThread().getName());
                     }
                 });
     }
 
+    @SuppressLint("CheckResult")
+    private void bs() {
+        Observable.timer(9, TimeUnit.SECONDS)
+                .compose(RxHelper.bindToLifecycle(this))
+                .subscribe(aLong -> {
+                    L.e("线程b", "" + Thread.currentThread().getName());
+                });
+    }
 
-
+    @SuppressLint("CheckResult")
+    private void cs(){
+        Observable.timer(19, TimeUnit.SECONDS)
+                .compose(RxHelper.bindToLifecycle(this))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(aLong -> {
+                    L.e("线程c", "" + Thread.currentThread().getName());
+                });
+    }
 }

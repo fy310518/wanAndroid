@@ -32,7 +32,7 @@ import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 
-import com.fy.baselibrary.application.ConfigUtils;
+import com.fy.baselibrary.ioc.ConfigUtils;
 
 import static android.graphics.BlurMaskFilter.Blur;
 

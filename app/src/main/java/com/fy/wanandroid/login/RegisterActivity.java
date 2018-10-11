@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.fy.baselibrary.aop.annotation.StatusBar;
-import com.fy.baselibrary.application.ConfigUtils;
+import com.fy.baselibrary.ioc.ConfigUtils;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;

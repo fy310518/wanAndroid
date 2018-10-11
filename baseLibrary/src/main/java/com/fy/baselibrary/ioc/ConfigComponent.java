@@ -1,11 +1,12 @@
-package com.fy.baselibrary.application;
+package com.fy.baselibrary.ioc;
 
 import android.content.Context;
 import javax.inject.Singleton;
 import dagger.Component;
 
 /**
- * 作为桥梁，沟通调用者和依赖对象库
+ * 全局 ioc(依赖注入)
+ * 作为桥梁，沟通调用者和依赖对象
  * Created by fangs on 2018/7/13.
  */
 @Singleton

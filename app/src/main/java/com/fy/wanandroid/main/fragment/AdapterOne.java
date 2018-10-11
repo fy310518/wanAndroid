@@ -83,7 +83,7 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
         RequestUtils.create(ApiService.class)
                 .collectArticle(article.getId(), "")
                 .compose(RxHelper.handleResult())
-                .doOnSubscribe(RequestUtils::addDispos)
+                .compose(RxHelper.bindToLifecycle(mContext))
                 .subscribe(new NetCallBack<Object>() {
                     @Override
                     protected void onSuccess(Object collect) {
@@ -104,7 +104,7 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
         RequestUtils.create(ApiService.class)
                 .uncollectArticle(article.getId(), "")
                 .compose(RxHelper.handleResult())
-                .doOnSubscribe(RequestUtils::addDispos)
+                .compose(RxHelper.bindToLifecycle(mContext))
                 .subscribe(new NetCallBack<Object>() {
                     @Override
                     protected void onSuccess(Object collect) {
@@ -126,7 +126,7 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
         RequestUtils.create(ApiService.class)
                 .unMyCollectArticle(article.getId(), article.getOriginId())
                 .compose(RxHelper.handleResult())
-                .doOnSubscribe(RequestUtils::addDispos)
+                .compose(RxHelper.bindToLifecycle(mContext))
                 .subscribe(new NetCallBack<Object>() {
                     @Override
                     protected void onSuccess(Object collect) {

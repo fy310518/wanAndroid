@@ -1,6 +1,6 @@
 package com.fy.baselibrary.retrofit;
 
-import com.fy.baselibrary.application.ConfigUtils;
+import com.fy.baselibrary.ioc.ConfigUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.cache.ACache;
 
@@ -32,8 +32,7 @@ public class RequestUtils {
     protected CompositeDisposable mCompositeDisposable;
 
     private RequestUtils() {
-        RequestComponent component = DaggerRequestComponent.builder().build();
-        component.inJect(this);
+        DaggerRequestComponent.builder().build().inJect(this);
 
         mCompositeDisposable = new CompositeDisposable();
     }

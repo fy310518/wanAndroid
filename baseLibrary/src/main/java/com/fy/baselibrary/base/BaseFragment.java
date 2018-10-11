@@ -10,12 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fy.baselibrary.retrofit.RequestUtils;
+import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.cache.ACache;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * Fragment 基类
@@ -113,7 +114,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     public void onPause() {
         super.onPause();
         L.e(TAG, "onPause()");
-        RequestUtils.clearDispos();
     }
 
     @Override

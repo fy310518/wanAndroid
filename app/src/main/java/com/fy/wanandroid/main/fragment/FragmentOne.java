@@ -135,7 +135,7 @@ public class FragmentOne extends BaseFragment {
                 map.put("article", articleBean);
                 return map;
             }
-        }).doOnSubscribe(RequestUtils::addDispos)
+        }).compose(RxHelper.bindToLifecycle(getActivity()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new NetCallBack<Map<String, Object>>() {
                     @Override

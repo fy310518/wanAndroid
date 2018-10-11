@@ -4,7 +4,7 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.text.TextUtils;
 
-import com.fy.baselibrary.application.ConfigUtils;
+import com.fy.baselibrary.ioc.ConfigUtils;
 
 import java.io.File;
 import java.io.FileWriter;

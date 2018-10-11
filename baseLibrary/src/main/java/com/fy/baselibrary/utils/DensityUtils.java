@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.TypedValue;
 import android.view.View;
 
-import com.fy.baselibrary.application.ConfigUtils;
+import com.fy.baselibrary.ioc.ConfigUtils;
 
 /**
  * 单位转换 和 测量 工具类

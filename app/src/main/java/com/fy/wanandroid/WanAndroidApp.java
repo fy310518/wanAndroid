@@ -3,7 +3,7 @@ package com.fy.wanandroid;
 import android.app.Application;
 
 import com.fy.baselibrary.application.BaseActivityLifecycleCallbacks;
-import com.fy.baselibrary.application.ConfigUtils;
+import com.fy.baselibrary.ioc.ConfigUtils;
 import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.NightModeUtils;

@@ -3,7 +3,7 @@ package com.fy.baselibrary.retrofit.load;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.fy.baselibrary.application.ConfigUtils;
+import com.fy.baselibrary.ioc.ConfigUtils;
 import com.fy.baselibrary.retrofit.RequestBaseObserver;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
 import com.fy.baselibrary.utils.Constant;

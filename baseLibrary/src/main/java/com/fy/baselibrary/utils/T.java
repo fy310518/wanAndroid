@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.fy.baselibrary.R;
-import com.fy.baselibrary.application.ConfigUtils;
+import com.fy.baselibrary.ioc.ConfigUtils;
 
 /**
  * Toast统一管理类 (解决多次弹出toast)

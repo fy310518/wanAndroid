@@ -10,7 +10,7 @@ import android.support.annotation.DimenRes;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 
-import com.fy.baselibrary.application.ConfigUtils;
+import com.fy.baselibrary.ioc.ConfigUtils;
 
 import java.util.Random;
 

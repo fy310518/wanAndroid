@@ -75,7 +75,7 @@ public class FragmentTwo extends BaseFragment {
         RequestUtils.create(ApiService.class)
                 .getTreeList()
                 .compose(RxHelper.handleResult())
-                .doOnSubscribe(RequestUtils::addDispos)
+                .compose(RxHelper.bindToLifecycle(getActivity()))
                 .subscribe(new NetCallBack<List<TreeBean>>() {
                     @Override
                     protected void onSuccess(List<TreeBean> treeBeanList) {

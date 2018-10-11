@@ -2,9 +2,8 @@ package com.fy.wanandroid.request;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 
-import com.fy.baselibrary.application.ConfigUtils;
+import com.fy.baselibrary.ioc.ConfigUtils;
 import com.fy.baselibrary.retrofit.RequestBaseObserver;
 import com.fy.baselibrary.retrofit.ServerException;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;

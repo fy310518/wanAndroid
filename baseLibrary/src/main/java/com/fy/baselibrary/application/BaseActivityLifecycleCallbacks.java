@@ -15,8 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fy.baselibrary.R;
-import com.fy.baselibrary.retrofit.RequestUtils;
-import com.fy.baselibrary.retrofit.load.down.DownManager;
+import com.fy.baselibrary.ioc.ConfigUtils;
 import com.fy.baselibrary.startactivity.StartActivity;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.Constant;
@@ -118,8 +117,6 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
     @Override
     public void onActivityPaused(Activity activity) {
         L.e(TAG, activity.getClass().getName() + "--Pause()");
-//        RequestUtils.clearDispos();
-//        DownManager.getInstentce().clieanDownData();
     }
 
     @Override

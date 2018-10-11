@@ -1,6 +1,7 @@
-package com.fy.baselibrary.application;
+package com.fy.baselibrary.ioc;
 
 import android.content.Context;
+
 
 /**
  * 应用框架基础配置工具类 （应用启动时候初始化）

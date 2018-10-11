@@ -1,5 +1,9 @@
 package com.fy.baselibrary.retrofit;
 
+import android.app.Activity;
+import android.content.Context;
+
+import com.fy.baselibrary.application.BaseActivityBean;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.L;
 
@@ -11,6 +15,7 @@ import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 
@@ -60,9 +65,7 @@ public class RxHelper {
             public void subscribe(@NonNull ObservableEmitter<T> subscriber) throws Exception {
                 try {
                     L.e("net", "成功 _ onNext");
-                    if (null == data) subscriber.onNext((T) new Object());
-                    else subscriber.onNext(data);
-
+                    subscriber.onNext(data);
                     subscriber.onComplete();
                 } catch (Exception e) {
                     L.e("net", "异常 _ onError");
@@ -72,11 +75,35 @@ public class RxHelper {
         });
     }
 
+    /**
+     * 绑定activity 或 fragment声明周期，在生命周期结束后断开 rxjava 请求
+     * @param context
+     * @param <T>
+     * @return
+     */
+    public static <T> ObservableTransformer<T, T> bindToLifecycle(@NonNull Context context) {
+        BehaviorSubject<String> subject = null;
+        if (context instanceof Activity) {
+            Activity activity = (Activity) context;
+            subject = ((BaseActivityBean) activity.getIntent()
+                    .getSerializableExtra("ActivityBean"))
+                    .getSubject();
+        }
 
-    public static <T> ObservableTransformer<T, T> bindToLifecycle(BehaviorSubject<String> subject) {
-        return upstream -> upstream.takeUntil(
-                subject.filter(Constant.DESTROY::equals)
-        );
+        BehaviorSubject<String> finalSubject = subject;
+        return new ObservableTransformer<T, T>() {
+            @Override
+            public ObservableSource<T> apply(Observable<T> upstream) {
+                return upstream.takeUntil(
+                        finalSubject.filter(new Predicate<String>() {
+                            @Override
+                            public boolean test(String anObject) throws Exception {
+                                return Constant.DESTROY.equals(anObject) || Constant.DESTROY_VIEW.equals(anObject);
+                            }
+                        })
+                );
+            }
+        };
     }
 
     /**

@@ -117,7 +117,7 @@ public class FragmentThree extends BaseFragment {
             }
 
             return data;
-        }).doOnSubscribe(RequestUtils::addDispos)
+        }).compose(RxHelper.bindToLifecycle(getActivity()))
           .observeOn(AndroidSchedulers.mainThread())
           .subscribe(new NetCallBack<List<Bookmark>>() {
               @Override
