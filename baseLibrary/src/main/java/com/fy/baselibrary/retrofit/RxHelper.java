@@ -65,7 +65,9 @@ public class RxHelper {
             public void subscribe(@NonNull ObservableEmitter<T> subscriber) throws Exception {
                 try {
                     L.e("net", "成功 _ onNext");
-                    subscriber.onNext(data);
+                    if (null == data) subscriber.onNext((T) new Object());
+                    else subscriber.onNext(data);
+
                     subscriber.onComplete();
                 } catch (Exception e) {
                     L.e("net", "异常 _ onError");
@@ -98,7 +100,7 @@ public class RxHelper {
                         finalSubject.filter(new Predicate<String>() {
                             @Override
                             public boolean test(String anObject) throws Exception {
-                                return Constant.DESTROY.equals(anObject) || Constant.DESTROY_VIEW.equals(anObject);
+                                return Constant.DESTROY.equals(anObject);
                             }
                         })
                 );

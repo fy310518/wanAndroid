@@ -10,24 +10,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fy.baselibrary.utils.Constant;
+import com.fy.baselibrary.statuslayout.LoadSirUtil;
+import com.fy.baselibrary.statuslayout.StatusLayoutManager;
+import com.fy.baselibrary.statuslayout.StatusLayout;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.cache.ACache;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * Fragment 基类
  * Created by fangs on 2017/4/26.
  */
-public abstract class BaseFragment extends Fragment implements View.OnClickListener {
+public abstract class BaseFragment extends Fragment implements View.OnClickListener, StatusLayout.OnRetryListener, StatusLayout.OnSetStatusView {
     public static final String TAG = "Fragment";
 
     protected ACache mCache;
 
     protected AppCompatActivity mContext;
+    protected StatusLayoutManager slManager;
+
     protected View mRootView;
     protected Unbinder unbinder;
 
@@ -42,6 +45,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             if (setContentLayout() > 0){
                 mRootView = inflater.inflate(setContentLayout(), container, false);
                 unbinder = ButterKnife.bind(this, mRootView);
+                slManager = LoadSirUtil.initStatusLayout(this, setStatusView());
             }
 
             baseInit();
@@ -58,8 +62,18 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Override
     public void onClick(View view) {}
 
+    @Override
+    public void onRetry() {}
+
+    @Override
+    public View setStatusView(){return mRootView;}
+
     protected void baseInit() {}
 
+    /**
+     * 设置 fragment 视图
+     * @return
+     */
     protected abstract int setContentLayout();
 
 

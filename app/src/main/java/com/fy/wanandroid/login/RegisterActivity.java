@@ -99,7 +99,7 @@ public class RegisterActivity extends AppCompatActivity implements IBaseActivity
         RequestUtils.create(ApiService.class)
                 .register(param)
                 .compose(RxHelper.handleResult())
-                .doOnSubscribe(RequestUtils::addDispos)
+                .compose(RxHelper.bindToLifecycle(this))
                 .subscribe(new NetCallBack<LoginBean>(progressDialog) {
                     @Override
                     protected void onSuccess(LoginBean login) {

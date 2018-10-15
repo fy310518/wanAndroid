@@ -35,7 +35,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 
 /**
- * 文件下载 管理类
+ * 文件下载 管理类 (todo 启动一个后台服务执行下载操作)
  * Created by fangs on 2018/6/1.
  */
 public class DownManager {

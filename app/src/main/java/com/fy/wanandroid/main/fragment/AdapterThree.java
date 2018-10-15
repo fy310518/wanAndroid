@@ -8,12 +8,11 @@ import com.fy.baselibrary.rv.adapter.MultiCommonAdapter;
 import com.fy.baselibrary.rv.adapter.MultiTypeSupport;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.ResUtils;
-
-import java.util.List;
-
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.entity.Bookmark;
 import com.fy.wanandroid.utils.SelectUtils;
+
+import java.util.List;
 
 /**
  * 书签 adapter

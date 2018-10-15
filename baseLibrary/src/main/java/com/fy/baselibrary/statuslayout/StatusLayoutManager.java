@@ -5,15 +5,12 @@ import android.support.annotation.LayoutRes;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewStub;
-import android.widget.LinearLayout;
 
 import java.io.Serializable;
 
 /**
  * 多状态视图 管理类
- * Created by fangs on 2016/12/15.
+ * Created by fangs on 2017/12/15.
  */
 public class StatusLayoutManager implements Serializable{
 
@@ -32,15 +29,11 @@ public class StatusLayoutManager implements Serializable{
     /** 请求失败 标记 */
     public static final int REQUEST_FAIL = 1006;
 
-    /** 关闭加载 对话框 */
-    public static final int LAYOUT_CLOSE_LOAD_DIALOG = 1007;
-
     /** 存放布局集合 */
     private SparseArray<View> layoutSparseArray = new SparseArray();
 
     TargetContext targetContext;
     final Context context;
-    boolean isShowHeadView;
 
     int netWorkErrorRetryViewId;
     int errorRetryViewId;
@@ -48,18 +41,15 @@ public class StatusLayoutManager implements Serializable{
 
     final int retryViewId;
 
-    final OnShowHideViewListener onShowHideViewListener;
-    final OnRetryListener onRetryListener;
+    final StatusLayout.OnRetryListener onRetryListener;
 
     public StatusLayoutManager(Builder builder) {
         this.context = builder.context;
         this.targetContext   = builder.targetContext;
 
-        this.isShowHeadView = builder.isShowHeadView;
         this.netWorkErrorRetryViewId = builder.netWorkErrorRetryViewId;
         this.emptyDataRetryViewId = builder.emptyDataRetryViewId;
         this.errorRetryViewId = builder.errorRetryViewId;
-        this.onShowHideViewListener = builder.onShowHideViewListener;
         this.retryViewId = builder.retryViewId;
         this.onRetryListener = builder.onRetryListener;
     }
@@ -99,11 +89,12 @@ public class StatusLayoutManager implements Serializable{
      * @param id
      */
     private void showHideViewById(int id) {
-        View vgBody = targetContext.getParentView().getChildAt(1);
+        View vgBody = targetContext.getContent();
         vgBody.setVisibility(id == LAYOUT_CONTENT_ID ? View.VISIBLE : View.GONE);
 
-        if (targetContext.getParentView().getChildCount() > 2) {
-            targetContext.getParentView().removeViewAt(2);
+        if (targetContext.getParentView().getChildCount() > targetContext.getChildCount()){
+            //显示 指定id的 view 前 清理最后的view
+            targetContext.getParentView().removeViewAt(targetContext.getParentView().getChildCount() - 1);
         }
 
         if (id == LAYOUT_CONTENT_ID) return;
@@ -114,9 +105,7 @@ public class StatusLayoutManager implements Serializable{
             //显示该view
             if (key == id) {
                 View valueView = layoutSparseArray.valueAt(i);
-
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -1);
-                targetContext.getParentView().addView(valueView, params);
+                targetContext.getParentView().addView(valueView, vgBody.getLayoutParams());
             }
         }
     }
@@ -146,12 +135,7 @@ public class StatusLayoutManager implements Serializable{
 
         if (retryView == null || onRetryListener == null) return;
 
-        retryView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onRetryListener.onRetry();
-            }
-        });
+        retryView.setOnClickListener(v -> onRetryListener.onRetry());
     }
 
     public static Builder newBuilder(Context context, Object target) {
@@ -164,16 +148,13 @@ public class StatusLayoutManager implements Serializable{
         TargetContext targetContext;
         private Context context;
 
-        private boolean isShowHeadView;//是否显示 头部标题栏
-
         private int netWorkErrorRetryViewId;//网络错误 布局文件ID
         private int emptyDataRetryViewId;//空数据 布局文件ID
         private int errorRetryViewId;// 请求错误（失败）布局文件ID
 
         private int retryViewId;//请求错误或网络错误时候 的刷新按钮
 
-        private OnShowHideViewListener onShowHideViewListener;
-        private OnRetryListener onRetryListener;
+        private StatusLayout.OnRetryListener onRetryListener;
 
         /**
          *
@@ -183,11 +164,6 @@ public class StatusLayoutManager implements Serializable{
         public Builder(Context context, Object target) {
             this.context = context;
             this.targetContext = LoadSirUtil.getTargetContext(target);
-        }
-
-        public Builder setShowHeadView(boolean showHeadView) {
-            this.isShowHeadView = showHeadView;
-            return this;
         }
 
         public Builder netWorkErrorView(int netWorkErrorRetryViewId) {
@@ -215,12 +191,7 @@ public class StatusLayoutManager implements Serializable{
             return this;
         }
 
-        public Builder onShowHideViewListener(OnShowHideViewListener onShowHideViewListener) {
-            this.onShowHideViewListener = onShowHideViewListener;
-            return this;
-        }
-
-        public Builder onRetryListener(OnRetryListener onRetryListener) {
+        public Builder onRetryListener(StatusLayout.OnRetryListener onRetryListener) {
             this.onRetryListener = onRetryListener;
             return this;
         }

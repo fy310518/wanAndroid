@@ -17,6 +17,8 @@ import android.widget.TextView;
 import com.fy.baselibrary.R;
 import com.fy.baselibrary.ioc.ConfigUtils;
 import com.fy.baselibrary.startactivity.StartActivity;
+import com.fy.baselibrary.statuslayout.LoadSirUtil;
+import com.fy.baselibrary.statuslayout.StatusLayout;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
@@ -74,9 +76,6 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
                 View view = LayoutInflater.from(activity).inflate(act.setView(), null);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -1);
                 linearLRoot.addView(view, params);
-
-                StatusLayoutManager slManager = initSLManager(activity);
-                if (null != slManager) activityBean.setSlManager(slManager);
             }
         }
 
@@ -96,6 +95,13 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
         //设置 黄油刀 简化 Android 样板代码
         activityBean.setUnbinder(ButterKnife.bind(activity));
+
+        //设置 activity 多状态布局
+        if (activity instanceof StatusLayout.OnSetStatusView) {
+            StatusLayout.OnSetStatusView setStatusView = (StatusLayout.OnSetStatusView) activity;
+            StatusLayoutManager slManager = LoadSirUtil.initStatusLayout(activity, setStatusView.setStatusView());
+            if (null != slManager) activityBean.setSlManager(slManager);
+        }
 
         activityBean.setSubject(BehaviorSubject.create());
         activity.getIntent().putExtra("ActivityBean", activityBean);
@@ -183,31 +189,6 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
             if (ConfigUtils.getBgColor() > 0)
                 toolbar.setBackgroundColor(ResUtils.getColor(ConfigUtils.getBgColor()));
         }
-    }
-
-
-    /**
-     * 设置 多状态视图 管理器
-     */
-    protected StatusLayoutManager initSLManager(Activity activity) {
-        StatusLayoutManager slManager = null;
-
-        if (activity instanceof IreTryActivity) {
-            IreTryActivity act = (IreTryActivity) activity;
-
-            slManager = StatusLayoutManager.newBuilder(activity, activity)
-                    .setShowHeadView(act.isShowHeadView())
-                    .errorView(R.layout.state_include_error)
-                    .netWorkErrorView(R.layout.state_include_networkerror)
-                    .emptyDataView(R.layout.state_include_emptydata)
-                    .retryViewId(R.id.tvTry)
-                    .onRetryListener(act::reTry)
-                    .build();
-
-            slManager.showContent();
-        }
-
-        return slManager;
     }
 
 }

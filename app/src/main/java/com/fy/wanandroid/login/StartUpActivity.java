@@ -12,6 +12,7 @@ import com.fy.baselibrary.aop.annotation.ClickFilter;
 import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
+import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.statusbar.StatusBarContentColor;
 import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.Constant;
@@ -79,7 +80,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(aLong -> tvSkip.setText(ResUtils.getReplaceStr(R.string.skip, skip - aLong)))
-                .doOnSubscribe(RequestUtils::addDispos)
+                .compose(RxHelper.bindToLifecycle(this))
                 .subscribe(aLong -> {
                     if (aLong == 2L)intoMainOrLogin();
                 });

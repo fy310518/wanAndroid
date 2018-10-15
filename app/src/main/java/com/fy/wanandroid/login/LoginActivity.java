@@ -12,22 +12,20 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.fy.baselibrary.aop.annotation.ClickFilter;
 import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.aop.annotation.StatusBar;
-import com.fy.baselibrary.application.BaseActivityBean;
+import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.ioc.ConfigUtils;
-import com.fy.baselibrary.application.IreTryActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
+import com.fy.baselibrary.statuslayout.StatusLayout;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.SpfUtils;
-import com.fy.baselibrary.utils.T;
 import com.fy.baselibrary.utils.cache.ACache;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.entity.LoginBean;
@@ -35,7 +33,8 @@ import com.fy.wanandroid.main.MainActivity;
 import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
 import com.fy.wanandroid.request.NetDialog;
-import com.fy.wanandroid.test.TestActivity;
+import com.fy.wanandroid.testdemo.StatusDemoActivity;
+import com.fy.wanandroid.testdemo.TestStatusFragmentActivity;
 import com.fy.wanandroid.utils.SelectUtils;
 
 import java.util.HashMap;
@@ -48,13 +47,12 @@ import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 /**
  * 登录
  * Created by fangs on 2017/12/12.
  */
-public class LoginActivity extends AppCompatActivity implements IreTryActivity, View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements IBaseActivity, StatusLayout.OnRetryListener, View.OnClickListener {
     private static final String TAG = "LoginActivity";
     @BindView(R.id.editName)
     TextInputEditText editName;
@@ -124,14 +122,15 @@ public class LoginActivity extends AppCompatActivity implements IreTryActivity, 
             case R.id.tvRegister:
 //                JumpUtils.jump(mContext, RegisterActivity.class, null);
 //                JumpUtils.jump(this, StatusDemoActivity.class, null);
+                JumpUtils.jump(this, TestStatusFragmentActivity.class, null);
 //                JumpUtils.jump(this, RevealEffectActivity.class, null);
-                JumpUtils.jump(this, TestActivity.class, null);
+//                JumpUtils.jump(this, TestActivity.class, null);
                 break;
         }
     }
 
     @Override
-    public void reTry() {
+    public void onRetry() {
         login();
     }
 
@@ -150,12 +149,7 @@ public class LoginActivity extends AppCompatActivity implements IreTryActivity, 
         RequestUtils.create(ApiService.class)
                 .login(param)
                 .compose(RxHelper.handleResult())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        RequestUtils.addDispos(disposable);
-                    }
-                })
+                .compose(RxHelper.bindToLifecycle(this))
                 .subscribe(new NetCallBack<LoginBean>(progressDialog) {
                     @Override
                     protected void onSuccess(LoginBean login) {
@@ -218,4 +212,5 @@ public class LoginActivity extends AppCompatActivity implements IreTryActivity, 
                     L.e("线程c", "" + Thread.currentThread().getName());
                 });
     }
+
 }

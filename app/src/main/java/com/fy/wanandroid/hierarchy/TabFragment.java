@@ -93,7 +93,7 @@ public class TabFragment extends BaseFragment {
         RequestUtils.create(ApiService.class)
                 .getTreeArticle(pageNum, cid)
                 .compose(RxHelper.handleResult())
-                .doOnSubscribe(RequestUtils::addDispos)
+                .compose(RxHelper.bindToLifecycle(mContext))
                 .subscribe(new NetCallBack<ArticleBean>() {
                     @Override
                     protected void onSuccess(ArticleBean articleBean) {

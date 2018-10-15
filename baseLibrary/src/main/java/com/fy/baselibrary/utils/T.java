@@ -1,6 +1,8 @@
 package com.fy.baselibrary.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -40,7 +42,7 @@ public class T {
      * @param message
      */
     public static void showShort(int message) {
-        show(ConfigUtils.getAppCtx().getResources().getString(message), Toast.LENGTH_SHORT);
+        show(ResUtils.getStr(message), Toast.LENGTH_SHORT);
     }
 
     /**
@@ -58,7 +60,7 @@ public class T {
      * @param message
      */
     public static void showLong(int message) {
-        show(ConfigUtils.getAppCtx().getResources().getString(message), Toast.LENGTH_LONG);
+        show(ResUtils.getStr(message), Toast.LENGTH_LONG);
     }
 
     /**
@@ -66,31 +68,33 @@ public class T {
      *
      * @param message 消息
      */
+    @SuppressLint("ShowToast")
     private static void show(String message, int duration) {
         if (isShow) {
-
             if (null == toast) {
-                toast = Toast.makeText(ConfigUtils.getAppCtx(), message, duration);
+                toast = Toast.makeText(ConfigUtils.getAppCtx(), null, duration);
             } else {
-                toast.setText(message);
+                toast.cancel();
+                toast = Toast.makeText(ConfigUtils.getAppCtx(), null, duration);
             }
 
-            toast.setDuration(duration);
+            toast.setText(message);
             toast.show();
         }
     }
 
 
     /**
-     * 自定义 布局的Toast todo 待测
+     * 自定义 布局的Toast
      *
      * @param duration
      * @param message
+     * @param tLayouId  自定义布局
      */
-    public static void showQulifier(int duration, CharSequence message) {
+    public static void showQulifier(int duration, CharSequence message, @LayoutRes int tLayouId) {
         if (null == toast) {
             LayoutInflater inflate = (LayoutInflater) ConfigUtils.getAppCtx().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflate.inflate(R.layout.dialog_permission, null);// todo 布局待实现
+            View view = inflate.inflate(tLayouId, null);
 
             toast = new Toast(ConfigUtils.getAppCtx());
             toast.setView(view);

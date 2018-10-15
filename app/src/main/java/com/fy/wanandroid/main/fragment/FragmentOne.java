@@ -69,7 +69,7 @@ public class FragmentOne extends BaseFragment {
         Observable.timer(5, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(RequestUtils::addDispos)
+                .compose(RxHelper.bindToLifecycle(mContext))
                 .subscribe(aLong -> {
                     epl.start(EasyPullLayout.TYPE_EDGE_TOP);
 //                    RefreshAnimView view = epl.getAnimView(EasyPullLayout.TYPE_EDGE_TOP);

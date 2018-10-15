@@ -102,7 +102,7 @@ public class MyCollectActivity extends AppCompatActivity implements IBaseActivit
         RequestUtils.create(ApiService.class)
                 .getCollectList(pageNum)
                 .compose(RxHelper.handleResult())
-                .doOnSubscribe(RequestUtils::addDispos)
+                .compose(RxHelper.bindToLifecycle(this))
                 .subscribe(new NetCallBack<ArticleBean>() {
                     @Override
                     protected void onSuccess(ArticleBean articleBean) {

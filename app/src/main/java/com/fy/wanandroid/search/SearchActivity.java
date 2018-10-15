@@ -151,7 +151,7 @@ public class SearchActivity extends AppCompatActivity implements IBaseActivity, 
         RequestUtils.create(ApiService.class)
                 .query(pageNum, queryKey)
                 .compose(RxHelper.handleResult())
-                .doOnSubscribe(RequestUtils::addDispos)
+                .compose(RxHelper.bindToLifecycle(this))
                 .subscribe(new NetCallBack<ArticleBean>() {
                     @Override
                     protected void onSuccess(ArticleBean articleBean) {

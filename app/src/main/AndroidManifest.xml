@@ -94,9 +94,13 @@
 
 
         <activity
-            android:name=".status.StatusDemoActivity"
+            android:name=".testdemo.StatusDemoActivity"
             android:label="@string/statusTitle"
             android:screenOrientation="portrait" />
+
+        <activity android:name=".testdemo.TestStatusFragmentActivity"
+            android:label="@string/statusTitle"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".loadfile.DownFileActivity"

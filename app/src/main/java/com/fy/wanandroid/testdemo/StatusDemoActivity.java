@@ -1,4 +1,4 @@
-package com.fy.wanandroid.status;
+package com.fy.wanandroid.testdemo;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -21,12 +21,13 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.BaseActivityBean;
-import com.fy.baselibrary.application.IreTryActivity;
+import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.load.LoadCallBack;
 import com.fy.baselibrary.retrofit.load.LoadService;
 import com.fy.baselibrary.retrofit.load.up.UpLoadUtils;
+import com.fy.baselibrary.statuslayout.StatusLayout;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.L;
@@ -55,7 +56,7 @@ import io.reactivex.schedulers.Schedulers;
  * 多状态布局 demo
  * Created by fangs on 2018/3/16.
  */
-public class StatusDemoActivity extends AppCompatActivity implements IreTryActivity, View.OnClickListener {
+public class StatusDemoActivity extends AppCompatActivity implements IBaseActivity, StatusLayout.OnRetryListener, StatusLayout.OnSetStatusView, View.OnClickListener {
 
     @BindView(R.id.imgDemo)
     ImageView imgDemo;
@@ -105,16 +106,16 @@ public class StatusDemoActivity extends AppCompatActivity implements IreTryActiv
                         .sendNotify(this, LoginActivity.class);
 
 //                NightModeUtils.switchNightMode(this);
-//                slManager.showNetWorkError();
-//                Observable.timer(3000, TimeUnit.MILLISECONDS)
-//                        .subscribeOn(Schedulers.io())
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe(new Consumer<Long>() {
-//                            @Override
-//                            public void accept(Long aLong) throws Exception {
-//                                slManager.showError();
-//                            }
-//                        });
+                slManager.showNetWorkError();
+                Observable.timer(3000, TimeUnit.MILLISECONDS)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<Long>() {
+                            @Override
+                            public void accept(Long aLong) throws Exception {
+                                slManager.showError();
+                            }
+                        });
                 break;
             case R.id.tvKing2:
                 NotificationUtils.FyBuild.init()
@@ -129,7 +130,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IreTryActiv
 
     @SuppressLint("CheckResult")
     @Override
-    public void reTry() {
+    public void onRetry() {
         slManager.showEmptyData();
 
         Observable.timer(3000, TimeUnit.MILLISECONDS)
@@ -167,7 +168,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IreTryActiv
         RequestUtils.create(LoadService.class)
                 .uploadFile1(UpLoadUtils.fileToMultipartBodyParts(fileList))
                 .compose(RxHelper.handleResult())
-                .doOnSubscribe(RequestUtils::addDispos)
+                .compose(RxHelper.bindToLifecycle(this))
                 .subscribe(new NetCallBack<Object>() {
                     @Override
                     protected void onSuccess(Object login) {
@@ -189,7 +190,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IreTryActiv
         files.add(new File(FileUtils.getSDCardPath() + "DCIM/Camera/tooopen_sy_133481514678.jpg"));
 
         UpLoadUtils.uploadFiles(files, RequestUtils.create(LoadService.class))
-                .doOnSubscribe(RequestUtils::addDispos)
+                .compose(RxHelper.bindToLifecycle(this))
                 .subscribe(new LoadCallBack<Object>() {
                     @Override
                     protected void onProgress(String percent) {
@@ -260,4 +261,8 @@ public class StatusDemoActivity extends AppCompatActivity implements IreTryActiv
     }
 
 
+    @Override
+    public View setStatusView() {
+        return rv;
+    }
 }

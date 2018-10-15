@@ -2,15 +2,16 @@ package com.fy.baselibrary.statuslayout;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Looper;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.fy.baselibrary.R;
+import com.fy.baselibrary.utils.L;
 
 /**
  * 多状态布局 替换逻辑工具类
- * Created by fangs on 2017/12/12.
+ * Created by fangs on 2017/12/18.
  */
 public class LoadSirUtil {
 
@@ -20,41 +21,63 @@ public class LoadSirUtil {
      * @return
      */
     public static TargetContext getTargetContext(Object target) {
-        ViewGroup contentParent;
         Context context;
-        if (target instanceof Activity) {
-            Activity activity = (Activity) target;
-            context = activity;
-            contentParent = (ViewGroup) activity.findViewById(R.id.linearLRoot);
-        } else if (target instanceof View) {
-            View view = (View) target;
-            contentParent = (ViewGroup) (view.getParent());
-            context = view.getContext();
-        } else {
-            throw new IllegalArgumentException("The target must be within Activity, Fragment, View.");
-        }
+        ViewGroup contentParent;
+        View content;
 
-        int childIndex = 0;
-        int childCount = contentParent == null ? 0 : contentParent.getChildCount();
-
-        View oldContent;
         if (target instanceof View) {
-            oldContent = (View) target;
-            for (int i = 0; i < childCount; i++) {
-                if (contentParent.getChildAt(i) == oldContent) {
-                    childIndex = i;
-                    break;
+            View view = (View) target;
+            context = view.getContext();
+            content = view;
+            contentParent = (ViewGroup) view.getParent();
+
+            //此处判断只是为了不崩溃
+            if (null == contentParent){
+                if (target instanceof ViewGroup){
+                    ViewGroup vg = (ViewGroup) target;
+                    contentParent = vg.getParent() == null ? vg : (ViewGroup) vg.getParent();
+                } else {
+                    throw new IllegalArgumentException("Must have a parent view");
                 }
             }
         } else {
-            oldContent = contentParent != null ? contentParent.getChildAt(0) : null;
+            throw new IllegalArgumentException("Must have a parent view");
         }
 
-        if (oldContent == null) {
-            throw new IllegalArgumentException(String.format("enexpected error when register LoadSir in %s",
-                    target.getClass().getSimpleName()));
+        int childCount = contentParent == null ? 0 : contentParent.getChildCount();
+
+        return new TargetContext(context, contentParent, content, childCount);
+    }
+
+    /**
+     * 设置 多状态视图 管理器
+     * @param contextObj
+     * @param target
+     */
+    public static StatusLayoutManager initStatusLayout(Object contextObj, Object target){
+
+        Context context;
+        if (contextObj instanceof Activity) {
+            context = (Activity) contextObj;
+        } else if (contextObj instanceof Fragment) {
+            context = ((Fragment) contextObj).getContext();
+        } else {
+            throw new IllegalArgumentException("The Context must be is Activity or Fragment.");
         }
 
-        return new TargetContext(context, contentParent, oldContent, childIndex);
+        //获取 点击重试回调接口
+        StatusLayout.OnRetryListener listener = contextObj instanceof StatusLayout.OnRetryListener ?
+                (StatusLayout.OnRetryListener) contextObj : () -> L.e("retry()");
+
+        StatusLayoutManager slManager = StatusLayoutManager.newBuilder(context, target)
+                .errorView(R.layout.state_include_error)
+                .netWorkErrorView(R.layout.state_include_networkerror)
+                .emptyDataView(R.layout.state_include_emptydata)
+                .retryViewId(R.id.tvTry)
+                .onRetryListener(listener)
+                .build();
+        slManager.showContent();
+
+        return slManager;
     }
 }
