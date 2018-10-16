@@ -8,7 +8,9 @@ import android.view.View;
  */
 public interface StatusLayout {
 
-    //设置 多状态视图显示的 区域
+    /**
+     * 设置 多布局 显示的 区域
+     */
     public interface OnSetStatusView {
         /**
          * 设置 多状态视图显示的 区域(内容视图，必须有父视图)
@@ -17,7 +19,9 @@ public interface StatusLayout {
         public View setStatusView();
     }
 
-    //重试加载按钮的监听事件
+    /**
+     * 多布局 重试加载按钮监听事件
+     */
     public interface OnRetryListener {
 
         /**
