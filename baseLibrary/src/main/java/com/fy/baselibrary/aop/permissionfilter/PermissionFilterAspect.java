@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
+import com.fy.baselibrary.R;
 import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.permission.OnPermission;
 import com.fy.baselibrary.permission.PermissionFragment;
@@ -58,10 +59,10 @@ public class PermissionFilterAspect {
                 @Override
                 public void hasPermission(List<String> denied, boolean isAll) {
 
-                    String permission = isAll ? "权限请求成功" : "有权限没有授权部分功能无法使用";
+                    int permission = isAll ? R.string.permissionSuccess : R.string.defaule_always_message;
                     T.showLong(permission);
 
-                    if (isAll) {
+                    if (isAll || needPermission.isRun()) {
                         try {
                             joinPoint.proceed();
                         } catch (Throwable throwable) {
@@ -72,7 +73,14 @@ public class PermissionFilterAspect {
 
                 @Override
                 public void noPermission(List<String> denied) {
-                    T.showLong("权限请求失败");
+                    T.showLong(R.string.permissionFail);
+                    if (needPermission.isRun()) {
+                        try {
+                            joinPoint.proceed();
+                        } catch (Throwable throwable) {
+                            throwable.printStackTrace();
+                        }
+                    }
                 }
             });
         }

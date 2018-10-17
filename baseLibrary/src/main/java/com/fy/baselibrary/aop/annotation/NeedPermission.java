@@ -15,6 +15,16 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface NeedPermission {
 
+    /**
+     * 请求权限列表
+     * @return
+     */
     String[] value() default {};
+
+    /**
+     * 存在被拒绝的权限时，是否继续执行
+     * @return 默认 false，不继续执行
+     */
+    boolean isRun() default false;
 
 }

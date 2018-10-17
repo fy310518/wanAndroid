@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.rv.utils.WrapperUtils;
 
-
 /**
  *  装饰者模式 RV 添加头部、底部
  *  参考鸿神的博客
