@@ -18,7 +18,6 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import retrofit2.http.Url;
 
 /**
  * api接口 </p>
@@ -136,18 +135,6 @@ public interface ApiService {
     @POST("article/query/{id}/json")
     Observable<BeanModule<ArticleBean>> query(@Path("id") int articleId,
                                               @Field("k") String queryKey);
-
-
-    @GET("http://120.55.57.236/api/user/bookshelf")
-    Observable<BeanModule<Object>> bookshelf();
-
-    /**
-     * 小说类型
-     *
-     * @return
-     */
-    @GET("http://120.55.57.236/api/classify")
-    Observable<BeanModule<Object>> classify();
 
     /**
      * 小说类型下的 书籍列表

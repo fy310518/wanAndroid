@@ -1,7 +1,6 @@
 package com.fy.wanandroid.login;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
@@ -33,20 +32,14 @@ import com.fy.wanandroid.main.MainActivity;
 import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
 import com.fy.wanandroid.request.NetDialog;
-import com.fy.wanandroid.testdemo.StatusDemoActivity;
 import com.fy.wanandroid.testdemo.TestStatusFragmentActivity;
 import com.fy.wanandroid.utils.SelectUtils;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 
 /**
  * 登录
@@ -105,10 +98,6 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, S
 
             }
         });
-
-        as();
-        bs();
-        cs();
     }
 
     @ClickFilter
@@ -168,48 +157,6 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, S
                     protected void updataLayout(int flag) {
                         L.e("net updataLayout", flag + "-----");
                     }
-                });
-    }
-
-    private void as(){
-        Observable.interval(3, TimeUnit.SECONDS)
-                .compose(RxHelper.bindToLifecycle(this))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Long>() {
-                    @Override
-                    public void onError(Throwable e) {}
-
-                    @Override
-                    public void onComplete() {
-                        L.e("线程a -- onCompleted", "" + Thread.currentThread().getName());
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {}
-
-                    @Override
-                    public void onNext(final Long aLong) {
-                        L.e("线程a", "" + Thread.currentThread().getName());
-                    }
-                });
-    }
-
-    @SuppressLint("CheckResult")
-    private void bs() {
-        Observable.timer(9, TimeUnit.SECONDS)
-                .compose(RxHelper.bindToLifecycle(this))
-                .subscribe(aLong -> {
-                    L.e("线程b", "" + Thread.currentThread().getName());
-                });
-    }
-
-    @SuppressLint("CheckResult")
-    private void cs(){
-        Observable.timer(19, TimeUnit.SECONDS)
-                .compose(RxHelper.bindToLifecycle(this))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(aLong -> {
-                    L.e("线程c", "" + Thread.currentThread().getName());
                 });
     }
 

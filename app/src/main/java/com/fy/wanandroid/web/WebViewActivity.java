@@ -36,7 +36,7 @@ import butterknife.BindView;
  * 通用 加载 web 网页 activity
  * Created by fangs on 2018/4/13.
  */
-public class WebViewActivity extends AppCompatActivity implements IBaseActivity, StatusLayout.OnRetryListener, View.OnClickListener {
+public class WebViewActivity extends AppCompatActivity implements IBaseActivity, StatusLayout.OnRetryListener, StatusLayout.OnSetStatusView, View.OnClickListener {
     private static final String TAG = "WebViewActivity";
 
     StatusLayoutManager slm;
@@ -79,6 +79,11 @@ public class WebViewActivity extends AppCompatActivity implements IBaseActivity,
 
     @Override
     public void onClick(View v) {
+    }
+
+    @Override
+    public View setStatusView() {
+        return webView;
     }
 
     @Override
