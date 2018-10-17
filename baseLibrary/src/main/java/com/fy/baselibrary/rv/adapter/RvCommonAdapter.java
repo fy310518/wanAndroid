@@ -1,9 +1,11 @@
 package com.fy.baselibrary.rv.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v4.util.SparseArrayCompat;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -11,6 +13,7 @@ import android.widget.Filterable;
 
 import com.fy.baselibrary.aop.annotation.ClickFilter;
 import com.fy.baselibrary.base.ViewHolder;
+import com.fy.baselibrary.rv.utils.WrapperUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,26 +22,23 @@ import java.util.List;
  * RecyclerView 通用的Adapter
  * Created by fangs on 2017/7/31.
  */
-public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHolder> implements Filterable, View.OnClickListener {
-
-    private final static int TYPE_HEAD = 0;
-    private final static int TYPE_CONTENT = 1;
-    private final static int TYPE_FOOTER = 2;
-
+public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHolder> implements Filterable, View.OnClickListener{
+    private final static int TYPE_HEAD = 100000;
+    private final static int TYPE_FOOTER = 200000;
 
     protected Context mContext;
     protected int mLayoutId;
     protected List<Item> mDatas;
-    protected LayoutInflater mInflater;
+    private SparseArrayCompat<View> mHeaderViews = new SparseArrayCompat<>();
+    private SparseArrayCompat<View> mFootViews = new SparseArrayCompat<>();
+
+    protected SparseBooleanArray mSelectedPositions;//保存多选 数据
+    private RecyclerView mRv;
+    private int mSelectedPos = -1;//实现单选  保存当前选中的position
 
     protected OnListener.OnitemClickListener itemClickListner;//列表条目点击事件
     protected OnListener.OnRemoveItemListener removeItemListener;
     public OnListener.OnChangeItemListener changeItemListener;
-
-    protected SparseBooleanArray mSelectedPositions;//保存多选 数据
-
-    private RecyclerView mRv;
-    private int mSelectedPos = -1;//实现单选  保存当前选中的position
 
     public RvCommonAdapter(Context context, int layoutId, List<Item> datas) {
         init(context, layoutId, datas);
@@ -51,7 +51,6 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
 
     private void init(Context context, int layoutId, List<Item> datas) {
         this.mContext = context;
-        this.mInflater = LayoutInflater.from(context);
         this.mLayoutId = layoutId;
         this.mDatas = datas;
 
@@ -60,25 +59,74 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
 
     @Override
     public int getItemCount() {
-        return null == mDatas ? 0 : mDatas.size();
+        return getHeadersCount() + getFootersCount() + getRealItemCount();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (isHeaderViewPos(position)) {
+            return mHeaderViews.keyAt(position);
+        } else if (isFooterViewPos(position)) {
+            return mFootViews.keyAt(position - getHeadersCount() - getRealItemCount());
+        } else {
+            return super.getItemViewType(position - getHeadersCount());
+        }
     }
 
     @Override
     public ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-        ViewHolder viewHolder = ViewHolder.createViewHolder(mContext, parent, mLayoutId);
-
-        bindOnClick(viewHolder);
-
-        return viewHolder;
+        if (null != mHeaderViews.get(viewType)) {
+            return ViewHolder.createViewHolder(parent.getContext(), mHeaderViews.get(viewType));
+        } else if (null != mFootViews.get(viewType)) {
+            return ViewHolder.createViewHolder(parent.getContext(), mFootViews.get(viewType));
+        } else {
+            ViewHolder viewHolder = ViewHolder.createViewHolder(mContext, parent, mLayoutId);
+            bindOnClick(viewHolder);
+            return viewHolder;
+        }
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        convert(holder, mDatas.get(position), position);
+        if (isHeaderViewPos(position) || isFooterViewPos(position)) {
+            return;
+        }
+
+        int centerPosition = position - getHeadersCount();
+        convert(holder, mDatas.get(centerPosition), centerPosition);
 
 //        设置 tag 对应 onCreateViewHolder() 设置点击事件
-        holder.itemView.setTag(getmDatas().get(position));
+        holder.itemView.setTag(mDatas.get(centerPosition));
     }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        WrapperUtils.onAttachedToRecyclerView(recyclerView, new WrapperUtils.SpanSizeCallback() {
+            @Override
+            public int getSpanSize(GridLayoutManager layoutManager, GridLayoutManager.SpanSizeLookup oldLookup, int position) {
+                int viewType = getItemViewType(position);
+                if (mHeaderViews.get(viewType) != null) {
+                    return layoutManager.getSpanCount();
+                } else if (mFootViews.get(viewType) != null) {
+                    return layoutManager.getSpanCount();
+                }
+
+                if (oldLookup != null) return oldLookup.getSpanSize(position);
+
+                return 1;
+            }
+        });
+    }
+
+    @Override
+    public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        int position = holder.getLayoutPosition();
+        if (isHeaderViewPos(position) || isFooterViewPos(position)) {
+            WrapperUtils.setFullSpan(holder);
+        }
+    }
+
 
     /**
      * 渲染数据到 View中
@@ -105,6 +153,11 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
     @Override
     public void onClick(View v) {
         itemClickListner.onItemClick(v);
+    }
+
+
+    public List<Item> getmDatas() {
+        return this.mDatas;
     }
 
     public void setmDatas(List<Item> list) {
@@ -150,6 +203,7 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
         if (location < getItemCount()) this.mDatas.remove(location);
     }
 
+
     /**
      * 清理 多选状态
      */
@@ -160,12 +214,11 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
     /**
      * 设置给定位置条目的选择状态
      *
-     * @param array
      * @param position
      * @param isChecked
      */
-    protected void setItemChecked(SparseBooleanArray array, int position, boolean isChecked) {
-        array.put(position, isChecked);
+    protected void setItemChecked(int position, boolean isChecked) {
+        mSelectedPositions.put(position, isChecked);
     }
 
     /**
@@ -174,8 +227,8 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
      * @param position
      * @return
      */
-    protected boolean isItemChecked(SparseBooleanArray array, int position) {
-        return array.get(position);
+    protected boolean isItemChecked(int position) {
+        return mSelectedPositions.get(position);
     }
 
     /**
@@ -185,20 +238,67 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
      */
     public void setIsAllSelect(boolean isAllSelect) {
         for (int i = 0; i < getItemCount(); i++) {
-            setItemChecked(mSelectedPositions, i, isAllSelect);
+            setItemChecked(i, isAllSelect);
         }
 
         notifyDataSetChanged();
     }
 
-
-    public List<Item> getmDatas() {
-        return this.mDatas;
-    }
-
     public SparseBooleanArray getmSelectedPositions() {
         return mSelectedPositions;
     }
+
+
+    private boolean isHeaderViewPos(int position) {
+        return position < getHeadersCount();
+    }
+
+    private boolean isFooterViewPos(int position) {
+        return position >= getHeadersCount() + getRealItemCount();
+    }
+
+    /**
+     * 定义 添加 头部布局 方法
+     * @param view
+     */
+    public void addHeaderView(View view) {
+        mHeaderViews.put(mHeaderViews.size() + TYPE_HEAD, view);
+    }
+
+    /**
+     * 定义 添加 底部布局 方法
+     * @param view
+     */
+    public void addFootView(View view) {
+        mFootViews.put(mFootViews.size() + TYPE_FOOTER, view);
+    }
+
+    /** 清理头部布局 */
+    public void cleanHeader(){
+        mHeaderViews.clear();
+    }
+
+    /** 清理 底部布局 */
+    public void cleanFoot(){
+        mFootViews.clear();
+    }
+
+    public int getHeadersCount() {
+        return mHeaderViews.size();
+    }
+
+    public int getFootersCount() {
+        return mFootViews.size();
+    }
+
+    /**
+     * 主体的 数据数量
+     * @return
+     */
+    private int getRealItemCount() {
+        return null == mDatas ? 0 : mDatas.size();
+    }
+
 
 
     /**
@@ -248,8 +348,6 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
 //            holder.ivSelect.setSelected(true);
 //        }
 //    });
-
-
 
 
     //过滤器上的锁可以同步复制原始数据。

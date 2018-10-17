@@ -3,6 +3,7 @@ package com.fy.wanandroid.main.fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -12,7 +13,6 @@ import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.base.BaseFragment;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
-import com.fy.baselibrary.rv.adapter.HeaderAndFooterWrapper;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
 import com.fy.baselibrary.utils.DensityUtils;
 import com.fy.baselibrary.utils.JumpUtils;
@@ -49,7 +49,7 @@ public class FragmentOne extends BaseFragment {
     EasyPullLayout epl;
     @BindView(R.id.rvArticle)
     RecyclerView rvArticle;
-    HeaderAndFooterWrapper adapter;
+//    HeaderAndFooterWrapper adapter;
     ConvenientBanner<BannerBean> bannerView;
     List<BannerBean> bannerBeans;
     AdapterOne rvAdapter;
@@ -79,7 +79,7 @@ public class FragmentOne extends BaseFragment {
 
     private void initRvAdapter(){
         rvAdapter = new AdapterOne(getContext(), new ArrayList<>());
-        rvAdapter.setChangeItemListener((position) -> adapter.notifyItemChanged(adapter.getHeadersCount() + position, ""));
+        rvAdapter.setChangeItemListener((position) -> rvAdapter.notifyItemChanged(rvAdapter.getHeadersCount() + position, ""));
         rvAdapter.setItemClickListner(view -> {
             ArticleBean.DatasBean article = (ArticleBean.DatasBean) view.getTag();
 
@@ -88,14 +88,15 @@ public class FragmentOne extends BaseFragment {
             JumpUtils.jump(FragmentOne.this, WebViewActivity.class, bundle);
         });
 
-        rvArticle.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvArticle.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         rvArticle.addItemDecoration(new ListItemDecoration.Builder()
                 .setmSpace(R.dimen.rv_divider_height)
                 .setDraw(false)
                 .create(getActivity()));
 
-        adapter = new HeaderAndFooterWrapper(rvAdapter);
-        rvArticle.setAdapter(adapter);
+//        adapter = new HeaderAndFooterWrapper(rvAdapter);
+//        rvArticle.setAdapter(adapter);
+        rvArticle.setAdapter(rvAdapter);
 
         epl.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
@@ -144,17 +145,17 @@ public class FragmentOne extends BaseFragment {
                         List<ArticleBean.DatasBean> list = article.getDatas();
 
                         if (pageNum == 0) {
-                            adapter.cleanHeader();
+                            rvAdapter.cleanHeader();
                             List<BannerBean> bannerdata = (List<BannerBean>) map.get("banner");
                             if (null != bannerdata && bannerdata.size() > 0) {
                                 bannerBeans = bannerdata;
                                 setBanner();
-                                adapter.addHeaderView(bannerView);
+                                rvAdapter.addHeaderView(bannerView);
                             }
 
                             if (null != list) {
                                 rvAdapter.setmDatas(list);
-                                adapter.notifyDataSetChanged();
+                                rvAdapter.notifyDataSetChanged();
                             }
                         } else {
                             if (null != list) {
@@ -163,7 +164,7 @@ public class FragmentOne extends BaseFragment {
 //                                diffResult.dispatchUpdatesTo(adapter);
 //
                                 rvAdapter.addData(list);
-                                adapter.notifyDataSetChanged();
+                                rvAdapter.notifyDataSetChanged();
                             }
                         }
 
