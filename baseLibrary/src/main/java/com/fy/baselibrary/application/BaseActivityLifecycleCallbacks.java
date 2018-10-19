@@ -1,7 +1,9 @@
 package com.fy.baselibrary.application;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -16,7 +18,7 @@ import android.widget.TextView;
 
 import com.fy.baselibrary.R;
 import com.fy.baselibrary.ioc.ConfigUtils;
-import com.fy.baselibrary.startactivity.StartActivity;
+import com.fy.baselibrary.statusbar.OSUtils;
 import com.fy.baselibrary.statuslayout.LoadSirUtil;
 import com.fy.baselibrary.statuslayout.StatusLayout;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
@@ -50,14 +52,9 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         L.e(TAG, activity.getClass().getName() + "--Create()   " + activity.getTaskId());
 
-        if (!(activity instanceof StartActivity) && Constant.isRunState.equals("isRunState")) {
-            Intent intent = new Intent(activity, StartActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            activity.startActivity(intent);
-            //            activity.finish();
+        if (OSUtils.getRomType() == OSUtils.EMUI && onCheck(activity)){//是华为手机则 执行
+            activity.finish();
             return;
-        } else {
-            Constant.isRunState = "";
         }
 
         ScreenUtils.setCustomDensity(activity, designWidth);
@@ -189,6 +186,23 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
             if (ConfigUtils.getBgColor() > 0)
                 toolbar.setBackgroundColor(ResUtils.getColor(ConfigUtils.getBgColor()));
         }
+    }
+
+
+    private boolean onCheck(Activity activity) {
+        boolean isrun;
+        ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager.RunningTaskInfo info = manager.getRunningTasks(1).get(0);
+
+        if (info.numRunning == 1 && !info.topActivity.getClassName().equals("com.fy.baselibrary.startactivity.StartActivity")) {
+            //被杀死重启
+            isrun = true;
+            L.e(TAG, activity.getClass().getName() + "关闭此界面");
+        } else {
+            isrun = false;//手动启动
+        }
+
+        return isrun;
     }
 
 }

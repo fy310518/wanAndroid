@@ -93,7 +93,7 @@ public class PermissionUtils {
     }
 
 
-    /**     以下为适不同厂商手机 进入权限管理界面   */
+    /**     以下为适配不同厂商手机 进入权限管理界面   */
     private static final String MARK = Build.MANUFACTURER.toLowerCase();
 
     /**

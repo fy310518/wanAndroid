@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.utils.AppUtils;
-import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.SpfUtils;
@@ -34,15 +33,6 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
     @SuppressLint("CheckResult")
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
-        //缓存应用进程id
-        SpfUtils.saveIntToSpf(Constant.appProcessId, AppUtils.getProcessId(activity));
-
-//        if (null != savedInstanceState && savedInstanceState.getBoolean(FLAG_EXIT)) {
-//            FileUtils.fileToInputContent("log", "日志.txt", "onCreate(): savedInstanceState" + AppUtils.getProcessId(this));
-//            exitApp();
-//            return;
-//        }
-
         exitOrIn(getIntent());
     }
 
@@ -102,7 +92,6 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
      * 退出应用
      */
     private void exitApp() {
-        SpfUtils.remove(Constant.appProcessId);//正常退出程序 清理缓存的进程id
         finish();
         System.exit(0);
     }

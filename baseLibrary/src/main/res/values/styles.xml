@@ -13,13 +13,20 @@
         <item name="windowNoTitle">true</item><!-- 无标题 -->
 
         <item name="android:colorBackgroundCacheHint">@null</item><!-- 背景缓存颜色 -->
-        <item name="android:windowBackground">@android:color/transparent</item><!-- 背景 -->
 
+
+        <!-- 避免启动应用后，出现短暂的黑屏或白屏现象 -->
+        <!--窗体是否半透明-->
+        <!--<item name="android:windowIsTranslucent">true</item>-->
         <item name="android:windowAnimationStyle">@style/animfade</item>
+        <!--设置窗体内容背景-->
+        <item name="android:windowContentOverlay">@android:color/transparent</item>
     </style>
 
     <!-- 系统分割线 -->
     <!--<item name="android:listDivider">@drawable/divider_bg</item>-->
+    <!-- 背景 -->
+    <!--<item name="android:windowBackground">@android:color/transparent</item>-->
     <!-- 全屏 -->
     <!--<item name="android:windowFullscreen">false</item> -->
     <!-- 避免启动应用后，出现短暂的黑屏或白屏现象 -->

@@ -70,16 +70,6 @@ public class Constant {
     public static String userName = "User_Name";
 
     /**
-     * 说明重启 key
-     */
-    public static String isRunState = "";
-
-    /**
-     * 保存应用进程id
-     */
-    public static final String appProcessId = "AppProcessId";
-
-    /**
      * APP 当前模式 （日间/夜间）
      */
     public static final String appMode = "appModeSwitch";

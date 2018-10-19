@@ -4,8 +4,7 @@ import android.app.Application;
 
 import com.fy.baselibrary.application.BaseActivityLifecycleCallbacks;
 import com.fy.baselibrary.ioc.ConfigUtils;
-import com.fy.baselibrary.utils.AppUtils;
-import com.fy.baselibrary.utils.Constant;
+import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NightModeUtils;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
@@ -20,6 +19,7 @@ public class WanAndroidApp extends Application{
     public void onCreate() {
         super.onCreate();
 
+        L.e("ActivityCallbacks", "Application--Create() 启动-----");
         new ConfigUtils.ConfigBiuder()
                 .setBgColor(R.color.appHeadBg)
 //                .setTitleColor(R.color.red)
@@ -30,12 +30,6 @@ public class WanAndroidApp extends Application{
 
         int designWidth = (int) ResUtils.getMetaData("Rudeness_Adapter_Screen_width", 0);
         ScreenUtils.setCustomDensity(this, designWidth);
-
-        //通过缓存的 进程id 判断应用是否被强杀
-        int processId = SpfUtils.getSpfSaveInt(Constant.appProcessId);
-        if (processId != -1 && processId != AppUtils.getProcessId(this)) {
-            Constant.isRunState = "isRunState";//说明重启
-        }
 
 //        设置activity 生命周期回调
         registerActivityLifecycleCallbacks(new BaseActivityLifecycleCallbacks(designWidth));

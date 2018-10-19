@@ -13,7 +13,7 @@ import java.util.Set;
 
 /**
  * 判断是否是小米手机
- * Created by SmileXie on 2017/7/4.
+ * Created by fangs on 2017/7/4.
  */
 public class BuildProperties {
 
@@ -63,6 +63,7 @@ public class BuildProperties {
     public Collection<Object> values() {
         return properties.values();
     }
+
 
     public static BuildProperties newInstance() throws IOException {
         return new BuildProperties();

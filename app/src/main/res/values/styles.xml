@@ -2,6 +2,7 @@
 
     <style name="wanAndroidTheme" parent="BaseAppTheme">
         <item name="android:listDivider">@drawable/divider_bg</item>
+        <item name="android:windowBackground">@drawable/app_loading</item>
     </style>
 
     <!-- 启动界面主题 -->
