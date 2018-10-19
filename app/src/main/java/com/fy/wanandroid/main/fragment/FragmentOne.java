@@ -40,7 +40,7 @@ import io.reactivex.functions.BiFunction;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * 首页 // todo 主体 上拉加载更多 没有实现
+ * 首页
  * Created by fangs on 2017/12/12.
  */
 public class FragmentOne extends BaseFragment {
@@ -49,7 +49,6 @@ public class FragmentOne extends BaseFragment {
     EasyPullLayout epl;
     @BindView(R.id.rvArticle)
     RecyclerView rvArticle;
-//    HeaderAndFooterWrapper adapter;
     ConvenientBanner<BannerBean> bannerView;
     List<BannerBean> bannerBeans;
     AdapterOne rvAdapter;
@@ -94,8 +93,6 @@ public class FragmentOne extends BaseFragment {
                 .setDraw(false)
                 .create(getActivity()));
 
-//        adapter = new HeaderAndFooterWrapper(rvAdapter);
-//        rvArticle.setAdapter(adapter);
         rvArticle.setAdapter(rvAdapter);
 
         epl.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
@@ -151,23 +148,19 @@ public class FragmentOne extends BaseFragment {
                                 bannerBeans = bannerdata;
                                 setBanner();
                                 rvAdapter.addHeaderView(bannerView);
+                                rvAdapter.notifyItemRangeChanged(0, 1);
                             }
+                        }
 
-                            if (null != list) {
-                                rvAdapter.setmDatas(list);
-                                rvAdapter.notifyDataSetChanged();
-                            }
-                        } else {
-                            if (null != list) {
+                        if (null != list) {
 //                                DiffUtil.DiffResult diffResult = DiffUtil
 //                                        .calculateDiff(new DownFileDiffCall(rvAdapter.getmDatas(), list), true);
 //                                diffResult.dispatchUpdatesTo(adapter);
 //
-                                rvAdapter.addData(list);
-                                rvAdapter.notifyDataSetChanged();
-                            }
+                            int notifyPosition = rvAdapter.getItemCount();
+                            rvAdapter.addData(list);
+                            rvAdapter.notifyItemRangeChanged(notifyPosition, list.size());
                         }
-
                     }
 
                     @Override

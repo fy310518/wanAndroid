@@ -25,6 +25,8 @@ public abstract class NetCallBack<T> extends RequestBaseObserver<T>{
 
     @Override
     public void onError(Throwable e) {
+        e.printStackTrace();//todo 正式发布时候 注释此打印
+
         if (e instanceof ServerException) {
             dismissProgress();
             if (e.getMessage().equals("请先登录！")) {//token 失效 进入登录页面
