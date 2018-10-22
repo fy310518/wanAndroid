@@ -36,8 +36,7 @@ public class OSUtils {
 
     /**
      * 获取手机系统 类型
-     * @return ROM类型的枚举
-     * @desc  获取ROM类型: MIUI_ROM, FLYME_ROM, EMUI_ROM, OTHER_ROM
+     * @return  ROM类型: MIUI_ROM, FLYME_ROM, EMUI_ROM, OTHER_ROM
      */
     public static int getRomType() {
         int rom_type = OTHER;

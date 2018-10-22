@@ -217,7 +217,6 @@ public class JumpUtils {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  //注意
         intent.putExtra("exitApp", true);//添加标记
         act.startActivity(intent);
-        act.finish();
     }
 
 

@@ -36,15 +36,6 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
         exitOrIn(getIntent());
     }
 
-//    @Override
-//    protected void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        if (null != outState) {
-//            outState.putBoolean(FLAG_EXIT, true);
-//            L.e("StartActivity", "onSaveInstanceState");
-//        }
-//    }
-
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -78,9 +69,8 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
      * @param intent
      */
     private void exitOrIn(Intent intent){
-        boolean b = (Intent.FLAG_ACTIVITY_CLEAR_TOP & intent.getFlags()) != 0;
+        boolean b = (Intent.FLAG_ACTIVITY_CLEAR_TOP & intent.getFlags())!= 0;
         boolean c = intent.getBooleanExtra("exitApp", false);
-
         if (b && c) {
             exitApp();
         } else {
@@ -92,6 +82,7 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
      * 退出应用
      */
     private void exitApp() {
+        L.e("ActivityCallbacks", "Application--Create() 退出-----");
         finish();
         System.exit(0);
     }
