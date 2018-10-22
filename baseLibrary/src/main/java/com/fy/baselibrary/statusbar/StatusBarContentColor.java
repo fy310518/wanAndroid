@@ -7,7 +7,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import java.io.IOException;
+import com.fy.baselibrary.utils.os.OSUtils;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -34,49 +35,15 @@ public class StatusBarContentColor {
     }
 
     /**
-     * 判断手机是否是魅族
-     * @return
-     */
-    public static boolean isFlyme() {
-        try {
-            // Invoke Build.hasSmartBar()
-            final Method method = Build.class.getMethod("hasSmartBar");
-            return method != null;
-        } catch (final Exception e) {
-            return false;
-        }
-    }
-
-
-    private static final String KEY_MIUI_VERSION_CODE = "ro.miui.ui.version.code";
-    private static final String KEY_MIUI_VERSION_NAME = "ro.miui.ui.version.name";
-    private static final String KEY_MIUI_INTERNAL_STORAGE = "ro.miui.internal.storage";
-
-    /**
-     * 判断手机是否是小米
-     * @return
-     */
-    public static boolean isMIUI() {
-        try {
-            final BuildProperties prop = BuildProperties.newInstance();
-            return prop.getProperty(KEY_MIUI_VERSION_CODE, null) != null
-                    || prop.getProperty(KEY_MIUI_VERSION_NAME, null) != null
-                    || prop.getProperty(KEY_MIUI_INTERNAL_STORAGE, null) != null;
-        } catch (final IOException e) {
-            return false;
-        }
-    }
-
-    /**
      * 设置状态栏文字色值为深色调
      * @param activity
      * @param useDart 是否使用深色调
      * @param isTransparentBar 布局是否延伸到状态栏
      */
     public static void setStatusTextColor(Activity activity, boolean useDart, boolean isTransparentBar) {
-        if (isFlyme()) {
+        if (OSUtils.isFlyme()) {
             processFlyMe(activity, useDart);
-        } else if (isMIUI()) {
+        } else if (OSUtils.isMIUI()) {
             MIUISetStatusBarLightMode(activity ,useDart, isTransparentBar);
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

@@ -1,4 +1,4 @@
-package com.fy.baselibrary.statusbar;
+package com.fy.baselibrary.utils.os;
 
 import android.os.Environment;
 
@@ -12,7 +12,7 @@ import java.util.Properties;
 import java.util.Set;
 
 /**
- * 判断是否是小米手机
+ * 判断手机系统类型 核心类
  * Created by fangs on 2017/7/4.
  */
 public class BuildProperties {

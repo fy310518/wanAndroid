@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +17,7 @@ import android.widget.TextView;
 
 import com.fy.baselibrary.R;
 import com.fy.baselibrary.ioc.ConfigUtils;
-import com.fy.baselibrary.statusbar.OSUtils;
+import com.fy.baselibrary.utils.os.OSUtils;
 import com.fy.baselibrary.statuslayout.LoadSirUtil;
 import com.fy.baselibrary.statuslayout.StatusLayout;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;

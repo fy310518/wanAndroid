@@ -113,7 +113,7 @@ public class FragmentOne extends BaseFragment {
     /**
      * 网络请求
      */
-    @NeedPermission(value = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
+    @NeedPermission(value = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, isRun = true)
     private void getData() {
         Observable<List<BannerBean>> observable1 = RequestUtils.create(ApiService.class)
                 .getBannerList()

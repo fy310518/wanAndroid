@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, S
         login();
     }
 
-    @NeedPermission(value = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
+    @NeedPermission(value = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, isRun = true)
     private void login() {
         IProgressDialog progressDialog = new NetDialog().init(this)
                 .setDialogMsg(R.string.user_login);

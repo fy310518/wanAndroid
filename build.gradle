@@ -12,7 +12,7 @@ buildscript {
         // in the individual module build.gradle files
 
         //aop
-        classpath 'com.hujiang.aspectjx:gradle-android-plugin-aspectjx:2.0.2'
+        classpath 'com.hujiang.aspectjx:gradle-android-plugin-aspectjx:2.0.4'
         //将Library上传到jcenter
         classpath 'com.novoda:bintray-release:0.8.1'
     }
