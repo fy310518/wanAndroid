@@ -19,5 +19,6 @@
 
     </application>
 
+    <!-- 震动 -->
     <uses-permission android:name="android.permission.VIBRATE" />
 </manifest>

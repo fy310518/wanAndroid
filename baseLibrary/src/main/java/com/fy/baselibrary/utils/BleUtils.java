@@ -27,8 +27,7 @@ public class BleUtils {
 
     /**
      * 获取本机的 蓝牙adapter
-     * @param context
-     * @return
+     * @return bleAdapter
      */
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     public static BluetoothAdapter getBleAdapter(Context context){
@@ -40,8 +39,7 @@ public class BleUtils {
 
     /**
      * 判断是否支持蓝牙4.0
-     * @param context
-     * @return
+     * @return true/false
      */
     public static boolean isHaveBluetooth(Context context) {
         return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE);
@@ -49,7 +47,6 @@ public class BleUtils {
 
     /**
      * 判断蓝牙是否打开
-     * @param context
      * @return true表示已经开启
      */
     public static boolean isBluetoothOpen(Context context) {
@@ -64,7 +61,6 @@ public class BleUtils {
 
     /**
      * 强制开启当前 Android 设备的 Bluetooth
-     * @param context
      * @return true：强制打开 Bluetooth　成功　false：强制打开 Bluetooth 失败
      */
     public static boolean turnOnBluetooth(Context context) {
@@ -83,7 +79,6 @@ public class BleUtils {
 
     /**
      * 强制关闭当前 Android 设备的 Bluetooth
-     * @param context
      * @return  true：强制关闭 Bluetooth　成功　false：强制关闭 Bluetooth 失败
      */
     public static boolean turnOffBluetooth(Context context) {
@@ -101,7 +96,6 @@ public class BleUtils {
 
     /**
      * 判断蓝牙是否打开，如果打开就重启蓝牙
-     * @param context
      */
     public static void reStartBluetooth(final Context context) {
         //先关闭手机蓝牙

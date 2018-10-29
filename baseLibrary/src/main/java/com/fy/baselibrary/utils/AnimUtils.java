@@ -22,12 +22,11 @@ public class AnimUtils {
     public static final String TAG = "CircleMenu";
     public static final int radius1 = 500;
 
-
     /**
      * 设置fragment 转场动画
-     *
-     * @param fragmentTransaction
-     * @param position            将要显示的fragment的下标
+     * @param fragmentTransaction 事物
+     * @param currentIndex 当前fragment 在事物中的下标
+     * @param position  将要显示的fragment的下标
      */
     public static void setFragmentTransition(FragmentTransaction fragmentTransaction,
                                              int currentIndex, int position) {
@@ -45,6 +44,8 @@ public class AnimUtils {
 
     /**
      * 箭头的动画
+     * @param iv_arrow 箭头View
+     * @param isExpand 当前状态是否 收起
      */
     public static void doArrowAnim(View iv_arrow, boolean isExpand) {
         if (isExpand) {
@@ -58,6 +59,7 @@ public class AnimUtils {
 
     /**
      * 关闭扇形菜单
+     * @param buttonList 控件列表
      */
     @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
     public static void closeSectorMenu(List<RadioButton> buttonList) {
@@ -82,7 +84,7 @@ public class AnimUtils {
 
     /**
      * 显示半圆弧 菜单
-     * @param buttonList
+     * @param buttonList 控件列表
      */
     public static void showSemicircleMenu(List<RadioButton> buttonList) {
         /***第一步，遍历所要展示的菜单ImageView*/

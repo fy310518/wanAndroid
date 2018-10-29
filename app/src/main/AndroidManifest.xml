@@ -142,7 +142,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 拨打电话的权限 -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <!-- 在SDCard中创建与删除文件权限 -->
 
     <!-- 往SDCard写入数据权限  写权限已经包含了读权限了 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />

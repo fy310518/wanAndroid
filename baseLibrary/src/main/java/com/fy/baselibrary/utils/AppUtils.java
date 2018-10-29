@@ -27,6 +27,7 @@ public class AppUtils {
 
     /**
      * 获取应用程序名称
+     * @return appName
      */
     public static String getAppName() {
         try {
@@ -43,7 +44,7 @@ public class AppUtils {
 
     /**
      * 获取当前应用的版本号 versionCode
-     * @return
+     * @return versionCode
      */
     public static int getVersionCode() {
         Context context = ConfigUtils.getAppCtx();
@@ -60,7 +61,7 @@ public class AppUtils {
 
     /**
      * 获取当前应用的版本名称 versionName
-     * @return
+     * @return versionName
      */
     public static String getVersionName() {
         Context context = ConfigUtils.getAppCtx();
@@ -78,7 +79,7 @@ public class AppUtils {
 
     /**
      * 获取当前应用的 应用id
-     * @return
+     * @return 应用id（包名）
      */
     public static String getLocalPackageName() {
         Context context = ConfigUtils.getAppCtx();
@@ -95,10 +96,8 @@ public class AppUtils {
 
     /**
      * 当前的包是否存在
-     *
-     * @param context
-     * @param pckName
-     * @return
+     * @param pckName 包名
+     * @return true/false
      */
     public static boolean isPackageExist(Context context, String pckName) {
         try {
@@ -146,7 +145,6 @@ public class AppUtils {
     /**
      * Android 7.0 在应用间共享文件
      * 获取 清单文件注册的 文件共享签名认证
-     * @return
      */
     public static String getFileProviderName() {
         return getLocalPackageName() + ".provider";
@@ -154,9 +152,7 @@ public class AppUtils {
 
     /**
      * 判断app是否在前台还是在后台运行
-     *
-     * @param context
-     * @return
+     * @return true/false
      */
     public static boolean isBackground(Context context) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
@@ -184,8 +180,7 @@ public class AppUtils {
 
     /**
      * 获取当前应用 进程id
-     * @param context
-     * @return
+     * @return id
      */
     public static int getProcessId(Context context) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);

@@ -5,6 +5,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.StringRes;
@@ -39,8 +40,9 @@ public class ResUtils {
      * 获取 colors 资源文件 指定 id 的资源 (getResources().getColor 过时 替代方式)
      *
      * @param colorId
-     * @return
+     * @return color
      */
+    @ColorInt
     public static int getColor(@ColorRes int colorId) {
         return ContextCompat.getColor(ConfigUtils.getAppCtx(), colorId);
     }

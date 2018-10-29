@@ -53,7 +53,7 @@ public class RequestUtils {
      * 得到 RxJava + Retrofit 被观察者 实体类
      * @param clazz 被观察者 类（ApiService.class）
      * @param <T>   被观察者 实体类（ApiService）
-     * @return
+     * @return 封装的网络请求api
      */
     public static <T> T create(Class<T> clazz) {
         return getInstance().netRetrofit.create(clazz);
@@ -61,8 +61,10 @@ public class RequestUtils {
 
     /**
      * 同时从缓存和网络获取请求结果
-     * @param fromNetwork  从网络获取数据的 Observable
-     * @return
+     * @param fromNetwork 从网络获取数据的 Observable
+     * @param apiKey key
+     * @param <T> 泛型
+     * @return 被观察者
      */
     public static <T> Observable<T> request(Observable<T> fromNetwork, String apiKey) {
 
@@ -101,7 +103,7 @@ public class RequestUtils {
 
     /**
      * 使用RxJava CompositeDisposable 控制请求队列
-     * @param d
+     * @param d 切断订阅事件 接口
      */
     public static void addDispos(Disposable d){
         getInstance().mCompositeDisposable.add(d);

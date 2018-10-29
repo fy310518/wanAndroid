@@ -27,8 +27,8 @@ public class RxHelper {
     /**
      * 对结果进行预处理
      *
-     * @param <T>
-     * @return
+     * @param <T> 泛型
+     * @return  ObservableTransformer
      */
     public static <T> ObservableTransformer<BaseBean<T>, T> handleResult() {
         return new ObservableTransformer<BaseBean<T>, T>() {
@@ -79,9 +79,9 @@ public class RxHelper {
 
     /**
      * 绑定activity 或 fragment声明周期，在生命周期结束后断开 rxjava 请求
-     * @param context
-     * @param <T>
-     * @return
+     * @param context 环境
+     * @param <T> 泛型
+     * @return 包装过的被观察者
      */
     public static <T> ObservableTransformer<T, T> bindToLifecycle(@NonNull Context context) {
         BehaviorSubject<String> subject = null;

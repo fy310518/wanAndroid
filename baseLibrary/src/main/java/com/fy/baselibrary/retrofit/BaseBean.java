@@ -14,25 +14,25 @@ public interface BaseBean<T> {
 
     /**
      * 获取请求返回状态码
-     * @return
+     * @return 状态码
      */
     public int getCode();
 
     /**
      * 获取请求返回信息
-     * @return
+     * @return 消息
      */
     public String getMsg();
 
     /**
      * 获取请求返回对象
-     * @return
+     * @return 泛型
      */
     public T getData();
 
     /**
      * 判断请求是否成功
-     * @return
+     * @return true/false
      */
     public boolean isSuccess();
 }

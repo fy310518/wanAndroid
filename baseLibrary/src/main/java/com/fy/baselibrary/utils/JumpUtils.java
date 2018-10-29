@@ -209,6 +209,17 @@ public class JumpUtils {
     }
 
     /**
+     * 返回桌面
+     * @param act
+     */
+    public static void backDesktop(Activity act){
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        act.startActivity(intent);
+    }
+
+    /**
      * 退出整个应用
      * @param act
      */

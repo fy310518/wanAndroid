@@ -19,7 +19,7 @@ public class DensityUtils {
 
     /**
      * pt转 px
-     * @param ptValue
+     * @param ptValue pt值
      * @return px值
      */
     public static float pt2px(float ptValue){
@@ -29,7 +29,7 @@ public class DensityUtils {
 
     /**
      * dp转 px
-     * @param dpVal
+     * @param dpVal dp值
      */
     public static int dp2px(float dpVal) {
         Context context = ConfigUtils.getAppCtx();
@@ -38,7 +38,7 @@ public class DensityUtils {
 
     /**
      * sp转px
-     * @param spVal
+     * @param spVal sp值
      */
     public static int sp2px(float spVal) {
         Context context = ConfigUtils.getAppCtx();
@@ -47,7 +47,7 @@ public class DensityUtils {
 
     /**
      * px转dp
-     * @param pxVal
+     * @param pxVal 像素值
      */
     public static float px2dp(float pxVal) {
         Context context = ConfigUtils.getAppCtx();
@@ -57,7 +57,7 @@ public class DensityUtils {
 
     /**
      * px转sp
-     * @param pxVal
+     * @param pxVal px值
      */
     public static float px2sp(float pxVal) {
         Context context = ConfigUtils.getAppCtx();

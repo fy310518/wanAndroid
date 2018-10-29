@@ -118,8 +118,7 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
 
     /**
      * 显示提示信息
-     *
-     * @param msg
+     * @param msg 内容
      */
     protected void actionResponseError(String msg) {
         T.showShort(msg);
@@ -145,8 +144,7 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
     /**
      * 更新activity 界面（多状态视图）
      * 可根据flag 判断请求失败
-     *
-     * @param flag
+     * @param flag 请求状态flag
      */
     protected abstract void updataLayout(int flag);
 

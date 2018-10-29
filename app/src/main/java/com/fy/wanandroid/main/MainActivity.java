@@ -245,10 +245,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
             dlMain.closeDrawer(GravityCompat.START);
         } else {
             // super.onBackPressed(); 	不要调用父类的方法
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            startActivity(intent);
+            JumpUtils.backDesktop(this);
         }
     }
 
