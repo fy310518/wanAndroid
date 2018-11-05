@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion var.minSdkVersion
         targetSdkVersion var.targetSdkVersion
-        versionCode 46
-        versionName "1.4.6"
+        versionCode 48
+        versionName "1.4.8"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true//配置5.0 版本以下可以使用svg
@@ -28,6 +28,7 @@ android {
 
     lintOptions {
         abortOnError false
+        warning 'InvalidPackage'
     }
 
     compileOptions {
@@ -99,7 +100,7 @@ publish {
     //项目名称
     artifactId = 'baselibrary'
     //版本号
-    publishVersion = '1.4.6'
+    publishVersion = '1.4.8'
     //描述，不重要
     desc = 'Elegant Android application development base library'
     //网站，不重要
@@ -107,5 +108,6 @@ publish {
 }
 
 //gradlew clean build bintrayUpload -PbintrayUser=fy310518 -PbintrayKey=54c46159b02281fdabc355fb3912291e0d390994 -PdryRun=false
+//gradlew bintrayUpload -PbintrayUser=fy310518 -PbintrayKey=54c46159b02281fdabc355fb3912291e0d390994 -PdryRun=false
 //测试 是否上传成功
 //https://jcenter.bintray.com/fy310518.maven

@@ -2,7 +2,6 @@ package com.fy.baselibrary.aop.resultfilter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.annotation.Nullable;
 
 import java.util.HashMap;
 
@@ -44,16 +43,16 @@ public class ActResultManager {
         context.startActivityForResult(intent, requestCode);
     }
 
-    public void afterActivityResult(Activity context, int requestCode, int resultCode, Intent data) {
+    public void afterActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
         if (mMap != null) {
-            HashMap<Integer, ResultCallBack> resultMap = mMap.get(context.getClass().getName());
+            HashMap<Integer, ResultCallBack> resultMap = mMap.get(activity.getClass().getName());
             if (resultMap != null) {
                 ResultCallBack callBack = resultMap.get(requestCode);
                 if (callBack != null) {
                     callBack.onActivityResult(requestCode, resultCode, data);
                     resultMap.remove(requestCode);
                     if (resultMap.size() == 0) {
-                        mMap.remove(context.getClass().getName());
+                        mMap.remove(activity.getClass().getName());
                         if (mMap.size() == 0) {
                             mMap = null;
                         }

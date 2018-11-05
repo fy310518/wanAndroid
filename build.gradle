@@ -5,6 +5,7 @@ buildscript {
         mavenCentral()
         google()
         jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.0'
@@ -22,6 +23,8 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven{url "https://jitpack.io"}
+        mavenCentral()
     }
 }
 
@@ -31,17 +34,18 @@ task clean(type: Delete) {
 
 // 指定javadoc UTF-8格式
 task javadoc(type: Javadoc) {
-    options.encoding = "utf-8"
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
 }
 
 ext {
     var = [
             compileSdkVersion    : 28,
-            buildToolsVersion    : "28.0.2",
+            buildToolsVersion    : "28.0.3",
 
             minSdkVersion        : 19,
-            targetSdkVersion     : 27,
+            targetSdkVersion     : 28,
 
-            supportLibraryVersion: "27.1.1"
+            supportLibraryVersion: "28.0.0"
     ]
 }

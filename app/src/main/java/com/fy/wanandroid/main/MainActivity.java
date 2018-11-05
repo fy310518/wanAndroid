@@ -269,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
                     JumpUtils.jump(mContext, MyCollectActivity.class, null);
                     break;
                 case R.id.myDownLoad:
-//                    JumpUtils.jump(mContext, DownFileActivity.class, null);
+                    JumpUtils.jump(mContext, DownFileActivity.class, null);
                     break;
                 case R.id.atNightModel:
                     NightModeUtils.switchNightMode(mContext);

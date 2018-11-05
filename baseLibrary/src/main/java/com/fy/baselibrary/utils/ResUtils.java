@@ -29,8 +29,8 @@ public class ResUtils {
     /**
      * 获取 dimens 资源文件 指定 id 的资源
      *
-     * @param dimenId
-     * @return
+     * @param dimenId 资源id
+     * @return dimen 值
      */
     public static float getDimen(@DimenRes int dimenId) {
         return ConfigUtils.getAppCtx().getResources().getDimension(dimenId);
@@ -39,7 +39,7 @@ public class ResUtils {
     /**
      * 获取 colors 资源文件 指定 id 的资源 (getResources().getColor 过时 替代方式)
      *
-     * @param colorId
+     * @param colorId 资源id
      * @return color
      */
     @ColorInt
@@ -49,8 +49,7 @@ public class ResUtils {
 
     /**
      * 生成随机颜色
-     *
-     * @return
+     * @return 颜色值
      */
     public static int getRandomColor() {
         Random random = new Random();
@@ -64,8 +63,8 @@ public class ResUtils {
     /**
      * 获取 strings 资源文件 指定 id 的资源
      *
-     * @param stringId
-     * @return
+     * @param stringId 资源id
+     * @return ""
      */
     public static String getStr(@StringRes int stringId) {
         return ConfigUtils.getAppCtx().getString(stringId);
