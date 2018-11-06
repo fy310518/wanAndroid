@@ -6,6 +6,7 @@ import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.SpfUtils;
 
 import java.io.IOException;
+import java.util.List;
 
 import io.reactivex.Observable;
 import okhttp3.Interceptor;
@@ -23,10 +24,9 @@ public class ReceivedCookiesInterceptor implements Interceptor{
         if (null == chain) L.d("http", "Receivedchain == null");
 
         Response response = chain.proceed(chain.request());
-        L.d("http", "originalResponse" + response.toString());
 
-        if (!response.headers("set-cookie").isEmpty()) {
-
+        List<String> headers = response.headers("set-cookie");
+        if (!headers.isEmpty() && headers.size() > 1) {
             StringBuffer cookieBuffer = new StringBuffer();
 
             Object[] strArray = response.headers("set-cookie").toArray();
