@@ -30,17 +30,12 @@ public abstract class NetCallBack<T> extends RequestBaseObserver<T>{
         if (e instanceof ServerException) {
             dismissProgress();
             if (e.getMessage().equals("请先登录！")) {//token 失效 进入登录页面
-                try {//SSlPeerUnverifiedException
-                    Class cla = Class.forName(AppUtils.getLocalPackageName() + ".login.LoginActivity");
-                    Context context = ConfigUtils.getAppCtx();
+                Context context = ConfigUtils.getAppCtx();
 
-                    Intent intent = new Intent(context, cla);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                    context.startActivity(intent);
-                } catch (ClassNotFoundException e1) {
-                    e1.printStackTrace();
-                }
+                Intent intent = new Intent();
+                intent.setAction(AppUtils.getLocalPackageName() + ".login.LoginActivity");
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
             }
 
             if (((ServerException) e).code != 401) actionResponseError(e.getMessage());

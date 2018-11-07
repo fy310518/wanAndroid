@@ -66,6 +66,7 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
     public void onNext(V t) {
         L.e("net", "onNext()");
         onSuccess(t);
+        updataLayout(StatusLayoutManager.LAYOUT_CONTENT_ID);
     }
 
     @Override
@@ -112,7 +113,6 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
     @Override
     public void onComplete() {
         L.e("net", "onComplete()");
-        updataLayout(StatusLayoutManager.LAYOUT_CONTENT_ID);
         dismissProgress();
     }
 

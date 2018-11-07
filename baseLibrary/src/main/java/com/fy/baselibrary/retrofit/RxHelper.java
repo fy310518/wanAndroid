@@ -100,6 +100,7 @@ public class RxHelper {
                         finalSubject.filter(new Predicate<String>() {
                             @Override
                             public boolean test(String anObject) throws Exception {
+                                L.e("net 请求or响应", anObject);
                                 return Constant.DESTROY.equals(anObject);
                             }
                         })
