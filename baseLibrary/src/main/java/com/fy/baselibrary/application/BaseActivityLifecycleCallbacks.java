@@ -62,7 +62,6 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
         IBaseActivity act = null;
         if (activity instanceof IBaseActivity) {
             act = (IBaseActivity) activity;
-
             if (act.setView() != 0) {
                 activity.setContentView(R.layout.activity_base);
                 LinearLayout linearLRoot = activity.findViewById(R.id.linearLRoot);
