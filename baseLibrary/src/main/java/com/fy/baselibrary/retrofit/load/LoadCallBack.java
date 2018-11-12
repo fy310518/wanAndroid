@@ -30,23 +30,18 @@ public abstract class LoadCallBack<T> extends RequestBaseObserver<T> {
 
     @Override
     public void onNext(T t) {
-        if (t instanceof Integer) {
-            onProgress(t + "");
+        if (t instanceof Double) {
+            String percent = TransfmtUtils.doubleToKeepTwoDecimalPlaces(((Double) t).doubleValue());
+            onProgress(percent);
         } else {
             super.onNext(t);
         }
     }
 
-    public void setmSumLength(long mSumLength) {
-        this.mSumLength = mSumLength;
 
-        ACache mCache = ACache.get(ConfigUtils.getAppCtx());
-        //从缓存中获取 已经下载的总进度
-        loaded.addAndGet(mCache.getAsLong(url + Constant.DownTask));
-    }
 
     /**
-     * 下载 url
+     * 下载
      */
     private String url;
     public long mSumLength = 0L;//总长度
@@ -96,6 +91,11 @@ public abstract class LoadCallBack<T> extends RequestBaseObserver<T> {
             mCache.put(url + Constant.DownTask, loaded.get());
         }
     }
+
+    public void setmSumLength(long mSumLength) {
+        this.mSumLength = mSumLength;
+    }
+
 
 
     /**

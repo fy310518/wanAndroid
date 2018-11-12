@@ -1,8 +1,7 @@
 package com.fy.baselibrary.retrofit.load.up;
 
 import com.fy.baselibrary.retrofit.load.LoadService;
-import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
-import com.fy.baselibrary.retrofit.load.up.UploadRequestBody;
+import com.fy.baselibrary.utils.L;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,34 +26,21 @@ public class UpLoadUtils {
     }
 
     /**
-     * 把File集合转化成MultipartBody.Part 集合（retrofit 多文件文件上传）
-     *
-     * @param files
-     * @return
+     * 把 File集合转化成 MultipartBody.Part集合
+     * @param files File列表或者 File 路径列表
+     * @param <T> 泛型
+     * @return MultipartBody.Part列表（retrofit 多文件文件上传）
      */
-    public static List<MultipartBody.Part> fileToMultipartBodyParts(List<String> files) {
+    public static <T> List<MultipartBody.Part> filesToMultipartBodyPart(List<T> files) {
         List<MultipartBody.Part> parts = new ArrayList<>(files.size());
-        for (String path : files) {
-            File file = new File(path);//访问手机端的文件资源，保证手机端sdcdrd中必须有这个文件
 
-            String fileStr = path.substring(path.lastIndexOf(".") + 1);
+        File file;
+        for (T t : files) {//访问手机端的文件资源，保证手机端sdcdrd中必须有这个文件
 
-            RequestBody requestBody = RequestBody.create(MediaType.parse("image/" + fileStr), file);
-            MultipartBody.Part part = MultipartBody.Part.createFormData("files", file.getName(), requestBody);
-            parts.add(part);
-        }
-        return parts;
-    }
+            if (t instanceof File) file = (File) t;
+            else if (t instanceof String) file = new File((String) t);//访问手机端的文件资源，保证手机端sdcdrd中必须有这个文件
+            else break;
 
-    /**
-     * 把File集合转化成MultipartBody.Part 集合（retrofit 多文件文件上传）
-     *
-     * @param files
-     * @return
-     */
-    public static List<MultipartBody.Part> fileToMultipartBodyPart(List<File> files) {
-        List<MultipartBody.Part> parts = new ArrayList<>(files.size());
-        for (File file : files) {//访问手机端的文件资源，保证手机端sdcdrd中必须有这个文件
             String path = file.getPath();
             String fileStr = path.substring(path.lastIndexOf(".") + 1);
 
@@ -66,49 +52,46 @@ public class UpLoadUtils {
     }
 
     /**
-     * 用于把File 集合对象转化成MultipartBody （retrofit 多文件文件上传）
-     *
-     * @param files
-     * @return
+     * 用于把 File集合 或者 File路径集合 转化成 MultipartBody
+     * @param files File列表或者 File 路径列表
+     * @param <T> 泛型（File 或者 String）
+     * @return MultipartBody（retrofit 多文件文件上传）
      */
-    public static MultipartBody filesToMultipartBody(List<String> files) {
+    public static <T> MultipartBody filesToMultipartBody(List<T> files) {
         MultipartBody.Builder builder = new MultipartBody.Builder();
 
-        for (String path : files) {
-            File file = new File(path);//访问手机端的文件资源，保证手机端sdcdrd中必须有这个文件
+        File file;
+        for (T t : files) {
+            if (t instanceof File) file = (File) t;
+            else if (t instanceof String) file = new File((String) t);//访问手机端的文件资源，保证手机端sdcdrd中必须有这个文件
+            else break;
 
-            String fileStr = path.substring(path.lastIndexOf(".") + 1);
-
-            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            // TODO 为了简单起见，没有判断file的类型
+            FileProgressRequestBody requestBody = new FileProgressRequestBody(file, "multipart/form-data");
             builder.addFormDataPart("file", file.getName(), requestBody);
         }
 
         builder.setType(MultipartBody.FORM);
-        MultipartBody multipartBody = builder.build();
 
-        return multipartBody;
+        return builder.build();
     }
-
 
     /**
      * 上传多个文件
      */
     public static Observable<Object> uploadFiles(List<File> files, LoadService apiService) {
 //        总长度
-        long sumLength = 0l;
+        long sumLength = 0L;
         for (File file : files) sumLength += file.length();
 
 //      进度Observable
         UploadOnSubscribe uploadOnSubscribe = new UploadOnSubscribe(sumLength);
-        Observable<Integer> progressObservale = Observable.create(uploadOnSubscribe);
+        Observable<Double> progressObservale = Observable.create(uploadOnSubscribe);
 
         ArrayList<MultipartBody.Part> fileParts = new ArrayList<>();
         for (File file : files) {
-            UploadRequestBody uploadRequestBody = new UploadRequestBody(file);
-//          设置进度监听
-            uploadRequestBody.setUploadOnSubscribe(uploadOnSubscribe);
-
-            fileParts.add(MultipartBody.Part.createFormData("upload", file.getName(), uploadRequestBody));
+//            FileProgressRequestBody requestBody = new FileProgressRequestBody(file, "multipart/form-data", uploadOnSubscribe);
+//            fileParts.add(MultipartBody.Part.createFormData("upload", file.getName(), requestBody));
         }
 
         Observable<Object> uploadFile = apiService.uploadFile2(fileParts);

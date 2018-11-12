@@ -1,5 +1,6 @@
 package com.fy.wanandroid.testdemo;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.NotificationManager;
@@ -19,6 +20,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.BaseActivityBean;
 import com.fy.baselibrary.application.IBaseActivity;
@@ -36,7 +38,6 @@ import com.fy.baselibrary.utils.imgload.imgprogress.ProgressInterceptor;
 import com.fy.baselibrary.utils.imgload.imgprogress.ProgressListener;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.login.LoginActivity;
-import com.fy.wanandroid.request.NetCallBack;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -87,6 +88,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
         initNotificationChannel();
 
+        uploadFiles();
 //        uploadFiles();
 
 //        loadImage();
@@ -160,54 +162,45 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                 });
     }
 
-    private void uploadImg() {
-        List<String> fileList = new ArrayList<>();
-        fileList.add(FileUtils.getSDCardPath() + "DCIM/Camera/20121006174327607.jpg");
-        fileList.add(FileUtils.getSDCardPath() + "DCIM/Camera/tooopen_sy_133481514678.jpg");
+    @NeedPermission(value = {Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    @SuppressLint("CheckResult")
+    public void uploadFiles() {
+        List<String> files = new ArrayList<>();
+        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/679f6337gy1fr69ynfq3nj20hs0qodh0.jpg");
+//        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/IMG_20180902_144347.jpg");
+//        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/be933e1857.jpg"));
+//        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/体质健康.zip");
 
         RequestUtils.create(LoadService.class)
-                .uploadFile1(UpLoadUtils.fileToMultipartBodyParts(fileList))
-                .compose(RxHelper.handleResult())
+                .uploadFile1(UpLoadUtils.filesToMultipartBody(files))
                 .compose(RxHelper.bindToLifecycle(this))
-                .subscribe(new NetCallBack<Object>() {
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
                     @Override
-                    protected void onSuccess(Object login) {
+                    public void accept(Object objectBaseBean) throws Exception {
 
-                    }
-
-                    @Override
-                    protected void updataLayout(int flag) {
-                        L.e("net updataLayout", flag + "-----");
                     }
                 });
 
-    }
-
-    public void uploadFiles() {
-        List<File> files = new ArrayList<>();
-        files.add(new File(FileUtils.getSDCardPath() + "DCIM/Camera/20121006174327607.jpg"));
-        files.add(new File(FileUtils.getSDCardPath() + "DCIM/Downloads.zip"));
-        files.add(new File(FileUtils.getSDCardPath() + "DCIM/Camera/tooopen_sy_133481514678.jpg"));
-
-        UpLoadUtils.uploadFiles(files, RequestUtils.create(LoadService.class))
-                .compose(RxHelper.bindToLifecycle(this))
-                .subscribe(new LoadCallBack<Object>() {
-                    @Override
-                    protected void onProgress(String percent) {
-                        L.e("进度监听", percent + "%");
-
-                    }
-
-                    @Override
-                    protected void onSuccess(Object t) {
-
-                    }
-
-                    @Override
-                    protected void updataLayout(int flag) {
-
-                    }
-                });
+//        UpLoadUtils.uploadFiles(files, RequestUtils.create(LoadService.class))
+//                .compose(RxHelper.bindToLifecycle(this))
+//                .subscribe(new LoadCallBack<Object>() {
+//                    @Override
+//                    protected void onProgress(String percent) {
+////                        L.e("进度", percent + "%-->" + Thread.currentThread().getName());
+//                    }
+//
+//                    @Override
+//                    protected void onSuccess(Object t) {
+//
+//                    }
+//
+//                    @Override
+//                    protected void updataLayout(int flag) {
+//
+//                    }
+//                });
     }
 
     /**

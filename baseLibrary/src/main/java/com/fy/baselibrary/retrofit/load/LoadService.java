@@ -8,6 +8,7 @@ import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -24,28 +25,30 @@ import retrofit2.http.Url;
 public interface LoadService {
 
     /**
-     * 多图片上传
+     * 多图片上传 之 图文上传
      * @param token
      * @return
      */
     @Multipart
-    @Headers({"url_name:user"})
     @POST("http://192.168.100.123/hfs/")
     Observable<BaseBean<String>> uploadPostFile(@Part("token") RequestBody token,
                                                   @Part("type") RequestBody type,
                                                   @Part List<MultipartBody.Part> files);
 
-    @Multipart
-    @POST("http://192.168.100.123/hfs/")
-    Observable<BaseBean<Object>> uploadFile1(@Part List<MultipartBody.Part> files);
+    /**
+     * 多图片上传 方式一
+     * @param multipartBody
+     * @return
+     */
+    @POST("http://192.168.100.123:8080/hfs/")
+    Observable<Object> uploadFile1(@Body MultipartBody multipartBody);
 
     /**
-     * 多图片上传
+     * 多图片上传 方式二
      * @return
      */
     @Multipart
-    @Headers({"url_name:user"})
-    @POST("http://192.168.100.123/hfs/")
+    @POST("http://192.168.100.123:8080/hfs/")
     Observable<Object> uploadFile2(@Part List<MultipartBody.Part> files);
 
     /**
