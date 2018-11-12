@@ -72,10 +72,10 @@ public class T {
     private static void show(String message, int duration) {
         if (isShow) {
             if (null == toast) {
-                toast = Toast.makeText(ConfigUtils.getAppCtx(), null, duration);
+                toast = Toast.makeText(ConfigUtils.getAppCtx(), "", duration);
             } else {
                 toast.cancel();
-                toast = Toast.makeText(ConfigUtils.getAppCtx(), null, duration);
+                toast = Toast.makeText(ConfigUtils.getAppCtx(), "", duration);
             }
 
             toast.setText(message);
