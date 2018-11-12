@@ -41,10 +41,10 @@ public class DownFileActivity extends AppCompatActivity implements IBaseActivity
 
         initRv();
 
-        for (int i = 0; i < rvAdapter.getItemCount(); i++) {
+//        for (int i = 0; i < rvAdapter.getItemCount(); i++) {
             DownManager.getInstentce()
-                    .addDownTask(rvAdapter.getmDatas().get(i), new DownLoadCall(i));
-        }
+                    .addDownTask(rvAdapter.getmDatas().get(0), new DownLoadCall(0));
+//        }
 
         DownManager.getInstentce().runDownTask();
     }
