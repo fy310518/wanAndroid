@@ -35,6 +35,7 @@ import com.fy.wanandroid.main.MainActivity;
 import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
 import com.fy.wanandroid.request.NetDialog;
+import com.fy.wanandroid.testdemo.StatusDemoActivity;
 import com.fy.wanandroid.testdemo.TestStatusFragmentActivity;
 import com.fy.wanandroid.utils.SelectUtils;
 
@@ -113,8 +114,8 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, S
                 break;
             case R.id.tvRegister:
 //                JumpUtils.jump(mContext, RegisterActivity.class, null);
-//                JumpUtils.jump(this, StatusDemoActivity.class, null);
-                JumpUtils.jump(this, TestStatusFragmentActivity.class, null);
+                JumpUtils.jump(this, StatusDemoActivity.class, null);
+//                JumpUtils.jump(this, TestStatusFragmentActivity.class, null);
 //                JumpUtils.jump(this, RevealEffectActivity.class, null);
 //                JumpUtils.jump(this, TestActivity.class, null);
                 break;

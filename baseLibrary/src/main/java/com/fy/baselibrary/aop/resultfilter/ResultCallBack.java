@@ -7,5 +7,8 @@ import android.content.Intent;
  * Created by fangs on 2017/5/9.
  */
 public interface ResultCallBack {
-    void onActivityResult(int requestCode, int resultCode, Intent data);
+    /**
+     * 类似 activity 的 onActivityResult()
+     */
+    void onActResult(int requestCode, int resultCode, Intent data);
 }
