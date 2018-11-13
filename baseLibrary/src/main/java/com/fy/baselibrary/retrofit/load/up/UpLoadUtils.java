@@ -79,20 +79,25 @@ public class UpLoadUtils {
     /**
      * 上传多个文件
      */
-    public static Observable<Object> uploadFiles(List<File> files, LoadService apiService) {
+    public static Observable<Object> uploadFiles(List<String> files, LoadService apiService) {
 //        总长度
         long sumLength = 0L;
-        for (File file : files) sumLength += file.length();
 
 //      进度Observable
-        UploadOnSubscribe uploadOnSubscribe = new UploadOnSubscribe(sumLength);
+        UploadOnSubscribe uploadOnSubscribe = new UploadOnSubscribe();
         Observable<Double> progressObservale = Observable.create(uploadOnSubscribe);
 
         ArrayList<MultipartBody.Part> fileParts = new ArrayList<>();
-        for (File file : files) {
-//            FileProgressRequestBody requestBody = new FileProgressRequestBody(file, "multipart/form-data", uploadOnSubscribe);
-//            fileParts.add(MultipartBody.Part.createFormData("upload", file.getName(), requestBody));
+        File file;
+        for (String path : files) {
+            file = new File(path);
+            sumLength += file.length();
+
+            FileProgressRequestBody requestBody = new FileProgressRequestBody(file, "multipart/form-data", uploadOnSubscribe);
+            fileParts.add(MultipartBody.Part.createFormData("upload", file.getName(), requestBody));
         }
+
+        uploadOnSubscribe.setmSumLength(sumLength);
 
         Observable<Object> uploadFile = apiService.uploadFile2(fileParts);
 

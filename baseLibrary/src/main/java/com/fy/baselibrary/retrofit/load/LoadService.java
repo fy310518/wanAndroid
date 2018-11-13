@@ -36,7 +36,7 @@ public interface LoadService {
                                                   @Part List<MultipartBody.Part> files);
 
     /**
-     * 多图片上传 方式一
+     * 多图片上传 方式一 （参数注解：@Body；参数类型：MultipartBody）
      * @param multipartBody
      * @return
      */
@@ -44,7 +44,7 @@ public interface LoadService {
     Observable<Object> uploadFile1(@Body MultipartBody multipartBody);
 
     /**
-     * 多图片上传 方式二
+     * 多图片上传 方式二（@Multipart：方法注解；@Part：参数注解；参数类型；MultipartBody.Part）
      * @return
      */
     @Multipart

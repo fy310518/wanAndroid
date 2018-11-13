@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
-import com.fy.baselibrary.R;
 import com.fy.baselibrary.ioc.ConfigUtils;
 
 /**

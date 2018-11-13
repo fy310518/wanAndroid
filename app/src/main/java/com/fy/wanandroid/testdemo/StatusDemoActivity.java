@@ -167,40 +167,40 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
     public void uploadFiles() {
         List<String> files = new ArrayList<>();
         files.add(FileUtils.getSDCardPath() + "DCIM/Camera/679f6337gy1fr69ynfq3nj20hs0qodh0.jpg");
-//        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/IMG_20180902_144347.jpg");
-//        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/be933e1857.jpg"));
+        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/IMG_20180902_144347.jpg");
+        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/be933e1857.jpg");
 //        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/体质健康.zip");
 
-        RequestUtils.create(LoadService.class)
-                .uploadFile1(UpLoadUtils.filesToMultipartBody(files))
-                .compose(RxHelper.bindToLifecycle(this))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object objectBaseBean) throws Exception {
-
-                    }
-                });
-
-//        UpLoadUtils.uploadFiles(files, RequestUtils.create(LoadService.class))
+//        RequestUtils.create(LoadService.class)
+//                .uploadFile1(UpLoadUtils.filesToMultipartBody(files))
 //                .compose(RxHelper.bindToLifecycle(this))
-//                .subscribe(new LoadCallBack<Object>() {
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Consumer<Object>() {
 //                    @Override
-//                    protected void onProgress(String percent) {
-////                        L.e("进度", percent + "%-->" + Thread.currentThread().getName());
-//                    }
-//
-//                    @Override
-//                    protected void onSuccess(Object t) {
-//
-//                    }
-//
-//                    @Override
-//                    protected void updataLayout(int flag) {
+//                    public void accept(Object objectBaseBean) throws Exception {
 //
 //                    }
 //                });
+
+        UpLoadUtils.uploadFiles(files, RequestUtils.create(LoadService.class))
+                .compose(RxHelper.bindToLifecycle(this))
+                .subscribe(new LoadCallBack<Object>() {
+                    @Override
+                    protected void onProgress(String percent) {
+                        L.e("进度M", percent + "%-->" + Thread.currentThread().getName());
+                    }
+
+                    @Override
+                    protected void onSuccess(Object t) {
+
+                    }
+
+                    @Override
+                    protected void updataLayout(int flag) {
+
+                    }
+                });
     }
 
     /**

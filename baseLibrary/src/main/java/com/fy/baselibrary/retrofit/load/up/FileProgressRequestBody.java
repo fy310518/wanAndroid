@@ -17,13 +17,13 @@ import okio.Source;
 public class FileProgressRequestBody extends RequestBody {
 
     protected File file;
-    protected ProgressListener listener;
     protected String contentType;
+    protected UploadOnSubscribe subscribe;
 
-    public FileProgressRequestBody(File file, String contentType, ProgressListener listener) {
+    public FileProgressRequestBody(File file, String contentType, UploadOnSubscribe subscribe) {
         this.file = file;
         this.contentType = contentType;
-        this.listener = listener;
+        this.subscribe = subscribe;
     }
 
     public FileProgressRequestBody(File file, String contentType) {
@@ -63,10 +63,10 @@ public class FileProgressRequestBody extends RequestBody {
 
                 if (!ispercent && sum > 1){
                     String percent = TransfmtUtils.doubleToKeepTwoDecimalPlaces(100d * total / contentLength());
-//                    listener.transferred(percent);
-
                     percent = percent.equals("100.0") ? "----100" : percent;
-                    L.e("进度", percent + "%-->" + file.getName() + "-->" + Thread.currentThread().getId());
+                    L.e("进度R", percent + "%-->" + file.getName() + "-->" + Thread.currentThread().getId());
+
+                    subscribe.onRead(read);
                 }
             }
         } finally {
@@ -74,8 +74,4 @@ public class FileProgressRequestBody extends RequestBody {
         }
     }
 
-
-    public interface ProgressListener {
-        void transferred(String percent);
-    }
 }

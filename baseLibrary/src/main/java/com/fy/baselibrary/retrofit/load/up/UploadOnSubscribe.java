@@ -1,5 +1,8 @@
 package com.fy.baselibrary.retrofit.load.up;
 
+import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.TransfmtUtils;
+
 import java.util.concurrent.atomic.AtomicLong;
 
 import io.reactivex.ObservableEmitter;
@@ -15,28 +18,29 @@ public class UploadOnSubscribe implements ObservableOnSubscribe<Double> {
     public long mSumLength = 0L;//总长度
     public AtomicLong uploaded = new AtomicLong();//已经上传 长度
 
-    private double mPercent = 0;//当前上传进度 百分比
+    private double mPercent = 0;//已经上传进度 百分比
 
-    public UploadOnSubscribe(long sumLength) {
-        this.mSumLength = sumLength;
-    }
+    public UploadOnSubscribe() {}
 
     @Override
     public void subscribe(ObservableEmitter<Double> e) throws Exception {
         this.mObservableEmitter = e;
     }
 
-    public void onRead(double percent) {
+    public void onRead(long read) {
+        uploaded.addAndGet(read);
+
         if (mSumLength <= 0) {
             onProgress(0);
         } else {
-            onProgress(percent);
+            onProgress(100d * uploaded.get() / mSumLength);
         }
     }
 
     private void onProgress(double percent) {
         if (null == mObservableEmitter) return;
         if (percent == mPercent) return;
+        L.e("进度E", uploaded.get() + "--/--" + mSumLength + "-->" + Thread.currentThread().getName());
 
         mPercent = percent;
         if (percent >= 100) {
@@ -46,5 +50,9 @@ public class UploadOnSubscribe implements ObservableOnSubscribe<Double> {
             return;
         }
         mObservableEmitter.onNext(percent);
+    }
+
+    public void setmSumLength(long mSumLength) {
+        this.mSumLength = mSumLength;
     }
 }

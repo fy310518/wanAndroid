@@ -75,11 +75,11 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
 
     @Override
     public ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-        if (null != mHeaderViews.get(viewType)) {
+        if (null != mHeaderViews.get(viewType)) {//头
             return ViewHolder.createViewHolder(parent.getContext(), mHeaderViews.get(viewType));
-        } else if (null != mFootViews.get(viewType)) {
+        } else if (null != mFootViews.get(viewType)) {//尾
             return ViewHolder.createViewHolder(parent.getContext(), mFootViews.get(viewType));
-        } else {
+        } else {//主体
             ViewHolder viewHolder = ViewHolder.createViewHolder(mContext, parent, mLayoutId);
             bindOnClick(viewHolder);
             return viewHolder;
@@ -92,8 +92,8 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
             return;
         }
 
-        int centerPosition = position - getHeadersCount();
-        convert(holder, mDatas.get(centerPosition), centerPosition);
+        int centerPosition = position - getHeadersCount();//计算 主体数据 position
+        convert(holder, mDatas.get(centerPosition), position);
 
 //        设置 tag 对应 onCreateViewHolder() 设置点击事件
         holder.itemView.setTag(mDatas.get(centerPosition));
@@ -200,7 +200,7 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
      * @param location
      */
     public void removeData(int location) {
-        if (location < getItemCount()) this.mDatas.remove(location);
+        if (location < getItemCount()) this.mDatas.remove(location - getHeadersCount());
     }
 
 
