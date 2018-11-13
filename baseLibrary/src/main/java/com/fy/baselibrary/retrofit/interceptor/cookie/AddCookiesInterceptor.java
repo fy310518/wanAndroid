@@ -1,4 +1,4 @@
-package com.fy.baselibrary.retrofit.cookie;
+package com.fy.baselibrary.retrofit.interceptor.cookie;
 
 import android.annotation.SuppressLint;
 
@@ -8,7 +8,6 @@ import com.fy.baselibrary.utils.SpfUtils;
 import java.io.IOException;
 
 import io.reactivex.Observable;
-import io.reactivex.functions.Consumer;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;

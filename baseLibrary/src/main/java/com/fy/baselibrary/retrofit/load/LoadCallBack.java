@@ -5,18 +5,23 @@ import android.text.TextUtils;
 
 import com.fy.baselibrary.ioc.ConfigUtils;
 import com.fy.baselibrary.retrofit.RequestBaseObserver;
-import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
+import com.fy.baselibrary.retrofit.IProgressDialog;
 import com.fy.baselibrary.utils.Constant;
+import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.TransfmtUtils;
 import com.fy.baselibrary.utils.cache.ACache;
 
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * 自定义文件上传、下载 观察者 (增强 NetCallBAck)
+ * 自定义文件上传、下载 观察者 (增强 RequestBaseObserver)
  * Created by fangs on 2018/5/21.
  */
 public abstract class LoadCallBack<T> extends RequestBaseObserver<T> {
+
+    public long mSumLength = 0L;//总长度
+    public AtomicLong uploaded = new AtomicLong();//已经上传 长度
+    private double mPercent = 0;//已经上传进度 百分比
 
     public LoadCallBack() {}
 
@@ -39,25 +44,34 @@ public abstract class LoadCallBack<T> extends RequestBaseObserver<T> {
     }
 
 
+    public void onRead(long read) {
+        uploaded.addAndGet(read);
+
+        if (mSumLength <= 0) {
+            onProgress("0");
+        } else {
+            double progress = 100d * uploaded.get() / mSumLength;
+
+            if (progress >= 100) {
+                onProgress("100");
+                onComplete();
+            } else {
+                String percent = TransfmtUtils.doubleToKeepTwoDecimalPlaces(progress);
+                onProgress(percent);
+            }
+        }
+    }
+
+    public void setmSumLength(long mSumLength) {
+        this.mSumLength = mSumLength;
+    }
+
 
     /**
      * 下载
      */
     private String url;
-    public long mSumLength = 0L;//总长度
     public AtomicLong loaded = new AtomicLong();//已经下载的 总长度
-
-    private double mPercent = 0;//进度百分比 数
-
-    public void onRead(long read) {
-        loaded.addAndGet(read);
-
-        if (mSumLength <= 0) {
-            onPercent(-1);
-        } else {
-            onPercent(100d * loaded.get() / mSumLength);
-        }
-    }
 
     /**
      * 计算 上传、下载 进度百分比
@@ -91,17 +105,4 @@ public abstract class LoadCallBack<T> extends RequestBaseObserver<T> {
             mCache.put(url + Constant.DownTask, loaded.get());
         }
     }
-
-    public void setmSumLength(long mSumLength) {
-        this.mSumLength = mSumLength;
-    }
-
-
-
-    /**
-     * 上传、下载 进度回调方法
-     *
-     * @param percent
-     */
-    protected abstract void onProgress(String percent);
 }

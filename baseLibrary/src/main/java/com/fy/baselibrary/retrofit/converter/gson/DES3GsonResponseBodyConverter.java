@@ -1,4 +1,4 @@
-package com.fy.baselibrary.retrofit.gson;
+package com.fy.baselibrary.retrofit.converter.gson;
 
 import com.fy.baselibrary.utils.L;
 import com.google.gson.Gson;

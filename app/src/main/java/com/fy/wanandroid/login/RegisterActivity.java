@@ -13,7 +13,7 @@ import com.fy.baselibrary.ioc.ConfigUtils;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
-import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
+import com.fy.baselibrary.retrofit.IProgressDialog;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;

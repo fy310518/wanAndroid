@@ -6,7 +6,7 @@ import android.content.Intent;
 import com.fy.baselibrary.ioc.ConfigUtils;
 import com.fy.baselibrary.retrofit.RequestBaseObserver;
 import com.fy.baselibrary.retrofit.ServerException;
-import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
+import com.fy.baselibrary.retrofit.IProgressDialog;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.AppUtils;
 

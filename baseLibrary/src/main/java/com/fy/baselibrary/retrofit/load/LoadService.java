@@ -2,6 +2,7 @@ package com.fy.baselibrary.retrofit.load;
 
 import com.fy.baselibrary.retrofit.BaseBean;
 
+import java.io.File;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -37,6 +38,14 @@ public interface LoadService {
 
     /**
      * 多图片上传 方式一 （参数注解：@Body；参数类型：MultipartBody）
+     * @param files
+     * @return
+     */
+    @POST("http://192.168.100.123:8080/hfs/")
+    Observable<Object> uploadFile(@Body List<String> files);
+
+    /**
+     * 多图片上传 方式一 （参数注解：@Body；参数类型：MultipartBody）
      * @param multipartBody
      * @return
      */
@@ -50,6 +59,8 @@ public interface LoadService {
     @Multipart
     @POST("http://192.168.100.123:8080/hfs/")
     Observable<Object> uploadFile2(@Part List<MultipartBody.Part> files);
+
+
 
     /**
      * 文件下载

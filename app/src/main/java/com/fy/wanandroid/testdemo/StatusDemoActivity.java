@@ -28,7 +28,6 @@ import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.load.LoadCallBack;
 import com.fy.baselibrary.retrofit.load.LoadService;
-import com.fy.baselibrary.retrofit.load.up.UpLoadUtils;
 import com.fy.baselibrary.statuslayout.StatusLayout;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.FileUtils;
@@ -39,7 +38,6 @@ import com.fy.baselibrary.utils.imgload.imgprogress.ProgressListener;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.login.LoginActivity;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -167,24 +165,15 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
     public void uploadFiles() {
         List<String> files = new ArrayList<>();
         files.add(FileUtils.getSDCardPath() + "DCIM/Camera/679f6337gy1fr69ynfq3nj20hs0qodh0.jpg");
-        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/IMG_20180902_144347.jpg");
-        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/be933e1857.jpg");
+        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/IMG_20181108_144507.jpg");
+        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/IMG_20181108_143502.jpg");
 //        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/体质健康.zip");
 
-//        RequestUtils.create(LoadService.class)
-//                .uploadFile1(UpLoadUtils.filesToMultipartBody(files))
-//                .compose(RxHelper.bindToLifecycle(this))
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Consumer<Object>() {
-//                    @Override
-//                    public void accept(Object objectBaseBean) throws Exception {
-//
-//                    }
-//                });
-
-        UpLoadUtils.uploadFiles(files, RequestUtils.create(LoadService.class))
+        RequestUtils.create(LoadService.class)
+                .uploadFile(files)
                 .compose(RxHelper.bindToLifecycle(this))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new LoadCallBack<Object>() {
                     @Override
                     protected void onProgress(String percent) {
@@ -201,6 +190,25 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
                     }
                 });
+
+//        UpLoadUtils.uploadFiles(files, RequestUtils.create(LoadService.class))
+//                .compose(RxHelper.bindToLifecycle(this))
+//                .subscribe(new LoadCallBack<Object>() {
+//                    @Override
+//                    protected void onProgress(String percent) {
+//                        L.e("进度M", percent + "%-->" + Thread.currentThread().getName());
+//                    }
+//
+//                    @Override
+//                    protected void onSuccess(Object t) {
+//
+//                    }
+//
+//                    @Override
+//                    protected void updataLayout(int flag) {
+//
+//                    }
+//                });
     }
 
     /**

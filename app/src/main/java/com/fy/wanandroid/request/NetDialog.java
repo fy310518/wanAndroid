@@ -9,7 +9,7 @@ import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.base.dialog.CommonDialog;
 import com.fy.baselibrary.base.dialog.DialogConvertListener;
 import com.fy.baselibrary.base.dialog.NiceDialog;
-import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
+import com.fy.baselibrary.retrofit.IProgressDialog;
 import com.fy.baselibrary.utils.drawable.ShapeBuilder;
 import com.fy.wanandroid.R;
 

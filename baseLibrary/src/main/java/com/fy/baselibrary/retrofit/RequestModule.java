@@ -3,8 +3,9 @@ package com.fy.baselibrary.retrofit;
 import android.text.TextUtils;
 
 import com.fy.baselibrary.ioc.ConfigUtils;
-import com.fy.baselibrary.retrofit.cookie.AddCookiesInterceptor;
-import com.fy.baselibrary.retrofit.cookie.ReceivedCookiesInterceptor;
+import com.fy.baselibrary.retrofit.converter.file.FileConverterFactory;
+import com.fy.baselibrary.retrofit.interceptor.cookie.AddCookiesInterceptor;
+import com.fy.baselibrary.retrofit.interceptor.cookie.ReceivedCookiesInterceptor;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.security.SSLUtil;
@@ -17,8 +18,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 
 import dagger.Module;
@@ -47,6 +46,7 @@ public class RequestModule {
     protected Retrofit getService(RxJava2CallAdapterFactory callAdapterFactory, GsonConverterFactory
             gsonConverterFactory, OkHttpClient client) {
         return new Retrofit.Builder()
+                .addConverterFactory(new FileConverterFactory())
                 .addCallAdapterFactory(callAdapterFactory)
                 .addConverterFactory(gsonConverterFactory)
                 .baseUrl(ConfigUtils.getBaseUrl())

@@ -1,7 +1,6 @@
 package com.fy.baselibrary.retrofit.load.up;
 
 import com.fy.baselibrary.retrofit.load.LoadService;
-import com.fy.baselibrary.utils.L;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -58,7 +57,7 @@ public class UpLoadUtils {
      * @return MultipartBody（retrofit 多文件文件上传）
      */
     public static <T> MultipartBody filesToMultipartBody(List<T> files) {
-        MultipartBody.Builder builder = new MultipartBody.Builder();
+        MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
 
         File file;
         for (T t : files) {
@@ -70,8 +69,6 @@ public class UpLoadUtils {
             FileProgressRequestBody requestBody = new FileProgressRequestBody(file, "multipart/form-data");
             builder.addFormDataPart("file", file.getName(), requestBody);
         }
-
-        builder.setType(MultipartBody.FORM);
 
         return builder.build();
     }

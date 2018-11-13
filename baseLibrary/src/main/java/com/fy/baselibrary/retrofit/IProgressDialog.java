@@ -1,16 +1,8 @@
-package com.fy.baselibrary.retrofit.dialog;
+package com.fy.baselibrary.retrofit;
 
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 
-import com.fy.baselibrary.R;
-import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.base.dialog.CommonDialog;
-import com.fy.baselibrary.base.dialog.DialogConvertListener;
-import com.fy.baselibrary.base.dialog.NiceDialog;
 
 /**
  * 自定义对话框的dialog

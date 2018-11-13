@@ -1,4 +1,4 @@
-package com.fy.baselibrary.retrofit.cookie;
+package com.fy.baselibrary.retrofit.interceptor.cookie;
 
 import android.annotation.SuppressLint;
 

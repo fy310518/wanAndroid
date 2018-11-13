@@ -2,7 +2,6 @@ package com.fy.baselibrary.retrofit;
 
 import com.fy.baselibrary.ioc.ConfigUtils;
 import com.fy.baselibrary.base.dialog.CommonDialog;
-import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NetUtils;
@@ -147,5 +146,14 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
      * @param flag 请求状态flag
      */
     protected abstract void updataLayout(int flag);
+
+
+    /**
+     * 上传、下载 需重写此方法，更新进度
+     * @param percent 进度百分比 数
+     */
+    protected void onProgress(String percent){
+
+    }
 
 }

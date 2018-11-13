@@ -1,4 +1,4 @@
-package com.fy.baselibrary.retrofit.gson;
+package com.fy.baselibrary.retrofit.converter.gson;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
@@ -15,7 +15,6 @@ import retrofit2.Retrofit;
 /**
  * Created by Alois on 2017/5/22.
  */
-
 public class DES3GsonConverterFactory extends Converter.Factory{
 
     public static DES3GsonConverterFactory create() {

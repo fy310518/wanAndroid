@@ -14,6 +14,10 @@ import okio.BufferedSink;
 import okio.Okio;
 import okio.Source;
 
+/**
+ * 上传文件 计算上传进度 请求体
+ * Created by fangs on 2018/11/12.
+ */
 public class FileProgressRequestBody extends RequestBody {
 
     protected File file;
@@ -66,7 +70,7 @@ public class FileProgressRequestBody extends RequestBody {
                     percent = percent.equals("100.0") ? "----100" : percent;
                     L.e("进度R", percent + "%-->" + file.getName() + "-->" + Thread.currentThread().getId());
 
-                    subscribe.onRead(read);
+                    if (null != subscribe)subscribe.onRead(read);
                 }
             }
         } finally {
