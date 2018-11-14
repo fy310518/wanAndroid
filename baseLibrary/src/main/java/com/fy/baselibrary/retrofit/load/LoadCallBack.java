@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import com.fy.baselibrary.ioc.ConfigUtils;
 import com.fy.baselibrary.retrofit.RequestBaseObserver;
 import com.fy.baselibrary.retrofit.IProgressDialog;
+import com.fy.baselibrary.retrofit.RequestUtils;
+import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.TransfmtUtils;
@@ -39,26 +41,10 @@ public abstract class LoadCallBack<T> extends RequestBaseObserver<T> {
             String percent = TransfmtUtils.doubleToKeepTwoDecimalPlaces(((Double) t).doubleValue());
             onProgress(percent);
         } else {
+            L.e("进度E", "完成-->" + Thread.currentThread().getName());
             super.onNext(t);
-        }
-    }
-
-
-    public void onRead(long read) {
-        uploaded.addAndGet(read);
-
-        if (mSumLength <= 0) {
-            onProgress("0");
-        } else {
-            double progress = 100d * uploaded.get() / mSumLength;
-
-            if (progress >= 100) {
-                onProgress("100");
-                onComplete();
-            } else {
-                String percent = TransfmtUtils.doubleToKeepTwoDecimalPlaces(progress);
-                onProgress(percent);
-            }
+//            onComplete();
+            RequestUtils.getUploadOnSubscribe().clean();
         }
     }
 

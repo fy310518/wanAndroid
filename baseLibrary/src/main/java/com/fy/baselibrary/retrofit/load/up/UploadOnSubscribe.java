@@ -1,7 +1,6 @@
 package com.fy.baselibrary.retrofit.load.up;
 
 import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.utils.TransfmtUtils;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -40,19 +39,26 @@ public class UploadOnSubscribe implements ObservableOnSubscribe<Double> {
     private void onProgress(double percent) {
         if (null == mObservableEmitter) return;
         if (percent == mPercent) return;
-        L.e("进度E", uploaded.get() + "--/--" + mSumLength + "-->" + Thread.currentThread().getName());
 
+        L.e("进度E", (int)percent + "-->" + percent);
         mPercent = percent;
-        if (percent >= 100) {
+        if (percent >= 100d) {
             percent = 100;
             mObservableEmitter.onNext(percent);
             mObservableEmitter.onComplete();
-            return;
+        } else {
+            mObservableEmitter.onNext(percent);
         }
-        mObservableEmitter.onNext(percent);
     }
 
     public void setmSumLength(long mSumLength) {
         this.mSumLength = mSumLength;
+    }
+
+    //上传完成 清理进度数据
+    public void clean() {
+        this.mPercent = 0;
+        this.uploaded = new AtomicLong();
+        this.mSumLength = 0L;
     }
 }

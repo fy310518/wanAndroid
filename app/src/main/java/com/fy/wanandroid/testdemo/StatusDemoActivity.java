@@ -160,24 +160,24 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                 });
     }
 
+    /**
+     * 上传多个文件，监听进度 demo
+     */
     @NeedPermission(value = {Manifest.permission.WRITE_EXTERNAL_STORAGE})
-    @SuppressLint("CheckResult")
     public void uploadFiles() {
         List<String> files = new ArrayList<>();
         files.add(FileUtils.getSDCardPath() + "DCIM/Camera/679f6337gy1fr69ynfq3nj20hs0qodh0.jpg");
         files.add(FileUtils.getSDCardPath() + "DCIM/Camera/IMG_20181108_144507.jpg");
         files.add(FileUtils.getSDCardPath() + "DCIM/Camera/IMG_20181108_143502.jpg");
-//        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/体质健康.zip");
-
-        RequestUtils.create(LoadService.class)
-                .uploadFile(files)
+        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/体质健康.zip");
+        Observable.merge(RequestUtils.getProgressObservale(), RequestUtils.create(LoadService.class).uploadFile(files))
                 .compose(RxHelper.bindToLifecycle(this))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new LoadCallBack<Object>() {
                     @Override
                     protected void onProgress(String percent) {
-                        L.e("进度M", percent + "%-->" + Thread.currentThread().getName());
+                        tvKing.setText(percent + "%");
                     }
 
                     @Override
@@ -190,7 +190,6 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
                     }
                 });
-
 //        UpLoadUtils.uploadFiles(files, RequestUtils.create(LoadService.class))
 //                .compose(RxHelper.bindToLifecycle(this))
 //                .subscribe(new LoadCallBack<Object>() {

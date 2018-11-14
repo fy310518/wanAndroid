@@ -1,6 +1,7 @@
 package com.fy.baselibrary.retrofit;
 
 import com.fy.baselibrary.ioc.ConfigUtils;
+import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.cache.ACache;
 
@@ -29,6 +30,11 @@ public class RequestUtils {
 
     @Inject
     protected Retrofit netRetrofit;
+    @Inject
+    protected Observable<Double> progressObservale;
+    @Inject
+    protected UploadOnSubscribe uploadOnSubscribe;
+
     protected CompositeDisposable mCompositeDisposable;
 
     private RequestUtils() {
@@ -37,7 +43,7 @@ public class RequestUtils {
         mCompositeDisposable = new CompositeDisposable();
     }
 
-    public static synchronized RequestUtils getInstance(){
+    public static synchronized RequestUtils getInstance() {
         if (null == instentce) {
             synchronized (RequestUtils.class) {
                 if (null == instentce) {
@@ -51,6 +57,7 @@ public class RequestUtils {
 
     /**
      * 得到 RxJava + Retrofit 被观察者 实体类
+     *
      * @param clazz 被观察者 类（ApiService.class）
      * @param <T>   被观察者 实体类（ApiService）
      * @return 封装的网络请求api
@@ -61,26 +68,26 @@ public class RequestUtils {
 
     /**
      * 同时从缓存和网络获取请求结果
+     *
      * @param fromNetwork 从网络获取数据的 Observable
-     * @param apiKey key
-     * @param <T> 泛型
+     * @param apiKey      key
+     * @param <T>         泛型
      * @return 被观察者
      */
     public static <T> Observable<T> request(Observable<T> fromNetwork, String apiKey) {
-
         /** 定义读取缓存数据的 被观察者 */
         Observable<T> fromCache = Observable.create(new ObservableOnSubscribe<T>() {
-            @Override
-            public void subscribe(@NonNull ObservableEmitter<T> subscriber) throws Exception {
+            public void subscribe(ObservableEmitter<T> emitter) throws Exception {
                 ACache mCache = ACache.get(ConfigUtils.getAppCtx());
                 T cache = (T) mCache.getAsObject(apiKey);
                 if (null != cache) {
                     L.e("net cache", cache.toString());
-                    subscriber.onNext(cache);
+                    emitter.onNext(cache);
                 }
-                subscriber.onComplete();
+                emitter.onComplete();
             }
-        }).subscribeOn(Schedulers.io())
+        })
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
         /**
@@ -92,7 +99,7 @@ public class RequestUtils {
             public void accept(T result) throws Exception {
                 L.e("net doOnNext", result.toString());
                 ACache mCache = ACache.get(ConfigUtils.getAppCtx());
-                mCache.put(apiKey, (Serializable)result);
+                mCache.put(apiKey, (Serializable) result);
             }
         });
 
@@ -100,19 +107,38 @@ public class RequestUtils {
     }
 
 
+    /**
+     * 获取上传文件 进度 被观察者
+     *
+     * @return Observable
+     */
+    public static Observable<Double> getProgressObservale() {
+        return getInstance().progressObservale;
+    }
+
+    /**
+     * 获取上传文件 进度 发射器
+     *
+     * @return ObservableOnSubscribe
+     */
+    public static UploadOnSubscribe getUploadOnSubscribe() {
+        return getInstance().uploadOnSubscribe;
+    }
+
 
     /**
      * 使用RxJava CompositeDisposable 控制请求队列
+     *
      * @param d 切断订阅事件 接口
      */
-    public static void addDispos(Disposable d){
+    public static void addDispos(Disposable d) {
         getInstance().mCompositeDisposable.add(d);
     }
 
     /**
      * 使用RxJava CompositeDisposable 清理所有的网络请求
      */
-    public static void clearDispos(){
+    public static void clearDispos() {
         getInstance().mCompositeDisposable.clear();
     }
 
