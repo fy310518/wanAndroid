@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.ArrayMap;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.load.LoadCallBack;
 import com.fy.baselibrary.retrofit.load.LoadService;
+import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
 import com.fy.baselibrary.statuslayout.StatusLayout;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.FileUtils;
@@ -66,6 +68,8 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
     RecyclerView rv;
     @BindView(R.id.tvKing)
     TextView tvKing;
+    @BindView(R.id.tvKing2)
+    TextView tvKing2;
 
     @Override
     public boolean isShowHeadView() {
@@ -86,7 +90,19 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
         initNotificationChannel();
 
-        uploadFiles();
+        List<String> files = new ArrayList<>();
+        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/679f6337gy1fr69ynfq3nj20hs0qodh0.jpg");
+        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/IMG_20181108_144507.jpg");
+        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/IMG_20181108_143502.jpg");
+        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/RED,胡歌 - 逍遥叹（Cover 胡歌）.mp3");
+        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/马郁 - 下辈子如果我还记得你.mp3");
+        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/序人Hm - 再见（cover：张震岳）.mp3");
+
+        uploadFiles(files, tvKing);
+
+        List<String> files1 = new ArrayList<>();
+        files1.add(FileUtils.getSDCardPath() + "DCIM/Camera/体质健康.zip");
+        uploadFiles(files1, tvKing2);
 //        uploadFiles();
 
 //        loadImage();
@@ -164,20 +180,20 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
      * 上传多个文件，监听进度 demo
      */
     @NeedPermission(value = {Manifest.permission.WRITE_EXTERNAL_STORAGE})
-    public void uploadFiles() {
-        List<String> files = new ArrayList<>();
-        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/679f6337gy1fr69ynfq3nj20hs0qodh0.jpg");
-        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/IMG_20181108_144507.jpg");
-        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/IMG_20181108_143502.jpg");
-        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/体质健康.zip");
-        Observable.merge(RequestUtils.getProgressObservale(), RequestUtils.create(LoadService.class).uploadFile(files))
+    public synchronized void uploadFiles(List<String> files, TextView textView) {
+        UploadOnSubscribe uploadOnSubscribe = new UploadOnSubscribe();
+        ArrayMap<String, Object> params = new ArrayMap<>();
+        params.put("filePathList", files);
+        params.put("UploadOnSubscribe", uploadOnSubscribe);
+
+        Observable.merge(Observable.create(uploadOnSubscribe), RequestUtils.create(LoadService.class).uploadFile(params))
                 .compose(RxHelper.bindToLifecycle(this))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new LoadCallBack<Object>() {
                     @Override
                     protected void onProgress(String percent) {
-                        tvKing.setText(percent + "%");
+                        textView.setText(percent + "%");
                     }
 
                     @Override

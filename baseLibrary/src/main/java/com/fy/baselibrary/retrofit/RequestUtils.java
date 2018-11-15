@@ -1,7 +1,6 @@
 package com.fy.baselibrary.retrofit;
 
 import com.fy.baselibrary.ioc.ConfigUtils;
-import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.cache.ACache;
 
@@ -13,7 +12,6 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -30,10 +28,6 @@ public class RequestUtils {
 
     @Inject
     protected Retrofit netRetrofit;
-    @Inject
-    protected Observable<Double> progressObservale;
-    @Inject
-    protected UploadOnSubscribe uploadOnSubscribe;
 
     protected CompositeDisposable mCompositeDisposable;
 
@@ -104,25 +98,6 @@ public class RequestUtils {
         });
 
         return Observable.concat(fromCache, fromNetwork);
-    }
-
-
-    /**
-     * 获取上传文件 进度 被观察者
-     *
-     * @return Observable
-     */
-    public static Observable<Double> getProgressObservale() {
-        return getInstance().progressObservale;
-    }
-
-    /**
-     * 获取上传文件 进度 发射器
-     *
-     * @return ObservableOnSubscribe
-     */
-    public static UploadOnSubscribe getUploadOnSubscribe() {
-        return getInstance().uploadOnSubscribe;
     }
 
 

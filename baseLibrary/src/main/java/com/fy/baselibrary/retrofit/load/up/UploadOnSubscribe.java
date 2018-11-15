@@ -40,7 +40,7 @@ public class UploadOnSubscribe implements ObservableOnSubscribe<Double> {
         if (null == mObservableEmitter) return;
         if (percent == mPercent) return;
 
-        L.e("进度E", (int)percent + "-->" + percent);
+//        L.e("进度E", (int)percent + "-->" + percent);
         mPercent = percent;
         if (percent >= 100d) {
             percent = 100;

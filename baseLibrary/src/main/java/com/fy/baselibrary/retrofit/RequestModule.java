@@ -6,7 +6,6 @@ import com.fy.baselibrary.ioc.ConfigUtils;
 import com.fy.baselibrary.retrofit.converter.file.FileConverterFactory;
 import com.fy.baselibrary.retrofit.interceptor.cookie.AddCookiesInterceptor;
 import com.fy.baselibrary.retrofit.interceptor.cookie.ReceivedCookiesInterceptor;
-import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.security.SSLUtil;
@@ -23,7 +22,6 @@ import javax.net.ssl.SSLSocketFactory;
 
 import dagger.Module;
 import dagger.Provides;
-import io.reactivex.Observable;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -174,19 +172,5 @@ public class RequestModule {
                 return response;
             }
         };
-    }
-
-
-/*************************************以下是文件上传进度监听相关配置********************************/
-    @Singleton
-    @Provides
-    protected Observable<Double> getProgressObservale(UploadOnSubscribe uploadOnSubscribe) {
-        return Observable.create(uploadOnSubscribe);
-    }
-
-    @Singleton
-    @Provides
-    protected UploadOnSubscribe getUploadOnSubscribe() {
-        return new UploadOnSubscribe();
     }
 }

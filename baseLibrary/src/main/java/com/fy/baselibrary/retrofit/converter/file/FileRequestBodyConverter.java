@@ -1,5 +1,7 @@
 package com.fy.baselibrary.retrofit.converter.file;
 
+import android.util.ArrayMap;
+
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.load.up.FileProgressRequestBody;
 import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
@@ -18,12 +20,26 @@ import retrofit2.Converter;
  * 上传文件 请求转换器
  * Created by fangs on 2018/11/12.
  */
-public class FileRequestBodyConverter implements Converter<List<String>, RequestBody> {
+public class FileRequestBodyConverter implements Converter<ArrayMap<String, Object>, RequestBody> {
+
+    //进度发射器
+    UploadOnSubscribe uploadOnSubscribe;
+
+    public FileRequestBodyConverter() {
+    }
 
     @Override
-    public RequestBody convert(List<String> files) throws IOException {
+    public RequestBody convert(ArrayMap<String, Object> params) throws IOException {
 
-        return filesToMultipartBody(files);
+        uploadOnSubscribe = (UploadOnSubscribe) params.get("UploadOnSubscribe");
+
+        if (params.containsKey("filePathList")){
+            return filesToMultipartBody((List<String>)params.get("filePathList"));
+        } else if (params.containsKey("files")){
+            return filesToMultipartBody((List<File>) params.get("files"));
+        } else {
+            return null;
+        }
     }
 
 
@@ -34,9 +50,6 @@ public class FileRequestBodyConverter implements Converter<List<String>, Request
      * @return MultipartBody（retrofit 多文件文件上传）
      */
     public <T> MultipartBody filesToMultipartBody(List<T> files) throws IOException {
-
-        //进度发射器
-        UploadOnSubscribe uploadOnSubscribe = RequestUtils.getUploadOnSubscribe();
 
         MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
 
