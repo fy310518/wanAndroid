@@ -49,7 +49,7 @@ public class FileRequestBodyConverter implements Converter<ArrayMap<String, Obje
      * @param <T> 泛型（File 或者 String）
      * @return MultipartBody（retrofit 多文件文件上传）
      */
-    public <T> MultipartBody filesToMultipartBody(List<T> files) throws IOException {
+    public synchronized <T> MultipartBody filesToMultipartBody(List<T> files) {
 
         MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
 
@@ -79,7 +79,7 @@ public class FileRequestBodyConverter implements Converter<ArrayMap<String, Obje
      * @param <T>   泛型
      * @return MultipartBody.Part列表（retrofit 多文件文件上传）
      */
-    public static <T> List<MultipartBody.Part> filesToMultipartBodyPart(List<T> files) {
+    public synchronized static <T> List<MultipartBody.Part> filesToMultipartBodyPart(List<T> files) {
         List<MultipartBody.Part> parts = new ArrayList<>(files.size());
 
         File file;

@@ -2,6 +2,8 @@ package com.fy.baselibrary.retrofit.converter.file;
 
 import android.support.annotation.Nullable;
 
+import com.fy.baselibrary.retrofit.load.up.UpLoadFileType;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
@@ -22,7 +24,14 @@ public class FileConverterFactory extends Converter.Factory {
                                                           Annotation[] parameterAnnotations,
                                                           Annotation[] methodAnnotations,
                                                           Retrofit retrofit) {
-        return new FileRequestBodyConverter();
+        //进行条件判断，如果传进来的 methodAnnotations 不包含 UpLoadFileType，则匹配失败
+        for( Annotation annotation : methodAnnotations) {
+            if( annotation instanceof UpLoadFileType) {
+                return new FileRequestBodyConverter();
+            }
+        }
+
+        return null;
     }
 
     @Nullable

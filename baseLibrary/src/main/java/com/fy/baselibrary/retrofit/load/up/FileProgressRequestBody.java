@@ -24,18 +24,13 @@ public class FileProgressRequestBody extends RequestBody {
     protected String contentType;
     protected UploadOnSubscribe subscribe;
 
+    protected FileProgressRequestBody() {}
+
     public FileProgressRequestBody(File file, String contentType, UploadOnSubscribe subscribe) {
         this.file = file;
         this.contentType = contentType;
         this.subscribe = subscribe;
     }
-
-    public FileProgressRequestBody(File file, String contentType) {
-        this.file = file;
-        this.contentType = contentType;
-    }
-
-    protected FileProgressRequestBody() {}
 
     @Override
     public long contentLength() {
@@ -47,7 +42,7 @@ public class FileProgressRequestBody extends RequestBody {
         return MediaType.parse(contentType);
     }
 
-    private int sum;//加这个参数 是因为不同的手机系统，这个回调方法执行次数不同（如手里有的一个华为手机、华为平板执行3次，三星执行两次）
+    private int sum;//todo 加这个参数 是因为不同的手机系统，这个回调方法执行次数不同原因未知（手里有的一个华为手机、华为平板执行3次，三星执行两次）
     public static final int SEGMENT_SIZE = 2048;
     @Override
     public void writeTo(BufferedSink sink) throws IOException {

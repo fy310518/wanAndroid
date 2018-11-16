@@ -3,6 +3,7 @@ package com.fy.baselibrary.retrofit.load;
 import android.util.ArrayMap;
 
 import com.fy.baselibrary.retrofit.BaseBean;
+import com.fy.baselibrary.retrofit.load.up.UpLoadFileType;
 
 import java.io.File;
 import java.util.List;
@@ -43,16 +44,9 @@ public interface LoadService {
      * @param params
      * @return
      */
+    @UpLoadFileType
     @POST("http://192.168.100.123:8080/hfs/")
     Observable<Object> uploadFile(@Body ArrayMap<String, Object> params);
-
-    /**
-     * 多图片上传 方式一 （参数注解：@Body；参数类型：MultipartBody）
-     * @param multipartBody
-     * @return
-     */
-    @POST("http://192.168.100.123:8080/hfs/")
-    Observable<Object> uploadFile1(@Body MultipartBody multipartBody);
 
     /**
      * 多图片上传 方式二（@Multipart：方法注解；@Part：参数注解；参数类型；MultipartBody.Part）

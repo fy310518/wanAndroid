@@ -180,7 +180,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
      * 上传多个文件，监听进度 demo
      */
     @NeedPermission(value = {Manifest.permission.WRITE_EXTERNAL_STORAGE})
-    public synchronized void uploadFiles(List<String> files, TextView textView) {
+    public void uploadFiles(List<String> files, TextView textView) {
         UploadOnSubscribe uploadOnSubscribe = new UploadOnSubscribe();
         ArrayMap<String, Object> params = new ArrayMap<>();
         params.put("filePathList", files);
