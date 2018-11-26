@@ -3,12 +3,11 @@ package com.fy.wanandroid;
 import android.app.Application;
 
 import com.fy.baselibrary.application.BaseActivityLifecycleCallbacks;
-import com.fy.baselibrary.ioc.ConfigUtils;
+import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NightModeUtils;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
-import com.fy.baselibrary.utils.SpfUtils;
 
 /**
  * Created by fangs on 2018/7/24 17:36.

@@ -22,7 +22,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.fy.baselibrary.aop.annotation.StatusBar;
-import com.fy.baselibrary.ioc.ConfigUtils;
+import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.startactivity.StartActivity;
 import com.fy.baselibrary.statusbar.StatusBarContentColor;

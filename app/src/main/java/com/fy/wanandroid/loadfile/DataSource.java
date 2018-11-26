@@ -14,7 +14,6 @@ public class DataSource {
     private static DataSource sDataSource = new DataSource();
 
     private static final String[] NAMES = {
-            "手机QQ",
             "网易云音乐",
             "京东",
             "微信",
@@ -27,7 +26,6 @@ public class DataSource {
     };
 
     private static final String[] IMAGES = {
-            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1528460147401&di=29d9e9e139c10805d8a27cdcab5a4a3a&imgtype=jpg&src=http%3A%2F%2Fimg3.imgtn.bdimg.com%2Fit%2Fu%3D3122134133%2C674706722%26fm%3D214%26gp%3D0.jpg",
             "http://img.wdjimg.com/mms/icon/v1/d/f1/1c8ebc9ca51390cf67d1c3c3d3298f1d_512_512.png",
             "http://img0.imgtn.bdimg.com/it/u=2054164741,3414392271&fm=27&gp=0.jpg",
             "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1528459943851&di=4ae7d508ea81db9fec68472bf3e5539c&imgtype=0&src=http%3A%2F%2Ftx.haiqq.com%2Fuploads%2Fallimg%2F170813%2F05350M031-6.jpg",
@@ -40,7 +38,6 @@ public class DataSource {
     };
 
     private static final String[] URLS = {
-            "http://dl001.liqucn.com/upload/2017/290/q/com.tencent.mobileqq_7.6.5_liqucn.com.apk",
             "http://s1.music.126.net/download/android/CloudMusic_2.8.1_official_4.apk",
             "http://dl001.liqucn.com/upload/2018/277/l/jd01.apk",
             "http://dl001.liqucn.com/upload/2017/290/m/com.tencent.mm_6.6.7_liqucn.com.apk",

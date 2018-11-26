@@ -2,7 +2,7 @@ package com.fy.baselibrary.retrofit;
 
 import android.text.TextUtils;
 
-import com.fy.baselibrary.ioc.ConfigUtils;
+import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.retrofit.converter.file.FileConverterFactory;
 import com.fy.baselibrary.retrofit.interceptor.cookie.AddCookiesInterceptor;
 import com.fy.baselibrary.retrofit.interceptor.cookie.ReceivedCookiesInterceptor;

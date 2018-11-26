@@ -1,7 +1,5 @@
 package com.fy.baselibrary.retrofit.load.up;
 
-import com.fy.baselibrary.utils.L;
-
 import java.util.concurrent.atomic.AtomicLong;
 
 import io.reactivex.ObservableEmitter;

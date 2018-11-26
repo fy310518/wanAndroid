@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fy.baselibrary.R;
-import com.fy.baselibrary.ioc.ConfigUtils;
+import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.utils.os.OSUtils;
 import com.fy.baselibrary.statuslayout.LoadSirUtil;
 import com.fy.baselibrary.statuslayout.StatusLayout;

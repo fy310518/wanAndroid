@@ -5,13 +5,14 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.ArrayRes;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 
-import com.fy.baselibrary.ioc.ConfigUtils;
+import com.fy.baselibrary.application.ioc.ConfigUtils;
 
 import java.util.Random;
 
@@ -68,6 +69,15 @@ public class ResUtils {
      */
     public static String getStr(@StringRes int stringId) {
         return ConfigUtils.getAppCtx().getString(stringId);
+    }
+
+    /**
+     * 获取 strings 资源文件 指定 id 的资源
+     * @param StrArrayId 资源数组id
+     * @return String[]
+     */
+    public static String[] getStrArray(@ArrayRes int StrArrayId){
+        return ConfigUtils.getAppCtx().getResources().getStringArray(StrArrayId);
     }
 
     /**

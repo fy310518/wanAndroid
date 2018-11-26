@@ -1,4 +1,4 @@
-package com.fy.baselibrary.retrofit;
+package com.fy.baselibrary.retrofit.observer;
 
 import android.support.v7.app.AppCompatActivity;
 

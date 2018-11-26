@@ -1,6 +1,6 @@
-package com.fy.baselibrary.retrofit;
+package com.fy.baselibrary.retrofit.observer;
 
-import com.fy.baselibrary.ioc.ConfigUtils;
+import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.base.dialog.CommonDialog;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.L;

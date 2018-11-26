@@ -1,4 +1,4 @@
-package com.fy.baselibrary.ioc;
+package com.fy.baselibrary.application.ioc;
 
 import android.content.Context;
 import javax.inject.Singleton;
