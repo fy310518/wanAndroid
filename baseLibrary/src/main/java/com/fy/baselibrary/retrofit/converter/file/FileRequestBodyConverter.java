@@ -2,7 +2,6 @@ package com.fy.baselibrary.retrofit.converter.file;
 
 import android.util.ArrayMap;
 
-import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.load.up.FileProgressRequestBody;
 import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
 
@@ -10,10 +9,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okio.ByteString;
 import retrofit2.Converter;
 
 /**
@@ -33,9 +33,9 @@ public class FileRequestBodyConverter implements Converter<ArrayMap<String, Obje
 
         uploadOnSubscribe = (UploadOnSubscribe) params.get("UploadOnSubscribe");
 
-        if (params.containsKey("filePathList")){
-            return filesToMultipartBody((List<String>)params.get("filePathList"));
-        } else if (params.containsKey("files")){
+        if (params.containsKey("filePathList")) {
+            return filesToMultipartBody((List<String>) params.get("filePathList"));
+        } else if (params.containsKey("files")) {
             return filesToMultipartBody((List<File>) params.get("files"));
         } else {
             return null;
@@ -79,9 +79,10 @@ public class FileRequestBodyConverter implements Converter<ArrayMap<String, Obje
      * @param <T>   泛型
      * @return MultipartBody.Part列表（retrofit 多文件文件上传）
      */
-    public synchronized static <T> List<MultipartBody.Part> filesToMultipartBodyPart(List<T> files) {
-        List<MultipartBody.Part> parts = new ArrayList<>(files.size());
+    public static <T> List<MultipartBody.Part> filesToMultipartBodyPart(List<T> files, UploadOnSubscribe uploadOnSubscribe) {
+        List<MultipartBody.Part> parts = new ArrayList<>();
 
+        long sumLeng = 0L;
         File file;
         for (T t : files) {//访问手机端的文件资源，保证手机端sdcdrd中必须有这个文件
 
@@ -89,14 +90,19 @@ public class FileRequestBodyConverter implements Converter<ArrayMap<String, Obje
             else if (t instanceof String)
                 file = new File((String) t);//访问手机端的文件资源，保证手机端sdcdrd中必须有这个文件
             else break;
+            sumLeng += file.length();
 
             String path = file.getPath();
             String fileStr = path.substring(path.lastIndexOf(".") + 1);
 
-            RequestBody requestBody = RequestBody.create(MediaType.parse("image/" + fileStr), file);
+            FileProgressRequestBody requestBody = new FileProgressRequestBody(file, "image/" + fileStr, uploadOnSubscribe);
+//            RequestBody requestBody = RequestBody.create(MediaType.parse("image/" + fileStr), file);
             MultipartBody.Part part = MultipartBody.Part.createFormData("files", file.getName(), requestBody);
             parts.add(part);
         }
+
+        uploadOnSubscribe.setmSumLength(sumLeng);
+
         return parts;
     }
 }

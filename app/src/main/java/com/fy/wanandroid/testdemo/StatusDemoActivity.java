@@ -27,6 +27,7 @@ import com.fy.baselibrary.application.BaseActivityBean;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
+import com.fy.baselibrary.retrofit.converter.file.FileRequestBodyConverter;
 import com.fy.baselibrary.retrofit.load.LoadCallBack;
 import com.fy.baselibrary.retrofit.load.LoadService;
 import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
@@ -52,6 +53,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MultipartBody;
 
 /**
  * 多状态布局 demo
@@ -182,11 +184,15 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
     @NeedPermission(value = {Manifest.permission.WRITE_EXTERNAL_STORAGE})
     public void uploadFiles(List<String> files, TextView textView) {
         UploadOnSubscribe uploadOnSubscribe = new UploadOnSubscribe();
-        ArrayMap<String, Object> params = new ArrayMap<>();
-        params.put("filePathList", files);
-        params.put("UploadOnSubscribe", uploadOnSubscribe);
 
-        Observable.merge(Observable.create(uploadOnSubscribe), RequestUtils.create(LoadService.class).uploadFile(params))
+        List<MultipartBody.Part> data = FileRequestBodyConverter.filesToMultipartBodyPart(files, uploadOnSubscribe);
+//        ArrayMap<String, Object> params = new ArrayMap<>();
+//        params.put("filePathList", files);
+//        params.put("UploadOnSubscribe", uploadOnSubscribe);
+//        params.put("token", "大王叫我来巡山");
+//        params.put("type", "图文");
+
+        Observable.merge(Observable.create(uploadOnSubscribe), RequestUtils.create(LoadService.class).uploadFile2(data))
                 .compose(RxHelper.bindToLifecycle(this))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
