@@ -5,7 +5,6 @@ import android.util.ArrayMap;
 import com.fy.baselibrary.retrofit.BaseBean;
 import com.fy.baselibrary.retrofit.load.up.UpLoadFileType;
 
-import java.io.File;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -15,11 +14,9 @@ import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
-import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-import retrofit2.http.PartMap;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
@@ -57,16 +54,6 @@ public interface LoadService {
     @POST("http://192.168.100.123:8080/hfs/")
     Observable<Object> uploadFile2(@Part List<MultipartBody.Part> files);
 
-
-
-    /**
-     * 文件下载
-     * @param url
-     * @return
-     */
-    @Streaming
-    @GET
-    Observable<ResponseBody> downloadFile(@Url String url);
 
 
     /**

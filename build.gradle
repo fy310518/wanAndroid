@@ -19,15 +19,15 @@ buildscript {
 
 allprojects {
     repositories {
-        google()
         jcenter()
+        google()
+        maven { url 'https://dl.bintray.com/fy310518/grace' }
     }
+}
 
-    // 指定javadoc UTF-8格式
-    tasks.withType(Javadoc) {
-        options.addStringOption('Xdoclint:none', '-quiet')
-        options.addStringOption('encoding', 'UTF-8')
-    }
+// 指定javadoc UTF-8格式
+task javadoc(type: Javadoc) {
+    options.encoding = "utf-8"
 }
 
 task clean(type: Delete) {
