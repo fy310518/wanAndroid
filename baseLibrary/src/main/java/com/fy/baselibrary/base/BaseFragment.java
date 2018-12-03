@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fy.baselibrary.statuslayout.LoadSirUtil;
-import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.statuslayout.StatusLayout;
+import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.cache.ACache;
 
@@ -24,7 +24,7 @@ import butterknife.Unbinder;
  * Created by fangs on 2017/4/26.
  */
 public abstract class BaseFragment extends Fragment implements View.OnClickListener, StatusLayout.OnRetryListener, StatusLayout.OnSetStatusView {
-    public static final String TAG = "Fragment";
+    public final String TAG = getClass().getSimpleName() + "Fragment";
 
     protected ACache mCache;
 
@@ -36,6 +36,43 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
+
+    /**
+     * 设置 fragment 视图
+     * @return
+     */
+    protected abstract int setContentLayout();
+
+    protected void baseInit() {}
+
+    /** 设置懒加载数据 */
+    protected void lazyData(){}
+
+
+    @Override
+    public void onClick(View view) {}
+
+    @Override
+    public void onRetry() {}
+
+    @Override
+    public View setStatusView(){return mRootView;}
+
+
+    @Override//Fragment和Activity建立关联的时候调用
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        L.e(TAG, "onAttach()");
+
+        this.mContext = (AppCompatActivity) context;
+        mCache = ACache.get(mContext);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        L.e(TAG, "onCreate()");
     }
 
     @Nullable
@@ -59,62 +96,16 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         return mRootView;
     }
 
-    @Override
-    public void onClick(View view) {}
-
-    @Override
-    public void onRetry() {}
-
-    @Override
-    public View setStatusView(){return mRootView;}
-
-    protected void baseInit() {}
-
-    /**
-     * 设置 fragment 视图
-     * @return
-     */
-    protected abstract int setContentLayout();
-
-
-
-    //Fragment生命周期管理
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (hidden) {// 不在最前端界面显示
-            onPause();
-        } else {// 重新显示到最前端中
-            onResume();
-        }
-    }
-
-
     @Override//当Activity中的onCreate方法执行完后调用
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         L.e(TAG, "onActivityCreated()");
     }
 
-    @Override//Fragment和Activity建立关联的时候调用
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        L.e(TAG, "onAttach()");
-
-        this.mContext = (AppCompatActivity) context;
-        mCache = ACache.get(mContext);
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        L.e(TAG, "onCreate()");
-    }
-
-
     @Override
     public void onStart() {
         super.onStart();
+        isActivityShow = true;
         L.e(TAG, "onStart()");
     }
 
@@ -133,6 +124,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Override
     public void onStop() {
         super.onStop();
+        isActivityShow = false;
         L.e(TAG, "onStop()");
     }
 
@@ -156,5 +148,51 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     public void onDetach() {
         super.onDetach();
         L.e(TAG, "onDetach()");
+    }
+
+    /**
+     * 当前activity 是否显示
+     * 目的：解决activity 跳转到一个已存在的activity 并显示指定位置的fragment，onResume方法重走两次问题
+     */
+    private boolean isActivityShow;
+    //activity内部切换 Fragment 不回调onPause() 和 onResume() 方法解决方案
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!isActivityShow) return;
+        if (hidden) {// 不在最前端界面显示
+            onPause();
+        } else {// 重新显示到最前端中
+            onResume();
+        }
+    }
+
+
+    /** Fragment的View加载完毕的标记 todo 待测 */
+    private boolean isViewCreated;
+    /** Fragment对用户可见的标记 */
+    private boolean isUIVisible;
+    //当fragment结合viewpager使用的时候 这个方法会调用
+    //这个方法是在oncreateView之前使用 不要使用控件
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            isUIVisible = true;
+            lazyLoad();
+        } else {
+            isUIVisible = false;
+        }
+    }
+
+    private void lazyLoad() {
+        //这里进行双重标记判断,是因为setUserVisibleHint会多次回调,并且会在onCreateView执行前回调,
+        // 必须确保onCreateView加载完毕且页面可见,才加载数据
+        if (isViewCreated && isUIVisible) {
+            lazyData();
+            //数据加载完毕,恢复标记,防止重复加载
+            isViewCreated = false;
+            isUIVisible = false;
+        }
     }
 }

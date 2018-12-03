@@ -243,6 +243,20 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
         }
     }
 
+    /**
+     * 获取 是否 全选
+     * @return
+     */
+    public boolean getIsAllSelect(){
+        if (mSelectedPositions.size() < getRealItemCount()) return false;
+
+        for (int i = 0; i < mSelectedPositions.size(); i++) {
+            if (!mSelectedPositions.valueAt(i)) return false;
+        }
+
+        return true;
+    }
+
     public SparseBooleanArray getmSelectedPositions() {
         return mSelectedPositions;
     }
