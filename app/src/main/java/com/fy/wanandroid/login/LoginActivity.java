@@ -3,6 +3,7 @@ package com.fy.wanandroid.login;
 import android.Manifest;
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;

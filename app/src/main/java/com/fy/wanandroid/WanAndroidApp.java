@@ -3,11 +3,13 @@ package com.fy.wanandroid;
 import android.app.Application;
 
 import com.fy.baselibrary.application.BaseActivityLifecycleCallbacks;
+import com.fy.baselibrary.application.blockcanary.AppBlockCanaryContext;
 import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NightModeUtils;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
+import com.github.moduth.blockcanary.BlockCanary;
 
 /**
  * Created by fangs on 2018/7/24 17:36.
@@ -17,7 +19,9 @@ public class WanAndroidApp extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
+        BlockCanary.install(this, new AppBlockCanaryContext()).start();
 
+        //初始化配置信息
         L.e("ActivityCallbacks", "Application--Create() 启动-----");
         new ConfigUtils.ConfigBiuder()
                 .setBgColor(R.color.appHeadBg)
