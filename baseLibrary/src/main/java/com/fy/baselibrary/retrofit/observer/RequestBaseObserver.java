@@ -74,7 +74,7 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
 
         dismissProgress();
 
-        if (!NetUtils.isConnected(ConfigUtils.getAppCtx())) {
+        if (!NetUtils.isConnected()) {
             actionResponseError("网络不可用，请检查您的网络状态，稍后重试！");
             updataLayout(StatusLayoutManager.LAYOUT_NETWORK_ERROR_ID);
         } else if (e instanceof SocketTimeoutException) {

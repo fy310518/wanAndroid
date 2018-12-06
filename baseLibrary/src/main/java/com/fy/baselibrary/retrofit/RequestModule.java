@@ -4,9 +4,12 @@ import android.text.TextUtils;
 
 import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.retrofit.converter.file.FileConverterFactory;
+import com.fy.baselibrary.retrofit.interceptor.cache.CacheNetworkInterceptor;
+import com.fy.baselibrary.retrofit.interceptor.cache.IsUseCacheInterceptor;
 import com.fy.baselibrary.retrofit.interceptor.cookie.AddCookiesInterceptor;
-import com.fy.baselibrary.retrofit.interceptor.cookie.ReceivedCookiesInterceptor;
+import com.fy.baselibrary.retrofit.interceptor.cookie.CacheCookiesInterceptor;
 import com.fy.baselibrary.utils.Constant;
+import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.security.SSLUtil;
 import com.google.gson.GsonBuilder;
@@ -22,6 +25,7 @@ import javax.net.ssl.SSLSocketFactory;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.Cache;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -75,16 +79,18 @@ public class RequestModule {
 
     @Singleton
     @Provides
-    protected OkHttpClient getClient(HttpLoggingInterceptor interceptor, Interceptor header) {
-
+    protected OkHttpClient getClient(HttpLoggingInterceptor logInterceptor, Interceptor requestHeader) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectTimeout(Constant.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
                 .readTimeout(Constant.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
                 .writeTimeout(Constant.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
-                .addInterceptor(new ReceivedCookiesInterceptor())
-                .addInterceptor(new AddCookiesInterceptor())
-                .addInterceptor(header)
-                .addNetworkInterceptor(interceptor)
+                .addInterceptor(requestHeader)
+                .addNetworkInterceptor(logInterceptor)
+                .addInterceptor(new CacheCookiesInterceptor())
+                .addNetworkInterceptor(new AddCookiesInterceptor())
+                .addInterceptor(new IsUseCacheInterceptor())
+                .addNetworkInterceptor(new CacheNetworkInterceptor())
+                .cache(new Cache(FileUtils.folderIsExists(FileUtils.cache + ".ok-cache", 3), 1024 * 1024 * 30L))
                 .hostnameVerifier((hostname, session) -> {
                     return true;//强行返回true 即验证成功
                 })
@@ -127,7 +133,6 @@ public class RequestModule {
 //                        .addHeader("Accept-Encoding", "gzip, deflate")//根据服务器要求添加（避免重复压缩乱码）
                         .addHeader("Connection", "keep-alive")
                         .addHeader("Accept", "*/*")
-                        .addHeader("Cookie", "add cookies here")
                         .addHeader("app-type", "Android")//TODO 测试微阅
                         .build();
 

@@ -13,10 +13,10 @@ import okhttp3.Interceptor;
 import okhttp3.Response;
 
 /**
- * 实现 拦截器，将 Http返回的 cookie 存储到本地
+ * describe：缓存网络请求 response 后携带的 cookie;
  * Created by fangs on 2018/3/30.
  */
-public class ReceivedCookiesInterceptor implements Interceptor{
+public class CacheCookiesInterceptor implements Interceptor {
 
     @SuppressLint("CheckResult")
     @Override
@@ -37,7 +37,7 @@ public class ReceivedCookiesInterceptor implements Interceptor{
 
             SpfUtils.saveStrToSpf("cookie", cookieBuffer.toString());
 
-            L.d("http", "ReceivedCookiesInterceptor" + cookieBuffer.toString());
+            L.e("http", "CacheCookiesInterceptor" + cookieBuffer.toString());
         }
 
         return response;

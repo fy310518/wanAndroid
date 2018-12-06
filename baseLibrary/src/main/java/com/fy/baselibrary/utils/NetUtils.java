@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.fy.baselibrary.application.ioc.ConfigUtils;
+
 /**
  * 网络相关的工具类
  * Created by fangs on 2017/3/1.
@@ -20,12 +22,10 @@ public class NetUtils {
 
     /**
      * 判断网络是否连接
-     *
-     * @param context
-     * @return
+     * @return true or false
      */
-    public static boolean isConnected(Context context) {
-        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    public static boolean isConnected() {
+        ConnectivityManager connectivity = (ConnectivityManager) ConfigUtils.getAppCtx().getSystemService(Context.CONNECTIVITY_SERVICE);
         if (null != connectivity) {
             NetworkInfo info = connectivity.getActiveNetworkInfo();
             if (null != info && info.isConnected()) {
