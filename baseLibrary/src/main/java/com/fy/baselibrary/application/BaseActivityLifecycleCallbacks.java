@@ -17,15 +17,15 @@ import android.widget.TextView;
 
 import com.fy.baselibrary.R;
 import com.fy.baselibrary.application.ioc.ConfigUtils;
-import com.fy.baselibrary.utils.os.OSUtils;
-import com.fy.baselibrary.statuslayout.LoadSirUtil;
-import com.fy.baselibrary.statuslayout.StatusLayout;
+import com.fy.baselibrary.statuslayout.LoadSirUtils;
+import com.fy.baselibrary.statuslayout.OnSetStatusView;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
+import com.fy.baselibrary.utils.os.OSUtils;
 
 import butterknife.ButterKnife;
 import io.reactivex.subjects.BehaviorSubject;
@@ -92,9 +92,8 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
         activityBean.setUnbinder(ButterKnife.bind(activity));
 
         //设置 activity 多状态布局
-        if (activity instanceof StatusLayout.OnSetStatusView) {
-            StatusLayout.OnSetStatusView setStatusView = (StatusLayout.OnSetStatusView) activity;
-            StatusLayoutManager slManager = LoadSirUtil.initStatusLayout(activity, setStatusView.setStatusView());
+        if (activity instanceof OnSetStatusView) {
+            StatusLayoutManager slManager = LoadSirUtils.initStatusLayout(activity);
             if (null != slManager) activityBean.setSlManager(slManager);
         }
 

@@ -91,8 +91,22 @@ public class Constant {
     public static final String queryKey = "QueryKey";
 
 
+//  多状态视图 常量 flag
+    /** 内容 flag */
+    public static final int LAYOUT_CONTENT_ID = 0;
 
+    /** 异常 flag */
+    public static final int LAYOUT_ERROR_ID = 1;
 
+    /** 网络异常 flag */
+    public static final int LAYOUT_NETWORK_ERROR_ID = 2;
+
+    /** 空数据 flag */
+    public static final int LAYOUT_EMPTYDATA_ID = 3;
+
+    /** 请求失败 标记 */
+    public static final int REQUEST_FAIL = 1006;
+//  多状态视图 常量 flag
 
 
 // Activity life Events

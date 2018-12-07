@@ -4,10 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.fy.baselibrary.application.ioc.ConfigUtils;
-import com.fy.baselibrary.retrofit.observer.RequestBaseObserver;
 import com.fy.baselibrary.retrofit.ServerException;
 import com.fy.baselibrary.retrofit.observer.IProgressDialog;
-import com.fy.baselibrary.statuslayout.StatusLayoutManager;
+import com.fy.baselibrary.retrofit.observer.RequestBaseObserver;
 import com.fy.baselibrary.utils.AppUtils;
 
 /**
@@ -39,7 +38,6 @@ public abstract class NetCallBack<T> extends RequestBaseObserver<T>{
             }
 
             if (((ServerException) e).code != 401) actionResponseError(e.getMessage());
-            updataLayout(StatusLayoutManager.REQUEST_FAIL);
         } else {
             super.onError(e);
         }

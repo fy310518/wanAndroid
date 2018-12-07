@@ -3,10 +3,12 @@ package com.fy.wanandroid.main.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.fy.baselibrary.base.BaseFragment;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
+import com.fy.baselibrary.retrofit.observer.IProgressDialog;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.widget.refresh.EasyPullLayout;
@@ -16,6 +18,7 @@ import com.fy.wanandroid.entity.TreeBean;
 import com.fy.wanandroid.hierarchy.HierarchyActivity;
 import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
+import com.fy.wanandroid.request.NetDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +36,9 @@ public class FragmentTwo extends BaseFragment {
     @BindView(R.id.rvKnowledge)
     RecyclerView rvKnowledge;
     AdapterTwo adapterTwo;
+
+//    @Override
+//    public View setStatusView(){return rvKnowledge;}
 
     @Override
     protected int setContentLayout() {
@@ -72,11 +78,13 @@ public class FragmentTwo extends BaseFragment {
     }
 
     private void getData(){
+        IProgressDialog progressDialog = new NetDialog().init(this)
+                .setDialogMsg(R.string.register_loading);
         RequestUtils.create(ApiService.class)
                 .getTreeList()
                 .compose(RxHelper.handleResult())
                 .compose(RxHelper.bindToLifecycle(getActivity()))
-                .subscribe(new NetCallBack<List<TreeBean>>() {
+                .subscribe(new NetCallBack<List<TreeBean>>(progressDialog) {
                     @Override
                     protected void onSuccess(List<TreeBean> treeBeanList) {
                         adapterTwo.setmDatas(treeBeanList);
@@ -85,6 +93,7 @@ public class FragmentTwo extends BaseFragment {
 
                     @Override
                     protected void updataLayout(int flag) {
+                        super.updataLayout(flag);
                         epl.stop();
                     }
                 });

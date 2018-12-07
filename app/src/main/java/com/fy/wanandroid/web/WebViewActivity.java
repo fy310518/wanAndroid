@@ -23,8 +23,9 @@ import android.widget.ProgressBar;
 import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.BaseActivityBean;
 import com.fy.baselibrary.application.IBaseActivity;
-import com.fy.baselibrary.statuslayout.StatusLayout;
+import com.fy.baselibrary.statuslayout.OnSetStatusView;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
+import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.T;
 import com.fy.wanandroid.R;
@@ -36,10 +37,10 @@ import butterknife.BindView;
  * 通用 加载 web 网页 activity
  * Created by fangs on 2018/4/13.
  */
-public class WebViewActivity extends AppCompatActivity implements IBaseActivity, StatusLayout.OnRetryListener, StatusLayout.OnSetStatusView, View.OnClickListener {
+public class WebViewActivity extends AppCompatActivity implements IBaseActivity, OnSetStatusView, View.OnClickListener {
     private static final String TAG = "WebViewActivity";
 
-    StatusLayoutManager slm;
+    StatusLayoutManager slManager;
 
     String webUrl;
 
@@ -66,7 +67,7 @@ public class WebViewActivity extends AppCompatActivity implements IBaseActivity,
     public void initData(Activity activity, Bundle savedInstanceState) {
         BaseActivityBean activityBean = (BaseActivityBean) getIntent()
                 .getSerializableExtra("ActivityBean");
-        slm = activityBean.getSlManager();
+        slManager = activityBean.getSlManager();
 
 
         Bookmark bookmark = (Bookmark) getIntent().getExtras().getSerializable("Bookmark");
@@ -89,6 +90,11 @@ public class WebViewActivity extends AppCompatActivity implements IBaseActivity,
     @Override
     public void onRetry() {
         webView.loadUrl(webUrl);
+    }
+
+    @Override
+    public void showHideViewFlag(int flagId) {
+        slManager.showHideViewFlag(flagId);
     }
 
     private void initWeb() {
@@ -131,7 +137,7 @@ public class WebViewActivity extends AppCompatActivity implements IBaseActivity,
         public void onPageStarted(WebView view, String url, Bitmap favicon) {//页面开始加载
             if (null != progressBar){
                 progressBar.setVisibility(View.VISIBLE);
-                slm.showContent();
+                showHideViewFlag(Constant.LAYOUT_CONTENT_ID);
             }
         }
 
@@ -151,7 +157,7 @@ public class WebViewActivity extends AppCompatActivity implements IBaseActivity,
             // 断网或者网络连接超时
             if (errorCode == ERROR_HOST_LOOKUP || errorCode == ERROR_CONNECT || errorCode == ERROR_TIMEOUT) {
                 view.loadUrl("about:blank"); // 避免出现默认的错误界面
-                slm.showNetWorkError();
+                showHideViewFlag(Constant.LAYOUT_NETWORK_ERROR_ID);
             }
         }
 
@@ -164,7 +170,7 @@ public class WebViewActivity extends AppCompatActivity implements IBaseActivity,
             L.i(TAG, "onReceivedHttpError:" + statusCode);
             if (404 == statusCode || 500 == statusCode) {
                 view.loadUrl("about:blank");// 避免出现默认的错误界面
-                slm.showError();
+                showHideViewFlag(Constant.LAYOUT_ERROR_ID);
             }
         }
     };
@@ -189,7 +195,7 @@ public class WebViewActivity extends AppCompatActivity implements IBaseActivity,
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 if (title.contains("404") || title.contains("500") || title.contains("Error")) {
                     view.loadUrl("about:blank");// 避免出现默认的错误界面
-                    slm.showError();
+                    showHideViewFlag(Constant.LAYOUT_ERROR_ID);
                 }
             }
         }

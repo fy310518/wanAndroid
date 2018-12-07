@@ -5,6 +5,11 @@ import android.support.annotation.LayoutRes;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+
+import com.fy.baselibrary.aop.annotation.ClickFilter;
+import com.fy.baselibrary.utils.Constant;
+import com.fy.baselibrary.widget.refresh.EasyPullLayout;
 
 import java.io.Serializable;
 
@@ -14,20 +19,7 @@ import java.io.Serializable;
  */
 public class StatusLayoutManager implements Serializable{
 
-    /** 内容id */
-    public static final int LAYOUT_CONTENT_ID = 0;
 
-    /** 异常id */
-    public static final int LAYOUT_ERROR_ID = 1;
-
-    /** 网络异常id */
-    public static final int LAYOUT_NETWORK_ERROR_ID = 2;
-
-    /** 空数据id */
-    public static final int LAYOUT_EMPTYDATA_ID = 3;
-
-    /** 请求失败 标记 */
-    public static final int REQUEST_FAIL = 1006;
 
     /** 存放布局集合 */
     private SparseArray<View> layoutSparseArray = new SparseArray();
@@ -41,7 +33,7 @@ public class StatusLayoutManager implements Serializable{
 
     final int retryViewId;
 
-    final StatusLayout.OnRetryListener onRetryListener;
+    final OnSetStatusView onRetryListener;
 
     public StatusLayoutManager(Builder builder) {
         this.context = builder.context;
@@ -61,27 +53,20 @@ public class StatusLayoutManager implements Serializable{
         return true;
     }
 
-    /** 显示内容 */
-    public void showContent() {
-        showHideViewById(LAYOUT_CONTENT_ID);
-    }
+    /**
+     * 根据 flag 显示/隐藏 对应的状态视图
+     * @param flagId
+     * @return
+     */
+    public StatusLayoutManager showHideViewFlag(int flagId){
+        if (flagId == Constant.LAYOUT_CONTENT_ID){
+            showHideViewById(Constant.LAYOUT_CONTENT_ID);
+        } else {
+            if(inflateLayout(flagId))
+                showHideViewById(flagId);
+        }
 
-    /** 显示空数据 */
-    public void showEmptyData() {
-        if(inflateLayout(LAYOUT_EMPTYDATA_ID))
-            showHideViewById(LAYOUT_EMPTYDATA_ID);
-    }
-
-    /** 显示网络异常 */
-    public void showNetWorkError() {
-        if(inflateLayout(LAYOUT_NETWORK_ERROR_ID))
-            showHideViewById(LAYOUT_NETWORK_ERROR_ID);
-    }
-
-    /** 显示异常 */
-    public void showError() {
-        if(inflateLayout(LAYOUT_ERROR_ID))
-            showHideViewById(LAYOUT_ERROR_ID);
+        return this;
     }
 
     /**
@@ -90,15 +75,14 @@ public class StatusLayoutManager implements Serializable{
      */
     private void showHideViewById(int id) {
         View vgBody = targetContext.getContent();
-        vgBody.setVisibility(id == LAYOUT_CONTENT_ID ? View.VISIBLE : View.GONE);
+        vgBody.setVisibility(id == Constant.LAYOUT_CONTENT_ID ? View.VISIBLE : View.GONE);
 
         if (targetContext.getParentView().getChildCount() > targetContext.getChildCount()){
             //显示 指定id的 view 前 清理最后的view
             targetContext.getParentView().removeViewAt(targetContext.getParentView().getChildCount() - 1);
         }
 
-        if (id == LAYOUT_CONTENT_ID) return;
-
+        if (id == Constant.LAYOUT_CONTENT_ID) return;
 
         for (int i = 0; i < layoutSparseArray.size(); i++) {
             int key = layoutSparseArray.keyAt(i);
@@ -114,14 +98,14 @@ public class StatusLayoutManager implements Serializable{
         boolean isShow = true;
         if (layoutSparseArray.get(id) != null) return isShow;
         switch (id) {
-            case LAYOUT_NETWORK_ERROR_ID:
-                isShow = addLayoutResId(netWorkErrorRetryViewId, LAYOUT_NETWORK_ERROR_ID);
+            case Constant.LAYOUT_NETWORK_ERROR_ID:
+                isShow = addLayoutResId(netWorkErrorRetryViewId, Constant.LAYOUT_NETWORK_ERROR_ID);
                 break;
-            case LAYOUT_ERROR_ID:
-                isShow = addLayoutResId(errorRetryViewId, LAYOUT_ERROR_ID);
+            case Constant.LAYOUT_ERROR_ID:
+                isShow = addLayoutResId(errorRetryViewId, Constant.LAYOUT_ERROR_ID);
                 break;
-            case LAYOUT_EMPTYDATA_ID:
-                isShow = addLayoutResId(emptyDataRetryViewId, LAYOUT_EMPTYDATA_ID);
+            case Constant.LAYOUT_EMPTYDATA_ID:
+                isShow = addLayoutResId(emptyDataRetryViewId, Constant.LAYOUT_EMPTYDATA_ID);
                 break;
         }
 
@@ -135,12 +119,19 @@ public class StatusLayoutManager implements Serializable{
 
         if (retryView == null || onRetryListener == null) return;
 
-        retryView.setOnClickListener(v -> onRetryListener.onRetry());
+        retryView.setOnClickListener(new View.OnClickListener() {
+            @ClickFilter
+            @Override
+            public void onClick(View v) {
+                onRetryListener.onRetry();
+            }
+        });
     }
 
-    public static Builder newBuilder(Context context, Object target) {
+    public static Builder newBuilder(Context context, View target) {
         return new Builder(context, target);
     }
+
 
 
     public static final class Builder {
@@ -154,16 +145,16 @@ public class StatusLayoutManager implements Serializable{
 
         private int retryViewId;//请求错误或网络错误时候 的刷新按钮
 
-        private StatusLayout.OnRetryListener onRetryListener;
+        private OnSetStatusView onRetryListener;
 
         /**
          *
          * @param context
          * @param target    activity 或者 View
          */
-        public Builder(Context context, Object target) {
+        public Builder(Context context, View target) {
             this.context = context;
-            this.targetContext = LoadSirUtil.getTargetContext(target);
+            this.targetContext = LoadSirUtils.getTargetContext(target);
         }
 
         public Builder netWorkErrorView(int netWorkErrorRetryViewId) {
@@ -191,7 +182,7 @@ public class StatusLayoutManager implements Serializable{
             return this;
         }
 
-        public Builder onRetryListener(StatusLayout.OnRetryListener onRetryListener) {
+        public Builder onRetryListener(OnSetStatusView onRetryListener) {
             this.onRetryListener = onRetryListener;
             return this;
         }

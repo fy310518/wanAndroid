@@ -1,6 +1,5 @@
 package com.fy.wanandroid.request;
 
-import android.support.v7.app.AppCompatActivity;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -19,8 +18,13 @@ import com.fy.wanandroid.R;
  */
 public class NetDialog extends IProgressDialog {
 
-    public IProgressDialog init(AppCompatActivity mContext) {
-        this.mContext = mContext;
+    /**
+     * 初始化 网络请求等待对话框
+     * @param mContext 环境（AppCompatActivity or v4.app.Fragment）
+     * @return 等待对话框
+     */
+    public IProgressDialog init(Object mContext) {
+        this.obj = mContext;
         return this;
     }
 

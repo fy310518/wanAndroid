@@ -1,5 +1,8 @@
 package com.fy.baselibrary.retrofit.observer;
 
+import android.app.Activity;
+import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import com.fy.baselibrary.base.dialog.CommonDialog;
@@ -10,8 +13,10 @@ import com.fy.baselibrary.base.dialog.CommonDialog;
  */
 public abstract class IProgressDialog {
 
-    protected AppCompatActivity mContext;
+    /** 传递进来的 环境（AppCompatActivity or v4.app.Fragment） */
+    protected Object obj;
     protected CommonDialog dialog;
+    protected Context mContext;
 
     /**
      * 创建对话框 子类实现此方法
@@ -28,8 +33,19 @@ public abstract class IProgressDialog {
      * 显示对话框
      */
     public void show() {
-        if (null != dialog && null != mContext)
-            dialog.show(mContext.getSupportFragmentManager());
+        if (null != dialog && null != obj){
+            if (obj instanceof Activity) {
+                AppCompatActivity activity = (AppCompatActivity) obj;
+                mContext = activity;
+                dialog.show(activity.getSupportFragmentManager());
+            } else if (obj instanceof Fragment) {
+                Fragment fragment = (Fragment) obj;
+                mContext = fragment.getContext();
+                dialog.show(fragment.getFragmentManager());
+            } else {
+                throw new IllegalArgumentException("The Context must be is AppCompatActivity or v4.app.Fragment.");
+            }
+        }
     }
 
     /**

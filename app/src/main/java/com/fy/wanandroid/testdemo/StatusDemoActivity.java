@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.ArrayMap;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,8 +30,9 @@ import com.fy.baselibrary.retrofit.converter.file.FileRequestBodyConverter;
 import com.fy.baselibrary.retrofit.load.LoadCallBack;
 import com.fy.baselibrary.retrofit.load.LoadService;
 import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
-import com.fy.baselibrary.statuslayout.StatusLayout;
+import com.fy.baselibrary.statuslayout.OnSetStatusView;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
+import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NotificationUtils;
@@ -59,7 +59,7 @@ import okhttp3.MultipartBody;
  * 多状态布局 demo
  * Created by fangs on 2018/3/16.
  */
-public class StatusDemoActivity extends AppCompatActivity implements IBaseActivity, StatusLayout.OnRetryListener, StatusLayout.OnSetStatusView, View.OnClickListener {
+public class StatusDemoActivity extends AppCompatActivity implements IBaseActivity, OnSetStatusView, View.OnClickListener {
 
     @BindView(R.id.imgDemo)
     ImageView imgDemo;
@@ -124,14 +124,14 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                         .sendNotify(this, LoginActivity.class);
 
 //                NightModeUtils.switchNightMode(this);
-                slManager.showNetWorkError();
+                showHideViewFlag(Constant.LAYOUT_NETWORK_ERROR_ID);
                 Observable.timer(3000, TimeUnit.MILLISECONDS)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Consumer<Long>() {
                             @Override
                             public void accept(Long aLong) throws Exception {
-                                slManager.showError();
+                                showHideViewFlag(Constant.LAYOUT_ERROR_ID);
                             }
                         });
                 break;
@@ -146,10 +146,20 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
         }
     }
 
+    @Override
+    public View setStatusView() {
+        return rv;
+    }
+
+    @Override
+    public void showHideViewFlag(int flagId) {
+        slManager.showHideViewFlag(flagId);
+    }
+
     @SuppressLint("CheckResult")
     @Override
     public void onRetry() {
-        slManager.showEmptyData();
+        showHideViewFlag(Constant.LAYOUT_EMPTYDATA_ID);
 
         Observable.timer(3000, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
@@ -157,7 +167,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                 .flatMap(new Function<Long, ObservableSource<?>>() {
                     @Override
                     public ObservableSource<?> apply(Long aLong) throws Exception {
-                        slManager.showNetWorkError();
+                        showHideViewFlag(Constant.LAYOUT_NETWORK_ERROR_ID);
                         return Observable.timer(3000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io());
                     }
                 })
@@ -165,7 +175,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                 .flatMap(new Function<Object, ObservableSource<Long>>() {
                     @Override
                     public ObservableSource<Long> apply(Object o) throws Exception {
-                        slManager.showError();
+                        showHideViewFlag(Constant.LAYOUT_ERROR_ID);
                         return Observable.timer(3000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io());
                     }
                 })
@@ -173,7 +183,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        slManager.showContent();
+                        showHideViewFlag(Constant.LAYOUT_CONTENT_ID);
                     }
                 });
     }
@@ -280,11 +290,5 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
         channelName = "订阅消息";
         importance = NotificationManager.IMPORTANCE_DEFAULT;
         NotificationUtils.createNotificationChannel(this, channelId, channelName, importance);
-    }
-
-
-    @Override
-    public View setStatusView() {
-        return rv;
     }
 }

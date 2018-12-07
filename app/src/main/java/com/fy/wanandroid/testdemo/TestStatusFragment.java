@@ -1,12 +1,12 @@
 package com.fy.wanandroid.testdemo;
 
 import android.annotation.SuppressLint;
-import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.fy.baselibrary.base.BaseFragment;
+import com.fy.baselibrary.utils.Constant;
 import com.fy.wanandroid.R;
 
 import java.util.concurrent.TimeUnit;
@@ -43,14 +43,14 @@ public class TestStatusFragment extends BaseFragment {
     @SuppressLint("CheckResult")
     @Override
     protected void baseInit() {
-        slManager.showNetWorkError();
+        showHideViewFlag(Constant.LAYOUT_NETWORK_ERROR_ID);
         Observable.timer(3000, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        slManager.showError();
+                        showHideViewFlag(Constant.LAYOUT_ERROR_ID);
                     }
                 });
     }
@@ -59,7 +59,7 @@ public class TestStatusFragment extends BaseFragment {
     @Override
     public void onRetry() {
         super.onRetry();
-        slManager.showEmptyData();
+        showHideViewFlag(Constant.LAYOUT_EMPTYDATA_ID);
 
         Observable.timer(3000, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
@@ -67,7 +67,7 @@ public class TestStatusFragment extends BaseFragment {
                 .flatMap(new Function<Long, ObservableSource<?>>() {
                     @Override
                     public ObservableSource<?> apply(Long aLong) throws Exception {
-                        slManager.showNetWorkError();
+                        showHideViewFlag(Constant.LAYOUT_NETWORK_ERROR_ID);
                         return Observable.timer(3000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io());
                     }
                 })
@@ -75,7 +75,7 @@ public class TestStatusFragment extends BaseFragment {
                 .flatMap(new Function<Object, ObservableSource<Long>>() {
                     @Override
                     public ObservableSource<Long> apply(Object o) throws Exception {
-                        slManager.showError();
+                        showHideViewFlag(Constant.LAYOUT_ERROR_ID);
                         return Observable.timer(3000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io());
                     }
                 })
@@ -83,7 +83,7 @@ public class TestStatusFragment extends BaseFragment {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        slManager.showContent();
+                        showHideViewFlag(Constant.LAYOUT_CONTENT_ID);
                     }
                 });
     }

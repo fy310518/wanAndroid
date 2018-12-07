@@ -1,8 +1,8 @@
 package com.fy.baselibrary.retrofit.observer;
 
-import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.base.dialog.CommonDialog;
-import com.fy.baselibrary.statuslayout.StatusLayoutManager;
+import com.fy.baselibrary.statuslayout.OnSetStatusView;
+import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NetUtils;
 import com.fy.baselibrary.utils.T;
@@ -35,14 +35,26 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
     private IProgressDialog progressDialog;
     private CommonDialog dialog;
 
+    private Object context;
+
     public RequestBaseObserver() {}
 
+    /**
+     * 观察者：带加载对话框的 构造方法
+     * @param pDialog
+     */
     public RequestBaseObserver(IProgressDialog pDialog) {
-        this.progressDialog = pDialog;
-        init();
+        this.context = pDialog.obj;
+        init(pDialog);
     }
 
-    private void init() {
+    public RequestBaseObserver(Object context) {
+        this.context = context;
+    }
+
+    private void init(IProgressDialog pDialog) {
+        this.progressDialog = pDialog;
+
         if (null == progressDialog) return;
         dialog = progressDialog.getDialog();
         if (null == dialog) return;
@@ -65,7 +77,7 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
     public void onNext(V t) {
         L.e("net", "onNext()");
         onSuccess(t);
-        updataLayout(StatusLayoutManager.LAYOUT_CONTENT_ID);
+        updataLayout(Constant.LAYOUT_CONTENT_ID);
     }
 
     @Override
@@ -76,25 +88,26 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
 
         if (!NetUtils.isConnected()) {
             actionResponseError("网络不可用，请检查您的网络状态，稍后重试！");
-            updataLayout(StatusLayoutManager.LAYOUT_NETWORK_ERROR_ID);
+            updataLayout(Constant.LAYOUT_NETWORK_ERROR_ID);
+
         } else if (e instanceof SocketTimeoutException) {
             actionResponseError("服务器响应超时，请稍后再试...");
-            updataLayout(StatusLayoutManager.LAYOUT_NETWORK_ERROR_ID);
+            updataLayout(Constant.LAYOUT_NETWORK_ERROR_ID);
         } else if (e instanceof ConnectException) {
             actionResponseError("网络连接异常，请检查您的网络状态，稍后重试！");
-            updataLayout(StatusLayoutManager.LAYOUT_NETWORK_ERROR_ID);
+            updataLayout(Constant.LAYOUT_NETWORK_ERROR_ID);
         } else if (e instanceof ConnectTimeoutException) {
             actionResponseError("网络连接超时，请检查您的网络状态，稍后重试！");
-            updataLayout(StatusLayoutManager.LAYOUT_NETWORK_ERROR_ID);
+            updataLayout(Constant.LAYOUT_NETWORK_ERROR_ID);
         } else if (e instanceof UnknownHostException) {
             actionResponseError("域名解析错误，请联系管理员解决后重试！");
-            updataLayout(StatusLayoutManager.LAYOUT_NETWORK_ERROR_ID);
+            updataLayout(Constant.LAYOUT_NETWORK_ERROR_ID);
         } else if (e instanceof SSLException) {
             actionResponseError("证书验证失败！");
-            updataLayout(StatusLayoutManager.REQUEST_FAIL);
+            updataLayout(Constant.REQUEST_FAIL);
         } else if (e instanceof ClassCastException) {
             actionResponseError("类型转换错误！");
-            updataLayout(StatusLayoutManager.REQUEST_FAIL);
+            updataLayout(Constant.REQUEST_FAIL);
         } else if (e instanceof JsonParseException
                 || e instanceof JSONException
                 || e instanceof JsonSyntaxException
@@ -102,10 +115,10 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
                 || e instanceof NotSerializableException
                 || e instanceof ParseException) {
             actionResponseError("数据解析错误！");
-            updataLayout(StatusLayoutManager.REQUEST_FAIL);
+            updataLayout(Constant.REQUEST_FAIL);
         } else {
             actionResponseError("请求失败，请稍后再试...");
-            updataLayout(StatusLayoutManager.REQUEST_FAIL);
+            updataLayout(Constant.REQUEST_FAIL);
         }
     }
 
@@ -145,7 +158,11 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
      * 可根据flag 判断请求失败
      * @param flag 请求状态flag
      */
-    protected abstract void updataLayout(int flag);
+    protected void updataLayout(int flag){
+        if (context instanceof OnSetStatusView) {
+            ((OnSetStatusView)context).showHideViewFlag(flag);
+        }
+    }
 
 
     /**
