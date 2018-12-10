@@ -22,6 +22,10 @@ public abstract class NetCallBack<T> extends RequestBaseObserver<T>{
         super(pDialog);
     }
 
+    public NetCallBack(Object context) {
+        super(context);
+    }
+
     @Override
     public void onError(Throwable e) {
         e.printStackTrace();//todo 正式发布时候 注释此打印

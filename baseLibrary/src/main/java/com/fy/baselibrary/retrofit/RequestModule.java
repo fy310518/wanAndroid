@@ -92,7 +92,7 @@ public class RequestModule {
                 .addNetworkInterceptor(new AddCookiesInterceptor())
                 .addInterceptor(new IsUseCacheInterceptor())
                 .addNetworkInterceptor(new CacheNetworkInterceptor())
-                .cache(new Cache(FileUtils.folderIsExists(FileUtils.cache + ".ok-cache", 3), 1024 * 1024 * 30L))
+                .cache(new Cache(FileUtils.folderIsExists(FileUtils.cache + ".ok-cache", 1), 1024 * 1024 * 30L))
                 .hostnameVerifier((hostname, session) -> {
                     return true;//强行返回true 即验证成功
                 })

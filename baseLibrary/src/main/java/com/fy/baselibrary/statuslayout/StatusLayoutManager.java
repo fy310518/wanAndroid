@@ -84,12 +84,21 @@ public class StatusLayoutManager implements Serializable{
 
         if (id == Constant.LAYOUT_CONTENT_ID) return;
 
+        ViewGroup.LayoutParams vgLP;
+        if (targetContext.getParentView() instanceof EasyPullLayout){
+            EasyPullLayout.LayoutParams layoutParams = new EasyPullLayout.LayoutParams(vgBody.getLayoutParams());
+            layoutParams.type = EasyPullLayout.TYPE_STATUS_CONTENT;
+            vgLP = layoutParams;
+        } else {
+            vgLP = vgBody.getLayoutParams();
+        }
+        
         for (int i = 0; i < layoutSparseArray.size(); i++) {
             int key = layoutSparseArray.keyAt(i);
             //显示该view
             if (key == id) {
                 View valueView = layoutSparseArray.valueAt(i);
-                targetContext.getParentView().addView(valueView, vgBody.getLayoutParams());
+                targetContext.getParentView().addView(valueView, vgLP);
             }
         }
     }

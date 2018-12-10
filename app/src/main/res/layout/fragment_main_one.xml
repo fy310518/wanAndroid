@@ -6,9 +6,9 @@
     android:layout_height="match_parent"
     app:max_offset_bottom="41dp"
     app:max_offset_top="@dimen/max_offset"
-    app:sticky_factor="0.1"
-    app:pull_animator_top="@string/easyPullAnimatorTop"
     app:pull_animator_bottom="@string/easyPullAnimatorBottom"
+    app:pull_animator_top="@string/easyPullAnimatorTop"
+    app:sticky_factor="0.1"
     app:trigger_offset_bottom="@dimen/loadMoreHeight"
     app:trigger_offset_top="@dimen/refreshHeight">
 

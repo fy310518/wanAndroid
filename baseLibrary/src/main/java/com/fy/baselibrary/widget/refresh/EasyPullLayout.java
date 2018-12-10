@@ -68,6 +68,7 @@ public class EasyPullLayout extends ViewGroup {
     public final static int TYPE_EDGE_RIGHT = 2;
     public final static int TYPE_EDGE_BOTTOM = 3;
     public final static int TYPE_CONTENT = 4;
+    public final static int TYPE_STATUS_CONTENT = 5;
 
     private final static int STATE_IDLE = 0;
     private final static int STATE_ROLLING = 1;
@@ -171,6 +172,20 @@ public class EasyPullLayout extends ViewGroup {
     }
 
     @Override
+    public void addView(View child, ViewGroup.LayoutParams params) {
+        //此处重写 addView 方法，为了动态添加子 view 时，把 view 保存在childViews 中，
+        //解决 动态添加的子view 不显示问题
+        if (params instanceof LayoutParams){
+            LayoutParams lp = (LayoutParams) params;
+            if (lp.type == TYPE_STATUS_CONTENT){
+                childViews.put(child, new ChildViewAttr());// 存储子View
+            }
+        }
+
+        addView(child, -1, params);
+    }
+
+    @Override//加载完xml后回调
     protected void onFinishInflate() {
         super.onFinishInflate();
 
@@ -184,7 +199,6 @@ public class EasyPullLayout extends ViewGroup {
                 throw new IllegalArgumentException("Each child type can only be defined once!");
             } else {
                 childViews.put(child, new ChildViewAttr());// 存储子View
-
             }
         }
 
@@ -619,8 +633,8 @@ public class EasyPullLayout extends ViewGroup {
         return new LayoutParams(p);
     }
 
-    public class LayoutParams extends MarginLayoutParams {
-        int type = TYPE_NONE;
+    public static class LayoutParams extends MarginLayoutParams {
+        public int type = TYPE_NONE;
 
         public LayoutParams(Context c, AttributeSet attrs) {
             super(c, attrs);
