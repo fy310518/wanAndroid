@@ -15,7 +15,7 @@ public class L {
         throw new UnsupportedOperationException("cannot be instantiated");
     }
 
-    public static boolean isDebug = BuildConfig.DEBUG;// 是否需要打印bug，可以在application的onCreate函数里面初始化
+    public static boolean isDebug = BuildConfig.ISDEBUG;// 是否需要打印bug
     private static final String TAG = "fy";
 
     // 下面四个是默认tag的函数

@@ -87,11 +87,6 @@
             android:label=""
             android:screenOrientation="portrait" />
 
-        <!-- 设计稿 宽度 （用于屏幕适配）  -->
-        <meta-data
-            android:name="Rudeness_Adapter_Screen_width"
-            android:value="360" />
-
 
         <activity
             android:name=".testdemo.StatusDemoActivity"
@@ -110,7 +105,9 @@
         <activity
             android:name=".animation.revealeffect.RevealEffectActivity"
             android:label="@string/revealEffect"
-            android:screenOrientation="portrait" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/revealEffect"/>
 
         <activity
             android:name=".animation.revealeffect.RevealEffectJumpActivity"
@@ -123,6 +120,11 @@
             android:name=".test.TestActivity"
             android:label="@string/test"
             android:screenOrientation="portrait" />
+
+        <!-- 设计稿 宽度 （用于屏幕适配）  -->
+        <meta-data
+            android:name="rudeness_Adapter_Screen_width"
+            android:value="${app_Adapter_Screen_width}" />
 
     </application>
 

@@ -26,6 +26,7 @@ import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.cache.ACache;
 import com.fy.wanandroid.R;
+import com.fy.wanandroid.animation.revealeffect.RevealEffectActivity;
 import com.fy.wanandroid.entity.LoginBean;
 import com.fy.wanandroid.main.MainActivity;
 import com.fy.wanandroid.request.ApiService;
@@ -109,9 +110,9 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
                 break;
             case R.id.tvRegister:
 //                JumpUtils.jump(mContext, RegisterActivity.class, null);
-                JumpUtils.jump(this, StatusDemoActivity.class, null);
+//                JumpUtils.jump(this, StatusDemoActivity.class, null);
 //                JumpUtils.jump(this, TestStatusFragmentActivity.class, null);
-//                JumpUtils.jump(this, RevealEffectActivity.class, null);
+                JumpUtils.jump(this, RevealEffectActivity.class, null);
 //                JumpUtils.jump(this, TestActivity.class, null);
                 break;
         }

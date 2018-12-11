@@ -48,10 +48,8 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MultipartBody;
 
@@ -75,7 +73,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
     @Override
     public boolean isShowHeadView() {
-        return false;
+        return true;
     }
 
     @Override
@@ -83,7 +81,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
         return R.layout.activity_status;
     }
 
-    @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar)
+    @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar, statusOrNavModel = 1)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         BaseActivityBean activityBean = (BaseActivityBean) activity.getIntent()
@@ -125,15 +123,6 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
 //                NightModeUtils.switchNightMode(this);
                 showHideViewFlag(Constant.LAYOUT_NETWORK_ERROR_ID);
-                Observable.timer(3000, TimeUnit.MILLISECONDS)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<Long>() {
-                            @Override
-                            public void accept(Long aLong) throws Exception {
-                                showHideViewFlag(Constant.LAYOUT_ERROR_ID);
-                            }
-                        });
                 break;
             case R.id.tvKing2:
                 NotificationUtils.FyBuild.init()
@@ -164,26 +153,10 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
         Observable.timer(3000, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Function<Long, ObservableSource<?>>() {
+                .subscribe(new Consumer<Long>() {
                     @Override
-                    public ObservableSource<?> apply(Long aLong) throws Exception {
-                        showHideViewFlag(Constant.LAYOUT_NETWORK_ERROR_ID);
-                        return Observable.timer(3000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io());
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Function<Object, ObservableSource<Long>>() {
-                    @Override
-                    public ObservableSource<Long> apply(Object o) throws Exception {
+                    public void accept(Long aLong) throws Exception {
                         showHideViewFlag(Constant.LAYOUT_ERROR_ID);
-                        return Observable.timer(3000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io());
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        showHideViewFlag(Constant.LAYOUT_CONTENT_ID);
                     }
                 });
     }

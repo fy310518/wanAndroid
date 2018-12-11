@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewStub;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,6 +28,9 @@ import com.fy.baselibrary.utils.os.OSUtils;
 
 import butterknife.ButterKnife;
 import io.reactivex.subjects.BehaviorSubject;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * activity 生命周期回调 (api 14+)
@@ -58,21 +60,35 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
         ScreenUtils.setCustomDensity(activity, designWidth);
 
-        BaseActivityBean activityBean = new BaseActivityBean();
         IBaseActivity act = null;
         if (activity instanceof IBaseActivity) {
             act = (IBaseActivity) activity;
             if (act.setView() != 0) {
-                activity.setContentView(R.layout.activity_base);
-                LinearLayout linearLRoot = activity.findViewById(R.id.linearLRoot);
+                if (act.isShowHeadView()) {//动态添加标题栏
 
-                if (act.isShowHeadView()) initHead(activity);
+                    View titleBar = initHead(activity);
 
-                View view = LayoutInflater.from(activity).inflate(act.setView(), null);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -1);
-                linearLRoot.addView(view, params);
+                    View view = LayoutInflater.from(activity).inflate(act.setView(), null);
+
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -1);
+                    LinearLayout linearLRoot = new LinearLayout(activity);
+                    linearLRoot.setOrientation(LinearLayout.VERTICAL);
+                    linearLRoot.setLayoutParams(params);
+                    linearLRoot.addView(titleBar, MATCH_PARENT, WRAP_CONTENT);
+                    linearLRoot.addView(view, MATCH_PARENT, MATCH_PARENT);
+
+                    activity.setContentView(linearLRoot);
+                } else {
+                    activity.setContentView(act.setView());
+                }
             }
         }
+
+
+        BaseActivityBean activityBean = new BaseActivityBean();
+        //设置 黄油刀 简化 Android 样板代码
+        activityBean.setUnbinder(ButterKnife.bind(activity));
+        activityBean.setSubject(BehaviorSubject.create());
 
 //        注册屏幕旋转监听
         if (Constant.isOrientation){
@@ -81,23 +97,16 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
                     Settings.System.ACCELEROMETER_ROTATION, 0) == 1);
 
             //检查系统是否开启自动旋转
-            if (autoRotateOn) {
-                orientoinListener.enable();
-            }
-
+            if (autoRotateOn) orientoinListener.enable();
             activityBean.setOrientoinListener(orientoinListener);
         }
-
-        //设置 黄油刀 简化 Android 样板代码
-        activityBean.setUnbinder(ButterKnife.bind(activity));
 
         //设置 activity 多状态布局
         if (activity instanceof OnSetStatusView) {
             StatusLayoutManager slManager = LoadSirUtils.initStatusLayout(activity);
-            if (null != slManager) activityBean.setSlManager(slManager);
+            activityBean.setSlManager(slManager);
         }
 
-        activityBean.setSubject(BehaviorSubject.create());
         activity.getIntent().putExtra("ActivityBean", activityBean);
 
         //基础配置 执行完成，再执行 初始化 activity 操作
@@ -153,16 +162,14 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
      *
      * @param activity
      */
-    private void initHead(Activity activity) {
-
-        ViewStub vStubTitleBar = activity.findViewById(R.id.vStubTitleBar);
-        vStubTitleBar.inflate();
+    private View initHead(Activity activity) {
+        View titleBar = LayoutInflater.from(activity).inflate(R.layout.activity_head, null);
         //这里全局给Activity设置toolbar和title mate
-        Toolbar toolbar = activity.findViewById(R.id.toolbar);
+        Toolbar toolbar = titleBar.findViewById(R.id.toolbar);
 
         if (ConfigUtils.isTitleCenter()) {
             toolbar.setTitle("");
-            TextView toolbarTitle = activity.findViewById(R.id.toolbarTitle);
+            TextView toolbarTitle = titleBar.findViewById(R.id.toolbarTitle);
             toolbarTitle.setText(activity.getTitle());
             toolbarTitle.setTextColor(ResUtils.getColor(ConfigUtils.getTitleColor()));
             toolbarTitle.setVisibility(View.VISIBLE);
@@ -183,6 +190,8 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
             if (ConfigUtils.getBgColor() > 0)
                 toolbar.setBackgroundColor(ResUtils.getColor(ConfigUtils.getBgColor()));
         }
+
+        return titleBar;
     }
 
 

@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 
 import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
+import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.wanandroid.R;
 
 import butterknife.BindView;
@@ -23,8 +25,8 @@ import butterknife.BindView;
  */
 public class RevealEffectJumpActivity extends AppCompatActivity implements IBaseActivity{
 
-    @BindView(R.id.linearLRoot)
-    LinearLayout linearLRoot;
+    @BindView(R.id.constLayout)
+    ConstraintLayout constLayout;
 
     @Override
     public boolean isShowHeadView() {
@@ -40,7 +42,7 @@ public class RevealEffectJumpActivity extends AppCompatActivity implements IBase
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         Bundle bundle = getIntent().getExtras();
-        linearLRoot.post(new Runnable() {
+        constLayout.post(new Runnable() {
             @Override
             public void run() {
                 runRevealEffect(bundle.getInt("x"), bundle.getInt("y"));
@@ -53,28 +55,28 @@ public class RevealEffectJumpActivity extends AppCompatActivity implements IBase
     private void runRevealEffect(int centerX, int centerY) {
         //求出第2个和第3个参数
         int[] vLocation = new int[2];
-        linearLRoot.getLocationInWindow(vLocation);
+        constLayout.getLocationInWindow(vLocation);
 //        int centerX = linearLRoot.getWidth() / 2;
 //        int centerY = linearLRoot.getHeight() / 2;
 
         //求出要揭露 View 的对角线，来作为扩散圆的最大半径
-        int hypotenuse = (int) Math.hypot(linearLRoot.getWidth(), linearLRoot.getHeight());
+        int hypotenuse = (int) Math.hypot(constLayout.getWidth(), constLayout.getHeight());
 
         if (flag){//显示揭露对象
-            Animator circularReveal = ViewAnimationUtils.createCircularReveal(linearLRoot, centerX, centerY, 0, hypotenuse);
+            Animator circularReveal = ViewAnimationUtils.createCircularReveal(constLayout, centerX, centerY, 0, hypotenuse);
             circularReveal.setDuration(1000);
             //注意：这里显示 head 调用并没有在监听方法里，并且是在动画开始前调用。
-            linearLRoot.setVisibility(View.VISIBLE);
+            constLayout.setVisibility(View.VISIBLE);
             circularReveal.start();
             flag = false;
         } else {
-            Animator circularReveal = ViewAnimationUtils.createCircularReveal(linearLRoot, centerX, centerY, hypotenuse, 0);
+            Animator circularReveal = ViewAnimationUtils.createCircularReveal(constLayout, centerX, centerY, hypotenuse, 0);
             circularReveal.setDuration(500);
             circularReveal.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    linearLRoot.setVisibility(View.GONE);
-                    finish();
+                    constLayout.setVisibility(View.GONE);
+                    JumpUtils.jump(RevealEffectJumpActivity.this, RevealEffectActivity.class, null);
                 }
             });
             circularReveal.start();
