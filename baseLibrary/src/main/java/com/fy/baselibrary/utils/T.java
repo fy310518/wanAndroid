@@ -3,6 +3,7 @@ package com.fy.baselibrary.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
+import android.support.v4.app.NotificationManagerCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -76,7 +77,7 @@ public class T {
                 toast.cancel();
                 toast = Toast.makeText(ConfigUtils.getAppCtx(), "", duration);
             }
-
+            NotificationManagerCompat.from(ConfigUtils.getAppCtx()).areNotificationsEnabled();
             toast.setText(message);
             toast.show();
         }

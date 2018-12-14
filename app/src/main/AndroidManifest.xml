@@ -105,7 +105,6 @@
         <activity
             android:name=".animation.revealeffect.RevealEffectActivity"
             android:label="@string/revealEffect"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/revealEffect"/>
 

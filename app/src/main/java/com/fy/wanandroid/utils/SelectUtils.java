@@ -38,9 +38,9 @@ public class SelectUtils {
         states[3] = new int[]{};
 
         Drawable drawable = TintUtils.getDrawable(draId, drawableType);
-        StateListDrawable stateListDrawable = TintUtils.getStateListDrawable(drawable, states);
+//        StateListDrawable stateListDrawable = TintUtils.getStateListDrawable(drawable, states);
 
-        return TintUtils.tintSelector(stateListDrawable, colors, states);
+        return TintUtils.tintSelector(drawable, colors, states);
     }
 
     /**

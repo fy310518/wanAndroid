@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 
 import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
-import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.wanandroid.R;
 
 import butterknife.BindView;
@@ -76,7 +75,7 @@ public class RevealEffectJumpActivity extends AppCompatActivity implements IBase
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     constLayout.setVisibility(View.GONE);
-                    JumpUtils.jump(RevealEffectJumpActivity.this, RevealEffectActivity.class, null);
+                    finish();
                 }
             });
             circularReveal.start();

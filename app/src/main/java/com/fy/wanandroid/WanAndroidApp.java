@@ -25,8 +25,8 @@ public class WanAndroidApp extends Application{
         L.e("ActivityCallbacks", "Application--Create() 启动-----");
         new ConfigUtils.ConfigBiuder()
                 .setBgColor(R.color.appHeadBg)
-//                .setTitleColor(R.color.red)
-//                .setTitleCenter(true)
+                .setTitleColor(R.color.white)
+                .setTitleCenter(true)
                 .setCer(CER)
                 .setBASE_URL("http://www.wanandroid.com/")
                 .create(this);
