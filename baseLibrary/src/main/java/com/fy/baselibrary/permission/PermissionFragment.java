@@ -2,7 +2,6 @@ package com.fy.baselibrary.permission;
 
 import android.annotation.TargetApi;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;

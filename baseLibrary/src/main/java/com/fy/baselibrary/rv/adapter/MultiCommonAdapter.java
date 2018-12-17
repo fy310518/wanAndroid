@@ -15,8 +15,7 @@ public abstract class MultiCommonAdapter<Item> extends RvCommonAdapter<Item> {
 
     protected MultiTypeSupport<Item> mMultiTypeSupport;
 
-    public MultiCommonAdapter(Context context, List<Item> datas,
-                              MultiTypeSupport<Item> multiTypeSupport) {
+    public MultiCommonAdapter(Context context, List<Item> datas, MultiTypeSupport<Item> multiTypeSupport) {
         super(context, -1, datas);
         mMultiTypeSupport = multiTypeSupport;
     }

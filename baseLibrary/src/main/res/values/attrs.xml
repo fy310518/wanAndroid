@@ -33,8 +33,9 @@
 
 
     <declare-styleable name="EasyPullLayout_LayoutParams">
-        <!-- EasyPullLayout 包裹的控件 的 layout_type 属性 为content -->
+        <!-- EasyPullLayout 包裹的控件 layout_type 属性 -->
         <attr name="layout_type" format="enum">
+            <!-- 内容 -->
             <enum name="content" value="4" />
         </attr>
     </declare-styleable>

@@ -4,7 +4,7 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.text.TextUtils;
 
-import com.fy.baselibrary.ioc.ConfigUtils;
+import com.fy.baselibrary.application.ioc.ConfigUtils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -15,12 +15,13 @@ import java.io.FileWriter;
  */
 public class FileUtils {
 
+    public static String cache = "hjy.cache";
     /** 文件下载目录 */
-    public static String DOWN = "down";
+    public static String DOWN = "hjy.down";
     /** 图片保存目录 */
-    public static String IMG = "picture";
+    public static String IMG = "hjy.picture";
     /** 压缩文件目录 */
-    public static String ZIP = "zip.temp";
+    public static String ZIP = "hjy.zip.temp";
 
     private FileUtils() {
         /* cannot be instantiated */
@@ -164,8 +165,8 @@ public class FileUtils {
      * @param filePath
      * @return
      */
-    public static File folderIsExists(String filePath) {
-        File folder = new File(getPath(filePath, 0));
+    public static File folderIsExists(String filePath, int type) {
+        File folder = new File(getPath(filePath, type));
         try {
             if (!folder.isDirectory()) {
                 folder.mkdirs();
@@ -249,7 +250,7 @@ public class FileUtils {
      * @return
      */
     public static File createFile(String folder, String prefix, String suffix) {
-        folderIsExists(folder);
+        folderIsExists(folder, 0);
 
         String name = TimeUtils.Long2DataString(System.currentTimeMillis(), "yyyyMMdd_HHmmss");
         String filename = prefix + name + suffix;
@@ -272,7 +273,7 @@ public class FileUtils {
             fileName = url.subSequence(url.lastIndexOf("/"), url.indexOf("?")).toString();
         }
 
-        File file = new File(folderIsExists(DOWN), fileName);
+        File file = new File(folderIsExists(DOWN, 3), fileName);
 
         return FileUtils.fileIsExists(file.getPath());
     }

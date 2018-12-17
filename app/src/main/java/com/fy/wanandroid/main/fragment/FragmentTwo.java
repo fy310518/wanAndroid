@@ -1,13 +1,17 @@
 package com.fy.wanandroid.main.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.fy.baselibrary.base.BaseFragment;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
+import com.fy.baselibrary.retrofit.observer.IProgressDialog;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
+import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.widget.refresh.EasyPullLayout;
 import com.fy.baselibrary.widget.refresh.OnRefreshListener;
@@ -16,11 +20,16 @@ import com.fy.wanandroid.entity.TreeBean;
 import com.fy.wanandroid.hierarchy.HierarchyActivity;
 import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
+import com.fy.wanandroid.request.NetDialog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 数据
@@ -35,13 +44,31 @@ public class FragmentTwo extends BaseFragment {
     AdapterTwo adapterTwo;
 
     @Override
+    public View setStatusView(){return rvKnowledge;}
+
+    @Override
     protected int setContentLayout() {
         return R.layout.fragment_main_two;
     }
 
+    @SuppressLint("CheckResult")
     @Override
     protected void baseInit() {
         initRv();
+
+        Observable.timer(5, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxHelper.bindToLifecycle(mContext))
+                .subscribe(aLong -> {
+                    epl.start(EasyPullLayout.TYPE_EDGE_TOP);
+//                    RefreshAnimView view = epl.getAnimView(EasyPullLayout.TYPE_EDGE_TOP);
+//                    if (null != view) view.idle();
+                });
+    }
+
+    @Override
+    public void onRetry() {
         epl.start(EasyPullLayout.TYPE_EDGE_TOP);
     }
 
@@ -76,7 +103,7 @@ public class FragmentTwo extends BaseFragment {
                 .getTreeList()
                 .compose(RxHelper.handleResult())
                 .compose(RxHelper.bindToLifecycle(getActivity()))
-                .subscribe(new NetCallBack<List<TreeBean>>() {
+                .subscribe(new NetCallBack<List<TreeBean>>(this) {
                     @Override
                     protected void onSuccess(List<TreeBean> treeBeanList) {
                         adapterTwo.setmDatas(treeBeanList);
@@ -85,6 +112,7 @@ public class FragmentTwo extends BaseFragment {
 
                     @Override
                     protected void updataLayout(int flag) {
+                        super.updataLayout(flag);
                         epl.stop();
                     }
                 });

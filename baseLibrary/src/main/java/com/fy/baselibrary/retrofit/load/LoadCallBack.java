@@ -3,9 +3,9 @@ package com.fy.baselibrary.retrofit.load;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.fy.baselibrary.ioc.ConfigUtils;
-import com.fy.baselibrary.retrofit.RequestBaseObserver;
-import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
+import com.fy.baselibrary.application.ioc.ConfigUtils;
+import com.fy.baselibrary.retrofit.observer.IProgressDialog;
+import com.fy.baselibrary.retrofit.observer.RequestBaseObserver;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.TransfmtUtils;
 import com.fy.baselibrary.utils.cache.ACache;
@@ -13,10 +13,14 @@ import com.fy.baselibrary.utils.cache.ACache;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * 自定义文件上传、下载 观察者 (增强 NetCallBAck)
+ * 自定义文件上传、下载 观察者 (增强 RequestBaseObserver)
  * Created by fangs on 2018/5/21.
  */
 public abstract class LoadCallBack<T> extends RequestBaseObserver<T> {
+
+    public long mSumLength = 0L;//总长度
+    public AtomicLong uploaded = new AtomicLong();//已经上传 长度
+    private double mPercent = 0;//已经上传进度 百分比
 
     public LoadCallBack() {}
 
@@ -30,8 +34,9 @@ public abstract class LoadCallBack<T> extends RequestBaseObserver<T> {
 
     @Override
     public void onNext(T t) {
-        if (t instanceof Integer) {
-            onProgress(t + "");
+        if (t instanceof Double) {
+            String percent = TransfmtUtils.doubleToKeepTwoDecimalPlaces(((Double) t).doubleValue());
+            onProgress(percent);
         } else {
             super.onNext(t);
         }
@@ -39,30 +44,14 @@ public abstract class LoadCallBack<T> extends RequestBaseObserver<T> {
 
     public void setmSumLength(long mSumLength) {
         this.mSumLength = mSumLength;
-
-        ACache mCache = ACache.get(ConfigUtils.getAppCtx());
-        //从缓存中获取 已经下载的总进度
-        loaded.addAndGet(mCache.getAsLong(url + Constant.DownTask));
     }
+
 
     /**
-     * 下载 url
+     * 下载
      */
     private String url;
-    public long mSumLength = 0L;//总长度
     public AtomicLong loaded = new AtomicLong();//已经下载的 总长度
-
-    private double mPercent = 0;//进度百分比 数
-
-    public void onRead(long read) {
-        loaded.addAndGet(read);
-
-        if (mSumLength <= 0) {
-            onPercent(-1);
-        } else {
-            onPercent(100d * loaded.get() / mSumLength);
-        }
-    }
 
     /**
      * 计算 上传、下载 进度百分比
@@ -96,12 +85,4 @@ public abstract class LoadCallBack<T> extends RequestBaseObserver<T> {
             mCache.put(url + Constant.DownTask, loaded.get());
         }
     }
-
-
-    /**
-     * 上传、下载 进度回调方法
-     *
-     * @param percent
-     */
-    protected abstract void onProgress(String percent);
 }

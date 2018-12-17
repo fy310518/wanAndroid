@@ -2,6 +2,7 @@ package com.fy.baselibrary.utils.drawable;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.ColorRes;
@@ -12,7 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.widget.TextView;
 
-import com.fy.baselibrary.ioc.ConfigUtils;
+import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.utils.ResUtils;
 
 /**
@@ -70,21 +71,11 @@ public class TintUtils {
             imageView2.setBackground(drawable3);
      */
 
-    public static StateListDrawable getStateListDrawable(Drawable[] drawables, int[][] states) {
-        StateListDrawable stateListDrawable = new StateListDrawable();
-        for (int i = 0; i < drawables.length; i++) {
-            int[] state = states[i];
-            Drawable drawable = drawables[i];
-            stateListDrawable.addState(state, drawable);
-        }
-        return stateListDrawable;
-    }
-
     /**
      * StateListDrawable 设置背景选择器
      * @param drawable              图片资源（shape,png图片，svg图）
      * @param states                View状态数组（比如按下，选中等）
-     * @return
+     * @return StateListDrawable
      */
     public static StateListDrawable getStateListDrawable(Drawable drawable, int[][] states) {
         StateListDrawable stateListDrawable = new StateListDrawable();
@@ -95,11 +86,11 @@ public class TintUtils {
     }
 
     /**
-     * Tint 方式实现 selector
+     * Tint 方式实现单图片 背景 selector
      * @param drawable          图片资源（shape, png图片，svg）
      * @param colors            不同状态 显示不同的颜色 数组
      * @param states            View状态数组（比如按下，选中等）
-     * @return
+     * @return Drawable
      */
     public static Drawable tintSelector(Drawable drawable, int[] colors, int[][] states) {
         ColorStateList colorList = new ColorStateList(states, colors);
@@ -115,10 +106,43 @@ public class TintUtils {
     }
 
     /**
+     * StateListDrawable 实现不同状态不同图片的 背景选择器
+     * @param drawables
+     * @param states
+     * @return
+     */
+    public static StateListDrawable getStateListDrawable(Drawable[] drawables, int[][] states) {
+        StateListDrawable stateListDrawable = new StateListDrawable();
+        for (int i = 0; i < drawables.length; i++) {
+            int[] state = states[i];
+            Drawable drawable = drawables[i];
+            stateListDrawable.addState(state, drawable);
+        }
+        return stateListDrawable;
+    }
+
+
+    /**
+     * 对TextView 设置不同状态时其文字颜色
+     */
+    private ColorStateList getColorStateList(int normal, int pressed, int focused, int unable) {
+        int[] colors = new int[] { pressed, focused, normal, focused, normal };
+        int[][] states = new int[5][];
+        states[0] = new int[] { android.R.attr.state_pressed, android.R.attr.state_enabled };
+        states[1] = new int[] { android.R.attr.state_enabled, android.R.attr.state_focused };
+        states[2] = new int[] { android.R.attr.state_enabled };
+        states[3] = new int[] { android.R.attr.state_focused };
+        states[4] = new int[] {};
+
+        return new ColorStateList(states, colors);
+    }
+
+
+    /**
      * 获取 指定 ID 的 drawable 资源
      * @param draId
      * @param drawableType drawable 类型（0：png、shape 图标等；1：svg 图标；2：动画 svg 图标）
-     * @return 返回的 drawable 注意空指针(目前没有遇到空的情况 ^_^)
+     * @return 返回的 drawable 注意空指针
      */
     public static Drawable getDrawable(@DrawableRes int draId, int drawableType) {
         Drawable drawable = null;

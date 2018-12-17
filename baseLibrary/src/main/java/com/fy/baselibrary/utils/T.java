@@ -3,12 +3,12 @@ package com.fy.baselibrary.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
+import android.support.v4.app.NotificationManagerCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
-import com.fy.baselibrary.R;
-import com.fy.baselibrary.ioc.ConfigUtils;
+import com.fy.baselibrary.application.ioc.ConfigUtils;
 
 /**
  * Toast统一管理类 (解决多次弹出toast)
@@ -72,12 +72,12 @@ public class T {
     private static void show(String message, int duration) {
         if (isShow) {
             if (null == toast) {
-                toast = Toast.makeText(ConfigUtils.getAppCtx(), null, duration);
+                toast = Toast.makeText(ConfigUtils.getAppCtx(), "", duration);
             } else {
                 toast.cancel();
-                toast = Toast.makeText(ConfigUtils.getAppCtx(), null, duration);
+                toast = Toast.makeText(ConfigUtils.getAppCtx(), "", duration);
             }
-
+            NotificationManagerCompat.from(ConfigUtils.getAppCtx()).areNotificationsEnabled();
             toast.setText(message);
             toast.show();
         }

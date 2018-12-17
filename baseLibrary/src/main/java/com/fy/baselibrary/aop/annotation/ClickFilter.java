@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 定义一个方法注解 ClickFilter，
+ * 方法注解 ClickFilter，处理按钮重复点击
  * Created by fangs on 2018/8/24 14:00.
  */
 @Retention(RetentionPolicy.RUNTIME)

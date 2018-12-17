@@ -18,7 +18,7 @@ public class ClickUtils {
     private static int mLastClickViewId;
 
     /**
-     * 判断是否是快速点击
+     * 判断是否 快速点击
      *
      * @param v  点击view
      * @param intervalMillis  时间间隔（毫秒）

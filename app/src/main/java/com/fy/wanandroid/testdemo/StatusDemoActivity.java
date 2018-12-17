@@ -1,5 +1,6 @@
 package com.fy.wanandroid.testdemo;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.NotificationManager;
@@ -19,16 +20,19 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.BaseActivityBean;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
+import com.fy.baselibrary.retrofit.converter.file.FileRequestBodyConverter;
 import com.fy.baselibrary.retrofit.load.LoadCallBack;
 import com.fy.baselibrary.retrofit.load.LoadService;
-import com.fy.baselibrary.retrofit.load.up.UpLoadUtils;
-import com.fy.baselibrary.statuslayout.StatusLayout;
+import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
+import com.fy.baselibrary.statuslayout.OnSetStatusView;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
+import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NotificationUtils;
@@ -36,9 +40,7 @@ import com.fy.baselibrary.utils.imgload.imgprogress.ProgressInterceptor;
 import com.fy.baselibrary.utils.imgload.imgprogress.ProgressListener;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.login.LoginActivity;
-import com.fy.wanandroid.request.NetCallBack;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -46,17 +48,16 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MultipartBody;
 
 /**
  * 多状态布局 demo
  * Created by fangs on 2018/3/16.
  */
-public class StatusDemoActivity extends AppCompatActivity implements IBaseActivity, StatusLayout.OnRetryListener, StatusLayout.OnSetStatusView, View.OnClickListener {
+public class StatusDemoActivity extends AppCompatActivity implements IBaseActivity, OnSetStatusView, View.OnClickListener {
 
     @BindView(R.id.imgDemo)
     ImageView imgDemo;
@@ -67,10 +68,12 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
     RecyclerView rv;
     @BindView(R.id.tvKing)
     TextView tvKing;
+    @BindView(R.id.tvKing2)
+    TextView tvKing2;
 
     @Override
     public boolean isShowHeadView() {
-        return false;
+        return true;
     }
 
     @Override
@@ -78,7 +81,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
         return R.layout.activity_status;
     }
 
-    @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar)
+    @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar, statusOrNavModel = 1)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         BaseActivityBean activityBean = (BaseActivityBean) activity.getIntent()
@@ -87,6 +90,19 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
         initNotificationChannel();
 
+        List<String> files = new ArrayList<>();
+        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/679f6337gy1fr69ynfq3nj20hs0qodh0.jpg");
+        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/IMG_20181108_144507.jpg");
+        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/IMG_20181108_143502.jpg");
+        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/RED,胡歌 - 逍遥叹（Cover 胡歌）.mp3");
+        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/马郁 - 下辈子如果我还记得你.mp3");
+        files.add(FileUtils.getSDCardPath() + "DCIM/Camera/序人Hm - 再见（cover：张震岳）.mp3");
+
+        uploadFiles(files, tvKing);
+
+        List<String> files1 = new ArrayList<>();
+        files1.add(FileUtils.getSDCardPath() + "DCIM/Camera/体质健康.zip");
+        uploadFiles(files1, tvKing2);
 //        uploadFiles();
 
 //        loadImage();
@@ -106,16 +122,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                         .sendNotify(this, LoginActivity.class);
 
 //                NightModeUtils.switchNightMode(this);
-                slManager.showNetWorkError();
-                Observable.timer(3000, TimeUnit.MILLISECONDS)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<Long>() {
-                            @Override
-                            public void accept(Long aLong) throws Exception {
-                                slManager.showError();
-                            }
-                        });
+                showHideViewFlag(Constant.LAYOUT_NETWORK_ERROR_ID);
                 break;
             case R.id.tvKing2:
                 NotificationUtils.FyBuild.init()
@@ -128,74 +135,54 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
         }
     }
 
+    @Override
+    public View setStatusView() {
+        return rv;
+    }
+
+    @Override
+    public void showHideViewFlag(int flagId) {
+        slManager.showHideViewFlag(flagId);
+    }
+
     @SuppressLint("CheckResult")
     @Override
     public void onRetry() {
-        slManager.showEmptyData();
+        showHideViewFlag(Constant.LAYOUT_EMPTYDATA_ID);
 
         Observable.timer(3000, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Function<Long, ObservableSource<?>>() {
+                .subscribe(new Consumer<Long>() {
                     @Override
-                    public ObservableSource<?> apply(Long aLong) throws Exception {
-                        slManager.showNetWorkError();
-                        return Observable.timer(3000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io());
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Function<Object, ObservableSource<Long>>() {
-                    @Override
-                    public ObservableSource<Long> apply(Object o) throws Exception {
-                        slManager.showError();
-                        return Observable.timer(3000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io());
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        slManager.showContent();
+                    public void accept(Long aLong) throws Exception {
+                        showHideViewFlag(Constant.LAYOUT_ERROR_ID);
                     }
                 });
     }
 
-    private void uploadImg() {
-        List<String> fileList = new ArrayList<>();
-        fileList.add(FileUtils.getSDCardPath() + "DCIM/Camera/20121006174327607.jpg");
-        fileList.add(FileUtils.getSDCardPath() + "DCIM/Camera/tooopen_sy_133481514678.jpg");
+    /**
+     * 上传多个文件，监听进度 demo
+     */
+    @NeedPermission(value = {Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    public void uploadFiles(List<String> files, TextView textView) {
+        UploadOnSubscribe uploadOnSubscribe = new UploadOnSubscribe();
 
-        RequestUtils.create(LoadService.class)
-                .uploadFile1(UpLoadUtils.fileToMultipartBodyParts(fileList))
-                .compose(RxHelper.handleResult())
+        List<MultipartBody.Part> data = FileRequestBodyConverter.filesToMultipartBodyPart(files, uploadOnSubscribe);
+//        ArrayMap<String, Object> params = new ArrayMap<>();
+//        params.put("filePathList", files);
+//        params.put("UploadOnSubscribe", uploadOnSubscribe);
+//        params.put("token", "大王叫我来巡山");
+//        params.put("type", "图文");
+
+        Observable.merge(Observable.create(uploadOnSubscribe), RequestUtils.create(LoadService.class).uploadFile2(data))
                 .compose(RxHelper.bindToLifecycle(this))
-                .subscribe(new NetCallBack<Object>() {
-                    @Override
-                    protected void onSuccess(Object login) {
-
-                    }
-
-                    @Override
-                    protected void updataLayout(int flag) {
-                        L.e("net updataLayout", flag + "-----");
-                    }
-                });
-
-    }
-
-    public void uploadFiles() {
-        List<File> files = new ArrayList<>();
-        files.add(new File(FileUtils.getSDCardPath() + "DCIM/Camera/20121006174327607.jpg"));
-        files.add(new File(FileUtils.getSDCardPath() + "DCIM/Downloads.zip"));
-        files.add(new File(FileUtils.getSDCardPath() + "DCIM/Camera/tooopen_sy_133481514678.jpg"));
-
-        UpLoadUtils.uploadFiles(files, RequestUtils.create(LoadService.class))
-                .compose(RxHelper.bindToLifecycle(this))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new LoadCallBack<Object>() {
                     @Override
                     protected void onProgress(String percent) {
-                        L.e("进度监听", percent + "%");
-
+                        textView.setText(percent + "%");
                     }
 
                     @Override
@@ -208,6 +195,24 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
                     }
                 });
+//        UpLoadUtils.uploadFiles(files, RequestUtils.create(LoadService.class))
+//                .compose(RxHelper.bindToLifecycle(this))
+//                .subscribe(new LoadCallBack<Object>() {
+//                    @Override
+//                    protected void onProgress(String percent) {
+//                        L.e("进度M", percent + "%-->" + Thread.currentThread().getName());
+//                    }
+//
+//                    @Override
+//                    protected void onSuccess(Object t) {
+//
+//                    }
+//
+//                    @Override
+//                    protected void updataLayout(int flag) {
+//
+//                    }
+//                });
     }
 
     /**
@@ -258,11 +263,5 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
         channelName = "订阅消息";
         importance = NotificationManager.IMPORTANCE_DEFAULT;
         NotificationUtils.createNotificationChannel(this, channelId, channelName, importance);
-    }
-
-
-    @Override
-    public View setStatusView() {
-        return rv;
     }
 }

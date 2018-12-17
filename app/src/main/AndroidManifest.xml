@@ -87,11 +87,6 @@
             android:label=""
             android:screenOrientation="portrait" />
 
-        <!-- 设计稿 宽度 （用于屏幕适配）  -->
-        <meta-data
-            android:name="Rudeness_Adapter_Screen_width"
-            android:value="360" />
-
 
         <activity
             android:name=".testdemo.StatusDemoActivity"
@@ -110,7 +105,8 @@
         <activity
             android:name=".animation.revealeffect.RevealEffectActivity"
             android:label="@string/revealEffect"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/revealEffect"/>
 
         <activity
             android:name=".animation.revealeffect.RevealEffectJumpActivity"
@@ -123,6 +119,11 @@
             android:name=".test.TestActivity"
             android:label="@string/test"
             android:screenOrientation="portrait" />
+
+        <!-- 设计稿 宽度 （用于屏幕适配）  -->
+        <meta-data
+            android:name="rudeness_Adapter_Screen_width"
+            android:value="${app_Adapter_Screen_width}" />
 
     </application>
 
@@ -142,6 +143,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 拨打电话的权限 -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <!-- 通知 -->
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
     <!-- 往SDCard写入数据权限  写权限已经包含了读权限了 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />

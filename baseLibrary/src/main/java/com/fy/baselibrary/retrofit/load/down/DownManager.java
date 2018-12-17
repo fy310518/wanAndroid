@@ -3,7 +3,7 @@ package com.fy.baselibrary.retrofit.load.down;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.fy.baselibrary.ioc.ConfigUtils;
+import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.load.LoadService;
 import com.fy.baselibrary.utils.Constant;
@@ -44,7 +44,8 @@ public class DownManager {
     public static final int THREAD_COUNT = 3;
 
     /** 最大并行下载量 */
-    private final int MAX_COUNT = ThreadUtils.maximumPoolSize / THREAD_COUNT;
+//    private final int MAX_COUNT = ThreadUtils.maximumPoolSize / THREAD_COUNT;
+    private final int MAX_COUNT = 1;
 
     /** 是否正在执行下载任务 */
     private boolean isRunDownLoad;

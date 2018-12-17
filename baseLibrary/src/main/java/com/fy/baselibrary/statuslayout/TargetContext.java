@@ -10,7 +10,8 @@ import java.io.Serializable;
  * 辅助 多状态布局 类
  * Created by fangs on 2017/12/17.
  */
-public class TargetContext implements Serializable{
+public class TargetContext implements Serializable {
+
     private Context context;
     private ViewGroup parentView;//多状态 管理 父布局
     private View content;//内容布局

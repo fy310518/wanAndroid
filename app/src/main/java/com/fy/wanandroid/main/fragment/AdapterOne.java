@@ -37,7 +37,7 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
         if (payloads.isEmpty()) {
             onBindViewHolder(holder, position);
         } else {
-            ArticleBean.DatasBean article = mDatas.get(position);
+            ArticleBean.DatasBean article = mDatas.get(position - getHeadersCount());
 
             setCollectImg(holder, article.isCollect());
         }
@@ -89,7 +89,8 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
                     protected void onSuccess(Object collect) {
                         T.showLong("收藏成功");
                         article.setCollect(true);
-                        if (null != changeItemListener) changeItemListener.onChange(position);
+                        notifyItemChange(position, "");
+//                        if (null != changeItemListener) changeItemListener.onChange(position);
                     }
 
                     @Override
@@ -111,7 +112,8 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
                         T.showLong("取消收藏成功");
                         article.setCollect(false);
 
-                        if (null != changeItemListener) changeItemListener.onChange(position);
+                        notifyItemChange(position, "");
+//                        if (null != changeItemListener) changeItemListener.onChange(position);
                     }
 
                     @Override
@@ -133,7 +135,7 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
                         T.showLong("取消收藏成功");
                         removeData(position);
                         notifyItemRemoved(position);
-                        notifyItemRangeChanged(position, getItemCount());
+                        notifyItemRangeChanged(position, getItemCount() - position);
                     }
 
                     @Override

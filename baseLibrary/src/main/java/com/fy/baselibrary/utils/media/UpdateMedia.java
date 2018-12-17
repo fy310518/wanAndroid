@@ -6,7 +6,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 
-import com.fy.baselibrary.ioc.ConfigUtils;
+import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.utils.L;
 
 import java.io.File;

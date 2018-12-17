@@ -2,6 +2,7 @@ package com.fy.baselibrary.rv.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.util.SparseArrayCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -75,11 +76,11 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
 
     @Override
     public ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-        if (null != mHeaderViews.get(viewType)) {
+        if (null != mHeaderViews.get(viewType)) {//头
             return ViewHolder.createViewHolder(parent.getContext(), mHeaderViews.get(viewType));
-        } else if (null != mFootViews.get(viewType)) {
+        } else if (null != mFootViews.get(viewType)) {//尾
             return ViewHolder.createViewHolder(parent.getContext(), mFootViews.get(viewType));
-        } else {
+        } else {//主体
             ViewHolder viewHolder = ViewHolder.createViewHolder(mContext, parent, mLayoutId);
             bindOnClick(viewHolder);
             return viewHolder;
@@ -92,7 +93,7 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
             return;
         }
 
-        int centerPosition = position - getHeadersCount();
+        int centerPosition = position - getHeadersCount();//计算 主体数据 position
         convert(holder, mDatas.get(centerPosition), centerPosition);
 
 //        设置 tag 对应 onCreateViewHolder() 设置点击事件
@@ -200,7 +201,7 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
      * @param location
      */
     public void removeData(int location) {
-        if (location < getItemCount()) this.mDatas.remove(location);
+        if (location < getItemCount()) this.mDatas.remove(location - getHeadersCount());
     }
 
 
@@ -217,7 +218,7 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
      * @param position
      * @param isChecked
      */
-    protected void setItemChecked(int position, boolean isChecked) {
+    public void setItemChecked(int position, boolean isChecked) {
         mSelectedPositions.put(position, isChecked);
     }
 
@@ -227,7 +228,7 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
      * @param position
      * @return
      */
-    protected boolean isItemChecked(int position) {
+    public boolean isItemChecked(int position) {
         return mSelectedPositions.get(position);
     }
 
@@ -240,8 +241,20 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
         for (int i = 0; i < getItemCount(); i++) {
             setItemChecked(i, isAllSelect);
         }
+    }
 
-        notifyDataSetChanged();
+    /**
+     * 获取 是否 全选
+     * @return
+     */
+    public boolean getIsAllSelect(){
+        if (mSelectedPositions.size() < getRealItemCount()) return false;
+
+        for (int i = 0; i < mSelectedPositions.size(); i++) {
+            if (!mSelectedPositions.valueAt(i)) return false;
+        }
+
+        return true;
     }
 
     public SparseBooleanArray getmSelectedPositions() {
@@ -414,5 +427,43 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
      */
     public boolean filterRule(Item value, CharSequence constraint){
         return false;
+    }
+
+
+    /** 重写 系统提供的 操作列表的方法，目的：适配 加头后位置改变 */
+    public void notifyItemChange(int position){
+        notifyItemChanged(getHeadersCount() + position);
+    }
+
+    public void notifyItemChange(int position, @Nullable Object payload) {
+        notifyItemChanged(getHeadersCount() + position, payload);
+    }
+
+    public void notifyItemRangeChange(int positionStart, int itemCount) {
+        notifyItemRangeChanged(getHeadersCount() + positionStart, itemCount);
+    }
+
+    public void notifyItemRangeChange(int positionStart, int itemCount, @Nullable Object payload) {
+        notifyItemRangeChanged(getHeadersCount() + positionStart, itemCount, payload);
+    }
+
+    public void notifyItemInsert(int position) {
+        notifyItemInserted(getHeadersCount() + position);
+    }
+
+    public void notifyItemRangeInsert(int positionStart, int itemCount) {
+        notifyItemRangeInserted(getHeadersCount() + positionStart, itemCount);
+    }
+
+    public void notifyItemMove(int fromPosition, int toPosition) {
+        notifyItemMoved(getHeadersCount() + fromPosition, getHeadersCount() + toPosition);
+    }
+
+    public void notifyItemRemove(int position) {
+        notifyItemRemoved(getHeadersCount() + position);
+    }
+
+    public void notifyItemRangeRemove(int positionStart, int itemCount) {
+        notifyItemRangeRemoved(getHeadersCount() + positionStart, itemCount);
     }
 }

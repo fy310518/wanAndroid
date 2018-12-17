@@ -2,10 +2,15 @@ package com.fy.baselibrary.retrofit;
 
 import android.text.TextUtils;
 
-import com.fy.baselibrary.ioc.ConfigUtils;
-import com.fy.baselibrary.retrofit.cookie.AddCookiesInterceptor;
-import com.fy.baselibrary.retrofit.cookie.ReceivedCookiesInterceptor;
+import com.fy.baselibrary.application.ioc.ConfigUtils;
+import com.fy.baselibrary.retrofit.converter.file.FileConverterFactory;
+import com.fy.baselibrary.retrofit.interceptor.RequestHeaderInterceptor;
+import com.fy.baselibrary.retrofit.interceptor.cache.CacheNetworkInterceptor;
+import com.fy.baselibrary.retrofit.interceptor.cache.IsUseCacheInterceptor;
+import com.fy.baselibrary.retrofit.interceptor.cookie.AddCookiesInterceptor;
+import com.fy.baselibrary.retrofit.interceptor.cookie.CacheCookiesInterceptor;
 import com.fy.baselibrary.utils.Constant;
+import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.security.SSLUtil;
 import com.google.gson.GsonBuilder;
@@ -21,6 +26,7 @@ import javax.net.ssl.SSLSocketFactory;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.Cache;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -46,6 +52,7 @@ public class RequestModule {
             gsonConverterFactory, OkHttpClient client) {
         return new Retrofit.Builder()
                 .addCallAdapterFactory(callAdapterFactory)
+                .addConverterFactory(new FileConverterFactory())
                 .addConverterFactory(gsonConverterFactory)
                 .baseUrl(ConfigUtils.getBaseUrl())
                 .client(client)
@@ -73,16 +80,19 @@ public class RequestModule {
 
     @Singleton
     @Provides
-    protected OkHttpClient getClient(HttpLoggingInterceptor interceptor, Interceptor header) {
-
+    protected OkHttpClient getClient(HttpLoggingInterceptor logInterceptor) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectTimeout(Constant.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
                 .readTimeout(Constant.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
                 .writeTimeout(Constant.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
-                .addInterceptor(new ReceivedCookiesInterceptor())
-                .addInterceptor(new AddCookiesInterceptor())
-                .addInterceptor(header)
-                .addNetworkInterceptor(interceptor)
+                .retryOnConnectionFailure(true)//错误重连
+                .addInterceptor(new RequestHeaderInterceptor())
+                .addNetworkInterceptor(logInterceptor)
+                .addInterceptor(new CacheCookiesInterceptor())
+                .addNetworkInterceptor(new AddCookiesInterceptor())
+                .addInterceptor(new IsUseCacheInterceptor())
+                .addNetworkInterceptor(new CacheNetworkInterceptor())
+                .cache(new Cache(FileUtils.folderIsExists(FileUtils.cache + ".ok-cache", 1), 1024 * 1024 * 30L))
                 .hostnameVerifier((hostname, session) -> {
                     return true;//强行返回true 即验证成功
                 })
@@ -110,65 +120,4 @@ public class RequestModule {
         }).setLevel(HttpLoggingInterceptor.Level.BODY);
     }
 
-    @Singleton
-    @Provides
-    protected Interceptor getHeader() {
-        return new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Response response = null;
-
-                //获取request
-                Request request = chain.request()
-                        .newBuilder()
-                        .addHeader("Content-Type", "multipart/form-data;charse=UTF-8")
-//                        .addHeader("Accept-Encoding", "gzip, deflate")//根据服务器要求添加（避免重复压缩乱码）
-                        .addHeader("Connection", "keep-alive")
-                        .addHeader("Accept", "*/*")
-                        .addHeader("Cookie", "add cookies here")
-                        .addHeader("app-type", "Android")//TODO 测试微阅
-                        .build();
-
-                //获取request的创建者builder
-                Request.Builder builder = request.newBuilder();
-
-                //从request中获取headers，通过给定的键url_name
-                List<String> headerValues = request.headers("url_name");
-                if (headerValues != null && headerValues.size() > 0) {
-                    //如果有这个header，先将配置的header删除，因为 此header仅用作app和okhttp之间使用
-                    builder.removeHeader("url_name");
-
-                    //匹配获得新的BaseUrl
-                    String headerValue = headerValues.get(0);
-                    HttpUrl newBaseUrl = null;
-                    if ("user".equals(headerValue) && !TextUtils.isEmpty(Constant.custom_Url)) {
-                        newBaseUrl = HttpUrl.parse(Constant.custom_Url);
-
-                        //从request中获取原有的HttpUrl实例oldHttpUrl
-                        HttpUrl oldHttpUrl = request.url();
-                        //重建新的HttpUrl，修改需要修改的url部分
-                        HttpUrl newFullUrl = oldHttpUrl
-                                .newBuilder()
-                                .scheme(newBaseUrl.scheme())
-                                .host(newBaseUrl.host())
-                                .port(newBaseUrl.port())
-                                .build();
-
-                        //重建这个request，通过builder.url(newFullUrl).build()；
-                        //然后返回一个response至此结束修改
-                        response = chain.proceed(builder.url(newFullUrl).build());
-                    }
-                }
-
-                if (null == response) {
-                    Request.Builder requestBuilder = request.newBuilder();
-
-                    Request newRequest = requestBuilder.build();
-                    response = chain.proceed(newRequest);
-                }
-
-                return response;
-            }
-        };
-    }
 }
