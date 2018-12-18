@@ -20,76 +20,46 @@ public final class EncodeUtils {
     }
 
     /**
-     * URL编码
+     * 使用 URLEncoder.encode 编码然后在做网络请求
      * @param input The input.
      * @return the urlencoded string
      */
     public static String urlEncode(final String input) {
-        return urlEncode(input, "UTF-8");
-    }
-
-    /**
-     * Return the urlencoded string.
-     *
-     * @param input       The input.
-     * @param charsetName The name of charset.
-     * @return the urlencoded string
-     */
-    public static String urlEncode(final String input, final String charsetName) {
         try {
-            return URLEncoder.encode(input, charsetName);
+            return URLEncoder.encode(input, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new AssertionError(e);
         }
     }
 
     /**
-     * URL解码
+     * 使用 URLDecoder.decode解码，然后在使用对应的 加密方式解码（如：base64）
      *
      * @param input The input.
      * @return the string of decode urlencoded string
      */
     public static String urlDecode(final String input) {
-        return urlDecode(input, "UTF-8");
-    }
-
-    /**
-     * Return the string of decode urlencoded string.
-     *
-     * @param input       The input.
-     * @param charsetName The name of charset.
-     * @return the string of decode urlencoded string
-     */
-    public static String urlDecode(final String input, final String charsetName) {
         try {
-            return URLDecoder.decode(input, charsetName);
+            return URLDecoder.decode(input, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new AssertionError(e);
         }
     }
 
+
+
     /**
-     * Base64编码
+     * Base64编码 字符串返回 byte数
      *
      * @param input The input.
      * @return Base64-encode bytes
      */
     public static byte[] base64Encode(final String input) {
-        return base64Encode(input.getBytes());
+        return Base64.encode(input.getBytes(), Base64.NO_WRAP);
     }
 
     /**
-     * Return Base64-encode bytes.
-     *
-     * @param input The input.
-     * @return Base64-encode bytes
-     */
-    public static byte[] base64Encode(final byte[] input) {
-        return Base64.encode(input, Base64.NO_WRAP);
-    }
-
-    /**
-     * Base64编码
+     * Base64编码 byte数组 返回字符串
      *
      * @param input The input.
      * @return Base64-encode string
@@ -99,23 +69,19 @@ public final class EncodeUtils {
     }
 
     /**
-     * Base64解码
+     * Base64解码 字符串返回字符串
      *
      * @param input The input.
      * @return the string of decode Base64-encode string
      */
-    public static byte[] base64Decode(final String input) {
-        return Base64.decode(input, Base64.NO_WRAP);
-    }
-
-    /**
-     * Base64解码 bytes.
-     *
-     * @param input The input.
-     * @return the bytes of decode Base64-encode bytes
-     */
-    public static byte[] base64Decode(final byte[] input) {
-        return Base64.decode(input, Base64.NO_WRAP);
+    public static String base64Decode2String(final String input) {
+        byte[] temp = Base64.decode(input, Base64.NO_WRAP);
+        try {
+            return new String(temp, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**

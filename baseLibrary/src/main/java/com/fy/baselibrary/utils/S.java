@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.fy.baselibrary.R;
 
 /**
- * describe： TODO </br>
+ * describe： Snackbar 统一管理类
  * Created by fangs on 2018/12/11 15:53.
  */
 public class S {
