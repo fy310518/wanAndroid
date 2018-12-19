@@ -26,7 +26,22 @@ public class JumpUtils {
     }
 
     /**
-     * 跳转到指定 activity
+     * 从fragment 跳转到指定的 activity
+     * @param fragment
+     * @param bundle
+     * @param actClass
+     */
+    public static void jump(Fragment fragment, Class actClass, Bundle bundle) {
+        Intent intent = new Intent(fragment.getContext(), actClass);
+        if (null != bundle) {
+            intent.putExtras(bundle);
+        }
+
+        fragment.startActivity(intent);
+    }
+
+    /**
+     * 从 activity 跳转到指定的 activity
      * @param actClass
      * @param bundle
      */
@@ -42,34 +57,48 @@ public class JumpUtils {
     }
 
     /**
-     * 跳转到指定 Action 的activity
+     * 从fragment 跳转到指定 Action 的activity
+     * @param fragment
+     * @param action
+     * @param bundle
+     */
+    public static void jump(Fragment fragment, String action, Bundle bundle) {
+        Intent intent = new Intent(action);
+        if (null != bundle) {
+            intent.putExtras(bundle);
+        }
+
+        fragment.startActivity(intent);
+    }
+
+    /**
+     * 从 activity 跳转到指定 Action 的activity
      * @param act
      * @param action
      * @param bundle
      */
     public static void jump(Activity act, String action, Bundle bundle) {
-        Intent intent = new Intent();
+        Intent intent = new Intent(action);
         if (null != bundle) {
             intent.putExtras(bundle);
         }
 
-        intent.setAction(action);
         act.startActivity(intent);
     }
 
+
     /**
      * 跳转到指定 Action 的activity 带回调结果的跳转
-     * @param action    要跳转到的Activity
+     * @param action    要跳转到的 action
      * @param bundle
      * @param requestCode 请求码
      * @param callBack 回调结果，回调接口
      */
     public static void jump(Activity act, String action, Bundle bundle, int requestCode, ResultCallBack callBack) {
-        Intent intent = new Intent();
+        Intent intent = new Intent(action);
         if (null != bundle) {
             intent.putExtras(bundle);
         }
-        intent.setAction(action);
 
         ActResultManager.getInstance()
                 .startActivityForResult(act, intent, requestCode, callBack);
@@ -88,6 +117,7 @@ public class JumpUtils {
             intent.putExtras(bundle);
         }
 
+//        act.startActivityForResult(intent, requestCode, bundle);//原生默认
         ActResultManager.getInstance()
                 .startActivityForResult(act, intent, requestCode, callBack);
     }
@@ -109,62 +139,48 @@ public class JumpUtils {
      * @param actClass
      * @param bundle
      * @param requestCode
+     * @param callBack
      */
-    public static void jump(Fragment fragment, Class actClass, Bundle bundle, int requestCode) {
+    public static void jump(Fragment fragment, Class actClass, Bundle bundle, int requestCode, ResultCallBack callBack) {
         Intent intent = new Intent(fragment.getContext(), actClass);
         if (null != bundle) {
             intent.putExtras(bundle);
         }
 
-        fragment.startActivityForResult(intent, requestCode, bundle);
+//        fragment.startActivityForResult(intent, requestCode, bundle);//原生默认
+        ActResultManager.getInstance()
+                .startActivityForResult(fragment.getActivity(), intent, requestCode, callBack);
     }
 
     /**
-     * 使用反射 从fragment 跳转到指定 包路径的 activity; 带回调结果的跳转
+     * 从fragment 跳转到指定 action 的 activity; 带回调结果的跳转
      * @param fragment
+     * @param action
      * @param bundle
-     * @param className
      * @param requestCode
      */
-    public static void jump(Fragment fragment, Bundle bundle, String className, int requestCode){
-        try {
-            Class cla = Class.forName(className);
-            Intent intent = new Intent(fragment.getContext(), cla);
-            if (null != bundle) {
-                intent.putExtras(bundle);
-            }
-
-            fragment.startActivityForResult(intent,requestCode, bundle);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 从fragment 跳转到指定的 activity
-     * @param fragment
-     * @param bundle
-     * @param actClass
-     */
-    public static void jump(Fragment fragment, Class actClass, Bundle bundle) {
-        Intent intent = new Intent(fragment.getContext(), actClass);
+    public static void jump(Fragment fragment, String action, Bundle bundle, int requestCode, ResultCallBack callBack) {
+        Intent intent = new Intent(action);
         if (null != bundle) {
             intent.putExtras(bundle);
         }
 
-        fragment.startActivity(intent);
+//        fragment.startActivityForResult(intent, requestCode, bundle);
+        ActResultManager.getInstance()
+                .startActivityForResult(fragment.getActivity(), intent, requestCode, callBack);
     }
 
 
+//////////////////////////////////反射跳转 start///////////////////////////////////////////////
     /**
-     * 使用反射 跳转到指定 包路径的 activity
+     * 使用反射 跳转到指定 路径的 activity
      * @param act
      * @param bundle
-     * @param className
+     * @param classPath
      */
-    public static void jumpReflex(Activity act, Bundle bundle, String className){
+    public static void jumpReflex(Activity act, Bundle bundle, String classPath){
         try {
-            Class cla = Class.forName(className);
+            Class cla = Class.forName(classPath);
             jump(act, cla, bundle);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -172,20 +188,52 @@ public class JumpUtils {
     }
 
     /**
-     * 使用反射(reflex) 跳转到指定 包路径的 activity; 带回调结果的跳转
+     * 使用反射 跳转到指定 路径的 activity
+     * @param fragment
+     * @param bundle
+     * @param classPath
+     */
+    public static void jumpReflex(Fragment fragment, Bundle bundle, String classPath){
+        try {
+            Class cla = Class.forName(classPath);
+            jump(fragment, cla, bundle);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 使用反射 从fragment 跳转到指定 路径的 activity; 带回调结果的跳转
+     * @param fragment
+     * @param bundle
+     * @param classPath
+     * @param requestCode
+     */
+    public static void jumpReflex(Fragment fragment, Bundle bundle, String classPath, int requestCode, ResultCallBack callBack){
+        try {
+            Class cla = Class.forName(classPath);
+            jump(fragment, cla, bundle, requestCode, callBack);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 使用反射 跳转到指定 路径的 activity; 带回调结果的跳转
      * @param act
      * @param bundle
-     * @param className
-     * @param callBack 回调结果，回调接口
+     * @param classPath
+     * @param callBack 回调接口
      */
-    public static void jumpReflex(Activity act, String className, Bundle bundle, int requestCode, ResultCallBack callBack){
+    public static void jumpReflex(Activity act, String classPath, Bundle bundle, int requestCode, ResultCallBack callBack){
         try {
-            Class cla = Class.forName(className);
+            Class cla = Class.forName(classPath);
             jump(act, cla, bundle, requestCode, callBack);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
+//////////////////////////////////反射跳转 end///////////////////////////////////////////////
 
     /**
      * 退出当前activity 并带数据回到上一个Activity
