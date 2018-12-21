@@ -146,9 +146,9 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
     //初始化底部导航按钮
     private void initRadioGroup() {
         //设置 选择器
-        TintUtils.setTxtIconLocal(rBtnOne, SelectUtils.getSelector(R.drawable.svg_home_page, 1), 1);
-        TintUtils.setTxtIconLocal(rBtnTwo, SelectUtils.getSelector(R.drawable.svg_knowledge_system, 1), 1);
-        TintUtils.setTxtIconLocal(rBtnThree, SelectUtils.getSelector(R.drawable.svg_bookmark, 1), 1);
+        TintUtils.setTxtIconLocal(rBtnOne, SelectUtils.getSelector(R.drawable.svg_home_page, 1), 2);
+        TintUtils.setTxtIconLocal(rBtnTwo, SelectUtils.getSelector(R.drawable.svg_knowledge_system, 1), 2);
+        TintUtils.setTxtIconLocal(rBtnThree, SelectUtils.getSelector(R.drawable.svg_bookmark, 1), 2);
 
         radioGlayout.setOnCheckedChangeListener((group, checkedId) -> {
             int position = 0;

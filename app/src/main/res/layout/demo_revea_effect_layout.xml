@@ -6,22 +6,22 @@
     android:background="#eeeeee">
 
     <TextView
-    android:id="@+id/head"
-    android:layout_width="0dp"
-    android:layout_height="0dp"
-    android:background="#ffcc"
-    app:layout_constraintDimensionRatio="16:8"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent" />
+        android:id="@+id/head"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#66000000"
+        app:layout_constraintDimensionRatio="16:8"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#ad7"
-        app:layout_constraintTop_toBottomOf="@+id/head"
         app:layout_constraintDimensionRatio="16:8"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/head" />
 
     <Button
         android:id="@+id/btn"
@@ -37,12 +37,29 @@
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/imgAngel"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/white"
-        app:srcCompat="@drawable/svg_angel"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:srcCompat="@drawable/svg_angel" />
 
+    <View
+        android:id="@+id/loadBg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/imgAngel"
+        app:layout_constraintRight_toRightOf="@id/imgAngel"
+        app:layout_constraintBottom_toBottomOf="@id/imgAngel"
+        app:layout_constraintLeft_toLeftOf="@id/imgAngel"/>
+
+    <com.fy.baselibrary.widget.CircleProgressBar
+        android:id="@+id/circleProgress"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        app:layout_constraintTop_toTopOf="@id/imgAngel"
+        app:layout_constraintRight_toRightOf="@id/imgAngel"
+        app:layout_constraintBottom_toBottomOf="@id/imgAngel"
+        app:layout_constraintLeft_toLeftOf="@id/imgAngel" />
 </android.support.constraint.ConstraintLayout>

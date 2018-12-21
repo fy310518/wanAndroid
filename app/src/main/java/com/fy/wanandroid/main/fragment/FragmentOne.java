@@ -150,16 +150,21 @@ public class FragmentOne extends BaseFragment {
                                 rvAdapter.addHeaderView(bannerView);
                                 rvAdapter.notifyItemRangeChanged(0, 1);
                             }
-                        }
 
-                        if (null != list) {
-//                                DiffUtil.DiffResult diffResult = DiffUtil
-//                                        .calculateDiff(new DownFileDiffCall(rvAdapter.getmDatas(), list), true);
-//                                diffResult.dispatchUpdatesTo(adapter);
-//
-                            int notifyPosition = rvAdapter.getItemCount();
-                            rvAdapter.addData(list);
-                            rvAdapter.notifyItemRangeChanged(notifyPosition, list.size());
+                            if (null != list) {
+                                rvAdapter.setmDatas(list);
+                                rvAdapter.notifyItemRangeChanged(1, list.size());
+                            }
+                        } else {
+                            if (null != list) {
+    //                                DiffUtil.DiffResult diffResult = DiffUtil
+    //                                        .calculateDiff(new DownFileDiffCall(rvAdapter.getmDatas(), list), true);
+    //                                diffResult.dispatchUpdatesTo(adapter);
+    //
+                                int notifyPosition = rvAdapter.getItemCount();
+                                rvAdapter.addData(list);
+                                rvAdapter.notifyItemRangeChanged(notifyPosition, list.size());
+                            }
                         }
                     }
 

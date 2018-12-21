@@ -2,7 +2,6 @@ package com.fy.baselibrary.utils.drawable;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.ColorRes;
@@ -170,23 +169,23 @@ public class TintUtils {
      * 设置icon 在TextView的位置
      * @param tv
      * @param drawable
-     * @param position 0、1、2、3 分别对应：左、上、右、下
+     * @param position 1、2、3、4 分别对应：左、上、右、下
      */
     public static void setTxtIconLocal(TextView tv, Drawable drawable, int position){
         drawable.setBounds(0, 0,
                 drawable.getMinimumWidth(), drawable.getMinimumHeight());
 
         switch (position) {
-            case 0:
+            case 1:
                 tv.setCompoundDrawables(drawable, null, null, null);
                 break;
-            case 1:
+            case 2:
                 tv.setCompoundDrawables(null, drawable, null, null);
                 break;
-            case 2:
+            case 3:
                 tv.setCompoundDrawables(null, null, drawable, null);
                 break;
-            case 3:
+            case 4:
                 tv.setCompoundDrawables(null, null, null, drawable);
                 break;
         }

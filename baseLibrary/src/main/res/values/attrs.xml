@@ -41,4 +41,35 @@
     </declare-styleable>
 
 
+    <!-- 适配5.0以下系统 svg图标 不能直接在布局文件使用 -->
+    <declare-styleable name="svgCompat">
+        <!-- svg 图标资源id -->
+        <attr name="svgDrawable" format="integer" />
+        <!-- svg 图标替换颜色 -->
+        <attr name="svgTintColor" format="color" />
+        <!-- 图标类型-->
+        <attr name="drawableType" format="enum">
+            <enum name="svgType" value="0" />
+            <enum name="imgType" value="1" /><!-- 图片类型 png、shape、jpg等 -->
+        </attr>
+
+        <!-- svg 图标显示在控件的位置，textView 类型控件 存在左、上、右、下。其它控件设置为背景 -->
+        <attr name="iconLocationType" format="enum">
+            <enum name="background" value="0" />
+            <enum name="locationLeft" value="1" />
+            <enum name="locationTop" value="2" />
+            <enum name="locationRight" value="3" />
+            <enum name="locationBottom" value="4" />
+        </attr>
+    </declare-styleable>
+
+
+    <!-- 自定义圆形进度条 控件 -->
+    <declare-styleable name="circleProgressBar">
+        <attr name="circleWidth" format="dimension" />
+        <attr name="betaAngle" format="integer" />
+        <attr name="firstColor" format="color" />
+        <attr name="secondColor" format="color" />
+    </declare-styleable>
+
 </resources>
