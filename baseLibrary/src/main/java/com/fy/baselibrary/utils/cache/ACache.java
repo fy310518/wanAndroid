@@ -134,7 +134,7 @@ public class ACache {
      *            保存的时间，单位：秒
      */
     public void put(String key, String value, int saveTime) {
-        put(key, Utils.newStringWithDateInfo(saveTime, value));
+        put(key, ACacheTitmeUtils.newStringWithDateInfo(saveTime, value));
     }
 
     /**
@@ -156,8 +156,8 @@ public class ACache {
             while ((currentLine = in.readLine()) != null) {
                 readString += currentLine;
             }
-            if (!Utils.isDue(readString)) {
-                return Utils.clearDateInfo(readString);
+            if (!ACacheTitmeUtils.isDue(readString)) {
+                return ACacheTitmeUtils.clearDateInfo(readString);
             } else {
                 removeFile = true;
                 return null;
@@ -354,7 +354,7 @@ public class ACache {
      * @param saveTime 保存的时间，单位：秒
      */
     public void put(String key, byte[] value, int saveTime) {
-        put(key, Utils.newByteArrayWithDateInfo(saveTime, value));
+        put(key, ACacheTitmeUtils.newByteArrayWithDateInfo(saveTime, value));
     }
 
     /**
@@ -372,8 +372,8 @@ public class ACache {
             RAFile = new RandomAccessFile(file, "r");
             byte[] byteArray = new byte[(int) RAFile.length()];
             RAFile.read(byteArray);
-            if (!Utils.isDue(byteArray)) {
-                return Utils.clearDateInfo(byteArray);
+            if (!ACacheTitmeUtils.isDue(byteArray)) {
+                return ACacheTitmeUtils.clearDateInfo(byteArray);
             } else {
                 removeFile = true;
                 return null;
@@ -485,7 +485,7 @@ public class ACache {
      * @param value  保存的bitmap数据
      */
     public void put(String key, Bitmap value) {
-        put(key, Utils.Bitmap2Bytes(value));
+        put(key, ACacheTitmeUtils.Bitmap2Bytes(value));
     }
 
     /**
@@ -496,7 +496,7 @@ public class ACache {
      * @param saveTime 保存的时间，单位：秒
      */
     public void put(String key, Bitmap value, int saveTime) {
-        put(key, Utils.Bitmap2Bytes(value), saveTime);
+        put(key, ACacheTitmeUtils.Bitmap2Bytes(value), saveTime);
     }
 
     /**
@@ -508,7 +508,7 @@ public class ACache {
         if (getAsBinary(key) == null) {
             return null;
         }
-        return Utils.Bytes2Bimap(getAsBinary(key));
+        return ACacheTitmeUtils.Bytes2Bimap(getAsBinary(key));
     }
 
     // =======================================
@@ -521,7 +521,7 @@ public class ACache {
      * @param value 保存的drawable数据
      */
     public void put(String key, Drawable value) {
-        put(key, Utils.drawable2Bitmap(value));
+        put(key, ACacheTitmeUtils.drawable2Bitmap(value));
     }
 
     /**
@@ -532,7 +532,7 @@ public class ACache {
      * @param saveTime   保存的时间，单位：秒
      */
     public void put(String key, Drawable value, int saveTime) {
-        put(key, Utils.drawable2Bitmap(value), saveTime);
+        put(key, ACacheTitmeUtils.drawable2Bitmap(value), saveTime);
     }
 
     /**
@@ -544,7 +544,7 @@ public class ACache {
         if (getAsBinary(key) == null) {
             return null;
         }
-        return Utils.bitmap2Drawable(Utils.Bytes2Bimap(getAsBinary(key)));
+        return ACacheTitmeUtils.bitmap2Drawable(ACacheTitmeUtils.Bytes2Bimap(getAsBinary(key)));
     }
 
     /**

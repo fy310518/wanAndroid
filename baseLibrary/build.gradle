@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion var.minSdkVersion
         targetSdkVersion var.targetSdkVersion
-        versionCode 51
-        versionName "1.5.1"
+        versionCode 47
+        versionName "1.4.7"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true//配置5.0 版本以下可以使用svg
@@ -29,6 +29,8 @@ android {
         release {
             buildConfigField("boolean", "ISDEBUG", "false")
             minifyEnabled false
+            //Zipalign优化
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -46,8 +48,6 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-
-    debugApi 'com.github.moduth:blockcanary-android:1.2.1'
 
     implementation "com.android.support:appcompat-v7:$var.supportLibraryVersion"
     implementation "com.android.support:recyclerview-v7:$var.supportLibraryVersion"
@@ -86,6 +86,22 @@ dependencies {
 /** 以下开始是将Android Library上传到jcenter的相关配置**/
 apply plugin: 'com.novoda.bintray-release'
 
+//task to delete the old jar
+task deleteOldJar(type: Delete) {
+    delete 'release/AndroidPlugin.jar'
+}
+
+//task to export contents as jar
+task exportJar(type: Copy) {
+    from('build/intermediates/bundles/release/')
+    into('release/')
+    include('classes.jar')
+    ///Rename the jar
+    rename('classes.jar', 'AndroidPlugin.jar')
+}
+
+exportJar.dependsOn(deleteOldJar, build)
+
 allprojects {
     tasks.withType(Javadoc) {
         options{
@@ -106,7 +122,7 @@ publish {
     //项目名称
     artifactId = 'baselibrary'
     //版本号
-    publishVersion = '1.5.1'
+    publishVersion = '1.4.7'
     desc = 'Elegant Android application development base library'
     //网站，不重要
     website = 'https://github.com/fy310518/wanAndroid'

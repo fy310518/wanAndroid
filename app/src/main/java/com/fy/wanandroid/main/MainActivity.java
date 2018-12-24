@@ -22,8 +22,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.fy.baselibrary.aop.annotation.StatusBar;
-import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.application.IBaseActivity;
+import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.startactivity.StartActivity;
 import com.fy.baselibrary.statusbar.StatusBarContentColor;
 import com.fy.baselibrary.utils.AnimUtils;
@@ -32,9 +32,9 @@ import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NightModeUtils;
 import com.fy.baselibrary.utils.ResUtils;
-import com.fy.baselibrary.utils.SpfUtils;
-import com.fy.baselibrary.utils.drawable.TintUtils;
 import com.fy.baselibrary.utils.cache.ACache;
+import com.fy.baselibrary.utils.cache.SpfAgent;
+import com.fy.baselibrary.utils.drawable.TintUtils;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.about.AboutActivity;
 import com.fy.wanandroid.collect.MyCollectActivity;
@@ -111,16 +111,17 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
         btnLoginOrExit = headerView.findViewById(R.id.btnLoginOrExit);
         btnLoginOrExit.setOnClickListener(this);
 
-        boolean isLogin = SpfUtils.getSpfSaveBoolean(Constant.isLogin);
+        SpfAgent spfAgent = new SpfAgent(Constant.baseSpf);
+        boolean isLogin = spfAgent.getBoolean(Constant.isLogin);
         tvUserName.setText(isLogin ?
-                SpfUtils.getSpfSaveStr(Constant.userName) :
+                spfAgent.getString(Constant.userName) :
                 ResUtils.getStr(R.string.notLogin));
 
         btnLoginOrExit.setText(isLogin ? R.string.exitLogin : R.string.clickLogin);
 
         MenuItem nightModel = navView.getMenu().findItem(R.id.atNightModel);
-        nightModel.setIcon(SpfUtils.getSpfSaveBoolean(NightModeUtils.isNightMode) ? R.drawable.svg_daytime_model : R.drawable.svg_at_night_model);//图标
-        int id = SpfUtils.getSpfSaveBoolean(NightModeUtils.isNightMode) ? R.string.daytimeMode : R.string.nightMode;
+        nightModel.setIcon(spfAgent.getBoolean(NightModeUtils.isNightMode) ? R.drawable.svg_daytime_model : R.drawable.svg_at_night_model);//图标
+        int id = spfAgent.getBoolean(NightModeUtils.isNightMode) ? R.string.daytimeMode : R.string.nightMode;
         nightModel.setTitle(id);
     }
 
@@ -223,14 +224,15 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
                 JumpUtils.jump(this, SearchActivity.class, null);
                 break;
             case R.id.btnLoginOrExit://登录 or 退出登录
-                boolean isLogin = SpfUtils.getSpfSaveBoolean(Constant.isLogin);
+                SpfAgent spfAgent = new SpfAgent(Constant.baseSpf);
+                boolean isLogin = spfAgent.getBoolean(Constant.isLogin);
                 if (isLogin) {
                     tvUserName.setText(R.string.notLogin);
                     btnLoginOrExit.setText(R.string.clickLogin);
 
                     ACache mCache = ACache.get(ConfigUtils.getAppCtx());
                     mCache.clear();
-                    SpfUtils.clear();
+                    spfAgent.clear();
                 } else {
                     JumpUtils.jump(MainActivity.this, LoginActivity.class, null);
                 }

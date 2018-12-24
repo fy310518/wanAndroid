@@ -1,4 +1,4 @@
-package com.fy.baselibrary.utils;
+package com.fy.baselibrary.utils.cache;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -17,18 +17,14 @@ public class SpfUtils {
 //    创建的Preferences文件存放位置可以在Eclipse中查看：
 //	  DDMS->File Explorer /<package name>/shared_prefs/setting.xml
 
-    private static String spfFileName = "fySpf";
-
     private SpfUtils() {
         /* cannot be instantiated */
         throw new UnsupportedOperationException("cannot be instantiated");
     }
 
-    private static SharedPreferences getSpf(){
+    private static SharedPreferences getSpf(String fileName){
         Context ctx = ConfigUtils.getAppCtx();
-        SharedPreferences mSpf = ctx.getSharedPreferences(spfFileName, Context.MODE_PRIVATE);
-
-        return mSpf;
+        return ctx.getSharedPreferences(fileName, Context.MODE_PRIVATE);
     }
 
     /**
@@ -37,8 +33,8 @@ public class SpfUtils {
      * @param key   保存的键
      * @param value 保存的内容
      */
-    public static void saveStrToSpf(String key, String value) {
-        SharedPreferences.Editor editor = getSpf().edit();
+    protected static void saveStrToSpf(String fileName, String key, String value) {
+        SharedPreferences.Editor editor = getSpf(fileName).edit();
 
         editor.putString(key, value);
         editor.apply();
@@ -50,9 +46,8 @@ public class SpfUtils {
      * @param key
      * @return   没有对应的key 默认返回的""
      */
-    public static String getSpfSaveStr(String key) {
-
-        return getSpf().getString(key, "");
+    protected static String getSpfSaveStr(String fileName, String key) {
+        return getSpf(fileName).getString(key, "");
     }
 
     /**
@@ -61,8 +56,8 @@ public class SpfUtils {
      * @param key   保存的键
      * @param value 保存的内容
      */
-    public static void saveIntToSpf(String key, int value) {
-        SharedPreferences.Editor editor = getSpf().edit();
+    protected static void saveIntToSpf(String fileName, String key, int value) {
+        SharedPreferences.Editor editor = getSpf(fileName).edit();
 
         editor.putInt(key, value);
         editor.apply();
@@ -74,8 +69,8 @@ public class SpfUtils {
      * @param key
      * @return   没有对应的key  默认返回 -1
      */
-    public static int getSpfSaveInt(String key) {
-        return getSpf().getInt(key, -1);
+    protected static int getSpfSaveInt(String fileName, String key) {
+        return getSpf(fileName).getInt(key, -1);
     }
 
     /**
@@ -84,8 +79,8 @@ public class SpfUtils {
      * @param key   保存的键
      * @param value 保存的内容
      */
-    public static void saveLongToSpf(String key, long value) {
-        SharedPreferences.Editor editor = getSpf().edit();
+    protected static void saveLongToSpf(String fileName, String key, long value) {
+        SharedPreferences.Editor editor = getSpf(fileName).edit();
 
         editor.putLong(key, value);
         editor.apply();
@@ -97,8 +92,8 @@ public class SpfUtils {
      * @param key
      * @return   没有对应的key  默认返回 0
      */
-    public static long getSpfSaveLong(String key) {
-        return getSpf().getLong(key, 0);
+    protected static long getSpfSaveLong(String fileName, String key) {
+        return getSpf(fileName).getLong(key, 0);
     }
 
     /**
@@ -106,8 +101,8 @@ public class SpfUtils {
      * @param key
      * @param value
      */
-    public static void saveBooleanToSpf(String key, boolean value){
-        SharedPreferences.Editor editor = getSpf().edit();
+    protected static void saveBooleanToSpf(String fileName, String key, boolean value){
+        SharedPreferences.Editor editor = getSpf(fileName).edit();
 
         editor.putBoolean(key, value);
         editor.apply();
@@ -115,22 +110,30 @@ public class SpfUtils {
 
     /**
      * 从默认的SharedPreferences文件获取 boolean数据
-     *
      * @param key
      * @return      没有对应的key 默认返回false
      */
-    public static boolean getSpfSaveBoolean(String key) {
-
-        return getSpf().getBoolean(key, false);
+    protected static boolean getSpfSaveBoolean(String fileName, String key) {
+        return getSpf(fileName).getBoolean(key, false);
     }
 
+    protected static void saveFloatToSpf(String fileName, String key, float value) {
+        SharedPreferences.Editor editor = getSpf(fileName).edit();
+
+        editor.putFloat(key, value);
+        editor.apply();
+    }
+
+    protected static float getSpfSaveFloat(String fileName, String key) {
+        return getSpf(fileName).getFloat(key, 0f);
+    }
 
     /**
      * 获取所有键值对
      * @return
      */
-    public Map<String, ?> getAll() {
-        return getSpf().getAll();
+    protected static Map<String, ?> getAll(String fileName) {
+        return getSpf(fileName).getAll();
     }
 
     /**
@@ -139,35 +142,22 @@ public class SpfUtils {
      * @param key The key of sp.
      * @return {@code true}: yes{@code false}: no
      */
-    public boolean contains(@NonNull final String key) {
-        return getSpf().contains(key);
+    protected static boolean contains(String fileName, @NonNull final String key) {
+        return getSpf(fileName).contains(key);
     }
 
     /**
      * 删除已存内容
-     * @param key The key of sp.
-     */
-    public static void remove(@NonNull final String key) {
-        remove(key, false);
-    }
-
-    /**
-     * Remove the preference in sp.
      * @param key      The key of sp.
      * @param isCommit True to use {@link SharedPreferences.Editor#commit()},
      *                 false to use {@link SharedPreferences.Editor#apply()}
      */
-    public static void remove(@NonNull final String key, final boolean isCommit) {
+    protected static void remove(String fileName, @NonNull final String key, final boolean isCommit) {
         if (isCommit) {
-            getSpf().edit().remove(key).commit();
+            getSpf(fileName).edit().remove(key).commit();
         } else {
-            getSpf().edit().remove(key).apply();
+            getSpf(fileName).edit().remove(key).apply();
         }
-    }
-
-    /** 清除所有数据 */
-    public static void clear() {
-        clear(false);
     }
 
     /**
@@ -175,11 +165,11 @@ public class SpfUtils {
      * @param isCommit True to use {@link SharedPreferences.Editor#commit()},
      *                 false to use {@link SharedPreferences.Editor#apply()}
      */
-    public static void clear(final boolean isCommit) {
+    protected static void clear(String fileName, final boolean isCommit) {
         if (isCommit) {
-            getSpf().edit().clear().commit();
+            getSpf(fileName).edit().clear().commit();
         } else {
-            getSpf().edit().clear().apply();
+            getSpf(fileName).edit().clear().apply();
         }
     }
 }

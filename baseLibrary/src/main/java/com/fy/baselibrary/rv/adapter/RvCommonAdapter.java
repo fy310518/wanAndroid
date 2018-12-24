@@ -2,7 +2,6 @@ package com.fy.baselibrary.rv.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.util.SparseArrayCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -427,43 +426,5 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
      */
     public boolean filterRule(Item value, CharSequence constraint){
         return false;
-    }
-
-
-    /** 重写 系统提供的 操作列表的方法，目的：适配 加头后位置改变 */
-    public void notifyItemChange(int position){
-        notifyItemChanged(getHeadersCount() + position);
-    }
-
-    public void notifyItemChange(int position, @Nullable Object payload) {
-        notifyItemChanged(getHeadersCount() + position, payload);
-    }
-
-    public void notifyItemRangeChange(int positionStart, int itemCount) {
-        notifyItemRangeChanged(getHeadersCount() + positionStart, itemCount);
-    }
-
-    public void notifyItemRangeChange(int positionStart, int itemCount, @Nullable Object payload) {
-        notifyItemRangeChanged(getHeadersCount() + positionStart, itemCount, payload);
-    }
-
-    public void notifyItemInsert(int position) {
-        notifyItemInserted(getHeadersCount() + position);
-    }
-
-    public void notifyItemRangeInsert(int positionStart, int itemCount) {
-        notifyItemRangeInserted(getHeadersCount() + positionStart, itemCount);
-    }
-
-    public void notifyItemMove(int fromPosition, int toPosition) {
-        notifyItemMoved(getHeadersCount() + fromPosition, getHeadersCount() + toPosition);
-    }
-
-    public void notifyItemRemove(int position) {
-        notifyItemRemoved(getHeadersCount() + position);
-    }
-
-    public void notifyItemRangeRemove(int positionStart, int itemCount) {
-        notifyItemRangeRemoved(getHeadersCount() + positionStart, itemCount);
     }
 }

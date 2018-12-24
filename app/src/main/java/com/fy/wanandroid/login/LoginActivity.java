@@ -23,8 +23,8 @@ import com.fy.baselibrary.retrofit.observer.IProgressDialog;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.cache.ACache;
+import com.fy.baselibrary.utils.cache.SpfAgent;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.animation.revealeffect.RevealEffectActivity;
 import com.fy.wanandroid.entity.LoginBean;
@@ -32,7 +32,6 @@ import com.fy.wanandroid.main.MainActivity;
 import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
 import com.fy.wanandroid.request.NetDialog;
-import com.fy.wanandroid.testdemo.StatusDemoActivity;
 import com.fy.wanandroid.utils.SelectUtils;
 
 import java.util.HashMap;
@@ -140,8 +139,9 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
                         ACache mCache = ACache.get(ConfigUtils.getAppCtx());
                         mCache.put(Constant.userName, login);
 
-                        SpfUtils.saveBooleanToSpf(Constant.isLogin, true);
-                        SpfUtils.saveStrToSpf(Constant.userName, login.getUsername());
+                        new SpfAgent(Constant.baseSpf)
+                                .saveBoolean(Constant.isLogin, true)
+                                .saveString(Constant.userName, login.getUsername());
 
                         Bundle bundle = new Bundle();
                         bundle.putString("大王", "大王叫我来巡山");

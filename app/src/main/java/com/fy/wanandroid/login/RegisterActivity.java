@@ -9,16 +9,16 @@ import android.view.View;
 import android.widget.Button;
 
 import com.fy.baselibrary.aop.annotation.StatusBar;
-import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.application.IBaseActivity;
+import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.observer.IProgressDialog;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.cache.ACache;
+import com.fy.baselibrary.utils.cache.SpfAgent;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.entity.LoginBean;
 import com.fy.wanandroid.main.MainActivity;
@@ -106,8 +106,9 @@ public class RegisterActivity extends AppCompatActivity implements IBaseActivity
                         ACache mCache = ACache.get(ConfigUtils.getAppCtx());
                         mCache.put(Constant.userName, login);
 
-                        SpfUtils.saveBooleanToSpf(Constant.isLogin, true);
-                        SpfUtils.saveStrToSpf(Constant.userName, login.getUsername());
+                        new SpfAgent(Constant.baseSpf)
+                                .saveBoolean(Constant.isLogin, true)
+                                .saveString(Constant.userName, login.getUsername());
 
                         Bundle bundle = new Bundle();
                         bundle.putString("大王", "大王叫我来巡山");

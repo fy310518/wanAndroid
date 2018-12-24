@@ -13,7 +13,7 @@ import java.io.ByteArrayOutputStream;
  * 缓存时间计算工具类
  * Created by 下载 on 2017/4/24.
  */
-public class Utils {
+public class ACacheTitmeUtils {
 
     /**
      * 判断缓存的String数据是否到期

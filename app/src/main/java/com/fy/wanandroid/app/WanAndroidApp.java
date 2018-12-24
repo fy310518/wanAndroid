@@ -1,14 +1,15 @@
-package com.fy.wanandroid;
+package com.fy.wanandroid.app;
 
 import android.app.Application;
 
 import com.fy.baselibrary.application.BaseActivityLifecycleCallbacks;
-import com.fy.baselibrary.application.blockcanary.AppBlockCanaryContext;
 import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NightModeUtils;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
+import com.fy.wanandroid.R;
+import com.fy.wanandroid.app.blockcanary.AppBlockCanaryContext;
 import com.github.moduth.blockcanary.BlockCanary;
 
 /**

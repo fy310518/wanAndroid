@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 /**
- * describe： todo 描述</br>
+ * describe： 自定义 LayoutInflater.Factory 管理入口
  * Created by fangs on 2018/12/21 17:33.
  */
 public class SvgCompatInject {

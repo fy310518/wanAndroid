@@ -7,7 +7,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 
 /**
- * describe： aop实现 在activity的 onCreate 方法执行前执行一段代码
+ * describe： aop实现 在 AppCompatActivity 的 onCreate 方法执行前执行一段代码
  * Created by fangs on 2018/12/21 17:37.
  */
 @Aspect

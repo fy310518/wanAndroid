@@ -75,9 +75,9 @@ public class Constant {
     public static final String appMode = "appModeSwitch";
 
     /**
-     * 用户是否 第一次打开APP
+     * baseLibrary SharedPreferences 文件名
      */
-    public static final String isfirstOpenApp = "userIsFirstOpenApp";
+    public static final String baseSpf = "baseSpf";
 
 
     /**

@@ -1,4 +1,4 @@
-package com.fy.baselibrary.application.blockcanary;
+package com.fy.wanandroid.app.blockcanary;
 
 import com.fy.baselibrary.BuildConfig;
 import com.github.moduth.blockcanary.BlockCanaryContext;

@@ -2,8 +2,9 @@ package com.fy.baselibrary.retrofit.interceptor.cookie;
 
 import android.annotation.SuppressLint;
 
+import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.utils.SpfUtils;
+import com.fy.baselibrary.utils.cache.SpfAgent;
 
 import java.io.IOException;
 
@@ -25,7 +26,7 @@ public class AddCookiesInterceptor implements Interceptor {
 
         final Request.Builder builder = chain.request().newBuilder();
 
-        String[] cookieArray = SpfUtils.getSpfSaveStr("cookie").split(";");
+        String[] cookieArray = new SpfAgent(Constant.baseSpf).getString("cookie").split(";");
 
         Observable.fromArray(cookieArray)
                 .subscribe(cookie -> {

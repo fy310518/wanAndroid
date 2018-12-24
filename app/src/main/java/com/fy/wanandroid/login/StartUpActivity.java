@@ -11,14 +11,13 @@ import android.widget.TextView;
 import com.fy.baselibrary.aop.annotation.ClickFilter;
 import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
-import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.statusbar.StatusBarContentColor;
 import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.ResUtils;
-import com.fy.baselibrary.utils.SpfUtils;
+import com.fy.baselibrary.utils.cache.SpfAgent;
 import com.fy.baselibrary.utils.drawable.TintUtils;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.main.MainActivity;
@@ -90,7 +89,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
      * 根据条件 判断进入登录页还是主界面
      */
     private void intoMainOrLogin() {
-        if (Constant.isMustAppLogin && !SpfUtils.getSpfSaveBoolean(Constant.isLogin)) {
+        if (Constant.isMustAppLogin && !new SpfAgent(Constant.baseSpf).getBoolean(Constant.isLogin)) {
             JumpUtils.jump(this, AppUtils.getLocalPackageName() + ".login.LoginActivity", null);
         } else {
             JumpUtils.jump(this, MainActivity.class, null);
