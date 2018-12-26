@@ -108,7 +108,8 @@ public class RegisterActivity extends AppCompatActivity implements IBaseActivity
 
                         new SpfAgent(Constant.baseSpf)
                                 .saveBoolean(Constant.isLogin, true)
-                                .saveString(Constant.userName, login.getUsername());
+                                .saveString(Constant.userName, login.getUsername())
+                                .commit(false);
 
                         Bundle bundle = new Bundle();
                         bundle.putString("大王", "大王叫我来巡山");

@@ -24,8 +24,7 @@ public class NightModeUtils {
      * @param activity
      */
     public static void switchNightMode(AppCompatActivity activity){
-        SpfAgent spfAgent = new SpfAgent(Constant.baseSpf);
-        boolean isNight = spfAgent.getBoolean(isNightMode);
+        boolean isNight = SpfAgent.getBoolean(Constant.baseSpf, isNightMode);
         if (isNight) {//当前模式是夜间模式
             //不使用夜间模式
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -34,7 +33,7 @@ public class NightModeUtils {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
 
-        spfAgent.saveBoolean(isNightMode, !isNight);
+        new SpfAgent(Constant.baseSpf).saveBoolean(isNightMode, !isNight).commit(false);
 //        activity.getWindow().setWindowAnimations(R.style.WindowAnimationFadeInOut);
         activity.recreate(); // 这个是刷新，不然不起作用
     }
@@ -43,7 +42,7 @@ public class NightModeUtils {
      * 设置 日间/夜间 模式
      */
     public static void setNightMode(){
-        boolean isNight = new SpfAgent(Constant.baseSpf).getBoolean(isNightMode);
+        boolean isNight = SpfAgent.getBoolean(Constant.baseSpf, isNightMode);
         if (isNight) {
             //使用夜间模式
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);

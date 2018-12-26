@@ -26,7 +26,7 @@ public class AddCookiesInterceptor implements Interceptor {
 
         final Request.Builder builder = chain.request().newBuilder();
 
-        String[] cookieArray = new SpfAgent(Constant.baseSpf).getString("cookie").split(";");
+        String[] cookieArray = SpfAgent.getString(Constant.baseSpf, "cookie").split(";");
 
         Observable.fromArray(cookieArray)
                 .subscribe(cookie -> {

@@ -1,6 +1,11 @@
 package com.fy.baselibrary.utils.cache;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+
+import com.fy.baselibrary.application.ioc.ConfigUtils;
 
 import java.util.Map;
 
@@ -9,11 +14,15 @@ import java.util.Map;
  * Created by fangs on 2018/12/24 16:39.
  */
 public class SpfAgent {
+//    创建的Preferences文件存放位置可以在Eclipse中查看：
+//	  DDMS->File Explorer /<package name>/shared_prefs/setting.xml
 
-    private String fileName = "app";
+    SharedPreferences.Editor editor;
 
+    @SuppressLint("CommitPrefEdits")
     public SpfAgent(String fileName) {
-        this.fileName = fileName;
+        SharedPreferences spf = getSpf(fileName);
+        this.editor = spf.edit();
     }
 
     /**
@@ -23,7 +32,7 @@ public class SpfAgent {
      * @return SpfAgent
      */
     public SpfAgent saveString(String key, String value){
-        SpfUtils.saveStrToSpf(fileName, key, value);
+        this.editor.putString(key, value);
         return this;
     }
 
@@ -34,7 +43,7 @@ public class SpfAgent {
      * @return SpfAgent
      */
     public SpfAgent saveInt(String key, int value){
-        SpfUtils.saveIntToSpf(fileName, key, value);
+        this.editor.putInt(key, value);
         return this;
     }
 
@@ -45,7 +54,7 @@ public class SpfAgent {
      * @return SpfAgent
      */
     public SpfAgent saveLong(String key, long value){
-        SpfUtils.saveLongToSpf(fileName, key, value);
+        this.editor.putLong(key, value);
         return this;
     }
 
@@ -56,7 +65,7 @@ public class SpfAgent {
      * @return SpfAgent
      */
     public SpfAgent saveBoolean(String key, boolean value){
-        SpfUtils.saveBooleanToSpf(fileName, key, value);
+        this.editor.putBoolean(key, value);
         return this;
     }
 
@@ -67,29 +76,89 @@ public class SpfAgent {
      * @return SpfAgent
      */
     public SpfAgent saveFloat(String key, float value){
-        SpfUtils.saveFloatToSpf(fileName, key, value);
+        this.editor.putFloat(key, value);
         return this;
     }
 
 
-    public String getString(String key){
-        return SpfUtils.getSpfSaveStr(fileName, key);
+    /**
+     * 删除 指定 key 的内容
+     * @param key      The key of sp.
+     * @param isCommit True to use {@link SharedPreferences.Editor#commit()},
+     *                 false to use {@link SharedPreferences.Editor#apply()}
+     */
+    public void remove(@NonNull final String key, final boolean isCommit) {
+        this.editor.remove(key);
+        commit(isCommit);
     }
 
-    public int getInt(String key){
-        return SpfUtils.getSpfSaveInt(fileName, key);
+    /**
+     * 清除所有数据
+     * @param isCommit True to use {@link SharedPreferences.Editor#commit()},
+     *                 false to use {@link SharedPreferences.Editor#apply()}
+     */
+    public void clear(final boolean isCommit) {
+        this.editor.clear();
+        commit(isCommit);
     }
 
-    public long getLong(String key){
-        return SpfUtils.getSpfSaveLong(fileName, key);
+    /**
+     * 提交
+     * @param isCommit 是否同步提交
+     */
+    public void commit(final boolean isCommit){
+        if (isCommit) {
+            this.editor.commit();
+        } else {
+            this.editor.apply();
+        }
     }
 
-    public float getFloat(String key){
-        return SpfUtils.getSpfSaveFloat(fileName, key);
+
+
+    /**
+     * 从 SharedPreferences 取String数据
+     * @param key key
+     * @return   没有对应的key 默认返回的""
+     */
+    public static String getString(String fileName, String key){
+        return getSpf(fileName).getString(key, "");
     }
 
-    public boolean getBoolean(String key){
-        return SpfUtils.getSpfSaveBoolean(fileName, key);
+    /**
+     * 从 SharedPreferences 取int数据
+     * @param key key
+     * @return   没有对应的key  默认返回 -1
+     */
+    public static int getInt(String fileName, String key){
+        return getSpf(fileName).getInt(key, -1);
+    }
+
+    /**
+     * 从 SharedPreferences 取 long 数据
+     * @param key key
+     * @return   没有对应的key  默认返回 0
+     */
+    public static long getLong(String fileName, String key){
+        return getSpf(fileName).getLong(key, 0);
+    }
+
+    /**
+     * 从 SharedPreferences 获取 float 数据
+     * @param key       key
+     * @return          没有对应的key 默认返回 0f
+     */
+    public static float getFloat(String fileName, String key){
+        return getSpf(fileName).getFloat(key, 0f);
+    }
+
+    /**
+     * 从 SharedPreferences 获取 boolean数据
+     * @param key   key
+     * @return      没有对应的key 默认返回false
+     */
+    public static boolean getBoolean(String fileName, String key){
+        return getSpf(fileName).getBoolean(key, false);
     }
 
 
@@ -97,22 +166,17 @@ public class SpfAgent {
      * 获取所有键值对
      * @return
      */
-    public Map<String, ?> getAll(){
-        return SpfUtils.getAll(fileName);
+    public static Map<String, ?> getAll(String fileName){
+        return getSpf(fileName).getAll();
     }
 
     /**
-     * 删除 指定 key 的内容
-     * @param key
+     * 通过 application 获取 指定名称的 SharedPreferences
+     * @param fileName 文件名称
+     * @return         SharedPreferences
      */
-    public void remove(@NonNull final String key){
-        SpfUtils.remove(fileName, key, false);
-    }
-
-    /**
-     * 清除所有数据
-     */
-    public void clear(){
-        SpfUtils.clear(fileName, false);
+    public static SharedPreferences getSpf(String fileName){
+        Context ctx = ConfigUtils.getAppCtx();
+        return ctx.getSharedPreferences(fileName, Context.MODE_PRIVATE);
     }
 }

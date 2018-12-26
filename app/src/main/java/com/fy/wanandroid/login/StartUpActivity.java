@@ -89,7 +89,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
      * 根据条件 判断进入登录页还是主界面
      */
     private void intoMainOrLogin() {
-        if (Constant.isMustAppLogin && !new SpfAgent(Constant.baseSpf).getBoolean(Constant.isLogin)) {
+        if (Constant.isMustAppLogin && ! SpfAgent.getBoolean(Constant.baseSpf, Constant.isLogin)) {
             JumpUtils.jump(this, AppUtils.getLocalPackageName() + ".login.LoginActivity", null);
         } else {
             JumpUtils.jump(this, MainActivity.class, null);
