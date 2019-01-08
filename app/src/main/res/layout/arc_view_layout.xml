@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/BgColor">
 
+    <!--www.pornhub.com-->
     <com.fy.wanandroid.test.ArcView
         android:id="@+id/avTile"
         android:layout_width="0dp"

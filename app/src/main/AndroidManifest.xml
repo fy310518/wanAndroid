@@ -120,6 +120,11 @@
             android:label="@string/test"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".test.TestListActivity"
+            android:label="@string/test"
+            android:screenOrientation="portrait" />
+
         <!-- 设计稿 宽度 （用于屏幕适配）  -->
         <meta-data
             android:name="rudeness_Adapter_Screen_width"

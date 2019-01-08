@@ -53,10 +53,10 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         L.e(TAG, activity.getClass().getName() + "--Create()   " + activity.getTaskId());
 
-        if (OSUtils.getRomType() == OSUtils.EMUI && onCheck(activity)){//是华为手机则 执行
-            activity.finish();
-            return;
-        }
+//        if (OSUtils.getRomType() == OSUtils.EMUI && onCheck(activity)){//是华为手机则 执行
+//            activity.finish();
+//            return;
+//        }
 
         ScreenUtils.setCustomDensity(activity, designWidth);
 

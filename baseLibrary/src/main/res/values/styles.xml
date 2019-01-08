@@ -13,12 +13,11 @@
         <item name="windowNoTitle">true</item><!-- 无标题 -->
 
         <item name="android:colorBackgroundCacheHint">@null</item><!-- 背景缓存颜色 -->
+         <!--背景-->
+        <item name="android:windowBackground">@android:color/transparent</item>
 
         <item name="android:windowAnimationStyle">@style/animfade</item>
 
-        <!-- 避免启动应用后，出现短暂的黑屏或白屏现象 -->
-        <!--窗体是否半透明-->
-        <!--<item name="android:windowIsTranslucent">true</item>-->
         <!--设置窗体内容背景-->
         <item name="android:windowContentOverlay">@android:color/transparent</item>
     </style>

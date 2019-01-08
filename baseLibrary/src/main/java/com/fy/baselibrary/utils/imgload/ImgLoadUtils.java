@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.FutureTarget;
 import com.bumptech.glide.request.RequestOptions;
 import com.fy.baselibrary.R;
@@ -76,11 +77,15 @@ public class ImgLoadUtils {
      * @param imageView
      */
     public static void loadCircularBead(Context context, String url, ImageView imageView) {
+        //加载圆角图片 通过RequestOptions扩展功能
         RequestOptions options = new RequestOptions()
-                .fallback(R.mipmap.img_load_default)
-                .error(R.mipmap.img_load_error)
-                .placeholder(R.mipmap.img_loading)
-                .circleCrop();
+                .transform(new GlideRoundTransform(context, 30));
+
+//        RequestOptions options = new RequestOptions()
+//                .fallback(R.mipmap.img_load_default)
+//                .error(R.mipmap.img_load_error)
+//                .placeholder(R.mipmap.img_loading)
+//                .circleCrop();
 
         Glide.with(context)
                 .load(url)

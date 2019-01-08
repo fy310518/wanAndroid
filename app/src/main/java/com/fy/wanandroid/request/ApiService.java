@@ -5,6 +5,7 @@ import com.fy.wanandroid.entity.BannerBean;
 import com.fy.wanandroid.entity.Bookmark;
 import com.fy.wanandroid.entity.LoginBean;
 import com.fy.wanandroid.entity.TreeBean;
+import com.fy.wanandroid.test.TestBean;
 
 import java.util.List;
 import java.util.Map;
@@ -176,5 +177,9 @@ public interface ApiService {
      */
     @GET("http://chapterup.zhuishushenqi.com/chapter/{link}")
     Observable<BeanModule<List<Object>>> booksByTag(@Path("link") String link);
+
+
+    @GET("http://qipai3.soulgame.mobi/index/get?uid=100782&timestamp=1545978664&nonce=860076&sign=659bf0e881d251fea0429829cc704c0a")
+    Observable<BeanModule<List<TestBean>>> test();
 
 }

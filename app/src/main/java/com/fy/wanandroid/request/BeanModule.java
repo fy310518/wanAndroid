@@ -20,6 +20,10 @@ public class BeanModule<T> implements BaseBean<T>, Serializable{
     private int errorCode;
     private String errorMsg;
 
+    private int code;
+    private String msg;
+
+
     public void setData(T data) {
         this.data = data;
     }
@@ -40,6 +44,15 @@ public class BeanModule<T> implements BaseBean<T>, Serializable{
         this.errorMsg = errorMsg;
     }
 
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
     @Override
     public String toString() {
         return "BeanModule{" +
@@ -55,7 +68,7 @@ public class BeanModule<T> implements BaseBean<T>, Serializable{
      */
     @Override
     public boolean isSuccess(){
-        return errorCode >= 0;
+        return errorCode >= 0 || code == 200;
     }
 
     @Override

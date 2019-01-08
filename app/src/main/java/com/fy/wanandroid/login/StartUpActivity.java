@@ -49,7 +49,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
         return R.layout.activity_start_up;
     }
 
-    @StatusBar(statusColor = R.color.transparent, navColor = R.color.blue, applyNav = false, statusOrNavModel = 1)
+    @StatusBar(statusColor = R.color.transparent, navColor = R.color.statusBar, applyNav = false, statusOrNavModel = 1)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         StatusBarContentColor.setStatusTextColor(this, true, true);

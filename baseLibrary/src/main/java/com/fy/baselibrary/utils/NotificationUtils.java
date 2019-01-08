@@ -15,6 +15,7 @@ import android.provider.Settings;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.NotificationCompat;
+import android.widget.RemoteViews;
 
 /**
  * 简单通知 工具类
@@ -71,7 +72,6 @@ public class NotificationUtils {
      * @param fyBuild        通知关键数据 包装类
      */
     public static void sendSubscribeMsg(Activity act, Class actClass, FyBuild fyBuild) {
-
         manageNotificationChannel(act, fyBuild.channelName);
 
         PendingIntent pendingIntent;
@@ -82,18 +82,22 @@ public class NotificationUtils {
             pendingIntent = getDefalutIntent(act, Notification.FLAG_AUTO_CANCEL);
         }
 
-        NotificationManager manager = (NotificationManager) act.getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(act, fyBuild.channelName)
-                    .setContentTitle(fyBuild.msgTitle)
-                    .setContentText(fyBuild.msgContent)
-                    .setContentIntent(pendingIntent) //设置通知栏点击意图
-                    .setWhen(System.currentTimeMillis())
-                    .setSmallIcon(fyBuild.icon)
-                    .setLargeIcon(BitmapFactory.decodeResource(act.getResources(), fyBuild.icon))
-                    .setColor(ResUtils.getColor(fyBuild.iconBgColor))
-                    .setAutoCancel(true)
-                    .setDefaults(NotificationCompat.DEFAULT_ALL)//系统默认声音、震动、呼吸灯（只响应一次）
-                    ;
+                .setContentIntent(pendingIntent) //设置通知栏点击意图
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(fyBuild.icon)
+                .setLargeIcon(BitmapFactory.decodeResource(act.getResources(), fyBuild.icon))
+                .setColor(ResUtils.getColor(fyBuild.iconBgColor))
+                .setAutoCancel(true)
+                .setDefaults(fyBuild.defaults);
+
+        //判断是否显示自定义通知布局
+        if (null == fyBuild.remoteViews) {
+            builder.setContentTitle(fyBuild.msgTitle)
+                    .setContentText(fyBuild.msgContent);
+        } else {
+            builder.setCustomContentView(fyBuild.remoteViews);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // requestCode是0的时候三星手机点击通知栏通知不起作用
@@ -105,6 +109,7 @@ public class NotificationUtils {
 
         Notification notification = builder.build();
 
+        NotificationManager manager = (NotificationManager) act.getSystemService(Context.NOTIFICATION_SERVICE);
         assert manager != null;
         manager.notify(fyBuild.channelId, notification);
     }
@@ -114,21 +119,25 @@ public class NotificationUtils {
         return pendingIntent;
     }
 
-
     public static class FyBuild {
-        /** 通知渠道名称 */
-        public String channelName;
         /** 通知渠道 Id */
-        public int channelId;
+        private int channelId;
+        /** 通知渠道名称 */
+        private String channelName;
+        /** 通知模式【DEFAULT_ALL：系统默认声音、震动、呼吸灯；FLAG_ONLY_ALERT_ONCE：静默等 】 */
+        private int defaults = NotificationCompat.FLAG_ONLY_ALERT_ONCE;
 
         /** 通知 图标（Android从5.0以上 通知 icon 只使用alpha图层来进行绘制，而不应该包括RGB图层） */
-        public int icon;
+        private int icon;
         /** 通知图标 背景颜色 */
-        public int iconBgColor;
+        private int iconBgColor;
         /** 通知标题 */
-        public String msgTitle;
+        private String msgTitle;
         /** 通知内容 */
-        public String msgContent;
+        private String msgContent;
+
+        /** 自定义布局  */
+        private RemoteViews remoteViews;
 
         public static FyBuild init() {
             return new FyBuild();
@@ -139,14 +148,19 @@ public class NotificationUtils {
          * @param act
          * @param actClass
          */
-        public void sendNotify(Activity act, Class actClass){
+        public void sendNotify(Activity act, Class actClass) {
             NotificationUtils.sendSubscribeMsg(act, actClass, this);
         }
 
 
         public FyBuild setChannel(int channelId, String channelName) {
-            this.channelName = channelName;
             this.channelId = channelId;
+            this.channelName = channelName;
+            return this;
+        }
+
+        public FyBuild setDefaults(int defaults) {
+            this.defaults = defaults;
             return this;
         }
 
@@ -164,6 +178,11 @@ public class NotificationUtils {
 
         public FyBuild setMsgContent(String msgContent) {
             this.msgContent = msgContent;
+            return this;
+        }
+
+        public FyBuild setLayout(RemoteViews remoteViews) {
+            this.remoteViews = remoteViews;
             return this;
         }
     }
