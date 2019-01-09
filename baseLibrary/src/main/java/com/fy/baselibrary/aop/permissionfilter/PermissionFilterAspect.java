@@ -9,7 +9,7 @@ import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.permission.OnPermission;
 import com.fy.baselibrary.permission.PermissionFragment;
 import com.fy.baselibrary.permission.PermissionUtils;
-import com.fy.baselibrary.utils.T;
+import com.fy.baselibrary.utils.notify.T;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

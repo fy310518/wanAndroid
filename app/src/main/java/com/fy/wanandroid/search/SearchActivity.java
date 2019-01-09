@@ -21,7 +21,7 @@ import com.fy.baselibrary.rv.divider.ListItemDecoration;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.utils.T;
+import com.fy.baselibrary.utils.notify.T;
 import com.fy.baselibrary.widget.refresh.EasyPullLayout;
 import com.fy.baselibrary.widget.refresh.OnRefreshListener;
 import com.fy.wanandroid.R;

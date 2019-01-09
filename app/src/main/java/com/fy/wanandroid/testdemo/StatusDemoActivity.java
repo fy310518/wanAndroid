@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -37,12 +38,10 @@ import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.utils.NotificationUtils;
-import com.fy.baselibrary.utils.ResUtils;
+import com.fy.baselibrary.utils.notify.NotifyUtils;
 import com.fy.baselibrary.utils.imgload.imgprogress.ProgressInterceptor;
 import com.fy.baselibrary.utils.imgload.imgprogress.ProgressListener;
 import com.fy.wanandroid.R;
-import com.fy.wanandroid.login.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,23 +116,25 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tvKing:
+                RemoteViews remoteViews = new RemoteViews(AppUtils.getLocalPackageName(), R.layout.notify_remote_layout);
+                NotifyUtils.FyBuild fyBuild = NotifyUtils.FyBuild.init()
+                        .setChannel(1, "chat")
+                        .setIcon(R.mipmap.ic_launcher, R.color.appHeadBg)
+                        .setLayout(remoteViews)
+                        .createManager(this, null);
+
                 int skip = 100;
                 Observable.interval(0, 1, TimeUnit.SECONDS)
                         .take(skip + 1)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnNext(aLong -> {
-                            RemoteViews remoteViews = new RemoteViews(AppUtils.getLocalPackageName(), R.layout.notify_remote_layout);
                             remoteViews.setTextViewText(R.id.txTitle, "我是标题");
 //                remoteViews.setTextViewText(R.id.content, "我是内容");
                             remoteViews.setProgressBar(R.id.progress, 100, aLong.intValue(), false);
                             remoteViews.setTextViewText(R.id.txProgress, aLong.intValue() + "%");
 
-                            NotificationUtils.FyBuild.init()
-                                    .setChannel(1, "chat")
-                                    .setIcon(R.mipmap.ic_launcher, R.color.appHeadBg)
-                                    .setLayout(remoteViews)
-                                    .sendNotify(this, null);
+                            fyBuild.notifyData(remoteViews);
                         })
                         .compose(RxHelper.bindToLifecycle(this))
                         .subscribe(aLong -> {
@@ -144,12 +145,14 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                 showHideViewFlag(Constant.LAYOUT_NETWORK_ERROR_ID);
                 break;
             case R.id.tvKing2:
-                NotificationUtils.FyBuild.init()
+                NotifyUtils.FyBuild.init()
                         .setChannel(2, "subscribe")
+                        .setDefaults(NotificationCompat.DEFAULT_ALL)
                         .setIcon(R.mipmap.ic_launcher, R.color.appHeadBg)
                         .setMsgTitle("收到一条订阅消息")
                         .setMsgContent("地铁沿线30万商铺抢购中！")
-                        .sendNotify(this, null);
+                        .createManager(this, null)
+                        .sendNotify();
                 break;
         }
     }
@@ -275,10 +278,10 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
     private void initNotificationChannel() {
         String channelId = "chat";
         String channelName = "聊天消息";
-        NotificationUtils.createNotificationChannel(this, channelId, channelName, NotificationManager.IMPORTANCE_LOW);
+        NotifyUtils.createNotificationChannel(this, channelId, channelName, NotificationManager.IMPORTANCE_LOW);
 
         channelId = "subscribe";
         channelName = "订阅消息";
-        NotificationUtils.createNotificationChannel(this, channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+        NotifyUtils.createNotificationChannel(this, channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
     }
 }

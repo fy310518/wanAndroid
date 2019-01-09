@@ -1,4 +1,4 @@
-package com.fy.baselibrary.utils;
+package com.fy.baselibrary.utils.notify;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -17,13 +17,17 @@ import android.support.annotation.DrawableRes;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
+import com.fy.baselibrary.utils.AppUtils;
+import com.fy.baselibrary.utils.JumpUtils;
+import com.fy.baselibrary.utils.ResUtils;
+
 /**
  * 简单通知 工具类
  * Created by fangs on 2018/3/18.
  */
-public class NotificationUtils {
+public class NotifyUtils {
 
-    private NotificationUtils() {
+    private NotifyUtils() {
         /* cannot be instantiated */
         throw new UnsupportedOperationException("cannot be instantiated");
     }
@@ -40,6 +44,7 @@ public class NotificationUtils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
             NotificationManager notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+            assert notificationManager != null;
             notificationManager.createNotificationChannel(channel);
         }
     }
@@ -49,7 +54,7 @@ public class NotificationUtils {
      * @param act
      * @param channelName
      */
-    public static void manageNotificationChannel(Activity act, String channelName){
+    private static void manageNotificationChannel(Activity act, String channelName){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager manager = (NotificationManager) act.getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationChannel channel = manager.getNotificationChannel(channelName);
@@ -65,13 +70,18 @@ public class NotificationUtils {
         }
     }
 
+    private static PendingIntent getDefaultIntent(Activity act, int flags) {
+        PendingIntent pendingIntent = PendingIntent.getActivity(act, 1, new Intent(), flags);
+        return pendingIntent;
+    }
+
     /**
-     * 发送一条通知
+     * 配置 NotificationCompat.Builder
      * @param act
      * @param actClass       点击通知 跳转的 目标activity（可空）
      * @param fyBuild        通知关键数据 包装类
      */
-    public static void sendSubscribeMsg(Activity act, Class actClass, FyBuild fyBuild) {
+    public static NotificationCompat.Builder createNotifyBuilder(Activity act, Class actClass, FyBuild fyBuild) {
         manageNotificationChannel(act, fyBuild.channelName);
 
         PendingIntent pendingIntent;
@@ -79,7 +89,7 @@ public class NotificationUtils {
             Intent intent = new Intent(act, actClass);
             pendingIntent = PendingIntent.getActivity(act, 0, intent, 0);
         } else {
-            pendingIntent = getDefalutIntent(act, Notification.FLAG_AUTO_CANCEL);
+            pendingIntent = getDefaultIntent(act, Notification.FLAG_AUTO_CANCEL);
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(act, fyBuild.channelName)
@@ -107,17 +117,9 @@ public class NotificationUtils {
                     .setFullScreenIntent(pendingIntent1, false);// 横幅
         }
 
-        Notification notification = builder.build();
-
-        NotificationManager manager = (NotificationManager) act.getSystemService(Context.NOTIFICATION_SERVICE);
-        assert manager != null;
-        manager.notify(fyBuild.channelId, notification);
+        return builder;
     }
 
-    public static PendingIntent getDefalutIntent(Activity act, int flags) {
-        PendingIntent pendingIntent = PendingIntent.getActivity(act, 1, new Intent(), flags);
-        return pendingIntent;
-    }
 
     public static class FyBuild {
         /** 通知渠道 Id */
@@ -139,20 +141,33 @@ public class NotificationUtils {
         /** 自定义布局  */
         private RemoteViews remoteViews;
 
+        private NotificationCompat.Builder mBuilder;
+        private NotificationManager manager;
+
         public static FyBuild init() {
             return new FyBuild();
         }
 
+        /** 发送一次通知 */
+        public void sendNotify(){
+            assert mBuilder != null;
+            Notification notification = mBuilder.build();
+            assert manager != null;
+            manager.notify(channelId, notification);
+        }
+
         /**
-         * 发送通知
-         * @param act
-         * @param actClass
+         * 刷新通知
+         * @param remoteViews 自定义通知布局
          */
-        public void sendNotify(Activity act, Class actClass) {
-            NotificationUtils.sendSubscribeMsg(act, actClass, this);
+        public void notifyData(RemoteViews remoteViews){
+            this.remoteViews = remoteViews;
+            mBuilder.setCustomContentView(remoteViews);
+            sendNotify();
         }
 
 
+        /** 以下为构建参数 */
         public FyBuild setChannel(int channelId, String channelName) {
             this.channelId = channelId;
             this.channelName = channelName;
@@ -183,6 +198,17 @@ public class NotificationUtils {
 
         public FyBuild setLayout(RemoteViews remoteViews) {
             this.remoteViews = remoteViews;
+            return this;
+        }
+
+        /**
+         * 最后构建 NotificationCompat.Builder 和 NotificationManager
+         * @param act
+         * @param actClass
+         */
+        public FyBuild createManager(Activity act, Class actClass) {
+            mBuilder = NotifyUtils.createNotifyBuilder(act, actClass, this);
+            manager = (NotificationManager) act.getSystemService(Context.NOTIFICATION_SERVICE);
             return this;
         }
     }

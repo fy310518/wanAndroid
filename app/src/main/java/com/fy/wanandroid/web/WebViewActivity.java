@@ -27,7 +27,7 @@ import com.fy.baselibrary.statuslayout.OnSetStatusView;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.utils.T;
+import com.fy.baselibrary.utils.notify.T;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.entity.Bookmark;
 

@@ -5,7 +5,7 @@ import com.fy.baselibrary.statuslayout.OnSetStatusView;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NetUtils;
-import com.fy.baselibrary.utils.T;
+import com.fy.baselibrary.utils.notify.T;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializer;
 import com.google.gson.JsonSyntaxException;

@@ -38,7 +38,8 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * Created by fangs on 2017/5/18.
  */
 public class BaseActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
-    public static String TAG = "ActivityCallbacks";
+    public static final String TAG = "ActivityCallbacks";
+    public static int actNum;
     int designWidth;
 
     static {
@@ -51,12 +52,13 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+        BaseActivityLifecycleCallbacks.actNum++;
         L.e(TAG, activity.getClass().getName() + "--Create()   " + activity.getTaskId());
 
-//        if (OSUtils.getRomType() == OSUtils.EMUI && onCheck(activity)){//是华为手机则 执行
-//            activity.finish();
-//            return;
-//        }
+        if (OSUtils.getRomType() == OSUtils.EMUI && onCheck(activity)){//是华为手机则 执行
+            activity.finish();
+            return;
+        }
 
         ScreenUtils.setCustomDensity(activity, designWidth);
 
@@ -194,13 +196,19 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
         return titleBar;
     }
 
-
+    /**
+     * 判断 应用是否被杀死（拦截 华为手机 设置中关闭权限 应用崩溃重启 黑屏问题）
+     * @param activity
+     * @return
+     */
     private boolean onCheck(Activity activity) {
         boolean isrun;
         ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
         ActivityManager.RunningTaskInfo info = manager.getRunningTasks(1).get(0);
 
-        if (info.numRunning == 1 && !info.topActivity.getClassName().equals("com.fy.baselibrary.startactivity.StartActivity")) {
+        if (BaseActivityLifecycleCallbacks.actNum == 1 &&
+                info.numRunning == 1 &&
+                !info.topActivity.getClassName().equals("com.fy.baselibrary.startactivity.StartActivity")) {
             //被杀死重启
             isrun = true;
             L.e(TAG, activity.getClass().getName() + "关闭此界面");

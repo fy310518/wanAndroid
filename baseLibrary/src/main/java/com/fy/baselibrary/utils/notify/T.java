@@ -1,4 +1,4 @@
-package com.fy.baselibrary.utils;
+package com.fy.baselibrary.utils.notify;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.fy.baselibrary.application.ioc.ConfigUtils;
+import com.fy.baselibrary.utils.ResUtils;
 
 /**
  * Toast统一管理类 (解决多次弹出toast)

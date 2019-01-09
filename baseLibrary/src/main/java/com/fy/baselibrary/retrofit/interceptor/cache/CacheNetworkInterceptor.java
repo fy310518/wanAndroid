@@ -5,6 +5,7 @@ import com.fy.baselibrary.utils.L;
 import java.io.IOException;
 
 import okhttp3.Interceptor;
+import okhttp3.Request;
 import okhttp3.Response;
 
 /**
@@ -17,14 +18,20 @@ public class CacheNetworkInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         L.e("http--Cache", "intercept()");
-        //无缓存,进行缓存
-        return chain.proceed(chain.request())
-                .newBuilder()
-                .removeHeader("Pragma")
-                .removeHeader("Cache-Control")
-                //对请求进行最大60秒的缓存
-                .addHeader("Cache-Control", "max-age=60")
-                .build();
-    }
 
+        Response response = chain.proceed(chain.request());
+        if (response != null && response.isRedirect()) {
+            //如果是重定向，则不做缓存
+            return response;
+        } else {
+            //无缓存,进行缓存
+            assert response != null;
+            return response.newBuilder()
+                    .removeHeader("Pragma")
+                    .removeHeader("Cache-Control")
+                    //对请求进行最大60秒的缓存
+                    .addHeader("Cache-Control", "max-age=60")
+                    .build();
+        }
+    }
 }

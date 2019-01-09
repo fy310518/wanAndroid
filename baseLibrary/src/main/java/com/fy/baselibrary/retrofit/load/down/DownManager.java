@@ -10,8 +10,7 @@ import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.GsonUtils;
 import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.utils.T;
-import com.fy.baselibrary.utils.ThreadUtils;
+import com.fy.baselibrary.utils.notify.T;
 import com.fy.baselibrary.utils.TransfmtUtils;
 import com.fy.baselibrary.utils.cache.ACache;
 
@@ -41,7 +40,7 @@ import okhttp3.ResponseBody;
 public class DownManager {
 
     /** 文件下载 默认下载线程数(目前建议是 3，以后谁知道呢 ^_^) */
-    public static final int THREAD_COUNT = 3;
+    public static final int THREAD_COUNT = 2;
 
     /** 最大并行下载量 */
 //    private final int MAX_COUNT = ThreadUtils.maximumPoolSize / THREAD_COUNT;
