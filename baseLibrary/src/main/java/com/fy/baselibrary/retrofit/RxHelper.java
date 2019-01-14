@@ -78,7 +78,7 @@ public class RxHelper {
     }
 
     /**
-     * 绑定activity 或 fragment声明周期，在生命周期结束后断开 rxjava 请求
+     * 绑定activity 或 fragment生命周期，在生命周期结束后断开 rxjava 请求
      * @param context 环境
      * @param <T> 泛型
      * @return 包装过的被观察者
@@ -110,7 +110,7 @@ public class RxHelper {
     }
 
     /**
-     //  ┏┓　　　┏┓
+     //   ┏┓　　　┏┓
      //┏┛┻━━━┛┻┓
      //┃　　　　　　　┃
      //┃　　　━　　　┃
@@ -121,11 +121,11 @@ public class RxHelper {
      //   ┃　　　┃   阿弥陀佛
      //   ┃　　　┃   神兽保佑
      //   ┃      ┃  代码无BUG
-     //   ┃　　　┗━━━┓
-     //   ┃　　　　　　　┣━┓
-     //   ┃　　　　　　　┏━┛
-     //   ┗┓┓┏━┳┓┏┛
+     //   ┃　　　┗━━━━━┓
+     //   ┃　　　　　　     ┣━┓
+     //   ┃　　　　　　    ┏━┛
+     //   ┗┓┓ ┏━┳┓┏┛
      //     ┃┫┫　┃┫┫
-     //     ┗┻┛　┗┻┛
+     //    ┗┻┛　┗┻┛
      */
 }

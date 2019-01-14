@@ -106,14 +106,14 @@ public class RequestUtils {
      *
      * @param d 切断订阅事件 接口
      */
-    public static void addDispos(Disposable d) {
+    public static void addDispose(Disposable d) {
         getInstance().mCompositeDisposable.add(d);
     }
 
     /**
      * 使用RxJava CompositeDisposable 清理所有的网络请求
      */
-    public static void clearDispos() {
+    public static void clearDispose() {
         getInstance().mCompositeDisposable.clear();
     }
 

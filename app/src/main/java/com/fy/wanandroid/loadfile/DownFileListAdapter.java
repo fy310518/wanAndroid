@@ -62,13 +62,13 @@ public class DownFileListAdapter extends RvCommonAdapter<DownInfo> {
                 DownManager.getInstentce().stop(downInfo.getUrl(), DownInfo.STATUS_PAUSED);
                 break;
             case DownInfo.STATUS_PAUSED:
-                DownManager.getInstentce().stratDown(downInfo);
+                DownManager.getInstentce().startDown(downInfo);
                 break;
             case DownInfo.STATUS_CANCEL:
-                DownManager.getInstentce().stratDown(downInfo);
+                DownManager.getInstentce().startDown(downInfo);
                 break;
             case DownInfo.STATUS_DOWNLOAD_ERROR:
-                DownManager.getInstentce().stratDown(downInfo);
+                DownManager.getInstentce().startDown(downInfo);
                 break;
             case DownInfo.STATUS_COMPLETE://下载完成
 

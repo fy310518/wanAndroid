@@ -32,6 +32,7 @@ import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NightModeUtils;
 import com.fy.baselibrary.utils.ResUtils;
+import com.fy.baselibrary.utils.ScreenUtils;
 import com.fy.baselibrary.utils.cache.ACache;
 import com.fy.baselibrary.utils.cache.SpfAgent;
 import com.fy.baselibrary.utils.drawable.TintUtils;
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
         mContext = this;
         L.e(getTaskId() + "----> MainActivity");
         initNav();
-        initRadioGroup();
+        if (null == savedInstanceState)initRadioGroup();
     }
 
     @Override
@@ -184,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
         Fragment showfragment = null;
         switch (position) {
             case 0:
+//                fragmentOne = fragmentTransaction.
                 if (null == fragmentOne) fragmentOne = new FragmentOne();
                 showfragment = fragmentOne;
                 break;

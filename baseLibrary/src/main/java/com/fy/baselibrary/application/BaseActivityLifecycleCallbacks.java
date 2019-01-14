@@ -38,7 +38,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * Created by fangs on 2017/5/18.
  */
 public class BaseActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
-    public static final String TAG = "ActivityCallbacks";
+    public static final String TAG = "lifeCycle --> ";
     public static int actNum;
     int designWidth;
 
@@ -53,7 +53,7 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         BaseActivityLifecycleCallbacks.actNum++;
-        L.e(TAG, activity.getClass().getName() + "--Create()   " + activity.getTaskId());
+        L.e(TAG + activity.getClass().getSimpleName(), "Create()   " + activity.getTaskId());
 
         if (OSUtils.getRomType() == OSUtils.EMUI && onCheck(activity)){//是华为手机则 执行
             activity.finish();
@@ -117,32 +117,32 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
     @Override
     public void onActivityStarted(Activity activity) {
-        L.e(TAG, activity.getClass().getName() + "--Start()");
+        L.e(TAG + activity.getClass().getSimpleName(), "--Start()");
     }
 
     @Override
     public void onActivityResumed(Activity activity) {
-        L.e(TAG, activity.getClass().getName() + "--Resume()");
+        L.e(TAG + activity.getClass().getSimpleName(), "--Resume()");
     }
 
     @Override
     public void onActivityPaused(Activity activity) {
-        L.e(TAG, activity.getClass().getName() + "--Pause()");
+        L.e(TAG + activity.getClass().getSimpleName(), "--Pause()");
     }
 
     @Override
     public void onActivityStopped(Activity activity) {
-        L.e(TAG, activity.getClass().getName() + "--Stop()");
+        L.e(TAG + activity.getClass().getSimpleName(), "--Stop()");
     }
 
     @Override
     public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-        L.e(TAG, activity.getClass().getName() + "--SaveInstanceState()");
+        L.e(TAG + activity.getClass().getSimpleName(), "--SaveInstanceState()");
     }
 
     @Override
     public void onActivityDestroyed(Activity activity) {
-        L.e(TAG, activity.getClass().getName() + "--Destroy()");
+        L.e(TAG + activity.getClass().getSimpleName(), "--Destroy()");
 
         BaseActivityBean activityBean = (BaseActivityBean) activity.getIntent()
                 .getSerializableExtra("ActivityBean");

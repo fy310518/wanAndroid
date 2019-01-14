@@ -11,6 +11,7 @@ import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.load.down.DownLoadListener;
 import com.fy.baselibrary.retrofit.load.down.DownManager;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
+import com.fy.baselibrary.utils.L;
 import com.fy.wanandroid.R;
 
 import butterknife.BindView;
@@ -94,12 +95,11 @@ public class DownFileActivity extends AppCompatActivity implements IBaseActivity
 
         @Override
         public void onComplete() {
-
+            L.e("Thread", "onComplete() ---》" + Thread.currentThread().getName());
         }
 
         @Override
         public void onFailed(Exception e) {
-
         }
     }
 }

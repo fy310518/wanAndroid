@@ -13,17 +13,11 @@ public class DownLoadObserver<T> implements Observer<T> {
 
     private Disposable disposed;
 
-    /**
-     * 下载开关
-     */
+    /** 下载开关 */
     private boolean downSwitch = true;
-    /**
-     * 下载数据
-     */
+    /** 下载数据 */
     private DownInfo downInfo;
-    /**
-     * 下载监听
-     */
+    /** 下载监听 */
     private DownLoadListener loadListener;
 
 
@@ -38,12 +32,10 @@ public class DownLoadObserver<T> implements Observer<T> {
     }
 
     @Override
-    public void onNext(T t) {
-    }
+    public void onNext(T t) {}
 
     @Override
     public void onError(Throwable e) {
-
         if (e instanceof SocketException) {
             int status = -1;
             if (e.getMessage().equals(DownInfo.STATUS_CANCEL + "")) {
@@ -57,8 +49,8 @@ public class DownLoadObserver<T> implements Observer<T> {
             if (status != -1) {
                 downInfo.setStateInte(status);
                 downSwitch = false;
-                //切断当前的订阅
-                if (null != disposed && !disposed.isDisposed()) disposed.dispose();
+
+                disposed();
                 if (null != loadListener) loadListener.onProgress(downInfo.getReadLength().get(),
                         downInfo.getCountLength(), downInfo.getPercent());
             }
@@ -75,14 +67,20 @@ public class DownLoadObserver<T> implements Observer<T> {
         DownManager.getInstentce().removeTask(downInfo);
 
         DownManager.getInstentce().saveDownInfo(downInfo);
-        DownManager.getInstentce().runDownTask();
+//        DownManager.getInstentce().runDownTask();
+    }
+
+    /**
+     * 切断当前的订阅
+     */
+    public void disposed(){
+        if (null != disposed && !disposed.isDisposed()) disposed.dispose();
     }
 
 
     /**
      * 计算下载 进度百分比
-     *
-     * @param read
+     * @param read       下载长度
      */
     public void onRead(long read) {
         if (!downSwitch) return;
@@ -98,12 +96,10 @@ public class DownLoadObserver<T> implements Observer<T> {
 
     /**
      * 计算下载 进度百分比
-     *
-     * @param percent
+     * @param percent 百分比
      */
     private void onPercent(double percent) {
         if (percent == downInfo.getPercent()) return;
-
 
         downInfo.setStateInte(DownInfo.STATUS_DOWNLOADING);
         if (percent >= 100d) {
@@ -113,7 +109,6 @@ public class DownLoadObserver<T> implements Observer<T> {
                 loadListener.onProgress(downInfo.getReadLength().get(),
                         downInfo.getCountLength(),
                         downInfo.getPercent());
-            onComplete();
             return;
         }
 

@@ -24,7 +24,7 @@ import butterknife.Unbinder;
  * Created by fangs on 2017/4/26.
  */
 public abstract class BaseFragment extends Fragment implements View.OnClickListener, OnSetStatusView {
-    public final String TAG = getClass().getSimpleName() + "Fragment";
+    public final String TAG = "lifeCycle --> " + getClass().getSimpleName();
 
     protected ACache mCache;
 

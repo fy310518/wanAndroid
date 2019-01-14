@@ -83,7 +83,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
         return R.layout.activity_status;
     }
 
-    @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar, statusOrNavModel = 1)
+    @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         BaseActivityBean activityBean = (BaseActivityBean) activity.getIntent()
