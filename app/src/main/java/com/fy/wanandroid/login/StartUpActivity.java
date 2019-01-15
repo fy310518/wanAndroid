@@ -1,5 +1,6 @@
 package com.fy.wanandroid.login;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.fy.baselibrary.aop.annotation.ClickFilter;
+import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.RxHelper;
@@ -72,6 +74,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
         }
     }
 
+//    @NeedPermission(value = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, isRun = true)
     @SuppressLint("CheckResult")
     private void hideLoadView() {
         Observable.interval(0, 1, TimeUnit.SECONDS)
@@ -88,6 +91,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
     /**
      * 根据条件 判断进入登录页还是主界面
      */
+    @NeedPermission(value = Manifest.permission.WRITE_EXTERNAL_STORAGE)
     private void intoMainOrLogin() {
         if (Constant.isMustAppLogin && ! SpfAgent.getBoolean(Constant.baseSpf, Constant.isLogin)) {
             JumpUtils.jump(this, AppUtils.getLocalPackageName() + ".login.LoginActivity", null);

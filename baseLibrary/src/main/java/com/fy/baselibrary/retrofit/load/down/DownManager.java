@@ -45,7 +45,8 @@ public class DownManager {
     public static final int THREAD_COUNT = 3;
 
     /** 最大并行下载量 */
-    private final int MAX_COUNT = ThreadUtils.maximumPoolSize / THREAD_COUNT;
+//    private final int MAX_COUNT = ThreadUtils.maximumPoolSize / THREAD_COUNT;
+    private final int MAX_COUNT = 1;
 
     /** 是否正在执行下载任务 */
     private boolean isRunDownLoad;
@@ -219,7 +220,6 @@ public class DownManager {
 
     /**
      * 增加一个下载任务 到 下载队列
-     *
      * @param downInfo
      */
     public void addDownTask(DownInfo downInfo, DownLoadListener loadListener) {
@@ -313,7 +313,9 @@ public class DownManager {
      * todo 并行下载有问题
      */
     public synchronized void runDownTask() {
-        int num = MAX_COUNT;
+        if (downQueue.size() == 0) return;
+
+        int num = MAX_COUNT;//添加到正在下载列表的数目
         if (isRunDownLoad) num = MAX_COUNT - downInfos.size();
 
         for (int i = 0; i < num; i++) {
@@ -398,15 +400,16 @@ public class DownManager {
 
     /**
      * 清除 指定的下载任务 回调
-     *
-     * @param downInfo
+     * @param downInfo    下载任务对象
      */
     public void removeTask(DownInfo downInfo) {
-        if (null == downInfo || observerMap.get(downInfo.getUrl()) == null) return;
-        observerMap.remove(downInfo.getUrl());
+        if (null != downInfo && observerMap.get(downInfo.getUrl()) != null) {
+            observerMap.remove(downInfo.getUrl());
+            boolean isRemove = downInfos.remove(downInfo);
 
-        boolean isRemove = downInfos.remove(downInfo);
-        L.e("清除下载完成的任务", downInfo.getUrl() + "--->" + isRemove + "-->" + Thread.currentThread().getName());
+            if (downInfos.size() == 0) isRunDownLoad = false;
+            L.e("清除下载完成的任务", downInfo.getUrl() + "--->" + isRemove + "-->" + Thread.currentThread().getName());
+        }
     }
 
     /**

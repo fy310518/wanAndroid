@@ -11,11 +11,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
 import com.fy.baselibrary.R;
+import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.base.BaseFragment;
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.base.dialog.CommonDialog;
 import com.fy.baselibrary.base.dialog.DialogConvertListener;
 import com.fy.baselibrary.base.dialog.NiceDialog;
+import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.drawable.ShapeBuilder;
 
 import java.util.ArrayList;
@@ -29,9 +31,7 @@ import java.util.List;
 public class PermissionFragment extends BaseFragment {
 
     public final static String KEY_PERMISSIONS_ARRAY = "key_permission_array";
-
     public final static String KEY_FIRST_MESSAGE = "key_first_message";
-
     public final static String KEY_ALWAYS_MESSAGE = "key_always_message";
 
     /** 权限请求 状态码 */
@@ -51,7 +51,7 @@ public class PermissionFragment extends BaseFragment {
 
     private boolean isToSettingPermission;
 
-    private static OnPermission call;
+    private OnPermission call;
 
     @Override
     protected int setContentLayout() {
@@ -60,7 +60,7 @@ public class PermissionFragment extends BaseFragment {
 
     @Override
     protected void baseInit() {
-        mFirstRefuseMessage = getString(R.string.defaule_always_message);
+        mFirstRefuseMessage = getString(R.string.default_always_message);
 
         Bundle bundle = getArguments();
         if (null != bundle) {
@@ -70,10 +70,10 @@ public class PermissionFragment extends BaseFragment {
         }
 
         if (TextUtils.isEmpty(mFirstRefuseMessage)) {
-            mFirstRefuseMessage = getString(R.string.defaule_first_message);
+            mFirstRefuseMessage = getString(R.string.default_first_message);
         }
         if (TextUtils.isEmpty(mAlwaysRefuseMessage)) {
-            mAlwaysRefuseMessage = getString(R.string.defaule_always_message);
+            mAlwaysRefuseMessage = getString(R.string.default_always_message);
         }
 
         checkPermission(mPermissions);
@@ -139,7 +139,7 @@ public class PermissionFragment extends BaseFragment {
 
     /**
      * 调用系统弹窗请求权限
-     * @param isRefuse
+     * @param isRefuse     是否勾选了（“不在提示”多选框）
      */
     public void onSurePermission(boolean isRefuse) {
         if (isRefuse) {
@@ -151,8 +151,8 @@ public class PermissionFragment extends BaseFragment {
     }
 
     /**
-     * 弹窗自定义弹窗 给予用户提示
-     * @param isAlwaysRefuse
+     * 自定义弹窗 给予用户提示
+     * @param isAlwaysRefuse    是否勾选了（“不在提示”多选框）
      * @param isAllSuccess      权限请求是否 全部成功
      */
     public void showPermissionDialog(final boolean isAlwaysRefuse, boolean isAllSuccess) {
@@ -205,30 +205,23 @@ public class PermissionFragment extends BaseFragment {
     }
 
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        call = null;
-    }
 
     /**
      * 准备请求权限
      * @param object
-     * @param permissions
+     * @param needPermission
      */
-    public static void newInstant(Object object, String[] permissions, OnPermission callListener) {
-        call = callListener;
-
+    public static void newInstant(Object object, NeedPermission needPermission, OnPermission callListener) {
         Bundle bundle = new Bundle();
-        bundle.putStringArray(KEY_PERMISSIONS_ARRAY, permissions);
-
-//        Intent intent = new Intent();
-//        intent.putExtras(bundle);
+        bundle.putStringArray(KEY_PERMISSIONS_ARRAY, needPermission.value());
+        if (needPermission.firstRefuseMsg() != 0)bundle.putString(KEY_FIRST_MESSAGE, ResUtils.getStr(needPermission.firstRefuseMsg()));
+        if (needPermission.alwaysRefuseMsg() != 0)bundle.putString(KEY_ALWAYS_MESSAGE, ResUtils.getStr(needPermission.alwaysRefuseMsg()));
 
         PermissionFragment fragment = new PermissionFragment();
+        fragment.call = callListener;
         fragment.setArguments(bundle);
-        FragmentManager manager = null;
 
+        FragmentManager manager = null;
         if (object instanceof AppCompatActivity) {
             AppCompatActivity act = ((AppCompatActivity)object);
             manager = act.getSupportFragmentManager();

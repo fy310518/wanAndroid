@@ -17,9 +17,18 @@ public @interface NeedPermission {
 
     /**
      * 请求权限列表
-     * @return
      */
     String[] value() default {};
+
+    /**
+     * 第一次拒绝必要权限的提示信息
+     */
+    int firstRefuseMsg() default 0;
+
+    /**
+     * 永久拒绝必要权限的提示信息
+     */
+    int alwaysRefuseMsg() default 0;
 
     /**
      * 存在被拒绝的权限时，是否继续执行

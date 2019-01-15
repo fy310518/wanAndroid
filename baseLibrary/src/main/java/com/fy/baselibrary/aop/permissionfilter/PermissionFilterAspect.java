@@ -50,16 +50,16 @@ public class PermissionFilterAspect {
 
         if (null == context) return;
         //获取需要申请的权限，如果返回的权限列表为空 则 已经获取了对应的权限列表
-        List<String> requestPermi = PermissionUtils.getRequestPermissionList(context, needPermission.value());
+        List<String> requestPermission = PermissionUtils.getRequestPermissionList(context, needPermission.value());
 
-        if (requestPermi.size() == 0) {
+        if (requestPermission.size() == 0) {
             joinPoint.proceed();
         } else {
-            PermissionFragment.newInstant(object, needPermission.value(), new OnPermission() {
+            PermissionFragment.newInstant(object, needPermission, new OnPermission() {
                 @Override
                 public void hasPermission(List<String> denied, boolean isAll) {
 
-                    int permission = isAll ? R.string.permissionSuccess : R.string.defaule_always_message;
+                    int permission = isAll ? R.string.permissionSuccess : R.string.default_always_message;
                     T.showLong(permission);
 
                     if (isAll || needPermission.isRun()) {

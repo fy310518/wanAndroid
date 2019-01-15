@@ -1,15 +1,12 @@
 package com.fy.wanandroid.main.fragment;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
-import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.base.BaseFragment;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
@@ -113,7 +110,6 @@ public class FragmentOne extends BaseFragment {
     /**
      * 网络请求
      */
-    @NeedPermission(value = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, isRun = true)
     private void getData() {
         Observable<List<BannerBean>> observable1 = RequestUtils.create(ApiService.class)
                 .getBannerList()

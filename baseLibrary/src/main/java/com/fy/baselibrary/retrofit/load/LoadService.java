@@ -62,6 +62,7 @@ public interface LoadService {
      * @param url
      * @return
      */
+    @UpLoadFileType
     @Streaming
     @GET
     Observable<ResponseBody> download(@Header("RANGE") String downParam, @Url String url);

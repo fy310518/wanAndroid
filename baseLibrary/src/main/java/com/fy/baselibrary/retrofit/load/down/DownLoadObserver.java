@@ -67,7 +67,7 @@ public class DownLoadObserver<T> implements Observer<T> {
         DownManager.getInstentce().removeTask(downInfo);
 
         DownManager.getInstentce().saveDownInfo(downInfo);
-//        DownManager.getInstentce().runDownTask();
+        DownManager.getInstentce().runDownTask();
     }
 
     /**

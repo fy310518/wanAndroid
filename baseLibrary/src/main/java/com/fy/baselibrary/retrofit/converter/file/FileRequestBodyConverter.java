@@ -9,11 +9,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okio.ByteString;
 import retrofit2.Converter;
 
 /**

@@ -217,24 +217,6 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
                     }
                 });
-//        UpLoadUtils.uploadFiles(files, RequestUtils.create(LoadService.class))
-//                .compose(RxHelper.bindToLifecycle(this))
-//                .subscribe(new LoadCallBack<Object>() {
-//                    @Override
-//                    protected void onProgress(String percent) {
-//                        L.e("进度M", percent + "%-->" + Thread.currentThread().getName());
-//                    }
-//
-//                    @Override
-//                    protected void onSuccess(Object t) {
-//
-//                    }
-//
-//                    @Override
-//                    protected void updataLayout(int flag) {
-//
-//                    }
-//                });
     }
 
     /**
