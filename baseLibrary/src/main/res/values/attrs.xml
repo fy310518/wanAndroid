@@ -44,13 +44,13 @@
     <!-- 适配5.0以下系统 svg图标 不能直接在布局文件使用 -->
     <declare-styleable name="svgCompat">
         <!-- svg 图标资源id -->
-        <attr name="svgDrawable" format="integer" />
+        <attr name="svgDrawable" format="reference" />
         <!-- svg 图标替换颜色 -->
-        <attr name="svgTintColor" format="color" />
+        <attr name="svgTintColor" format="reference" />
         <!-- 图标类型-->
         <attr name="drawableType" format="enum">
-            <enum name="svgType" value="0" />
-            <enum name="imgType" value="1" /><!-- 图片类型 png、shape、jpg等 -->
+            <enum name="imgType" value="0" /><!-- png、shape、jpg 图标等 -->
+            <enum name="svgType" value="1" /><!-- svg -->
         </attr>
 
         <!-- svg 图标显示在控件的位置，textView 类型控件 存在左、上、右、下。其它控件设置为背景 -->

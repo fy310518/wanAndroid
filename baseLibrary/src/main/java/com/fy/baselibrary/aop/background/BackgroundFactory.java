@@ -2,15 +2,19 @@ package com.fy.baselibrary.aop.background;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
 import android.support.v4.util.ArrayMap;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.fy.baselibrary.R;
 import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.drawable.TintUtils;
 
 import java.lang.reflect.Constructor;
 import java.util.Map;
@@ -42,14 +46,19 @@ public class BackgroundFactory implements LayoutInflater.Factory2 {
 
         TypedArray svgCompat = context.obtainStyledAttributes(attrs, R.styleable.svgCompat);
 
-        if (svgCompat.getIndexCount() == 0) return view;
+        try {
+            if (svgCompat.getIndexCount() <= 0) return view;
 
-        if (view == null) view = createViewFromTag(context, name, attrs);
+            if (view == null) view = createViewFromTag(context, name, attrs);
 
-        if (view == null) return null;
+            if (view == null) return null;
 
-        if(svgCompat.getIndexCount() > 0){
-
+            addDrawable(view, svgCompat);
+        } catch (Exception e) {
+//            e.printStackTrace();
+            L.e(e.toString());
+        } finally {
+            svgCompat.recycle();
         }
 
         return view;
@@ -60,6 +69,7 @@ public class BackgroundFactory implements LayoutInflater.Factory2 {
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
         return onCreateView(name, context, attrs);
     }
+
 
     public void setInterceptFactory(LayoutInflater.Factory factory) {
         mViewCreateFactory = factory;
@@ -121,6 +131,50 @@ public class BackgroundFactory implements LayoutInflater.Factory2 {
         } catch (Exception e) {
             L.i("BackgroundLibrary", "cannot create 【" + name + "】 : ");
             return null;
+        }
+    }
+
+    /**
+     * 通过 自定义属性容器，对 View 设置样式
+     * @param view
+     * @param svgCompat
+     */
+    private void addDrawable(View view, TypedArray svgCompat) {
+        @DrawableRes
+        int svgDrawable = 0;
+        int svgTintColor = 0;
+        int drawableType = 0;
+        int iconLocationType = 0;
+
+        for (int i = 0; i < svgCompat.getIndexCount(); i++) {
+            int attr = svgCompat.getIndex(i);
+            if (attr == R.styleable.svgCompat_svgDrawable) {
+                svgDrawable = svgCompat.getResourceId(attr, 0);
+            } else if (attr == R.styleable.svgCompat_svgTintColor){
+                svgTintColor = svgCompat.getResourceId(attr, 0);
+            } else if (attr == R.styleable.svgCompat_drawableType){
+                drawableType = svgCompat.getInt(attr, 0);
+            } else if (attr == R.styleable.svgCompat_iconLocationType){
+                iconLocationType = svgCompat.getInt(attr, 0);
+            }
+        }
+
+        if(svgDrawable == 0)return;
+
+        Drawable drawable;
+
+        if (svgTintColor == 0){
+            drawable = TintUtils.getDrawable(svgDrawable, drawableType);
+        } else {
+            drawable = TintUtils.getTintDrawable(svgDrawable, drawableType, svgTintColor);
+        }
+
+        if (iconLocationType == 0){
+            view.setBackground(drawable);
+        } else {
+            if (view instanceof TextView){
+                TintUtils.setTxtIconLocal((TextView) view, drawable, iconLocationType);
+            }
         }
     }
 }

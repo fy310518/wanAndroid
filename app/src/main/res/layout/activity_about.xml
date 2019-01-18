@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/BgColor">
@@ -16,11 +18,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:drawablePadding="@dimen/spacing_small_much"
-            android:drawableTop="@mipmap/ic_launcher"
             android:gravity="center"
             android:padding="@dimen/spacing_medium"
             android:textColor="@color/txtSecondColor"
-            android:textSize="@dimen/txt_small" />
+            android:textSize="@dimen/txt_small"
+            app:svgDrawable="@drawable/svg_about"
+            app:svgTintColor="@color/blue"
+            app:drawableType="svgType"
+            app:iconLocationType="locationTop"
+            tools:ignore="MissingPrefix" />
 
         <TextView
             android:id="@+id/tvAbout"

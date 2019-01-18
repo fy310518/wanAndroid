@@ -13,7 +13,7 @@ import org.aspectj.lang.annotation.Before;
 @Aspect
 public class SvgCompatAspect {
 
-    @Before("call(* android.support.v7.app.AppCompatActivity.onCreate(..))")
+    @Before("execution(* android.support.v7.app.AppCompatActivity.onCreate(..))")
     public void activityOnCreateMethod(JoinPoint joinPoint) throws Throwable {
         Activity activity = (Activity)joinPoint.getTarget();
         SvgCompatInject.inject(activity);

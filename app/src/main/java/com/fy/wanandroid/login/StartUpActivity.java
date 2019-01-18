@@ -91,7 +91,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
     /**
      * 根据条件 判断进入登录页还是主界面
      */
-    @NeedPermission(value = Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    @NeedPermission(value = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
     private void intoMainOrLogin() {
         if (Constant.isMustAppLogin && ! SpfAgent.getBoolean(Constant.baseSpf, Constant.isLogin)) {
             JumpUtils.jump(this, AppUtils.getLocalPackageName() + ".login.LoginActivity", null);
