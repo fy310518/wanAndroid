@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 
+import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
@@ -49,6 +51,7 @@ public class TestListActivity extends AppCompatActivity implements IBaseActivity
         return R.layout.activity_test_layout;
     }
 
+    @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         initRv();
@@ -63,18 +66,15 @@ public class TestListActivity extends AppCompatActivity implements IBaseActivity
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if (position == 4){
-                    return 2;
-                } else {
-                    return 1;
-                }
+                TestBean testBean = testAdapter.getmDatas().get(position);
+                return TextUtils.isEmpty(testBean.getRecommend_img_url()) ? 1 : 2;
             }
         });
         rvKnowledge.setLayoutManager(manager);
-        rvKnowledge.addItemDecoration(new ListItemDecoration.Builder()
-                .setmSpace(R.dimen.rv_divider_height)
-                .setDraw(false)
-                .create(this));
+//        rvKnowledge.addItemDecoration(new ListItemDecoration.Builder()
+//                .setmSpace(R.dimen.rv_divider_height)
+//                .setDraw(false)
+//                .create(this));
 
         rvKnowledge.setAdapter(testAdapter);
 

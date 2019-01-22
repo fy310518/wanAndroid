@@ -23,7 +23,7 @@
             android:textColor="@color/txtSecondColor"
             android:textSize="@dimen/txt_small"
             app:svgDrawable="@drawable/svg_about"
-            app:svgTintColor="@color/blue"
+            app:svgTintColor="#EF8994"
             app:drawableType="svgType"
             app:iconLocationType="locationTop"
             tools:ignore="MissingPrefix" />

@@ -46,7 +46,7 @@
         <!-- svg 图标资源id -->
         <attr name="svgDrawable" format="reference" />
         <!-- svg 图标替换颜色 -->
-        <attr name="svgTintColor" format="reference" />
+        <attr name="svgTintColor" format="color" />
         <!-- 图标类型-->
         <attr name="drawableType" format="enum">
             <enum name="imgType" value="0" /><!-- png、shape、jpg 图标等 -->

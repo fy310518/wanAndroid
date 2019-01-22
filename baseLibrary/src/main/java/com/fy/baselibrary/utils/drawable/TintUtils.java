@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
+import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
@@ -37,8 +38,18 @@ public class TintUtils {
      * @return
      */
     public static Drawable getTintDrawable(@DrawableRes int drawableId, int drawableType, @ColorRes int colorId) {
-        Drawable drawable = getDrawable(drawableId, drawableType);
         int color = ResUtils.getColor(colorId);
+        return getTintColorDrawable(drawableId, drawableType, color);
+    }
+
+    /**
+     * 使用 tint改变 drawable 颜色
+     * @param drawableId    将要改变的 drawable 的资源 id
+     * @param color         将要改变的 颜色
+     * @return
+     */
+    public static Drawable getTintColorDrawable(@DrawableRes int drawableId, int drawableType, @ColorInt int color) {
+        Drawable drawable = getDrawable(drawableId, drawableType);
 
         Drawable.ConstantState state = drawable.getConstantState();
         Drawable drawable1 = DrawableCompat

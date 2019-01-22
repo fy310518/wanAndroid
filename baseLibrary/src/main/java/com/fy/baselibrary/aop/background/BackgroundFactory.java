@@ -151,7 +151,7 @@ public class BackgroundFactory implements LayoutInflater.Factory2 {
             if (attr == R.styleable.svgCompat_svgDrawable) {
                 svgDrawable = svgCompat.getResourceId(attr, 0);
             } else if (attr == R.styleable.svgCompat_svgTintColor){
-                svgTintColor = svgCompat.getResourceId(attr, 0);
+                svgTintColor = svgCompat.getColor(attr, Color.WHITE);
             } else if (attr == R.styleable.svgCompat_drawableType){
                 drawableType = svgCompat.getInt(attr, 0);
             } else if (attr == R.styleable.svgCompat_iconLocationType){
@@ -166,7 +166,7 @@ public class BackgroundFactory implements LayoutInflater.Factory2 {
         if (svgTintColor == 0){
             drawable = TintUtils.getDrawable(svgDrawable, drawableType);
         } else {
-            drawable = TintUtils.getTintDrawable(svgDrawable, drawableType, svgTintColor);
+            drawable = TintUtils.getTintColorDrawable(svgDrawable, drawableType, svgTintColor);
         }
 
         if (iconLocationType == 0){

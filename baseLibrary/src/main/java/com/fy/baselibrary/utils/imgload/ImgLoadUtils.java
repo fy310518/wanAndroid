@@ -2,7 +2,6 @@ package com.fy.baselibrary.utils.imgload;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -17,7 +16,6 @@ import java.io.File;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -77,19 +75,20 @@ public class ImgLoadUtils {
      * @param imageView
      */
     public static void loadCircularBead(Context context, String url, ImageView imageView) {
-        //加载圆角图片 通过RequestOptions扩展功能
-        RequestOptions options = new RequestOptions()
-                .transform(new GlideRoundTransform(context, 30));
-
 //        RequestOptions options = new RequestOptions()
 //                .fallback(R.mipmap.img_load_default)
 //                .error(R.mipmap.img_load_error)
 //                .placeholder(R.mipmap.img_loading)
 //                .circleCrop();
 
+        //加载圆角图片 通过RequestOptions扩展功能
+        RequestOptions requestOptions = new RequestOptions()
+                .transforms(new RoundedCorners(15))
+                .diskCacheStrategy(DiskCacheStrategy.ALL);
+
         Glide.with(context)
                 .load(url)
-                .apply(options)
+                .apply(requestOptions)
                 .into(imageView);
     }
 
