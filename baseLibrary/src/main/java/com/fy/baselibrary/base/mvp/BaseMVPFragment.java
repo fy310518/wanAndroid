@@ -2,20 +2,24 @@ package com.fy.baselibrary.base.mvp;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+
+import com.fy.baselibrary.base.BaseFragment;
 
 /**
- * describe： 定义 MVP 视图层 之 activity 抽象超类
- * Created by fangs on 2019/1/22 17:29.
+ * describe： 定义 MVP 视图层 之 fragment 抽象超类
+ * Created by fangs on 2019/1/24 15:38.
  */
-public abstract class BaseMVPActivity<T extends IPresenter> extends AppCompatActivity implements IView {
+public abstract class BaseMVPFragment<T extends IPresenter> extends BaseFragment  implements IView{
 
     protected T mPresenter;
 
-    /**
-     * mvp 初始化 mPresenter
-     */
-    public void initPresenter() {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initPresenter();
+    }
+
+    protected void initPresenter() {
         mPresenter = createPresenter();
         //绑定生命周期
         if (null != mPresenter) {
@@ -24,7 +28,7 @@ public abstract class BaseMVPActivity<T extends IPresenter> extends AppCompatAct
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         if (null != mPresenter) {
             mPresenter.detachView();
         }
@@ -36,5 +40,4 @@ public abstract class BaseMVPActivity<T extends IPresenter> extends AppCompatAct
      * @return Presenter
      */
     protected abstract T createPresenter();
-
 }

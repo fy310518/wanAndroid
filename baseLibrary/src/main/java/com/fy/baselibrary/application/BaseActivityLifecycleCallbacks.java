@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.fy.baselibrary.R;
 import com.fy.baselibrary.application.ioc.ConfigUtils;
+import com.fy.baselibrary.base.mvp.BaseMVPActivity;
 import com.fy.baselibrary.statuslayout.LoadSirUtils;
 import com.fy.baselibrary.statuslayout.OnSetStatusView;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
@@ -61,6 +62,10 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
         }
 
         ScreenUtils.setCustomDensity(activity, designWidth);
+
+        if (activity instanceof BaseMVPActivity) {
+            ((BaseMVPActivity)activity).initPresenter();
+        }
 
         IBaseActivity act = null;
         if (activity instanceof IBaseActivity) {

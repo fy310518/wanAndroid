@@ -1,11 +1,9 @@
 package com.fy.wanandroid.login;
 
-import android.Manifest;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -13,33 +11,19 @@ import android.view.View;
 import android.widget.Button;
 
 import com.fy.baselibrary.aop.annotation.ClickFilter;
-import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.base.mvp.BaseMVPActivity;
-import com.fy.baselibrary.retrofit.RequestUtils;
-import com.fy.baselibrary.retrofit.RxHelper;
-import com.fy.baselibrary.retrofit.observer.IProgressDialog;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
-import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.cache.ACache;
 import com.fy.baselibrary.utils.cache.SpfAgent;
 import com.fy.wanandroid.R;
-import com.fy.wanandroid.animation.revealeffect.RevealEffectActivity;
 import com.fy.wanandroid.entity.LoginBean;
 import com.fy.wanandroid.main.MainActivity;
-import com.fy.wanandroid.request.ApiService;
-import com.fy.wanandroid.request.NetCallBack;
-import com.fy.wanandroid.request.NetDialog;
-import com.fy.wanandroid.test.TestActivity;
 import com.fy.wanandroid.test.TestListActivity;
-import com.fy.wanandroid.testdemo.StatusDemoActivity;
 import com.fy.wanandroid.utils.SelectUtils;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;

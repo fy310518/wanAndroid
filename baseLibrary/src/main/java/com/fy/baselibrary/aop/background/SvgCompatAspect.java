@@ -20,10 +20,7 @@ public class SvgCompatAspect {
 
     @Before("SvgCompatFilter()")
     public void activityOnCreateMethod(JoinPoint joinPoint) throws Throwable {
-        //todo aop 情况下 使用了 AppCompatActivity 的子类作为 业务activity 的父类，此处自行两次，因此做了判断（后期解决）
-        if (joinPoint.toString().contains("android.support.v7.app.AppCompatActivity.onCreate(")){
-            Activity activity = (Activity)joinPoint.getTarget();
-            SvgCompatInject.inject(activity);
-        }
+        Activity activity = (Activity) joinPoint.getTarget();
+        SvgCompatInject.inject(activity);
     }
 }
