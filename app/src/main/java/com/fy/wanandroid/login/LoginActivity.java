@@ -17,6 +17,7 @@ import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.application.ioc.ConfigUtils;
+import com.fy.baselibrary.base.mvp.BaseMVPActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.observer.IProgressDialog;
@@ -47,7 +48,7 @@ import butterknife.OnClick;
  * 登录
  * Created by fangs on 2017/12/12.
  */
-public class LoginActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
+public class LoginActivity extends BaseMVPActivity<LogingPresenter> implements IBaseActivity, View.OnClickListener, LoginContract.LoginView {
     private static final String TAG = "LoginActivity";
     @BindView(R.id.editName)
     TextInputEditText editName;
@@ -62,6 +63,11 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
     Button btnLogin;
 
     @Override
+    protected LogingPresenter createPresenter() {
+        return new LogingPresenter();
+    }
+
+    @Override
     public boolean isShowHeadView() {
         return true;
     }
@@ -74,9 +80,8 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
     @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
-        L.e(getTaskId() + "----> LoginActivity");
+
         btnLogin.setBackground(SelectUtils.getBtnSelector(R.drawable.shape_btn, 0));
-//        requestPermission();
         editPass.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -97,7 +102,6 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
                         iLayoutPass.setError(null);
                     }
                 }
-
             }
         });
     }
@@ -108,7 +112,10 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnLogin:
-                login();
+                String mUserName = editName.getText().toString().trim();//"fangshuai"
+                String mPassWord = editPass.getText().toString().trim();//"fangs123"
+
+                mPresenter.login(mUserName, mPassWord);
                 break;
             case R.id.tvRegister:
 //                JumpUtils.jump(mContext, RegisterActivity.class, null);
@@ -121,43 +128,18 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
         }
     }
 
-    @NeedPermission(value = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, isRun = true)
-    private void login() {
-        IProgressDialog progressDialog = new NetDialog().init(this)
-                .setDialogMsg(R.string.user_login);
+    @Override
+    public void loginSuccess(LoginBean login) {
+        ACache mCache = ACache.get(ConfigUtils.getAppCtx());
+        mCache.put(Constant.userName, login);
 
-        String mUserName = editName.getText().toString().trim();//"fangshuai"
-        String mPassWord = editPass.getText().toString().trim();//"fangs123"
+        new SpfAgent(Constant.baseSpf)
+                .saveBoolean(Constant.isLogin, true)
+                .saveString(Constant.userName, login.getUsername())
+                .commit(false);
 
-        Map<String, Object> param = new HashMap<>();
-        param.put("username", mUserName);
-        param.put("password", mPassWord);
-
-        RequestUtils.create(ApiService.class)
-                .login(param)
-                .compose(RxHelper.handleResult())
-                .compose(RxHelper.bindToLifecycle(this))
-                .subscribe(new NetCallBack<LoginBean>(progressDialog) {
-                    @Override
-                    protected void onSuccess(LoginBean login) {
-                        ACache mCache = ACache.get(ConfigUtils.getAppCtx());
-                        mCache.put(Constant.userName, login);
-
-                        new SpfAgent(Constant.baseSpf)
-                                .saveBoolean(Constant.isLogin, true)
-                                .saveString(Constant.userName, login.getUsername())
-                                .commit(false);
-
-                        Bundle bundle = new Bundle();
-                        bundle.putString("大王", "大王叫我来巡山");
-                        JumpUtils.jump(LoginActivity.this, MainActivity.class, bundle);
-                    }
-
-                    @Override
-                    protected void updataLayout(int flag) {
-                        L.e("net updataLayout", flag + "-----");
-                    }
-                });
+        Bundle bundle = new Bundle();
+        bundle.putString("大王", "大王叫我来巡山");
+        JumpUtils.jump(LoginActivity.this, MainActivity.class, bundle);
     }
-
 }

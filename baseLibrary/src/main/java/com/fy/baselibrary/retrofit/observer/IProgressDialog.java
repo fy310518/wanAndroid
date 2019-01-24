@@ -34,7 +34,7 @@ public abstract class IProgressDialog {
      */
     public void show() {
         if (null != dialog && null != obj){
-            if (obj instanceof Activity) {
+            if (obj instanceof AppCompatActivity) {
                 AppCompatActivity activity = (AppCompatActivity) obj;
                 mContext = activity;
                 dialog.show(activity.getSupportFragmentManager());

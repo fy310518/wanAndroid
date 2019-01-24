@@ -18,6 +18,7 @@ import com.fy.baselibrary.statusbar.StatusBarContentColor;
 import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
+import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.cache.SpfAgent;
 import com.fy.baselibrary.utils.drawable.TintUtils;
