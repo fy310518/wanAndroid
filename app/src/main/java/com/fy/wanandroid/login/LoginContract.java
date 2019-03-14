@@ -9,7 +9,7 @@ import com.fy.wanandroid.entity.LoginBean;
  */
 public interface LoginContract {
 
-    interface LoginView extends IView{
+    interface LoginView extends IView {
         void loginSuccess(LoginBean login);
     }
 

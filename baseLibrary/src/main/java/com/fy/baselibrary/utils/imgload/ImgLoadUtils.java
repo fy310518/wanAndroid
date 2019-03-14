@@ -36,14 +36,35 @@ public class ImgLoadUtils {
      * @param url
      * @param imageView
      */
-    public static void loadImage(Context context, String url, ImageView imageView) {
+    public static void loadImage(String url, int errorId, ImageView imageView) {
+
+        RequestOptions options = new RequestOptions()
+//                .fallback(R.mipmap.img_load_default)
+//                .error(R.mipmap.img_load_error)
+                .error(errorId)
+//                .placeholder(R.mipmap.img_loading)
+                ;
+
+        Glide.with(imageView.getContext())
+                .load(url)
+                .apply(options)
+                .into(imageView);
+    }
+
+    /**
+     * 加载指定URL的图片
+     * @param url
+     * @param imageView
+     */
+    public static void loadImage(String url, ImageView imageView) {
 
         RequestOptions options = new RequestOptions()
                 .fallback(R.mipmap.img_load_default)
                 .error(R.mipmap.img_load_error)
-                .placeholder(R.mipmap.img_loading);
+                .placeholder(R.mipmap.img_loading)
+                ;
 
-        Glide.with(context)
+        Glide.with(imageView.getContext())
                 .load(url)
                 .apply(options)
                 .into(imageView);

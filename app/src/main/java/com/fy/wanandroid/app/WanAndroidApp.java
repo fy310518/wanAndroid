@@ -1,6 +1,8 @@
 package com.fy.wanandroid.app;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.fy.baselibrary.application.BaseActivityLifecycleCallbacks;
 import com.fy.baselibrary.application.ioc.ConfigUtils;
@@ -20,7 +22,7 @@ public class WanAndroidApp extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-        BlockCanary.install(this, new AppBlockCanaryContext()).start();
+//        BlockCanary.install(this, new AppBlockCanaryContext()).start();
 
         //初始化配置信息
         L.e("ActivityCallbacks", "Application--Create() 启动-----");
@@ -28,7 +30,7 @@ public class WanAndroidApp extends Application{
                 .setBgColor(R.color.appHeadBg)
                 .setTitleColor(R.color.white)
                 .setTitleCenter(true)
-                .setCer(CER)
+//                .setCer(CER)
                 .setBASE_URL("http://www.wanandroid.com/")
                 .create(this);
 
@@ -40,6 +42,12 @@ public class WanAndroidApp extends Application{
 
         NightModeUtils.setNightMode();
 
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     public static String CER = "-----BEGIN CERTIFICATE-----\n" +

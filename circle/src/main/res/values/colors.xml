@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 分割线颜色 -->
+    <color name="lineColor">#3a3a3a</color>
+    <!-- ============分隔=============== -->
+    <color name="divide_line_gray" >#eeeeee</color>
+    <color name="appwhite">#ffffffff</color>
+
+    <!-- 状态栏颜色 -->
+    <color name="statusBar">#25b6ed</color>
+    <!-- 标题栏颜色 -->
+    <color name="appHeadBg">#25b6ed</color>
+    <!-- 界面背景色 -->
+    <color name="BgColor">#eeeeee</color>
+
+    <color name="button_pressed2">#cccccc</color>
+    <color name="button_normal2">#FFFAF0</color>
+
+    <color name="text_color_gray_80">#808080</color>
+    <color name="color_ffb100">#ffb100</color>
+
+    <color name="font_gray">#808080</color>
+    <color name="base_F2F2F2">#f2f2f2</color>
+    <color name="base_B5B5B5">#B5B5B5</color>
+    <color name="base_697A9F">#697A9F</color>
+    <color name="base_DCDCDC">#DCDCDC</color>
+    <color name="base_FFFFFF">#ffffff</color>
+
+</resources>

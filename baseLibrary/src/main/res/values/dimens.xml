@@ -9,13 +9,17 @@
 
     <!-- 自定义 列表刷新控件 高度 -->
     <dimen name="refreshHeight">75dp</dimen>
+    <!-- 加载更多控件高度 -->
+    <dimen name="loadMoreHeight">40dp</dimen>
+
     <!-- 最大偏移 -->
     <dimen name="max_offset">120dp</dimen>
+    <!-- 加载更多 最大偏移 -->
+    <dimen name="load_more_max_offset">50dp</dimen>
+
     <!-- 下拉刷新 下拉图标 宽度、高度 -->
     <dimen name="rvDropDown">50dp</dimen>
     <!-- 下拉刷新 加载动画 图片 宽度、高度 -->
     <dimen name="rvRefreshAnim">30dp</dimen>
-    <!-- 加载更多控件高度 -->
-    <dimen name="loadMoreHeight">40dp</dimen>
 
 </resources>

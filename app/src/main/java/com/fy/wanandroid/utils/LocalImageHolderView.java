@@ -33,7 +33,7 @@ public class LocalImageHolderView implements Holder<BannerBean> {
 
     @Override
     public void UpdateUI(Context context, int position, BannerBean banner) {
-        ImgLoadUtils.loadImage(context, banner.getImagePath(), imageView);
+        ImgLoadUtils.loadImage(banner.getImagePath(), imageView);
         tvBannerTitle.setText(banner.getTitle());
     }
 }

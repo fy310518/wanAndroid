@@ -118,6 +118,7 @@ public class SpfAgent {
 
     /**
      * 从 SharedPreferences 取String数据
+     * @param fileName 文件名称
      * @param key key
      * @return   没有对应的key 默认返回的""
      */
@@ -127,6 +128,7 @@ public class SpfAgent {
 
     /**
      * 从 SharedPreferences 取int数据
+     * @param fileName 文件名称
      * @param key key
      * @return   没有对应的key  默认返回 -1
      */
@@ -136,6 +138,7 @@ public class SpfAgent {
 
     /**
      * 从 SharedPreferences 取 long 数据
+     * @param fileName 文件名称
      * @param key key
      * @return   没有对应的key  默认返回 0
      */
@@ -145,6 +148,7 @@ public class SpfAgent {
 
     /**
      * 从 SharedPreferences 获取 float 数据
+     * @param fileName 文件名称
      * @param key       key
      * @return          没有对应的key 默认返回 0f
      */
@@ -154,6 +158,7 @@ public class SpfAgent {
 
     /**
      * 从 SharedPreferences 获取 boolean数据
+     * @param fileName 文件名称
      * @param key   key
      * @return      没有对应的key 默认返回false
      */

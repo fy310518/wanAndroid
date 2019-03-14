@@ -19,6 +19,10 @@ public @interface StatusBar {
      * @return
      */
     int statusColor() default 0;
+
+    /** 资源名称（加此参数是为了在 module中 不能使用colors资源时候的折中办法） */
+    String statusStrColor() default "";
+
     /**
      * 状态栏透明度
      * @return
@@ -31,6 +35,10 @@ public @interface StatusBar {
      * @return
      */
     int navColor() default 0;
+
+    /** 资源名称（加此参数是为了在 module中 不能使用colors资源时候的折中办法） */
+    String navStrColor() default "";
+
     /**
      * 导航栏 透明度
      * @return

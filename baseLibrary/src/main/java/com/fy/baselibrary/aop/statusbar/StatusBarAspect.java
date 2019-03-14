@@ -30,8 +30,8 @@ public class StatusBarAspect {
         if (null == activity) return;
 
         MdStatusBar.StatusBuilder builder = MdStatusBar.StatusBuilder.init()
-                .setStatusColor(param.statusColor(), param.statusAlpha())
-                .setNavColor(param.navColor(), param.navAlpha())
+                .setStatusColor(param.statusColor(), param.statusAlpha(), param.statusStrColor())
+                .setNavColor(param.navColor(), param.navAlpha(), param.navStrColor())
                 .setApplyNav(param.applyNav());
 
         switch (param.statusOrNavModel()){

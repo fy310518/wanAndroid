@@ -144,107 +144,99 @@ public class ResUtils {
     /**
      * 获取资源文件的id
      *
-     * @param context
      * @param resName
      * @return
      */
-    public static int getId(Context context, String resName) {
-        return getResId(context, resName, RES_ID);
+    public static int getId(String resName) {
+        return getResId(resName, RES_ID);
     }
 
     /**
      * 获取资源文件string的id
      *
-     * @param context
      * @param resName
      * @return
      */
-    public static int getStringId(Context context, String resName) {
-        return getResId(context, resName, RES_STRING);
+    public static int getStringId(String resName) {
+        return getResId(resName, RES_STRING);
     }
 
     /**
      * 获取资源文件drawble的id
      *
-     * @param context
      * @param drableName
      * @return
      */
-    public static int getDrableId(Context context, String drableName) {
-        return getResId(context, drableName, RES_DRAWABLE);
+    public static int getDrableId(String drableName) {
+        return getResId(drableName, RES_DRAWABLE);
     }
 
     /**
      * 获取资源文件layout的id
      *
-     * @param context
      * @param resName
      * @return
      */
-    public static int getLayoutId(Context context, String resName) {
-        return getResId(context, resName, RES_LAYOUT);
+    public static int getLayoutId(String resName) {
+        return getResId(resName, RES_LAYOUT);
     }
 
     /**
      * 获取资源文件style的id
      *
-     * @param context
      * @param resName
      * @return
      */
-    public static int getStyleId(Context context, String resName) {
-        return getResId(context, resName, RES_STYLE);
+    public static int getStyleId(String resName) {
+        return getResId(resName, RES_STYLE);
     }
 
     /**
      * 获取资源文件color的id
      *
-     * @param context
      * @param resName
      * @return
      */
-    public static int getColorId(Context context, String resName) {
-        return getResId(context, resName, RES_COLOR);
+    public static int getColorId(String resName) {
+        return getResId(resName, RES_COLOR);
     }
 
     /**
      * 获取资源文件dimen的id
      *
-     * @param context
      * @param resName
      * @return
      */
-    public static int getDimenId(Context context, String resName) {
-        return getResId(context, resName, RES_DIMEN);
+    public static int getDimenId(String resName) {
+        return getResId(resName, RES_DIMEN);
     }
 
     /**
      * 获取资源文件ainm的id
      *
-     * @param context
      * @param resName
      * @return
      */
-    public static int getAnimId(Context context, String resName) {
-        return getResId(context, resName, RES_ANIM);
+    public static int getAnimId(String resName) {
+        return getResId(resName, RES_ANIM);
     }
 
     /**
      * 获取资源文件menu的id
      */
-    public static int getMenuId(Context context, String resName) {
-        return getResId(context, resName, RES_MENU);
+    public static int getMenuId(String resName) {
+        return getResId(resName, RES_MENU);
     }
 
     /**
      * 获取资源文件ID
      *
-     * @param context
      * @param resName
      * @param defType
      * @return
      */
-    public static int getResId(Context context, String resName, String defType) {
+    public static int getResId(String resName, String defType) {
+        Context context = ConfigUtils.getAppCtx();
         return context.getResources().getIdentifier(resName, defType, context.getPackageName());
     }
 }

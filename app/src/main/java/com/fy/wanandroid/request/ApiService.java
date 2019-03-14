@@ -27,7 +27,7 @@ import retrofit2.http.Query;
 public interface ApiService {
 
     /**
-     * 登录
+     * wanAndroid 登录
      */
     @FormUrlEncoded
     @Headers({"url_name:user"})
@@ -181,5 +181,14 @@ public interface ApiService {
 
     @GET("http://qipai3.soulgame.mobi/index/get?uid=100782&timestamp=1545978664&nonce=860076&sign=659bf0e881d251fea0429829cc704c0a")
     Observable<BeanModule<List<TestBean>>> test();
+
+
+
+    /**
+     * 猎鹰 登录
+     */
+    @FormUrlEncoded
+    @POST("http://47.107.134.212:13201/Falcon/2.0/main/login")
+    Observable<BeanModule<LoginBean>> lyLogin(@FieldMap Map<String, Object> options);
 
 }

@@ -1,5 +1,6 @@
 package com.fy.baselibrary.retrofit.observer;
 
+import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.base.dialog.CommonDialog;
 import com.fy.baselibrary.statuslayout.OnSetStatusView;
 import com.fy.baselibrary.utils.Constant;
@@ -86,8 +87,11 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
 
         dismissProgress();
 
-        if (!NetUtils.isConnected()) {
+        if (NetUtils.getNetworkState(ConfigUtils.getAppCtx()) < 0){
             actionResponseError("网络不可用，请检查您的网络状态，稍后重试！");
+            updataLayout(Constant.LAYOUT_NETWORK_ERROR_ID);
+        } else if (!NetUtils.isConnected()) {
+            actionResponseError("连接服务器失败！");
             updataLayout(Constant.LAYOUT_NETWORK_ERROR_ID);
 
         } else if (e instanceof SocketTimeoutException) {

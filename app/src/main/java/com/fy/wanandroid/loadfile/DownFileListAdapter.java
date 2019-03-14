@@ -40,7 +40,7 @@ public class DownFileListAdapter extends RvCommonAdapter<DownInfo> {
     @Override
     public void convert(ViewHolder holder, DownInfo downInfo, int position) {
         ImageView imgIcon = holder.getView(R.id.imgIcon);
-        ImgLoadUtils.loadImage(mContext, downInfo.getImageUrl(), imgIcon);
+        ImgLoadUtils.loadImage(downInfo.getImageUrl(), imgIcon);
         holder.setText(R.id.tvTaskName, downInfo.getName());
         holder.setText(R.id.tvProgress, TransfmtUtils.doubleToKeepTwoDecimalPlaces(downInfo.getPercent()) + "");
 

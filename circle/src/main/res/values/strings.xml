@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">circle</string>
+
+    <string name="circle">战友圈</string>
+    <string name="browseNum">浏览%1$s次</string>
+    <string name="circleLvN">Lv%1$s</string>
+
+    <array name="circleTitle">
+        <item>热点</item>
+        <item>新动态</item>
+        <item>协查通报</item>
+        <item>案件分享</item>
+        <item>微课堂</item>
+        <item>私密</item>
+        <item>关注</item>
+    </array>
+
+    <array name="circleMode">
+        <item>hotspot</item>
+        <item>dynamic</item>
+        <item>xiechatongbao</item>
+        <item>caseshare</item>
+        <item>microclassroom</item>
+        <item>privacy</item>
+        <item>focus</item>
+    </array>
+
+</resources>

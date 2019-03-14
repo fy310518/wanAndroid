@@ -9,6 +9,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.IntRange;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
@@ -18,6 +19,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
 
 /**
@@ -50,9 +52,15 @@ public class MdStatusBar {
          * 设置状态栏颜色 和 透明度
          * @param statusColor
          * @param statusAlpha  透明度（0 完全透明，255 完全不透明）
+         * @param resName      资源名称（加此参数为了在 module中 不能使用colors资源时候的折中办法）
          * @return
          */
-        public StatusBuilder setStatusColor(@ColorRes int statusColor, @IntRange(from = 0, to = 255) int statusAlpha) {
+        public StatusBuilder setStatusColor(@ColorRes int statusColor, @IntRange(from = 0, to = 255) int statusAlpha, String resName) {
+
+            if (!TextUtils.isEmpty(resName)){
+                statusColor = ResUtils.getColorId(resName);
+            }
+
             this.statusColor = statusColor;
             this.statusAlpha = statusAlpha;
             return this;
@@ -62,9 +70,13 @@ public class MdStatusBar {
          * 设置导航栏颜色 和 透明度
          * @param navColor
          * @param navAlpha 透明度（255 完全透明，0 完全不透明）
+         * @param resName  资源名称（加此参数为了在 module中 不能使用colors资源时候的折中办法）
          * @return
          */
-        public StatusBuilder setNavColor(@ColorRes int navColor, @IntRange(from = 0, to = 255) int navAlpha) {
+        public StatusBuilder setNavColor(@ColorRes int navColor, @IntRange(from = 0, to = 255) int navAlpha, String resName) {
+            if (!TextUtils.isEmpty(resName)){
+                navColor = ResUtils.getColorId(resName);
+            }
             this.navColor = navColor;
             this.navAlpha = navAlpha;
             this.applyNav = true;

@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">baseLibrary</string>
 
+    <string name="easyPullAnimatorTop">com.fy.baselibrary.widget.refresh.EasyTopRefreshView</string>
+    <string name="easyPullAnimatorBottom">com.fy.baselibrary.widget.refresh.EasyBottomLoadMoreView</string>
+
+
     <string name="srartUpTitle">欢迎</string>
     <string name="permission">权限管理</string>
     <string name="skip">%1$sS后跳过</string>

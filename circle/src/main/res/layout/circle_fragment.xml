@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.fy.baselibrary.widget.refresh.EasyPullLayout
+        android:id="@+id/epl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transforTop"
+        app:max_offset_bottom="@dimen/load_more_max_offset"
+        app:max_offset_top="@dimen/max_offset"
+        app:sticky_factor="0.1"
+        app:pull_animator_bottom="@string/easyPullAnimatorBottom"
+        app:pull_animator_top="@string/easyPullAnimatorTop"
+        app:trigger_offset_bottom="@dimen/refreshHeight"
+        app:trigger_offset_top="@dimen/refreshHeight">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvHierarchy"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/BgColor"
+            app:layout_type="content" />
+
+    </com.fy.baselibrary.widget.refresh.EasyPullLayout>
+
+    <!-- 积分动画布局 -->
+    <RelativeLayout
+        android:id="@+id/rl_reward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="56dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/integral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/spacing_medium_small"
+            android:text="+5"
+            android:textColor="@color/orange"
+            android:textSize="30sp" />
+
+        <ImageView
+            android:id="@+id/iv_cron"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_below="@id/integral" />
+
+    </RelativeLayout>
+</FrameLayout>

@@ -152,4 +152,27 @@ public class TimeUtils {
 
         return date1.equals(date2);
     }
+
+    /**
+     * 计算当前时间 和 指定时间戳，的时间差
+     * @return
+     */
+    public static String getTimeDifference(long time) {
+        long timeDifference = (System.currentTimeMillis() - time);
+
+        if (timeDifference <= 60000) {//小于一分钟
+            return "刚刚";
+        } else if (timeDifference < 60 * 60000) {//小于一小时
+            return (timeDifference / 60000) + "分钟前";
+        } else if (timeDifference < 24L * 3600000L) {//小于一天
+            return (timeDifference / 3600000L) + "小时前";
+        } else if (timeDifference < 48L * 3600000L) {//大于一天小于两天
+            return "昨天";
+        } else if (timeDifference < 720L * 3600000L){//小于30天
+            return (timeDifference / (24L * 3600000L)) + "天前";
+        } else {
+            return Long2DataString(time, "yyyy-MM-dd");
+        }
+    }
+
 }

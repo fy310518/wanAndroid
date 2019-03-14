@@ -4,7 +4,7 @@
     android:id="@+id/epl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:max_offset_bottom="41dp"
+    app:max_offset_bottom="@dimen/load_more_max_offset"
     app:max_offset_top="@dimen/max_offset"
     app:pull_animator_bottom="@string/easyPullAnimatorBottom"
     app:pull_animator_top="@string/easyPullAnimatorTop"
