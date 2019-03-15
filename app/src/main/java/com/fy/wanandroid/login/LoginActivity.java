@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.view.GravityCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -179,5 +180,10 @@ public class LoginActivity extends BaseMVPActivity<LogingPresenter> implements I
                         L.e("net updataLayout", flag + "-----");
                     }
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        JumpUtils.backDesktop(this);
     }
 }

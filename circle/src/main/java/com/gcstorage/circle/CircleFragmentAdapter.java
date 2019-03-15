@@ -1,6 +1,8 @@
 package com.gcstorage.circle;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.view.View;
@@ -13,6 +15,7 @@ import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.rv.adapter.RvCommonAdapter;
 import com.fy.baselibrary.utils.Constant;
+import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.TimeUtils;
 import com.fy.baselibrary.utils.cache.SpfAgent;
@@ -20,6 +23,7 @@ import com.fy.baselibrary.utils.drawable.TintUtils;
 import com.fy.baselibrary.utils.imgload.ImgLoadUtils;
 import com.fy.baselibrary.utils.notify.T;
 import com.gcstorage.circle.bean.LyCircleListBean;
+import com.gcstorage.circle.comment.CircleCommentActivity;
 import com.gcstorage.circle.request.ApiService;
 import com.gcstorage.circle.request.NetCallBack;
 import com.gcstorage.circle.widgets.Constants;
@@ -58,8 +62,7 @@ public class CircleFragmentAdapter extends RvCommonAdapter<LyCircleListBean> {
 
     @Override
     public void convert(ViewHolder holder, LyCircleListBean article, int position) {
-        //头像
-        ImgLoadUtils.loadImage(article.getHeadpic(), R.drawable.default_pic_icon, holder.getView(R.id.imgHead));
+
         //姓名
         holder.setText(R.id.txt_post_name, article.getName());
         //等级
@@ -75,6 +78,15 @@ public class CircleFragmentAdapter extends RvCommonAdapter<LyCircleListBean> {
         //圈子内容
         holder.setText(R.id.txt_content, article.getContent());
 //        holder.setOnClickListener(R.id.txt_state, v -> setTextState(holder, ));//全文 伸缩 未实现
+
+        //头像
+        ImgLoadUtils.loadImage(article.getHeadpic(), R.drawable.default_pic_icon, holder.getView(R.id.imgHead));
+        holder.setOnClickListener(R.id.imgHead, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                T.showLong("进入个人主页");
+            }
+        });
 
         //点赞数 和 是否点赞图标
         TextView txt_good_count = holder.getView(R.id.txt_good_count);
@@ -105,7 +117,9 @@ public class CircleFragmentAdapter extends RvCommonAdapter<LyCircleListBean> {
         holder.setOnClickListener(R.id.txt_comment_count, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("LyCircleListBean", article);
+                JumpUtils.jump((FragmentActivity)mContext, CircleCommentActivity.class, bundle);
             }
         });
         //积分

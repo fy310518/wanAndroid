@@ -120,6 +120,7 @@
                 android:id="@+id/llayout_post_certify"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:visibility="invisible"
                 android:gravity="center">
 
                 <ImageView

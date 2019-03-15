@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/menuLayout"
+    android:layout_width="?attr/actionBarSize"
+    android:layout_height="?attr/actionBarSize">
+
+    <TextView
+        android:id="@+id/btn_comment_add"
+        android:layout_width="40dp"
+        android:layout_height="23dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:background="@drawable/shape_btn_circle_white"
+        android:text="发布"
+        android:textColor="@color/appwhite"
+        android:textSize="14sp" />
+
+</FrameLayout>

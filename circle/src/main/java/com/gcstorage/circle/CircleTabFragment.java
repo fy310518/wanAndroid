@@ -94,7 +94,7 @@ public class CircleTabFragment extends BaseFragment {
     }
 
     private void initRvAdapter() {
-        rvAdapter = new CircleFragmentAdapter(getContext(), new ArrayList<>());
+        rvAdapter = new CircleFragmentAdapter(getActivity(), new ArrayList<>());
         rvAdapter.setIntegralAnimListener(() -> animation());//设置积分动画回调
 //        rvAdapter.setItemClickListner(view -> {
 //            ArticleBean.DatasBean article = (ArticleBean.DatasBean) view.getTag();

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/bg_white_f5">
+
+    <EditText
+        android:id="@+id/edit_comment_add_content"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:padding="12dp"
+        android:background="@color/white"
+        android:gravity="top"
+        android:hint="写评论..."
+        android:inputType="textMultiLine"
+        android:scrollbars="vertical"
+        android:scrollHorizontally="false"
+        android:textColor="@color/txtSuperColor"
+        android:textColorHint="@color/font_gray"
+        android:textSize="14sp" />
+
+    <GridView
+        android:id="@+id/grid_comment_add_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:background="@color/white"
+        android:horizontalSpacing="20dp"
+        android:listSelector="@android:color/transparent"
+        android:numColumns="4"
+        android:verticalSpacing="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/edit_comment_add_content"/>
+
+</android.support.constraint.ConstraintLayout>

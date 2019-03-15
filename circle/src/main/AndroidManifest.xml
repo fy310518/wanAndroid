@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gcstorage.circle">
 
+    <uses-permission android:name="android.permission.VIBRATE" />
     <application
         android:allowBackup="true"
         android:label="@string/app_name"
@@ -9,6 +10,11 @@
         <activity
             android:name=".CircleActivity"
             android:label="@string/circle"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".comment.CircleCommentActivity"
+            android:label="@string/comment"
             android:screenOrientation="portrait" />
 
     </application>

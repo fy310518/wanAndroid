@@ -69,5 +69,4 @@ dependencies {
 
     implementation project(':baseLibrary')
     implementation project(':circle')
-//    implementation (name:'baseLibrary-debug', ext:'aar')
 }

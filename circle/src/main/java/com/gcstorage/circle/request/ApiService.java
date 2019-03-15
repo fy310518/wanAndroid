@@ -3,12 +3,14 @@ package com.gcstorage.circle.request;
 
 import android.util.ArrayMap;
 
+import com.fy.baselibrary.retrofit.load.up.UpLoadFileType;
 import com.gcstorage.circle.bean.LyCircleListBean;
 import com.gcstorage.circle.bean.LyLoginBean;
 
 import java.util.List;
 
 import io.reactivex.Observable;
+import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -52,7 +54,15 @@ public interface ApiService {
     Observable<BeanModule<List<LyCircleListBean.PraiseListBean>>> setpraiseNew(@FieldMap ArrayMap<String, Object> options);
 
 
-
+    /**
+     * 帖子评论 上传图片
+     * 多图片上传 （参数注解：@Body；参数类型：MultipartBody）
+     * @param params
+     * @return
+     */
+    @UpLoadFileType
+    @POST("http://47.107.134.212:13201/Falcon/2.0/tools/uploadfile")
+    Observable<Object> uploadFile(@Body ArrayMap<String, Object> params);
 
 
 }

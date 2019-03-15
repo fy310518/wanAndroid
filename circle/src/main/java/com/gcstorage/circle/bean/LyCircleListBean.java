@@ -71,7 +71,7 @@ public class LyCircleListBean implements Serializable {
     private String integral_count= "0";
     private List<TagListBean> tag_list;
     private List<PraiseListBean> praise_list;
-    private List<?> comment_list;
+    private List<CommentListBean> comment_list;
 
     public String getAddress() {
         return address;
@@ -297,11 +297,11 @@ public class LyCircleListBean implements Serializable {
         this.praise_list = praise_list;
     }
 
-    public List<?> getComment_list() {
+    public List<CommentListBean> getComment_list() {
         return comment_list;
     }
 
-    public void setComment_list(List<?> comment_list) {
+    public void setComment_list(List<CommentListBean> comment_list) {
         this.comment_list = comment_list;
     }
 
@@ -417,6 +417,137 @@ public class LyCircleListBean implements Serializable {
             return "PraiseListBean{" +
                     "praise_name='" + praise_name + '\'' +
                     ", praise_alarm='" + praise_alarm + '\'' +
+                    '}';
+        }
+    }
+
+    public static class CommentListBean implements Serializable{
+        /**
+         * publish_alarm : 发布评论的人的警号
+         * publish_name : 发布评论的人的姓名
+         * reply_alarm : 回复人的警号
+         * reply_name : 回复人的姓名
+         * post_id : 帖子的ID
+         * comment_id : 评论的ID
+         * content : 评论内容
+         * picture : 评论的图片
+         * type : 帖子的类型
+         * visible_alarm : 评论可见的人的警号（逗号隔开）
+         */
+
+        private String publish_alarm = "";
+        private String publish_name= "";
+        private String reply_alarm= "";
+        private String reply_name= "";
+        private String post_id= "";
+        private String comment_id= "";
+        private String content= "";
+        private String picture= "";
+        private String type= "";
+        private String is_visible= "";
+        private String is_accept_answer= "";
+
+        public String getIs_accept_answer() {
+            return is_accept_answer;
+        }
+
+        public void setIs_accept_answer(String is_accept_answer) {
+            this.is_accept_answer = is_accept_answer;
+        }
+
+        public String getPublish_alarm() {
+            return publish_alarm;
+        }
+
+        public void setPublish_alarm(String publish_alarm) {
+            this.publish_alarm = publish_alarm;
+        }
+
+        public String getPublish_name() {
+            return publish_name;
+        }
+
+        public void setPublish_name(String publish_name) {
+            this.publish_name = publish_name;
+        }
+
+        public String getReply_alarm() {
+            return reply_alarm;
+        }
+
+        public void setReply_alarm(String reply_alarm) {
+            this.reply_alarm = reply_alarm;
+        }
+
+        public String getReply_name() {
+            return reply_name;
+        }
+
+        public void setReply_name(String reply_name) {
+            this.reply_name = reply_name;
+        }
+
+        public String getPost_id() {
+            return post_id;
+        }
+
+        public void setPost_id(String post_id) {
+            this.post_id = post_id;
+        }
+
+        public String getComment_id() {
+            return comment_id;
+        }
+
+        public void setComment_id(String comment_id) {
+            this.comment_id = comment_id;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public String getPicture() {
+            return picture;
+        }
+
+        public void setPicture(String picture) {
+            this.picture = picture;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getIs_visible() {
+            return is_visible;
+        }
+
+        public void setIs_visible(String is_visible) {
+            this.is_visible = is_visible;
+        }
+
+        @Override
+        public String toString() {
+            return "CommentListBean{" +
+                    "publish_alarm='" + publish_alarm + '\'' +
+                    ", publish_name='" + publish_name + '\'' +
+                    ", reply_alarm='" + reply_alarm + '\'' +
+                    ", reply_name='" + reply_name + '\'' +
+                    ", post_id='" + post_id + '\'' +
+                    ", comment_id='" + comment_id + '\'' +
+                    ", content='" + content + '\'' +
+                    ", picture='" + picture + '\'' +
+                    ", type='" + type + '\'' +
+                    ", is_visible='" + is_visible + '\'' +
                     '}';
         }
     }

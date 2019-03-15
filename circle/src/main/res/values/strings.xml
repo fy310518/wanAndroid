@@ -5,6 +5,9 @@
     <string name="browseNum">浏览%1$s次</string>
     <string name="circleLvN">Lv%1$s</string>
 
+    <string name="comment">评论</string>
+
+
     <array name="circleTitle">
         <item>热点</item>
         <item>新动态</item>
