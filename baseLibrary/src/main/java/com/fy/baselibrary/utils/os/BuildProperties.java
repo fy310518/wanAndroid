@@ -21,7 +21,11 @@ public class BuildProperties {
 
     private BuildProperties() throws IOException {
         properties = new Properties();
-        properties.load(new FileInputStream(new File(Environment.getRootDirectory(), "build.prop")));
+        try {
+            properties.load(new FileInputStream(new File(Environment.getRootDirectory(), "build.prop")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean containsKey(final Object key) {

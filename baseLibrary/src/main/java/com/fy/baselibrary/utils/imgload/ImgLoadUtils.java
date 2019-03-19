@@ -52,7 +52,7 @@ public class ImgLoadUtils {
     }
 
     /**
-     * 加载指定URL的图片
+     * 加载指定 资源id 的图片
      * @param resId
      * @param imageView
      */
@@ -144,16 +144,6 @@ public class ImgLoadUtils {
                 .preload();
     }
 
-
-    /**
-     * 加载指定URL的图片 显示加载进度
-     * 原图缓存到磁盘，
-     * @param context
-     * @param url
-     */
-    public static void loadImage(Context context, String url) {
-
-    }
 
     /**
      * 异步获取 glide 缓存在磁盘的图片

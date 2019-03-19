@@ -47,4 +47,5 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     implementation project(':baseLibrary')
+    implementation project(':imgPicker')
 }

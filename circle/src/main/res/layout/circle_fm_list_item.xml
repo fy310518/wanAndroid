@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/itemLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/circle_shape_select"
     android:paddingLeft="@dimen/spacing_medium_small"
-    android:paddingTop="@dimen/spacing_small"
     android:paddingRight="@dimen/spacing_medium_small"
+    android:paddingTop="@dimen/spacing_small"
     android:paddingBottom="@dimen/spacing_small">
 
     <android.support.v7.widget.AppCompatImageView
@@ -71,6 +72,7 @@
         app:layout_constraintLeft_toRightOf="@+id/imgHead" />
 
     <LinearLayout
+        android:id="@+id/llparts"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -197,6 +199,5 @@
             android:textSize="@dimen/txt_small_much" />
 
     </LinearLayout>
-
 
 </android.support.constraint.ConstraintLayout>

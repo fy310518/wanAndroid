@@ -7,10 +7,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.utils.ResUtils;
+import com.fy.baselibrary.utils.notify.T;
 import com.gcstorage.circle.widgets.Constants;
 
 import java.util.ArrayList;
@@ -19,7 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 
 /**
- * @DESCRIPTION： 战友圈首页
+ * DESCRIPTION：战友圈首页
  * Created by fangs on 2019/3/11 9:34.
  */
 public class CircleActivity extends AppCompatActivity implements IBaseActivity {
@@ -40,6 +44,21 @@ public class CircleActivity extends AppCompatActivity implements IBaseActivity {
     @Override
     public int setView() {
         return R.layout.circle_activity;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.circle_act_menu, menu);
+        MenuItem menuLayout = menu.findItem(R.id.menuAdd);
+        menuLayout.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                //todo  待实现 发布功能
+                T.showLong("aaaaaa");
+                return false;
+            }
+        });
+        return true;
     }
 
     @StatusBar(statusStrColor = "statusBar", navStrColor = "statusBar")

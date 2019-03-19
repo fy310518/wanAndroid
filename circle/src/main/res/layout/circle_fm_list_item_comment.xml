@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/itemll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/spacing_medium_small"
+    android:paddingRight="@dimen/spacing_medium_small" >
+
+    <TextView
+        android:id="@+id/txt_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_view_content_state"
+        android:clickable="true"
+        android:lineSpacingExtra="3dp"
+        android:paddingTop="@dimen/spacing_small_much"
+        android:paddingBottom="@dimen/spacing_small_much"
+        android:textColor="@color/txtSuperColor"
+        android:textSize="16sp" />
+
+    <com.gcstorage.circle.widgets.NineGridView
+        android:id="@+id/nine_grid_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:visibility="gone" />
+
+</LinearLayout>

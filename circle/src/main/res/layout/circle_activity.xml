@@ -10,11 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        app:tabIndicatorColor="#66ff33"
+        app:tabIndicatorColor="@color/appHeadBg"
         app:tabIndicatorHeight="1dp"
         app:tabMode="scrollable"
         app:tabGravity="center"
-        app:tabSelectedTextColor="#CC33FF"
+        app:tabSelectedTextColor="@color/appHeadBg"
         app:tabTextColor="@color/txtSecondColor" />
 
     <android.support.v4.view.ViewPager

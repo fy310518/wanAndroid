@@ -174,11 +174,6 @@ public class LoginActivity extends BaseMVPActivity<LogingPresenter> implements I
                             JumpUtils.jump(LoginActivity.this, CircleActivity.class, bundle);
                         }
                     }
-
-                    @Override
-                    protected void updataLayout(int flag) {
-                        L.e("net updataLayout", flag + "-----");
-                    }
                 });
     }
 

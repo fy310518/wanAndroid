@@ -1,6 +1,5 @@
 package com.gcstorage.circle.comment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,9 +8,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.fy.baselibrary.utils.imgload.ImgLoadUtils;
+import com.fy.img.picker.bean.ImageItem;
 import com.gcstorage.circle.R;
 
 import java.util.List;
@@ -23,15 +21,15 @@ import java.util.List;
 public class AddTrackAdapter extends BaseAdapter {
 
     private Context mContext; // 上下文
-    private List<String> mDataList; // 数据源
-    private  int img_length;
+    private List<ImageItem> mDataList; // 数据源
+    private int img_length;
 
     public boolean mIsShowDelIcon; // 是否显示加号图标 true 显示  false 隐藏
 
-    public AddTrackAdapter(Context context, List<String> datas, int img_length) {
+    public AddTrackAdapter(Context context, List<ImageItem> datas, int img_length) {
         this.mContext = context; // 上下文
         this.mDataList = datas; // 数据源
-        this.img_length=img_length;
+        this.img_length = img_length;
     }
 
     @Override
@@ -72,7 +70,6 @@ public class AddTrackAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        Log.d("hehe", "position =" + position + "  mDataList.size()=" + mDataList.size());
         if (position == mDataList.size()) {
             // 当索引等于数据源的长度时，就设置为“+”号图标
             ImgLoadUtils.loadImage(R.drawable.comrade_add_pic, R.mipmap.img_load_error, holder.picImg);
@@ -80,7 +77,7 @@ public class AddTrackAdapter extends BaseAdapter {
             holder.delImg.setVisibility(View.INVISIBLE);
         } else { // 选中的图片
             // 显示图片
-            ImgLoadUtils.loadImage(mDataList.get(position), R.mipmap.img_load_error, holder.picImg);
+            ImgLoadUtils.loadImage(mDataList.get(position).path, R.mipmap.img_load_error, holder.picImg);
 
             // mIsShowDelIcon true显示删除图标   false隐藏删除图标
             holder.delImg.setVisibility(mIsShowDelIcon ? View.VISIBLE : View.INVISIBLE);

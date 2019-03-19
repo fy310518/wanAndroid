@@ -24,6 +24,8 @@ import com.fy.baselibrary.utils.cache.SpfAgent;
 import com.fy.baselibrary.widget.refresh.EasyPullLayout;
 import com.fy.baselibrary.widget.refresh.OnRefreshListener;
 import com.fy.baselibrary.widget.refresh.OnRefreshLoadMoreListener;
+import com.gcstorage.circle.bean.CircleListBean;
+import com.gcstorage.circle.bean.CommentListBean;
 import com.gcstorage.circle.bean.LyCircleListBean;
 import com.gcstorage.circle.request.ApiService;
 import com.gcstorage.circle.request.NetCallBack;
@@ -32,6 +34,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Function;
 
 /**
  * TabLayout Fragment
@@ -105,11 +110,6 @@ public class CircleTabFragment extends BaseFragment {
 //
         rvHierarchy.setLayoutManager(new LinearLayoutManager(getContext()));
         rvHierarchy.setItemAnimator(new FadeItemAnimator());
-        rvHierarchy.addItemDecoration(new ListItemDecoration.Builder()
-                .setmSpace(R.dimen.rv_divider_height)
-                .setDraw(false)
-                .create(getContext()));
-
         rvHierarchy.setAdapter(rvAdapter);
 
         epl.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
@@ -142,9 +142,25 @@ public class CircleTabFragment extends BaseFragment {
                 .lypostlist(param)
                 .compose(RxHelper.handleResult())
                 .compose(RxHelper.bindToLifecycle(mContext))
-                .subscribe(new NetCallBack<List<LyCircleListBean>>() {
+                .flatMap(new Function<List<LyCircleListBean>, ObservableSource<List<CircleListBean>>>() {
                     @Override
-                    protected void onSuccess(List<LyCircleListBean> dataList) {
+                    public ObservableSource<List<CircleListBean>> apply(List<LyCircleListBean> lyCircleListBeans) throws Exception {
+
+                        List<CircleListBean> adapterData = new ArrayList<>();
+                        for (LyCircleListBean lyCircleListBean : lyCircleListBeans){
+                            List<CommentListBean> comment_list = lyCircleListBean.getComment_list();
+                            adapterData.add(new CircleListBean(lyCircleListBean));
+
+                            for (int i = 0; i < comment_list.size(); i++){
+                                CommentListBean commentListBean = comment_list.get(i);
+                                adapterData.add(new CircleListBean(1, commentListBean, i == comment_list.size() - 1));
+                            }
+                        }
+                        return Observable.fromArray(adapterData);
+                    }
+                }).subscribe(new NetCallBack<List<CircleListBean>>() {
+                    @Override
+                    protected void onSuccess(List<CircleListBean> dataList) {
                         L.e("大王");
                         if (null == dataList || dataList.size() == 0) return;
 

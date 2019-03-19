@@ -1,18 +1,26 @@
 package com.gcstorage.circle;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
+import com.fy.baselibrary.aop.resultfilter.ResultCallBack;
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
+import com.fy.baselibrary.rv.adapter.MultiCommonAdapter;
+import com.fy.baselibrary.rv.adapter.MultiTypeSupport;
 import com.fy.baselibrary.rv.adapter.RvCommonAdapter;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
@@ -22,6 +30,9 @@ import com.fy.baselibrary.utils.cache.SpfAgent;
 import com.fy.baselibrary.utils.drawable.TintUtils;
 import com.fy.baselibrary.utils.imgload.ImgLoadUtils;
 import com.fy.baselibrary.utils.notify.T;
+import com.fy.img.picker.bean.ImageItem;
+import com.gcstorage.circle.bean.CircleListBean;
+import com.gcstorage.circle.bean.CommentListBean;
 import com.gcstorage.circle.bean.LyCircleListBean;
 import com.gcstorage.circle.comment.CircleCommentActivity;
 import com.gcstorage.circle.request.ApiService;
@@ -29,40 +40,67 @@ import com.gcstorage.circle.request.NetCallBack;
 import com.gcstorage.circle.widgets.Constants;
 import com.gcstorage.circle.widgets.NineGridView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 首页列表实体类
  * Created by fangs on 2018/4/16.
  */
-public class CircleFragmentAdapter extends RvCommonAdapter<LyCircleListBean> {
+public class CircleFragmentAdapter extends MultiCommonAdapter<CircleListBean> {
 
     private RequestOptions mRequestOptions;
     private DrawableTransitionOptions mDrawableTransitionOptions;
     private integralAnimListener integralAnimListener;
 
+    public CircleFragmentAdapter(Context context, List<CircleListBean> datas) {
+        super(context, datas, new MultiTypeSupport<CircleListBean>(){
+            @Override
+            public int getLayoutId(int itemType) {
+                if (itemType == 0) {
+                    return R.layout.circle_fm_list_item;
+                } else {
+                    return R.layout.circle_fm_list_item_comment;
+                }
+            }
 
-    public CircleFragmentAdapter(Context context, List<LyCircleListBean> datas) {
-        super(context, R.layout.circle_fm_list_item, datas);
+            @Override
+            public int getItemViewType(int position, CircleListBean circleListBean) {
+                return circleListBean.getIsShowCamera();
+            }
+        });
         this.mRequestOptions = new RequestOptions().centerCrop();
         this.mDrawableTransitionOptions = DrawableTransitionOptions.withCrossFade();
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position, List<Object> payloads) {
-//        payloads 对象不会为null，但是它可能是空（empty），这时候需要完整绑定(所以我们在方法里只要判断isEmpty就好，不用重复判空)。
-        if (payloads.isEmpty()) {
-            onBindViewHolder(holder, position);
-        } else {
-//            LyCircleListBean article = mDatas.get(position - getHeadersCount());
-//            setCollectImg(holder, article.isCollect());
+    public void convert(ViewHolder holder, CircleListBean circleListBean, int position) {
+        if (circleListBean.getIsShowCamera() == 0) {//帖子列表
+            drawCircleListItem(holder, circleListBean.getLyCircleListBean(), position);
+            if (!circleListBean.isExistenceComment()) {//代码设置 分割线
+                ConstraintLayout itemLayout = holder.getView(R.id.itemLayout);
+                ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(itemLayout.getLayoutParams());
+                params.setMargins(0, 0, 0, (int) ResUtils.getDimen(R.dimen.spacing_small_much));
+                itemLayout.setLayoutParams(params);
+            }
+        } else {//评论列表
+            drawCommentListItem(holder, circleListBean.getCommentListBean(), position);
+
+            //代码设置 分割线
+            LinearLayout itemll = holder.getView(R.id.itemll);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(itemll.getLayoutParams());
+            if (circleListBean.isExistenceComment()) {
+                params.setMargins(0, 0, 0, (int) ResUtils.getDimen(R.dimen.spacing_small_much));
+            } else {
+                params.setMargins(0, 0, 0, 0);
+            }
+            itemll.setLayoutParams(params);
         }
     }
 
-    @Override
-    public void convert(ViewHolder holder, LyCircleListBean article, int position) {
-
+    public void drawCircleListItem(ViewHolder holder, LyCircleListBean article, int position) {
         //姓名
         holder.setText(R.id.txt_post_name, article.getName());
         //等级
@@ -118,8 +156,42 @@ public class CircleFragmentAdapter extends RvCommonAdapter<LyCircleListBean> {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("LyCircleListBean", article);
-                JumpUtils.jump((FragmentActivity)mContext, CircleCommentActivity.class, bundle);
+//                bundle.putParcelable("LyCircleListBean", article);
+                bundle.putString("postId", article.getPostid());
+                JumpUtils.jump((FragmentActivity)mContext, CircleCommentActivity.class, bundle, R.id.txt_comment_count, new ResultCallBack(){
+                    @Override
+                    public void onActResult(int requestCode, int resultCode, Intent data) {
+                        if (resultCode == Activity.RESULT_OK && requestCode == R.id.txt_comment_count && null != data) {
+                            Bundle bundle1 = data.getExtras();
+                            assert bundle1 != null;
+                            ArrayList<CommentListBean> commentBeans = (ArrayList<CommentListBean>) bundle1.getSerializable("CommentListBeans");
+                            assert commentBeans != null;
+
+                            CommentListBean commentListBeanData = null;
+                            //获取新旧 评论列表 差异
+                            for (CommentListBean newCommentListBean : commentBeans) {
+                                for (CommentListBean oldCommentListBean : article.getComment_list()) {
+                                    if (!newCommentListBean.equals(oldCommentListBean)) {
+                                        commentListBeanData = newCommentListBean;
+                                    }
+                                }
+                            }
+
+                            //如果为空 说明 旧数据集没有评论
+                            if (null == commentListBeanData)commentListBeanData = commentBeans.get(0);
+
+                            //更新评论数
+                            mDatas.get(position).getLyCircleListBean().setComment_count(commentBeans.size() + "");
+                            notifyItemChanged(position);
+
+                            //把差异数据 插入到 列表数据源,并更新相关的两个 评论条目
+                            int spli = position + article.getComment_list().size();
+                            mDatas.get(spli).setExistenceComment(false);
+                            addData(spli + 1, new CircleListBean(1, commentListBeanData, true));
+                            notifyItemRangeChanged(spli, 2);
+                        }
+                    }
+                });
             }
         });
         //积分
@@ -152,9 +224,22 @@ public class CircleFragmentAdapter extends RvCommonAdapter<LyCircleListBean> {
             nineGridView.setAdapter(new NineImageAdapter(mContext, mRequestOptions,
                     mDrawableTransitionOptions, imgList));
         }
-
-
     }
+
+    private void drawCommentListItem(ViewHolder holder, CommentListBean commentBean, int position){
+        holder.setText(R.id.txt_content, commentBean.getContent());//评论内容
+
+        NineGridView nineGridView = holder.getView(R.id.nine_grid_view);
+        if (!TextUtils.isEmpty(commentBean.getPicture())) {
+            List<String> imgList = Arrays.asList(commentBean.getPicture().split(","));
+            nineGridView.setVisibility(View.VISIBLE);
+            nineGridView.setAdapter(new NineImageAdapter(mContext, mRequestOptions,
+                    mDrawableTransitionOptions, imgList));
+        } else {
+            nineGridView.setVisibility(View.GONE);
+        }
+    }
+
 
     public void setIntegralAnimListener(CircleFragmentAdapter.integralAnimListener integralAnimListener) {
         this.integralAnimListener = integralAnimListener;

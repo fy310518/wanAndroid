@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.fy.baselibrary.widget.CheckableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_thumb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/default_image" />
+
+    <CheckBox
+        android:id="@+id/cb_check"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:duplicateParentState="true"
+        android:button="@null"
+        android:background="@drawable/selector_item_checked"
+        android:padding="10dp" />
+</com.fy.baselibrary.widget.CheckableLayout>

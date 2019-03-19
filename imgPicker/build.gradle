@@ -1,0 +1,51 @@
+apply plugin: 'com.android.library'
+apply plugin: 'android-aspectjx'
+
+android {
+    compileSdkVersion var.compileSdkVersion
+    buildToolsVersion var.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion var.minSdkVersion
+        targetSdkVersion var.targetSdkVersion
+
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+
+    packagingOptions {
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/rxjava.properties'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "com.android.support:appcompat-v7:$var.supportLibraryVersion"
+    implementation "com.android.support:recyclerview-v7:$var.supportLibraryVersion"
+    implementation "com.android.support.constraint:constraint-layout:$var.constraintLayout"
+
+    //PhotoView
+    implementation 'com.github.chrisbanes:PhotoView:2.1.3'
+    implementation 'com.bigkoo:convenientbanner:2.0.5'
+//    ViewPagerTransforms 切换动画
+    implementation 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
+
+    implementation project(':baseLibrary')
+}

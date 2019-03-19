@@ -1,0 +1,31 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.fy.library.imgpicker">
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:supportsRtl="true">
+
+        <!-- 图片选择器 -->
+        <activity
+            android:name="com.fy.img.picker.multiselect.ImgPickerActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.fy.img.picker.ImgPickerActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- 图片预览 -->
+        <activity
+            android:name="com.fy.img.picker.preview.PicturePreviewActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.fy.img.picker.preview.PicturePreviewActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>

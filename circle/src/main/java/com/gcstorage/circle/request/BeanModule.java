@@ -2,14 +2,11 @@ package com.gcstorage.circle.request;
 
 import com.fy.baselibrary.retrofit.BaseBean;
 
-import java.io.Serializable;
-import java.util.List;
-
 /**
  * 网络请求 返回数据 格式化对象
  * Created by fangs on 2017/11/6.
  */
-public class BeanModule<T> implements BaseBean<T>, Serializable{
+public class BeanModule<T> implements BaseBean<T>{
 
 
     /**

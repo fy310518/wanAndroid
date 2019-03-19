@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.bigkoo.convenientbanner.ConvenientBanner
+        android:id="@+id/bannerViewPager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/black"
+        app:canLoop="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include layout="@layout/img_activity_head" />
+
+    <FrameLayout
+        android:id="@+id/pickerBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/imgPreviewBottomBg"
+        android:padding="@dimen/spacing_medium_small"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <CheckBox
+            android:id="@+id/original_checkbox"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:drawableLeft="@drawable/selector_item_checked"
+            android:textColor="@color/txtSuperColor"
+            android:textSize="@dimen/txt_small" />
+
+        <TextView
+            android:id="@+id/send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:paddingLeft="@dimen/spacing_medium_small"
+            android:paddingTop="@dimen/spacing_small_much"
+            android:paddingRight="@dimen/spacing_medium_small"
+            android:paddingBottom="@dimen/spacing_small_much"
+            android:text="完成"
+            android:textColor="@color/green"
+            android:textSize="@dimen/txt_small" />
+
+    </FrameLayout>
+</android.support.constraint.ConstraintLayout>

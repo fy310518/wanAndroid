@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="imgPreviewHeadBg">#A6000000</color>
+    <color name="imgPreviewBottomBg">#A6000000</color>
+
+    <!-- 界面字体颜色 超浅色 -->
+    <color name="txtSuperLight">#b3b3b3</color>
+
+    <!-- 状态栏颜色 -->
+    <color name="statusBar">#25b6ed</color>
+    <!-- 标题栏颜色 -->
+    <color name="appHeadBg">#25b6ed</color>
+    <!-- 界面背景色 -->
+    <color name="BgColor">#eeeeee</color>
+
+    <!-- 标题栏内容颜色 -->
+    <color name="titleBarCon">#fefefe</color>
+
+    <!-- 点击  背景变化 颜色 -->
+    <color name="selection">#4dd6d6d6</color>
+
+</resources>

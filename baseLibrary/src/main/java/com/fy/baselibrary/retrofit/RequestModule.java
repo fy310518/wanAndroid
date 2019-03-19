@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.retrofit.converter.file.FileConverterFactory;
+import com.fy.baselibrary.retrofit.converter.gson.DES3GsonConverterFactory;
 import com.fy.baselibrary.retrofit.interceptor.RequestHeaderInterceptor;
 import com.fy.baselibrary.retrofit.interceptor.cache.CacheNetworkInterceptor;
 import com.fy.baselibrary.retrofit.interceptor.cache.IsUseCacheInterceptor;

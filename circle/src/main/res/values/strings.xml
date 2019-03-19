@@ -6,6 +6,8 @@
     <string name="circleLvN">Lv%1$s</string>
 
     <string name="comment">评论</string>
+    <string name="publishLoading">正在发布...</string>
+    <string name="publishSuccess">发布成功</string>
 
 
     <array name="circleTitle">
