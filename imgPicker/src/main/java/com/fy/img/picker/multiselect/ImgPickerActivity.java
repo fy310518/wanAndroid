@@ -169,7 +169,7 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
     public void onClick(View view) {
         int i = view.getId();
         if (i == R.id.btn_dir) {//全部图片 按钮
-            if (popupWindow != null && popupWindow.isShowing()) return;
+            if (null != popupWindow && popupWindow.isShowing()) return;
             //计算popupWindow 高度（listview Item数量  * （Item高度 + 分割线高度））
             int itemCount = mImageFolderAdapter.getCount() > 3 ? 3 : mImageFolderAdapter.getCount();
             int pw_lv_height = 166 * itemCount;

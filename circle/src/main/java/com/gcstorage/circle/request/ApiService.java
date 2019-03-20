@@ -6,6 +6,7 @@ import android.util.ArrayMap;
 import com.fy.baselibrary.retrofit.load.up.UpLoadFileType;
 import com.gcstorage.circle.bean.CommentListBean;
 import com.gcstorage.circle.bean.LyCircleListBean;
+import com.gcstorage.circle.bean.LyLocationBean;
 import com.gcstorage.circle.bean.LyLoginBean;
 import com.gcstorage.circle.bean.UploadBean;
 
@@ -18,9 +19,11 @@ import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 /**
@@ -34,53 +37,67 @@ public interface ApiService {
      * 猎鹰 登录
      */
     @FormUrlEncoded
-    @POST("http://47.107.134.212:13201/Falcon/2.0/main/login")
+    @POST(Constant.HOST + "main/login")
     Observable<BeanModule<List<LyLoginBean>>> lyLogin(@FieldMap ArrayMap<String, Object> options);
 
     /**
-     * 获取帖子列表的接口
+     * 使用 猎鹰 的图片上传接口 帖子评论 上传图片
+     * 多图片上传 之 图文上传
+     * @return
      */
-    @GET("http://47.107.134.212:13202/Falcon/1.1/post/postlist1206")
+    @UpLoadFileType
+    @POST(Constant.HOST + "tools/uploadfile_more")
+    Observable<BeanModule<List<UploadBean>>> uploadFile(@Body ArrayMap<String, Object> params);
+
+
+
+    /**
+     * 战友圈 获取帖子列表的接口
+     */
+    @GET(Constant.zyq_HOST + "post/postlist1206")
     Observable<BeanModule<List<LyCircleListBean>>> lypostlist(@QueryMap ArrayMap<String, Object> options);
 
 
     /**
-     * 帖子列表 积分打赏
+     * 战友圈 帖子列表 积分打赏
      */
     @FormUrlEncoded
-    @POST("http://47.107.134.212:13202/Falcon/1.1/post/give_reward")
+    @POST(Constant.zyq_HOST + "post/give_reward")
     Observable<BeanModule<String>> integralGiveReward(@FieldMap ArrayMap<String, Object> options);
 
 
     /**
-     * 点赞 与 取消点赞
+     * 战友圈 点赞 与 取消点赞
      */
     @FormUrlEncoded
-    @POST("http://47.107.134.212:13202/Falcon/1.1/praise/setpraise_new")
+    @POST(Constant.zyq_HOST + "praise/setpraise_new")
     Observable<BeanModule<List<LyCircleListBean.PraiseListBean>>> setpraiseNew(@FieldMap ArrayMap<String, Object> options);
 
-
     /**
-     * 帖子评论 上传图片
-     * 多图片上传 之 图文上传
-     * @return
-     */
-    @Multipart
-    @POST("http://47.107.134.212:13201/Falcon/2.0/tools/uploadfile")
-    Observable<BeanModule<UploadBean>> uploadPostFile(@Part MultipartBody.Part file);
-
-    @UpLoadFileType
-    @POST("http://47.107.134.212:13201/Falcon/2.0/tools/uploadfile_more")
-    Observable<BeanModule<List<UploadBean>>> uploadFile(@Body ArrayMap<String, Object> params);
-
-    /**
-     * 帖子评论
+     * 战友圈 帖子评论
      * @param params
      * @return
      */
     @FormUrlEncoded
-    @POST("http://47.107.134.212:13202/Falcon/1.1/comment/setcomment_new")
+    @POST(Constant.zyq_HOST + "comment/setcomment_new")
     Observable<BeanModule<ArrayList<CommentListBean>>> commentNew(@FieldMap ArrayMap<String, Object> params);
 
+    /**
+     * 帖子发布
+     * @param params
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(Constant.zyq_HOST + "post/publishpost")
+    Observable<BeanModule<Object>> publishpost(@FieldMap ArrayMap<String, Object> params);
+
+    /**
+     * 通过百度服务获取 位置信息
+     * @param options
+     * @return
+     */
+//    @Headers({"", ""})
+    @GET("http://api.map.baidu.com/geocoder")
+    Observable<LyLocationBean> getLocation(@QueryMap ArrayMap<String, String> options);
 
 }

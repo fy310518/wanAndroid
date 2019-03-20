@@ -5,6 +5,6 @@
         android:id="@+id/menuAdd"
         android:orderInCategory="100"
         android:title=""
-        android:icon="@drawable/application_add"
+        app:actionLayout="@layout/circle_menu_item"
         app:showAsAction="always" />
 </menu>
