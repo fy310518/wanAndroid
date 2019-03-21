@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">scanFaceLogin</string>
+    <string name="scan_face">刷脸</string>
+
+    <string name="active_engine">激活引擎</string>
+    <string name="active_success">激活引擎成功</string>
+    <string name="already_activated">引擎已激活，无需再次激活</string>
+
+    <string name="active_failed">引擎激活失败，错误码为 %d</string>
+    <string name="init_failed">引擎初始化失败，错误码为 %d</string>
+    <string name="engine_not_initialized">引擎未初始化，错误码为 %d</string>
+
+
+</resources>

@@ -69,4 +69,5 @@ dependencies {
 
     implementation project(':baseLibrary')
     implementation project(':circle')
+//    implementation project(':scanfacelogin')
 }

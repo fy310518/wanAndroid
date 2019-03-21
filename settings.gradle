@@ -1,1 +1,2 @@
-include ':app', ':circle', ':baseLibrary', ':imgPicker'
+include ':app', ':baseLibrary', ':imgPicker', ":circleApp", ':circle'
+//, ':scanfacelogin'

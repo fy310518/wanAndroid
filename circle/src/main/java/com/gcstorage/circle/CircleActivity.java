@@ -88,16 +88,12 @@ public class CircleActivity extends AppCompatActivity implements IBaseActivity, 
             return;
         } else if (i == R.id.tv_dynamic){//动态
             bundle.putInt("title", R.string.newDynamic);
-
         }else if (i == R.id.tv_assist_notice){//协查通报
             bundle.putInt("title", R.string.bulletin);
-
         }else if (i == R.id.tv_case_analyse){//案件分享
             bundle.putInt("title", R.string.CaseSharing);
-
         }else if (i == R.id.tv_community_industry){//微课堂
             bundle.putInt("title", R.string.MicroClassroom);
-
         }
 
         //关闭 弹窗

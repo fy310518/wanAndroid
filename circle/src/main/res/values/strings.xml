@@ -9,6 +9,7 @@
     <string name="publishLoading">正在发布...</string>
     <string name="publishSuccess">发布成功</string>
 
+    <string name="dynamicDetails">动态详情</string>
 
     <string name="dynamic">动态</string>
     <string name="newDynamic">最新动态</string>

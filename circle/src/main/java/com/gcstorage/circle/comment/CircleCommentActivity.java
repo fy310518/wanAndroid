@@ -12,12 +12,8 @@ import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewStub;
 import android.widget.AdapterView;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.aop.annotation.StatusBar;

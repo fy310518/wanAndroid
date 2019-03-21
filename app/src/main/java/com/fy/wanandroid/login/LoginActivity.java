@@ -1,5 +1,6 @@
 package com.fy.wanandroid.login;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.fy.baselibrary.aop.annotation.ClickFilter;
+import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.application.ioc.ConfigUtils;
@@ -142,6 +144,7 @@ public class LoginActivity extends BaseMVPActivity<LogingPresenter> implements I
         JumpUtils.jump(LoginActivity.this, MainActivity.class, bundle);
     }
 
+    @NeedPermission({Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA, Manifest.permission.READ_PHONE_STATE})
     @SuppressLint("CheckResult")
     public void lylogin() {
         IProgressDialog progressDialog = new NetDialog().init(this)

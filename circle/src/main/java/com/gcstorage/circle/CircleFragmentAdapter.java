@@ -35,6 +35,7 @@ import com.gcstorage.circle.bean.CircleListBean;
 import com.gcstorage.circle.bean.CommentListBean;
 import com.gcstorage.circle.bean.LyCircleListBean;
 import com.gcstorage.circle.comment.CircleCommentActivity;
+import com.gcstorage.circle.details.CircleDetailsActivity;
 import com.gcstorage.circle.request.ApiService;
 import com.gcstorage.circle.request.NetCallBack;
 import com.gcstorage.circle.widgets.Constants;
@@ -116,6 +117,14 @@ public class CircleFragmentAdapter extends MultiCommonAdapter<CircleListBean> {
         //圈子内容
         holder.setText(R.id.txt_content, article.getContent());
 //        holder.setOnClickListener(R.id.txt_state, v -> setTextState(holder, ));//全文 伸缩 未实现
+
+        //进入帖子详情
+        holder.setOnClickListener(R.id.itemLayout, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JumpUtils.jump((FragmentActivity) mContext, CircleDetailsActivity.class, null);
+            }
+        });
 
         //头像
         ImgLoadUtils.loadImage(article.getHeadpic(), R.drawable.default_pic_icon, holder.getView(R.id.imgHead));

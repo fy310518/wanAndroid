@@ -100,14 +100,7 @@ public class CircleTabFragment extends BaseFragment {
 
     private void initRvAdapter() {
         rvAdapter = new CircleFragmentAdapter(getActivity(), new ArrayList<>());
-        rvAdapter.setIntegralAnimListener(() -> animation());//设置积分动画回调
-//        rvAdapter.setItemClickListner(view -> {
-//            ArticleBean.DatasBean article = (ArticleBean.DatasBean) view.getTag();
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable("Bookmark", new Bookmark(article.getTitle(), article.getLink()));
-//            JumpUtils.jump(this, WebViewActivity.class, bundle);
-//        });
-//
+        rvAdapter.setIntegralAnimListener(this::animation);//设置积分动画回调
         rvHierarchy.setLayoutManager(new LinearLayoutManager(getContext()));
         rvHierarchy.setItemAnimator(new FadeItemAnimator());
         rvHierarchy.setAdapter(rvAdapter);

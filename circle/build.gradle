@@ -18,7 +18,14 @@ android {
     }
 
     buildTypes {
+        debug {
+            manifestPlaceholders = [app_Adapter_Screen_width: "360"]
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
         release {
+            manifestPlaceholders = [app_Adapter_Screen_width: "360"]
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -44,6 +51,8 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$var.supportLibraryVersion"
     implementation "com.android.support:design:$var.supportLibraryVersion"
     implementation "com.android.support.constraint:constraint-layout:$var.constraintLayout"
+    implementation 'com.android.support:multidex:1.0.3'
+
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     implementation project(':baseLibrary')
