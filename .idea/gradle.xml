@@ -10,9 +10,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/baseLibrary" />
-            <option value="$PROJECT_DIR$/circle" />
-            <option value="$PROJECT_DIR$/circleApp" />
-            <option value="$PROJECT_DIR$/imgPicker" />
+            <option value="$PROJECT_DIR$/scanfacelogin" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

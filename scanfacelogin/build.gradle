@@ -46,10 +46,11 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.support:appcompat-v7:$var.supportLibraryVersion"
+    implementation "com.android.support:recyclerview-v7:$var.supportLibraryVersion"
     implementation "com.android.support.constraint:constraint-layout:$var.constraintLayout"
     
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     implementation project(':baseLibrary')
-    implementation files('libs/arcsoft_face.jar')
+//    implementation files('libs/arcsoft_face.jar')
 }

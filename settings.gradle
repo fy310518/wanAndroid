@@ -1,2 +1,2 @@
-include ':app', ':baseLibrary', ':imgPicker', ":circleApp", ':circle'
-//, ':scanfacelogin'
+//include ":circleApp", ':circle', ':imgPicker'  //战友圈
+include ':app', ':baseLibrary', ':scanfacelogin' //wanAndroid

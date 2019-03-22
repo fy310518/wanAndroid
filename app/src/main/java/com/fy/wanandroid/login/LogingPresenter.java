@@ -37,7 +37,7 @@ public class LogingPresenter extends BasePresenter<LoginContract.LoginView> {
 //        this.singleInterfaceModel = new SingleInterfaceModel();
     }
 
-//    @NeedPermission(value = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, isRun = true)
+    @NeedPermission(value = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, isRun = true)
     public void login(String mUserName, String mPassWord) {
         IProgressDialog progressDialog = new NetDialog().init(mView)
                 .setDialogMsg(R.string.user_login);
