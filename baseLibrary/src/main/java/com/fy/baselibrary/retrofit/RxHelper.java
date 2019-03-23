@@ -24,6 +24,7 @@ import io.reactivex.subjects.BehaviorSubject;
  * Created by fangs on 2018/3/13.
  */
 public class RxHelper {
+
     /**
      * 对结果进行预处理
      *

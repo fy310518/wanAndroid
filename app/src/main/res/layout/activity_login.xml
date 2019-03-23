@@ -22,7 +22,7 @@
             android:id="@+id/editName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="420115199410109818"
+            android:text="420105197808201612"
             android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>

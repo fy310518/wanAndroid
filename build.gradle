@@ -41,7 +41,7 @@ ext {
             buildToolsVersion    : "28.0.3",
 
             minSdkVersion        : 19,
-            targetSdkVersion     : 28,
+            targetSdkVersion     : 27,
 
             supportLibraryVersion: "27.1.1",
             constraintLayout     : "1.1.3",

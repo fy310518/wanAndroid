@@ -52,5 +52,5 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     implementation project(':baseLibrary')
-//    implementation files('libs/arcsoft_face.jar')
+    api files('libs/arcsoft_face.jar')
 }

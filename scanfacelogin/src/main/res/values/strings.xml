@@ -11,4 +11,7 @@
     <string name="engine_not_initialized">引擎未初始化，错误码为 %d</string>
 
 
+    <string name="compare_failed">比对失败，错误码为 %d</string>
+
+
 </resources>

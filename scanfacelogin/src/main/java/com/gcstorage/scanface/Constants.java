@@ -1,6 +1,10 @@
 package com.gcstorage.scanface;
 
+import com.arcsoft.face.FaceFeature;
+
 public class Constants {
+
+    public static FaceFeature faceFeature;
 
     /** 猎鹰 互联网请求地址 */
     public static final String HOST = "http://47.107.134.212:13201/Falcon/2.0/";

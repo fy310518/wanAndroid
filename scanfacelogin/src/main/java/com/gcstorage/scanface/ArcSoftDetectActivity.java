@@ -4,11 +4,20 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.ParcelableSpan;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.ArrayMap;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -20,8 +29,11 @@ import android.widget.Toast;
 
 import com.arcsoft.face.AgeInfo;
 import com.arcsoft.face.ErrorInfo;
+import com.arcsoft.face.Face3DAngle;
 import com.arcsoft.face.FaceEngine;
 import com.arcsoft.face.FaceFeature;
+import com.arcsoft.face.FaceInfo;
+import com.arcsoft.face.FaceSimilar;
 import com.arcsoft.face.GenderInfo;
 import com.arcsoft.face.LivenessInfo;
 import com.arcsoft.face.VersionInfo;
@@ -43,13 +55,13 @@ import com.gcstorage.scanface.request.NetCallBack;
 import com.gcstorage.scanface.request.NetDialog;
 import com.gcstorage.scanface.util.ConfigUtil;
 import com.gcstorage.scanface.util.DrawHelper;
+import com.gcstorage.scanface.util.ImageUtil;
 import com.gcstorage.scanface.util.camera.CameraHelper;
 import com.gcstorage.scanface.util.camera.CameraListener;
 import com.gcstorage.scanface.util.face.FaceHelper;
 import com.gcstorage.scanface.util.face.FaceListener;
 import com.gcstorage.scanface.util.face.FaceServer;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -60,6 +72,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
@@ -89,13 +102,13 @@ public class ArcSoftDetectActivity extends AppCompatActivity implements IBaseAct
     /** 人脸引擎类，其中定义了人脸操作相关的函数，包含 SDK 的授权激活、引擎初始 化以及人脸处理相关方法*/
     private FaceEngine faceEngine;
     private FaceHelper faceHelper;
+    private int afCode = -1;
 
     /**
      * 活体检测的开关
      */
     private boolean livenessDetect = false;
 
-    private int afCode = -1;
     private ConcurrentHashMap<Integer, Integer> requestFeatureStatusMap = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, Integer> livenessMap = new ConcurrentHashMap<>();
     private CompositeDisposable getFeatureDelayedDisposables = new CompositeDisposable();
@@ -106,7 +119,6 @@ public class ArcSoftDetectActivity extends AppCompatActivity implements IBaseAct
 
     @BindView(R2.id.img)
     ImageView img;
-    byte[] mBitmapbyte;
     Bitmap bitmap;
 
     String idCard = "";//账号，可能是警号可能是身份证
@@ -127,11 +139,7 @@ public class ArcSoftDetectActivity extends AppCompatActivity implements IBaseAct
         //保持亮屏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        //本地人脸库初始化
-        FaceServer.getInstance().init(this);
-
         init();
-
 
         previewView = findViewById(R.id.texture_preview);
         //在布局结束后才做初始化操作
@@ -139,13 +147,13 @@ public class ArcSoftDetectActivity extends AppCompatActivity implements IBaseAct
             @Override
             public void onGlobalLayout() {
                 previewView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                activeEngine();
+                activeEngine();//激活引擎
                 initEngine();
                 initCamera();
             }
         });
 
-        runNetRequest();
+//        runNetRequest();
     }
 
     private void initCamera() {
@@ -157,23 +165,22 @@ public class ArcSoftDetectActivity extends AppCompatActivity implements IBaseAct
             public void onFail(Exception e) {
                 Log.e(TAG, "onFail: " + e.getMessage());
             }
-
             //请求FR的回调
             @Override
             public void onFaceFeatureInfoGet(@Nullable final FaceFeature faceFeature, final Integer requestId) {
                 //FR成功
                 if (faceFeature != null) {
-//                    Log.i(TAG, "onPreview: fr end = " + System.currentTimeMillis() + " trackId = " + requestId);
-                    CompareResult compareResult = FaceServer.getInstance().getTopOfFaceLib(faceFeature);
-                    //不做活体检测的情况，直接搜索
-                    if (compareResult.getSimilar() < 0.6f) {
-                        getFeatureDelayedDisposables.add(Observable.timer(WAIT_LIVENESS_INTERVAL, TimeUnit.MILLISECONDS)
-                                .subscribe(new Consumer<Long>() {
-                                    @Override
-                                    public void accept(Long aLong) {
-                                        onFaceFeatureInfoGet(faceFeature, requestId);
-                                    }
-                                }));
+                    FaceSimilar faceSimilar = new FaceSimilar();
+                    int compareResult = faceEngine.compareFaceFeature(Constants.faceFeature, faceFeature, faceSimilar);
+
+                    if (compareResult == ErrorInfo.MOK && faceSimilar.getScore() > 0.6f) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                T.showLong("刷脸比对成功，相似度：" + faceSimilar.getScore());
+
+                            }
+                        });
                     }
                 }
             }
@@ -319,6 +326,8 @@ public class ArcSoftDetectActivity extends AppCompatActivity implements IBaseAct
         }
     }
 
+
+
     /**
      * 激活引擎
      */
@@ -350,7 +359,6 @@ public class ArcSoftDetectActivity extends AppCompatActivity implements IBaseAct
 
     @Override
     protected void onDestroy() {
-
         if (cameraHelper != null) {
             cameraHelper.release();
             cameraHelper = null;
@@ -393,102 +401,4 @@ public class ArcSoftDetectActivity extends AppCompatActivity implements IBaseAct
         idCard = bundle.getString("idCard", "");
     }
 
-
-    private void runNetRequest() {
-        IProgressDialog progressDialog = new NetDialog().init(this)
-                .setDialogMsg(R.string.user_login);
-
-        ArrayMap<String, Object> codeParam = new ArrayMap<>();
-        codeParam.put("appid", Constants.appId);
-        codeParam.put("uidcard", idCard);
-        codeParam.put("scope", "snsapi_userinfo");
-        codeParam.put("state", System.currentTimeMillis());
-
-        RequestUtils.create(ApiService.class)
-                .getcode(codeParam)
-                .compose(RxHelper.handleResult())
-                .compose(RxHelper.bindToLifecycle(this))
-                .flatMap(new Function<LgCodeBean, ObservableSource<LgTokenBean>>() {
-                    @Override
-                    public ObservableSource<LgTokenBean> apply(LgCodeBean lgCodeBean) throws Exception {
-                        ArrayMap<String, Object> tokenParam = new ArrayMap<>();
-                        tokenParam.put("appid", Constants.appId);
-                        tokenParam.put("secret", Constants.appSecret);
-                        tokenParam.put("code", lgCodeBean.getCode());
-
-                        return RequestUtils.create(ApiService.class)
-                                .getToken(tokenParam)
-                                .compose(RxHelper.handleResult())
-                                .compose(RxHelper.bindToLifecycle(ArcSoftDetectActivity.this));
-                    }
-                }).flatMap(new Function<LgTokenBean, ObservableSource<LgUserInfoBean>>() {
-                    @Override
-                    public ObservableSource<LgUserInfoBean> apply(LgTokenBean lgTokenBean) throws Exception {
-                        ArrayMap<String, Object> infoParam = new ArrayMap<>();
-                        infoParam.put("appid", Constants.appId);
-                        infoParam.put("access_token",lgTokenBean.getAccess_token());
-                        infoParam.put("openid",lgTokenBean.getOpenid());
-
-                        return RequestUtils.create(ApiService.class)
-                                .getInfo(infoParam)
-                                .compose(RxHelper.handleResult())
-                                .compose(RxHelper.bindToLifecycle(ArcSoftDetectActivity.this));
-                    }
-                }).flatMap(new Function<LgUserInfoBean, ObservableSource<ResponseBody>>() {
-                    @Override
-                    public ObservableSource<ResponseBody> apply(LgUserInfoBean lgUserInfoBean) throws Exception {
-                        return RequestUtils.create(ApiService.class)
-                                .getBitmap(lgUserInfoBean.getAvatar())
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .compose(RxHelper.bindToLifecycle(ArcSoftDetectActivity.this));
-                    }
-                }).subscribe(new NetCallBack<ResponseBody>(progressDialog) {
-                    @Override
-                    protected void onSuccess(ResponseBody responseBody) {
-                        bitmap = BitmapFactory.decodeStream(responseBody.byteStream());
-//                        try {
-                        img.setImageBitmap(bitmap);
-
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                        byte[] bitmapByte = baos.toByteArray();
-
-                        boolean success = FaceServer.getInstance()
-                                .register(ArcSoftDetectActivity.this, bitmapByte.clone(), bitmap.getWidth(), bitmap.getHeight(), "registered " + faceHelper.getCurrentTrackId());
-
-////                            mBitmapbyte = responseBody.bytes();
-//
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-                    }
-                });
-    }
-
-
-    /**
-     * 根据传递的人脸 特征和 bitmap 是否是同一个人（相似度大于 0.6f认为是同一个人）
-     * @param faceFeature
-     * @return
-     */
-    public boolean getTopOfFaceLib(FaceFeature faceFeature) {
-
-        FaceFeature faceFeature = new FaceFeature();
-        int res = faceEngine.extractFaceFeature(nv21, width, height, FaceEngine.CP_PAF_NV21, faceInfoList.get(0), faceFeature);
-        if (res == 0) {
-            FaceSimilar faceSimilar = new FaceSimilar();
-            int compareResult = faceEngine.compareFaceFeature(mainFeature, faceFeature, faceSimilar);
-            if (compareResult == ErrorInfo.MOK) {
-
-                ItemShowInfo showInfo = new ItemShowInfo(bitmap, ageInfoList.get(0).getAge(), genderInfoList.get(0).getGender(), faceSimilar.getScore());
-                showInfoList.add(showInfo);
-                showInfoAdapter.notifyItemInserted(showInfoList.size() - 1);
-            } else {
-                showToast(getString(R.string.compare_failed, compareResult));
-            }
-        }
-
-        return false;
-    }
 }
