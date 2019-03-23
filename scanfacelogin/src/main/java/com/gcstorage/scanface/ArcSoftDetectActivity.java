@@ -2,65 +2,44 @@ package com.gcstorage.scanface;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.content.Intent;
 import android.graphics.Point;
-import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.ParcelableSpan;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
-import android.util.ArrayMap;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arcsoft.face.AgeInfo;
 import com.arcsoft.face.ErrorInfo;
-import com.arcsoft.face.Face3DAngle;
 import com.arcsoft.face.FaceEngine;
 import com.arcsoft.face.FaceFeature;
-import com.arcsoft.face.FaceInfo;
 import com.arcsoft.face.FaceSimilar;
 import com.arcsoft.face.GenderInfo;
 import com.arcsoft.face.LivenessInfo;
 import com.arcsoft.face.VersionInfo;
 import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
-import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
-import com.fy.baselibrary.retrofit.observer.IProgressDialog;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.notify.T;
-import com.gcstorage.scanface.bean.CompareResult;
 import com.gcstorage.scanface.bean.DrawInfo;
 import com.gcstorage.scanface.bean.FacePreviewInfo;
-import com.gcstorage.scanface.bean.LgCodeBean;
-import com.gcstorage.scanface.bean.LgTokenBean;
-import com.gcstorage.scanface.bean.LgUserInfoBean;
-import com.gcstorage.scanface.request.ApiService;
-import com.gcstorage.scanface.request.NetCallBack;
-import com.gcstorage.scanface.request.NetDialog;
 import com.gcstorage.scanface.util.ConfigUtil;
 import com.gcstorage.scanface.util.DrawHelper;
-import com.gcstorage.scanface.util.ImageUtil;
 import com.gcstorage.scanface.util.camera.CameraHelper;
 import com.gcstorage.scanface.util.camera.CameraListener;
 import com.gcstorage.scanface.util.face.FaceHelper;
 import com.gcstorage.scanface.util.face.FaceListener;
-import com.gcstorage.scanface.util.face.FaceServer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,14 +50,10 @@ import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
 
 /**
  * DESCRIPTION：虹软人脸比对界面
@@ -108,6 +83,7 @@ public class ArcSoftDetectActivity extends AppCompatActivity implements IBaseAct
      * 活体检测的开关
      */
     private boolean livenessDetect = false;
+    private int count = 1;          //识别的次数
 
     private ConcurrentHashMap<Integer, Integer> requestFeatureStatusMap = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, Integer> livenessMap = new ConcurrentHashMap<>();
@@ -115,11 +91,15 @@ public class ArcSoftDetectActivity extends AppCompatActivity implements IBaseAct
     /**
      * 相机预览显示的控件，可为SurfaceView或TextureView
      */
-    private View previewView;
+    @BindView(R2.id.texture_preview)
+    TextureView previewView;
 
-    @BindView(R2.id.img)
-    ImageView img;
-    Bitmap bitmap;
+    @BindView(R2.id.ll_init)
+    LinearLayout llInit;
+    @BindView(R2.id.iv_detect_tip)
+    ImageView ivDetectTip;
+    @BindView(R2.id.tv_similar)
+    TextView tvSimilar;
 
     String idCard = "";//账号，可能是警号可能是身份证
 
@@ -133,6 +113,7 @@ public class ArcSoftDetectActivity extends AppCompatActivity implements IBaseAct
         return R.layout.activity_register_and_recognize;
     }
 
+    @SuppressLint("CheckResult")
     @StatusBar(statusStrColor = "transparent", navStrColor = "transparent", statusOrNavModel = 1)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
@@ -141,7 +122,18 @@ public class ArcSoftDetectActivity extends AppCompatActivity implements IBaseAct
 
         init();
 
-        previewView = findViewById(R.id.texture_preview);
+        Observable.timer(1000L, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxHelper.bindToLifecycle(this))
+                .subscribe(aLong -> initpreviewView());
+//        runNetRequest();
+    }
+
+    private void initpreviewView(){
+        previewView.setVisibility(View.VISIBLE);
+        llInit.setVisibility(View.GONE);
+
         //在布局结束后才做初始化操作
         previewView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -150,10 +142,12 @@ public class ArcSoftDetectActivity extends AppCompatActivity implements IBaseAct
                 activeEngine();//激活引擎
                 initEngine();
                 initCamera();
+
+                ivDetectTip.setVisibility(View.VISIBLE);
+
+                timeOut();
             }
         });
-
-//        runNetRequest();
     }
 
     private void initCamera() {
@@ -173,15 +167,18 @@ public class ArcSoftDetectActivity extends AppCompatActivity implements IBaseAct
                     FaceSimilar faceSimilar = new FaceSimilar();
                     int compareResult = faceEngine.compareFaceFeature(Constants.faceFeature, faceFeature, faceSimilar);
 
-                    if (compareResult == ErrorInfo.MOK && faceSimilar.getScore() > 0.6f) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (compareResult == ErrorInfo.MOK && faceSimilar.getScore() > 0.6f) {
                                 T.showLong("刷脸比对成功，相似度：" + faceSimilar.getScore());
+                                ivDetectTip.setImageResource(R.drawable.ic_true);
+
+                            } else if (count >= 3) {//识别三次未成功 则退出
 
                             }
-                        });
-                    }
+                        }
+                    });
                 }
             }
         };
@@ -204,9 +201,6 @@ public class ArcSoftDetectActivity extends AppCompatActivity implements IBaseAct
 
             @Override
             public void onPreview(final byte[] nv21, Camera camera) {
-//                if (faceRectView != null) {
-//                    faceRectView.clearFaceInfo();
-//                }
                 List<FacePreviewInfo> facePreviewInfoList = faceHelper.onPreviewFrame(nv21);
                 if (facePreviewInfoList != null && drawHelper != null) {
                     List<DrawInfo> drawInfoList = new ArrayList<>();
@@ -215,53 +209,16 @@ public class ArcSoftDetectActivity extends AppCompatActivity implements IBaseAct
                         drawInfoList.add(new DrawInfo(facePreviewInfoList.get(i).getFaceInfo().getRect(), GenderInfo.UNKNOWN, AgeInfo.UNKNOWN_AGE, LivenessInfo.UNKNOWN,
                                 name == null ? String.valueOf(facePreviewInfoList.get(i).getTrackId()) : name));
                     }
-//                    drawHelper.draw(faceRectView, drawInfoList);
+
+                    if (facePreviewInfoList.size() > 0){
+                        count++;
+                        ivDetectTip.setImageResource(R.drawable.ic_done);
+                    }else {
+                        ivDetectTip.setImageResource(R.drawable.ic_error);
+                    }
                 }
 
-//                if (registerStatus == REGISTER_STATUS_READY && facePreviewInfoList != null && facePreviewInfoList.size() > 0) {
-//                    registerStatus = REGISTER_STATUS_PROCESSING;
-//
-//                    Observable.create(new ObservableOnSubscribe<Boolean>() {
-//                        @Override
-//                        public void subscribe(ObservableEmitter<Boolean> emitter) {
-//                            boolean success = true;
-////                            boolean success = FaceServer.getInstance()
-////                                    .register(ArcSoftDetectActivity.this, nv21.clone(), previewSize.width, previewSize.height, "registered " + faceHelper.getCurrentTrackId());
-//                            emitter.onNext(success);
-//                        }
-//                    })
-//                            .subscribeOn(Schedulers.computation())
-//                            .observeOn(AndroidSchedulers.mainThread())
-//                            .subscribe(new Observer<Boolean>() {
-//                                @Override
-//                                public void onSubscribe(Disposable d) {
-//
-//                                }
-//
-//                                @Override
-//                                public void onNext(Boolean success) {
-//                                    String result = success ? "register success!" : "register failed!";
-//                                    Toast.makeText(ArcSoftDetectActivity.this, result, Toast.LENGTH_SHORT).show();
-//                                    registerStatus = REGISTER_STATUS_DONE;
-//                                }
-//
-//                                @Override
-//                                public void onError(Throwable e) {
-//                                    Toast.makeText(ArcSoftDetectActivity.this, "register failed!", Toast.LENGTH_SHORT).show();
-//                                    registerStatus = REGISTER_STATUS_DONE;
-//                                }
-//
-//                                @Override
-//                                public void onComplete() {
-//
-//                                }
-//                            });
-//                }
-
-//                clearLeftFace(facePreviewInfoList);
-
                 if (facePreviewInfoList != null && facePreviewInfoList.size() > 0 && previewSize != null) {
-
                     for (int i = 0; i < facePreviewInfoList.size(); i++) {
                         if (livenessDetect) {
                             livenessMap.put(facePreviewInfoList.get(i).getTrackId(), facePreviewInfoList.get(i).getLivenessInfo().getLiveness());
@@ -274,7 +231,6 @@ public class ArcSoftDetectActivity extends AppCompatActivity implements IBaseAct
                                 || requestFeatureStatusMap.get(facePreviewInfoList.get(i).getTrackId()) == Constants.FAILED) {
                             requestFeatureStatusMap.put(facePreviewInfoList.get(i).getTrackId(), Constants.SEARCHING);
                             faceHelper.requestFaceFeature(nv21, facePreviewInfoList.get(i).getFaceInfo(), previewSize.width, previewSize.height, FaceEngine.CP_PAF_NV21, facePreviewInfoList.get(i).getTrackId());
-//                            Log.i(TAG, "onPreview: fr start = " + System.currentTimeMillis() + " trackId = " + facePreviewInfoList.get(i).getTrackId());
                         }
                     }
                 }
@@ -379,7 +335,6 @@ public class ArcSoftDetectActivity extends AppCompatActivity implements IBaseAct
             getFeatureDelayedDisposables.clear();
         }
 
-        FaceServer.getInstance().unInit();
         super.onDestroy();
     }
 
@@ -394,11 +349,23 @@ public class ArcSoftDetectActivity extends AppCompatActivity implements IBaseAct
         }
     }
 
-
     private void init(){
         Bundle bundle = getIntent().getExtras();
         assert bundle != null;
         idCard = bundle.getString("idCard", "");
     }
 
+    /**
+     * 定时器 超时退出
+     */
+    @SuppressLint("CheckResult")
+    private void timeOut(){
+        Observable.timer(20000L, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxHelper.bindToLifecycle(this))
+                .subscribe(aLong -> {
+//                    showFailDialog();
+                });
+    }
 }

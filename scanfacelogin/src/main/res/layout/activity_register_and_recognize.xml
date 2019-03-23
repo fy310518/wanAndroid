@@ -7,15 +7,59 @@
     <TextureView
         android:id="@+id/texture_preview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
     <!--<com.gcstorage.scanface.widget.FaceRectView-->
-        <!--android:id="@+id/face_rect_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" />-->
+    <!--android:id="@+id/face_rect_view"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent" />-->
+
+    <LinearLayout
+        android:id="@+id/ll_init"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#cccccc"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_applogo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="初始化数据中..."
+            android:textColor="#007EFF" />
+    </LinearLayout>
 
     <ImageView
-        android:id="@+id/img"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
+        android:id="@+id/iv_detect_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="72dp"
+        android:src="@drawable/ic_error"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_similar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="37dp"
+        android:background="@drawable/shape_similar"
+        android:drawableLeft="@drawable/icon_similar"
+        android:drawablePadding="6dp"
+        android:padding="13dp"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="1"
+        android:text="90%"
+        android:textColor="#fff"
+        android:textSize="15sp"
+        android:visibility="gone" />
 </FrameLayout>
