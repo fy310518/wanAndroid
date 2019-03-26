@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/selector_view_content_state"
-        android:clickable="true"
         android:lineSpacingExtra="3dp"
         android:paddingTop="@dimen/spacing_small_much"
         android:paddingBottom="@dimen/spacing_small_much"

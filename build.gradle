@@ -37,7 +37,7 @@ task clean(type: Delete) {
 
 ext {
     var = [
-            compileSdkVersion    : 28,
+            compileSdkVersion    : 27,
             buildToolsVersion    : "28.0.3",
 
             minSdkVersion        : 19,

@@ -3,6 +3,7 @@ package com.gcstorage.circle.details;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -21,10 +22,20 @@ import com.fy.baselibrary.widget.refresh.OnRefreshLoadMoreListener;
 import com.gcstorage.circle.CircleFragmentAdapter;
 import com.gcstorage.circle.R;
 import com.gcstorage.circle.R2;
+import com.gcstorage.circle.bean.CircleListBean;
+import com.gcstorage.circle.bean.CommentListBean;
+import com.gcstorage.circle.bean.LyCircleListBean;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * DESCRIPTION：帖子详情 activity
@@ -50,23 +61,50 @@ public class CircleDetailsActivity extends AppCompatActivity implements IBaseAct
 
     @Override
     public int setView() {
-        return R.layout.circle_fragment;
+        return R.layout.circle_act_details;
     }
 
     @StatusBar(statusStrColor = "statusBar", navStrColor = "statusBar")
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
 
-        initRvAdapter();
+        Bundle bundle = getIntent().getExtras();
+        assert bundle != null;
+        LyCircleListBean circleListBean = (LyCircleListBean) bundle.getSerializable("LyCircleListBean");
+
+        initRvAdapter(circleListBean);
 
     }
 
-    private void initRvAdapter() {
+    @SuppressLint("CheckResult")
+    private void initRvAdapter(LyCircleListBean lyCircleListBean) {
         rvAdapter = new CircleFragmentAdapter(this, new ArrayList<>());
+        rvAdapter.setDetails(true);
         rvAdapter.setIntegralAnimListener(() -> animation());//设置积分动画回调
         rvHierarchy.setLayoutManager(new LinearLayoutManager(this));
         rvHierarchy.setItemAnimator(new FadeItemAnimator());
         rvHierarchy.setAdapter(rvAdapter);
+
+        Observable.create((ObservableOnSubscribe<List<CircleListBean>>) emitter -> {
+            List<CircleListBean> adapterData = new ArrayList<>();
+            List<CommentListBean> comment_list = lyCircleListBean.getComment_list();
+            adapterData.add(new CircleListBean(lyCircleListBean));
+
+            for (int i = 0; i < comment_list.size(); i++) {
+                CommentListBean commentListBean = comment_list.get(i);
+                adapterData.add(new CircleListBean(1, commentListBean, i == comment_list.size() - 1));
+            }
+            emitter.onNext(adapterData);
+            emitter.onComplete();
+        }).subscribeOn(Schedulers.io())//指定的是上游发送事件的线程
+          .observeOn(AndroidSchedulers.mainThread())
+          .subscribe(new Consumer<List<CircleListBean>>() {
+              @Override
+              public void accept(List<CircleListBean> dataList) throws Exception {
+                  rvAdapter.setmDatas(dataList);
+                  rvAdapter.notifyDataSetChanged();
+              }
+          });
     }
 
 

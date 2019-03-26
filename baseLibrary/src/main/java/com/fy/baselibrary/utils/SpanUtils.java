@@ -4,11 +4,15 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.BackgroundColorSpan;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.view.View;
 
 /**
  * SpannableString 富文本显示 工具类
@@ -51,7 +55,15 @@ public class SpanUtils {
         @DimenRes
         private int textDpSize;
 
+        public Builder() {
+            init("");
+        }
+
         private Builder(@NonNull CharSequence text) {
+            init(text);
+        }
+
+        private void init(@NonNull CharSequence text){
             flag = Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
             spanBuilder = new SpannableStringBuilder(text);
         }
@@ -87,7 +99,7 @@ public class SpanUtils {
          * 根据指定的 “子字符串” 以及方向（orientation）设置 字符串样式
          * @param orientation 0 之前（0-n），-1 之后（n - strContent.length()）
          */
-        public Builder slice(@NonNull String replaceStr, @IntRange(from = -1, to = 0) int orientation) {
+        public Builder slice(@NonNull String replaceStr, @IntRange(from = -1, to = 0) int orientation, ClickableSpan clickableSpan) {
             this.replaceStr = replaceStr;
             this.orientation = orientation;
 
@@ -101,7 +113,7 @@ public class SpanUtils {
                     start = index;
                     end = spanBuilder.length();
                 }
-                setSpan(start, end);
+                setSpan(start, end, clickableSpan);
             }
 
             return this;
@@ -112,19 +124,19 @@ public class SpanUtils {
          *
          * @return 样式字符串
          */
-        public Builder append(@NonNull CharSequence text) {
+        public Builder append(@NonNull CharSequence text, ClickableSpan clickableSpan) {
             int start = spanBuilder.length();
             spanBuilder.append(text);
             int end = spanBuilder.length();
 
-            setSpan(start, end);
+            setSpan(start, end, clickableSpan);
             return this;
         }
 
         /**
          * 设置样式
          */
-        private void setSpan(int start, int end) {
+        private void setSpan(int start, int end, ClickableSpan clickableSpan) {
             if (fgColor > 0) {
                 int color = ResUtils.getColor(fgColor);
                 spanBuilder.setSpan(new ForegroundColorSpan(color), start, end, flag);
@@ -140,7 +152,22 @@ public class SpanUtils {
                 //设置字体大小（绝对值,单位：像素）,第二个参数boolean dip，如果为true，表示前面的字体大小单位为dip，否则为像素
                 spanBuilder.setSpan(new AbsoluteSizeSpan(size, false), start, end, flag);
             }
+
+            if (null != clickableSpan){
+                spanBuilder.setSpan(clickableSpan, start, end, flag);
+            }
         }
     }
 
+
+
+    //局部 文本点击事件 抽象类
+    public abstract static class ClickText extends ClickableSpan{
+        @Override
+        public void updateDrawState(TextPaint ds) {
+//            super.updateDrawState(ds);
+//            ds.setColor(ds.linkColor);//设置颜色
+            ds.setUnderlineText(false);//去掉下划线
+        }
+    }
 }

@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentActivity;
+import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.ArrayMap;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,16 +25,19 @@ import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.rv.adapter.MultiCommonAdapter;
 import com.fy.baselibrary.rv.adapter.MultiTypeSupport;
-import com.fy.baselibrary.rv.adapter.RvCommonAdapter;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.ResUtils;
+import com.fy.baselibrary.utils.SpanUtils;
 import com.fy.baselibrary.utils.TimeUtils;
 import com.fy.baselibrary.utils.cache.SpfAgent;
 import com.fy.baselibrary.utils.drawable.TintUtils;
 import com.fy.baselibrary.utils.imgload.ImgLoadUtils;
 import com.fy.baselibrary.utils.notify.T;
+import com.fy.img.picker.PickerConfig;
+import com.fy.img.picker.bean.ImageFolder;
 import com.fy.img.picker.bean.ImageItem;
+import com.fy.img.picker.preview.PicturePreviewActivity;
 import com.gcstorage.circle.bean.CircleListBean;
 import com.gcstorage.circle.bean.CommentListBean;
 import com.gcstorage.circle.bean.LyCircleListBean;
@@ -44,10 +51,9 @@ import com.gcstorage.circle.widgets.NineGridView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 /**
- * 首页列表实体类
+ * 战友圈列表 adapter
  * Created by fangs on 2018/4/16.
  */
 public class CircleFragmentAdapter extends MultiCommonAdapter<CircleListBean> {
@@ -55,6 +61,8 @@ public class CircleFragmentAdapter extends MultiCommonAdapter<CircleListBean> {
     private RequestOptions mRequestOptions;
     private DrawableTransitionOptions mDrawableTransitionOptions;
     private integralAnimListener integralAnimListener;
+
+    private boolean isDetails;//是否是 帖子详情，是则没有点击事件
 
     public CircleFragmentAdapter(Context context, List<CircleListBean> datas) {
         super(context, datas, new MultiTypeSupport<CircleListBean>(){
@@ -118,13 +126,17 @@ public class CircleFragmentAdapter extends MultiCommonAdapter<CircleListBean> {
         holder.setText(R.id.txt_content, article.getContent());
 //        holder.setOnClickListener(R.id.txt_state, v -> setTextState(holder, ));//全文 伸缩 未实现
 
-        //进入帖子详情
-        holder.setOnClickListener(R.id.itemLayout, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                JumpUtils.jump((FragmentActivity) mContext, CircleDetailsActivity.class, null);
-            }
-        });
+        if (!isDetails){
+            //进入帖子详情
+            holder.setOnClickListener(R.id.itemLayout, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("LyCircleListBean", article);
+                    JumpUtils.jump((FragmentActivity) mContext, CircleDetailsActivity.class, bundle);
+                }
+            });
+        }
 
         //头像
         ImgLoadUtils.loadImage(article.getHeadpic(), R.drawable.default_pic_icon, holder.getView(R.id.imgHead));
@@ -232,11 +244,55 @@ public class CircleFragmentAdapter extends MultiCommonAdapter<CircleListBean> {
             nineGridView.setVisibility(View.VISIBLE);
             nineGridView.setAdapter(new NineImageAdapter(mContext, mRequestOptions,
                     mDrawableTransitionOptions, imgList));
+            nineGridView.setOnImageClickListener(new NineGridView.OnImageClickListener() {
+                @Override
+                public void onImageClick(int position, View view) {
+                    List<ImageItem> images = new ArrayList<>();
+                    for (String url : imgList){
+                        images.add(new ImageItem(url, false));
+                    }
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(PickerConfig.KEY_IMG_FOLDER, new ImageFolder(images));
+                    bundle.putInt(PickerConfig.KEY_CURRENT_POSITION, position);
+                    JumpUtils.jump((Activity) mContext, PicturePreviewActivity.class, bundle);
+                }
+            });
         }
     }
 
     private void drawCommentListItem(ViewHolder holder, CommentListBean commentBean, int position){
-        holder.setText(R.id.txt_content, commentBean.getContent());//评论内容
+        SpannableStringBuilder sbsb = SpanUtils.getBuilder("")
+                .setFgColor(R.color.statusBar)
+                .append(commentBean.getReply_name(), new SpanUtils.ClickText() {
+                    @Override
+                    public void onClick(@NonNull View view) {
+                        T.showLong("1111");
+                    }
+                })
+                .setFgColor(R.color.txtSuperColor)
+                .append(ResUtils.getStr(R.string.reply), null)
+                .setFgColor(R.color.statusBar)
+                .append(commentBean.getPublish_name(), new SpanUtils.ClickText() {
+                    @Override
+                    public void onClick(@NonNull View view) {
+                        T.showLong("bbbb");
+                    }
+                })
+                .setFgColor(R.color.txtSuperColor)
+                .append(" ：", null)
+                .setFgColor(R.color.txtSuperColor)
+                .append(commentBean.getContent(), new SpanUtils.ClickText() {
+                    @Override
+                    public void onClick(@NonNull View view) {
+                        T.showLong("内容");
+                    }
+                })
+                .create();
+
+        TextView txtcontent = holder.getView(R.id.txt_content);
+        txtcontent.setText(sbsb);//评论内容
+        txtcontent.setMovementMethod(LinkMovementMethod.getInstance());
+        txtcontent.setFocusable(false);
 
         NineGridView nineGridView = holder.getView(R.id.nine_grid_view);
         if (!TextUtils.isEmpty(commentBean.getPicture())) {
@@ -247,11 +303,6 @@ public class CircleFragmentAdapter extends MultiCommonAdapter<CircleListBean> {
         } else {
             nineGridView.setVisibility(View.GONE);
         }
-    }
-
-
-    public void setIntegralAnimListener(CircleFragmentAdapter.integralAnimListener integralAnimListener) {
-        this.integralAnimListener = integralAnimListener;
     }
 
     //点赞 与 取消点赞
@@ -324,6 +375,14 @@ public class CircleFragmentAdapter extends MultiCommonAdapter<CircleListBean> {
                 });
     }
 
+
+    public void setDetails(boolean details) {
+        isDetails = details;
+    }
+
+    public void setIntegralAnimListener(CircleFragmentAdapter.integralAnimListener integralAnimListener) {
+        this.integralAnimListener = integralAnimListener;
+    }
 
     /**
      * 定义积分动画回调接口

@@ -26,29 +26,6 @@
     </com.fy.baselibrary.widget.refresh.EasyPullLayout>
 
     <!-- 积分动画布局 -->
-    <RelativeLayout
-        android:id="@+id/rl_reward"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="56dp"
-        android:visibility="gone">
+    <include layout="@layout/include_integral"/>
 
-        <TextView
-            android:id="@+id/integral"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/spacing_medium_small"
-            android:text="+5"
-            android:textColor="@color/orange"
-            android:textSize="30sp" />
-
-        <ImageView
-            android:id="@+id/iv_cron"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_below="@id/integral" />
-
-    </RelativeLayout>
 </FrameLayout>
