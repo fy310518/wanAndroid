@@ -43,7 +43,7 @@ public class LoadSirUtils {
      * 设置 多状态视图 管理器
      * @param contextObj
      */
-    public static StatusLayoutManager initStatusLayout(Object contextObj){
+    public static StatusLayoutManager initStatusLayout(Object contextObj, OnStatusAdapter adapter){
 
         Context context;
         if (contextObj instanceof Activity) {
@@ -65,12 +65,36 @@ public class LoadSirUtils {
             throw new IllegalArgumentException("The param must be is 'StatusLayout.OnSetStatusView'.");
         }
 
+        if (null == adapter){
+            adapter = new OnStatusAdapter() {
+                @Override
+                public int errorViewId() {
+                    return R.layout.state_include_error;
+                }
+
+                @Override
+                public int emptyDataView() {
+                    return R.layout.state_include_emptydata;
+                }
+
+                @Override
+                public int netWorkErrorView() {
+                    return R.layout.state_include_networkerror;
+                }
+
+                @Override
+                public int retryViewId() {
+                    return R.id.tvTry;
+                }
+            };
+        }
+
         //构造 StatusLayoutManager 并显示内容布局，
         return StatusLayoutManager.newBuilder(context, target)
-                .errorView(R.layout.state_include_error)
-                .netWorkErrorView(R.layout.state_include_networkerror)
-                .emptyDataView(R.layout.state_include_emptydata)
-                .retryViewId(R.id.tvTry)
+                .errorView(adapter.errorViewId())
+                .netWorkErrorView(adapter.netWorkErrorView())
+                .emptyDataView(adapter.emptyDataView())
+                .retryViewId(adapter.retryViewId())
                 .onRetryListener(listener)
                 .build()
                 .showHideViewFlag(Constant.LAYOUT_CONTENT_ID);

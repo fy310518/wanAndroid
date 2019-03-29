@@ -19,13 +19,13 @@ import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.base.mvp.BaseMVPActivity;
 import com.fy.baselibrary.statuslayout.LoadSirUtils;
 import com.fy.baselibrary.statuslayout.OnSetStatusView;
+import com.fy.baselibrary.statuslayout.OnStatusAdapter;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
-import com.fy.baselibrary.utils.os.OSUtils;
 
 import butterknife.ButterKnife;
 import io.reactivex.subjects.BehaviorSubject;
@@ -41,14 +41,17 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 public class BaseActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
     public static final String TAG = "lifeCycle --> ";
     public static int actNum;
+
     int designWidth;
+    OnStatusAdapter adapter;
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
-    public BaseActivityLifecycleCallbacks(int designWidth) {
+    public BaseActivityLifecycleCallbacks(int designWidth, OnStatusAdapter adapter) {
         this.designWidth = designWidth;
+        this.adapter = adapter;
     }
 
     @Override
@@ -110,7 +113,7 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
         //设置 activity 多状态布局
         if (activity instanceof OnSetStatusView) {
-            StatusLayoutManager slManager = LoadSirUtils.initStatusLayout(activity);
+            StatusLayoutManager slManager = LoadSirUtils.initStatusLayout(activity, adapter);
             activityBean.setSlManager(slManager);
         }
 
@@ -223,5 +226,6 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
         return isrun;
     }
+
 
 }

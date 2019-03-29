@@ -6,6 +6,7 @@ import android.support.multidex.MultiDex;
 
 import com.fy.baselibrary.application.BaseActivityLifecycleCallbacks;
 import com.fy.baselibrary.application.ioc.ConfigUtils;
+import com.fy.baselibrary.statuslayout.OnStatusAdapter;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NightModeUtils;
 import com.fy.baselibrary.utils.ResUtils;
@@ -38,10 +39,27 @@ public class WanAndroidApp extends Application{
         ScreenUtils.setCustomDensity(this, designWidth);
 
 //        设置activity 生命周期回调
-        registerActivityLifecycleCallbacks(new BaseActivityLifecycleCallbacks(designWidth));
+        registerActivityLifecycleCallbacks(new BaseActivityLifecycleCallbacks(designWidth, new OnStatusAdapter() {
+            @Override
+            public int errorViewId() {
+                return R.layout.state_include_error;
+            }
 
-        NightModeUtils.setNightMode();
+            @Override
+            public int emptyDataView() {
+                return R.layout.state_include_emptydata;
+            }
 
+            @Override
+            public int netWorkErrorView() {
+                return R.layout.state_include_networkerror;
+            }
+
+            @Override
+            public int retryViewId() {
+                return R.id.tvTry;
+            }
+        }));
     }
 
     @Override

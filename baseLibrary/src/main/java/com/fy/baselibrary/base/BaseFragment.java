@@ -86,7 +86,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             if (setContentLayout() > 0){
                 mRootView = inflater.inflate(setContentLayout(), container, false);
                 unbinder = ButterKnife.bind(this, mRootView);
-                slManager = LoadSirUtils.initStatusLayout(this);
+                slManager = LoadSirUtils.initStatusLayout(this, null);
             }
 
             baseInit();

@@ -68,5 +68,5 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     implementation project(':baseLibrary')
-    implementation project(':scanfacelogin')
+//    implementation project(':scanfacelogin')
 }
