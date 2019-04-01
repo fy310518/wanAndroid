@@ -106,7 +106,7 @@ public class LoginActivity extends BaseMVPActivity<LogingPresenter> implements I
                 break;
             case R.id.tvRegister:
 //                JumpUtils.jump(mContext, RegisterActivity.class, null);
-//                JumpUtils.jump(this, StatusDemoActivity.class, null);
+                JumpUtils.jump(this, StatusDemoActivity.class, null);
 //                JumpUtils.jump(this, TestStatusFragmentActivity.class, null);
 //                JumpUtils.jump(this, RevealEffectActivity.class, null);
 //                JumpUtils.jump(this, TestActivity.class, null);

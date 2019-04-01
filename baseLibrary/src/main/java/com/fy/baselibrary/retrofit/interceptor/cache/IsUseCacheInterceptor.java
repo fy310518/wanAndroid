@@ -1,7 +1,7 @@
 package com.fy.baselibrary.retrofit.interceptor.cache;
 
 import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.utils.NetUtils;
+import com.fy.baselibrary.utils.net.NetUtils;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
