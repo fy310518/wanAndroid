@@ -199,4 +199,20 @@ public class AppUtils {
     }
 
 
+    /**
+     * 检查是否安装了某应用
+     * @param packageName
+     * @param mContext
+     * @return
+     */
+    public static boolean isAvilible(String packageName, Context mContext) {
+        final PackageManager packageManager = mContext.getPackageManager();
+        // 获取所有已安装程序的包信息
+        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);
+        for (int i = 0; i < pinfo.size(); i++) {
+            if (pinfo.get(i).packageName.equalsIgnoreCase(packageName))
+                return true;
+        }
+        return false;
+    }
 }

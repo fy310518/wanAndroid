@@ -102,7 +102,7 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
         tvTitle.setText(R.string.select_img);
         tvMenu.setTextColor(Color.GRAY);
         tvMenu.setText(R.string.preview);
-        if (maxCount == -1 || maxCount == 1) tvMenu.setVisibility(View.GONE);//图片选择数目 小于1 隐藏 菜单按钮
+//        if (maxCount == -1 || maxCount == 1) tvMenu.setVisibility(View.GONE);//图片选择数目 小于1 隐藏 菜单按钮
 
         setViewStutas(imageFolder.images.size());
     }

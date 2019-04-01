@@ -34,6 +34,25 @@ public class PhotoUtils {
     }
 
     /**
+     * @param activity    当前activity
+     * @param imageUri    拍照后照片存储路径
+     * @param requestCode 调用系统相机请求码
+     */
+    public static void takePicture(Activity activity, Uri imageUri, int requestCode) {
+        //调用系统相机
+        Intent intentCamera = new Intent();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intentCamera.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); //添加这一句表示对目标应用临时授权该Uri所代表的文件
+        }
+        intentCamera.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+        //将拍照结果保存至photo_file的Uri中，不保留在相册中
+        intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        if (activity!=null){
+            activity.startActivityForResult(intentCamera, requestCode);
+        }
+    }
+
+    /**
      * 调用系统相机 拍照(监听返回数据时候不要 判断 data是否为空)
      *
      * @param activity      当前activity
@@ -43,7 +62,6 @@ public class PhotoUtils {
     public static Intent takePicture(Activity activity, File takeImageFile) {
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
 
@@ -57,7 +75,6 @@ public class PhotoUtils {
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
                     uri = Uri.fromFile(takeImageFile);
                 } else {
-
                     /**
                      * 7.0 调用系统相机拍照不再允许使用Uri方式，应该替换为 FileProvider
                      * 并且这样可以解决MIUI系统上拍照返回size为0的情况

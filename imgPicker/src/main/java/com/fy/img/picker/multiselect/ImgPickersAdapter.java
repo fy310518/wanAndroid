@@ -78,33 +78,33 @@ public class ImgPickersAdapter extends MultiCommonAdapter<ImageItem> {
             });
 
             CheckBox cbCheck = holder.getView(R.id.cb_check);
-            if (imagePicker.getSelectLimit() == 1){
-                cbCheck.setVisibility(View.GONE);
+//            if (imagePicker.getSelectLimit() == 1){
+//                cbCheck.setVisibility(View.GONE);
+//            } else {
+            if (imgItem.isSelect) {
+                cbCheck.setChecked(true);
             } else {
-                if (imgItem.isSelect) {
-                    cbCheck.setChecked(true);
-                } else {
+                cbCheck.setChecked(false);
+            }
+
+            cbCheck.setOnClickListener(v -> {
+                int selectLimit = imagePicker.getSelectLimit();
+                if (cbCheck.isChecked() && selectedImages.size() >= selectLimit) {
+                    T.showLong(ResUtils.getReplaceStr(R.string.select_limit, selectLimit));
                     cbCheck.setChecked(false);
+                } else {
+                    if (cbCheck.isChecked()) {
+                        if (!selectedImages.contains(imgItem)) selectedImages.add(imgItem);
+                        imgItem.setSelect(true);//设置状态 属性为 选中
+                    } else {
+                        selectedImages.remove(imgItem);
+                        imgItem.setSelect(false);//设置状态 属性为 未选中
+                    }
                 }
 
-                cbCheck.setOnClickListener(v -> {
-                    int selectLimit = imagePicker.getSelectLimit();
-                    if (cbCheck.isChecked() && selectedImages.size() >= selectLimit) {
-                        T.showLong(ResUtils.getReplaceStr(R.string.select_limit, selectLimit));
-                        cbCheck.setChecked(false);
-                    } else {
-                        if (cbCheck.isChecked()) {
-                            if (!selectedImages.contains(imgItem))selectedImages.add(imgItem);
-                            imgItem.setSelect(true);//设置状态 属性为 选中
-                        } else {
-                            selectedImages.remove(imgItem);
-                            imgItem.setSelect(false);//设置状态 属性为 未选中
-                        }
-                    }
-
-                    if (null != clickListener)clickListener.onClick(selectedImages.size());
-                });
-            }
+                if (null != clickListener) clickListener.onClick(selectedImages.size());
+            });
+//            }
         }
     }
 
