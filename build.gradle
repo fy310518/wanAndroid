@@ -13,6 +13,8 @@ buildscript {
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
         //aop
         classpath 'com.hujiang.aspectjx:gradle-android-plugin-aspectjx:2.0.4'
+        classpath 'org.aspectj:aspectjtools:1.8.13'
+
         //将Library上传到jcenter
 //        classpath 'com.novoda:bintray-release:0.8.1'
     }

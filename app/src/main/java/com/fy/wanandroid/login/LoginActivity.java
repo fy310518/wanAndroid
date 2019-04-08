@@ -25,6 +25,7 @@ import com.fy.wanandroid.R;
 import com.fy.wanandroid.entity.LoginBean;
 import com.fy.wanandroid.main.MainActivity;
 import com.fy.wanandroid.test.H5Interactive;
+import com.fy.wanandroid.testdemo.StatusDemoActivity;
 import com.fy.wanandroid.utils.SelectUtils;
 
 import butterknife.BindView;
@@ -111,7 +112,7 @@ public class LoginActivity extends BaseMVPActivity<LogingPresenter> implements I
 //                JumpUtils.jump(this, RevealEffectActivity.class, null);
 //                JumpUtils.jump(this, TestActivity.class, null);
 //                JumpUtils.jump(this, TestListActivity.class, null);
-                JumpUtils.jump(this, H5Interactive.class, null);
+//                JumpUtils.jump(this, H5Interactive.class, null);
                 break;
         }
     }

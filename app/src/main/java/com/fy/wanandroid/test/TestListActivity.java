@@ -30,7 +30,7 @@ import java.util.List;
 import butterknife.BindView;
 
 /**
- * describe： todo 描述</br>
+ * describe： 测试 魔力小游戏 列表布局
  * Created by fangs on 2018/12/28 16:39.
  */
 public class TestListActivity extends AppCompatActivity implements IBaseActivity {

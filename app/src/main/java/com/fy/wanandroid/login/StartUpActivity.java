@@ -96,8 +96,7 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
         if (Constant.isMustAppLogin && ! SpfAgent.getBoolean(Constant.baseSpf, Constant.isLogin)) {
             JumpUtils.jump(this, AppUtils.getLocalPackageName() + ".login.LoginActivity", null);
         } else {
-            JumpUtils.jump(this, AppUtils.getLocalPackageName() + ".login.LoginActivity", null);
-//            JumpUtils.jump(this, MainActivity.class, null);
+            JumpUtils.jump(this, MainActivity.class, null);
         }
 
         finish();

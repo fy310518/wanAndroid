@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'android-aspectjx'
+apply plugin: 'com.hujiang.android-aspectjx'
 
 android {
     compileSdkVersion var.compileSdkVersion

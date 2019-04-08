@@ -115,17 +115,19 @@
             android:screenOrientation="portrait"
             android:theme="@style/revealEffect" />
 
-
+        <!-- 测试 自定义View -->
         <activity
             android:name=".test.TestActivity"
             android:label="@string/test"
             android:screenOrientation="portrait" />
 
+        <!-- 测试 魔力小游戏 列表布局 -->
         <activity
             android:name=".test.TestListActivity"
             android:label="@string/test"
             android:screenOrientation="portrait" />
 
+        <!-- h5 android 交互 test -->
         <activity
             android:name=".test.H5Interactive"
             android:label="@string/test"

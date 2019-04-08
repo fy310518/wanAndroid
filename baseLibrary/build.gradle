@@ -78,6 +78,6 @@ dependencies {
     api 'com.github.bumptech.glide:annotations:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 
-    //noinspection GradleDependency  aop
-    implementation 'org.aspectj:aspectjrt:1.8.9'
+    //aop
+    api 'org.aspectj:aspectjrt:1.8.13'
 }

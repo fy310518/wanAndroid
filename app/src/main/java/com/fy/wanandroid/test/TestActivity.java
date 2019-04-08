@@ -11,7 +11,7 @@ import com.fy.wanandroid.R;
 import butterknife.BindView;
 
 /**
- * 测试 某些功能
+ * 测试 自定义View
  * Created by fangs on 2018/9/11 15:20.
  */
 public class TestActivity extends AppCompatActivity implements IBaseActivity{

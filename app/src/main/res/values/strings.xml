@@ -1,6 +1,5 @@
 <resources>
-    <!--<string name="app_name">Wan Android</string>-->
-    <string name="app_name">战友圈</string>
+    <string name="app_name">Wan Android</string>
 
     <string name="mainTabOne">首页</string>
     <string name="mainTabTwo">知识体系</string>
