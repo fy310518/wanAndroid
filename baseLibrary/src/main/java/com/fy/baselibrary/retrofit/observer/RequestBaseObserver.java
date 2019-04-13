@@ -45,8 +45,10 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
      * @param pDialog
      */
     public RequestBaseObserver(IProgressDialog pDialog) {
-        this.context = pDialog.obj;
-        init(pDialog);
+        if (null != pDialog){
+            this.context = pDialog.obj;
+            init(pDialog);
+        }
     }
 
     public RequestBaseObserver(Object context) {
@@ -78,7 +80,7 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
     public void onNext(V t) {
         L.e("net", "onNext()");
         onSuccess(t);
-        updataLayout(Constant.LAYOUT_CONTENT_ID);
+        successUpdataLayout();
     }
 
     @Override
@@ -156,6 +158,13 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
      * @param t 请求返回的数据
      */
     protected abstract void onSuccess(V t);
+
+    /**
+     * 设置显示 内容布局
+     */
+    private void successUpdataLayout(){
+        updataLayout(Constant.LAYOUT_CONTENT_ID);
+    }
 
     /**
      * 更新activity 界面（多状态视图）

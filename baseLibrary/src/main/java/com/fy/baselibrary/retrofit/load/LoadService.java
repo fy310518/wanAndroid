@@ -12,19 +12,39 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
+import retrofit2.http.FieldMap;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.HeaderMap;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
+import retrofit2.http.QueryMap;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
 /**
- * 通用的 上传文件 下载文件 api
+ * api 接口 包含 上传文件 下载文件 demo
  * Created by fangs on 2018/6/1.
  */
 public interface LoadService {
+
+
+    /**
+     * h5调用本地 请求封装 之 GET请求
+     */
+    @GET("{apiUrl}")
+    Observable<String> jsInAndroidGetRequest(@Path("apiUrl") String apiUrl, @HeaderMap ArrayMap<String, String> heads, @QueryMap ArrayMap<String, String> params);
+
+    /**
+     * h5调用本地 请求封装 之 POST请求
+     */
+    @Multipart
+    @POST("{apiUrl}")
+    Observable<String> jsInAndroidPostRequest(@Path("apiUrl") String apiUrl, @HeaderMap ArrayMap<String, String> heads, @FieldMap ArrayMap<String, String> params);
+
 
     /**
      * 多图片上传 之 图文上传

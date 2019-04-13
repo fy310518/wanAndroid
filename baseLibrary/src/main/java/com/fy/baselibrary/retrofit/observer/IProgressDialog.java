@@ -1,6 +1,5 @@
 package com.fy.baselibrary.retrofit.observer;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
