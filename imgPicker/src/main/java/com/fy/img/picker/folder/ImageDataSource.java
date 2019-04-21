@@ -9,7 +9,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 
-import com.fy.img.picker.ImagePicker;
 import com.fy.img.picker.bean.ImageFolder;
 import com.fy.img.picker.bean.ImageItem;
 import com.fy.library.imgpicker.R;
@@ -79,7 +78,7 @@ public class ImageDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         imageFolders.clear();
         if (data != null) {
-            ArrayList<ImageItem> allImages = new ArrayList<>();   //所有图片的集合,不分文件夹
+            List<ImageItem> allImages = new ArrayList<>();   //所有图片的集合,不分文件夹
             while (data.moveToNext()) {
                 //查询数据
                 String imageName = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[0]));
@@ -119,16 +118,16 @@ public class ImageDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
                 }
             }
 
-            //防止没有图片报异常
-            if (data.getCount() > 0 && allImages.size() > 0) {
+            //全部图片
+//            if (data.getCount() > 0 && allImages.size() > 0) {
                 //构造所有图片的集合
                 ImageFolder allImagesFolder = new ImageFolder();
                 allImagesFolder.name = activity.getResources().getString(R.string.all_images);
                 allImagesFolder.path = "/";
-                allImagesFolder.cover = allImages.get(0);
                 allImagesFolder.images = allImages;
+                allImagesFolder.cover = allImages.size() > 0 ? allImages.get(0) : new ImageItem();
                 imageFolders.add(0, allImagesFolder);  //确保第一条是所有图片
-            }
+//            }
         }
 
         if (imageFolders.size() > 0)loadedListener.onImagesLoaded(imageFolders);

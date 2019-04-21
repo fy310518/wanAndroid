@@ -18,11 +18,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fy.baselibrary.aop.annotation.StatusBar;
-import com.fy.baselibrary.aop.resultfilter.ResultCallBack;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.base.popupwindow.CommonPopupWindow;
 import com.fy.baselibrary.base.popupwindow.NicePopup;
+import com.fy.baselibrary.utils.DensityUtils;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.media.UpdateMedia;
@@ -44,7 +44,7 @@ import java.util.List;
  * 图片选择（单选、多选）
  * Created by fangs on 2017/6/29.
  */
-public class ImgPickerActivity extends AppCompatActivity implements IBaseActivity, ResultCallBack, View.OnClickListener {
+public class ImgPickerActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
 
     protected TextView tvTitle;                 //显示当前图片的位置  例如  5/31
     protected TextView tvBack;
@@ -102,7 +102,7 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
         tvTitle.setText(R.string.select_img);
         tvMenu.setTextColor(Color.GRAY);
         tvMenu.setText(R.string.preview);
-//        if (maxCount == -1 || maxCount == 1) tvMenu.setVisibility(View.GONE);//图片选择数目 小于1 隐藏 菜单按钮
+        if (maxCount == -1 || maxCount == 1) tvMenu.setVisibility(View.GONE);//图片选择数目 小于1 隐藏 菜单按钮
 
         setViewStutas(imageFolder.images.size());
     }
@@ -150,10 +150,19 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
                         images.add(new ImageItem(0));
                     }
                     mImgListAdapter.refreshData(images);
+                    return;
                 } else {
                     if (isTAKE_picture) {
                         for (ImageFolder folderItem : imageFolders) {
-                            folderItem.images.add(0, new ImageItem(0));
+                            if (folderItem.images.size() > 0){
+                                ImageItem imageItem = folderItem.images.get(0);
+                                //使 刚刚拍照的图片为选中状态
+                                if (imageItem.path.equals(ImagePicker.newFilePath)) imageItem.isSelect = true;
+                                ImagePicker.newFilePath = "";
+                            }
+
+                            folderItem.images.add(0, new ImageItem(0));//添加拍照按钮
+                            break;
                         }
                     }
                     imgFolder = imageFolders.get(0);
@@ -172,7 +181,7 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
             if (null != popupWindow && popupWindow.isShowing()) return;
             //计算popupWindow 高度（listview Item数量  * （Item高度 + 分割线高度））
             int itemCount = mImageFolderAdapter.getCount() > 3 ? 3 : mImageFolderAdapter.getCount();
-            int pw_lv_height = 166 * itemCount;
+            int pw_lv_height = 81 * itemCount;
 
             popupWindow = NicePopup.Builder.init()
                     .setLayoutId(R.layout.pop_imgfolder)
@@ -204,12 +213,13 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
                     .setAnim(R.style.AnimDown)
                     .onCreateView(ImgPickerActivity.this);
 
-
             //得到button的左上角坐标
             int[] positions = new int[2];
             view.getLocationOnScreen(positions);
-            popupWindow.showAtLocation(findViewById(android.R.id.content),
-                    Gravity.NO_GRAVITY, positions[0], positions[1] - pw_lv_height);
+            popupWindow.showAtLocation(findViewById(android.R.id.content), Gravity.NO_GRAVITY,
+                    positions[0],
+                    positions[1] - DensityUtils.dp2px(pw_lv_height));
+
         } else if (i == R.id.btn_complete) {//修改成完成
             if (mImgListAdapter.getSelectedImages().size() == 0) {
                 return;
@@ -265,11 +275,12 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
         bundle.putSerializable(PickerConfig.KEY_IMG_FOLDER, imgFolder);
         bundle.putSerializable(PickerConfig.KEY_ALREADY_SELECT, new ImageFolder(mImgListAdapter.getSelectedImages()));
 
-        JumpUtils.jump(this, PicturePreviewActivity.class, bundle, ImagePicker.Picture_Preview, this);
+        JumpUtils.jump(this, PicturePreviewActivity.class, bundle, ImagePicker.Picture_Preview);
     }
 
     @Override
-    public void onActResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case ImagePicker.Picture_Preview:
@@ -281,4 +292,5 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
             }
         }
     }
+
 }

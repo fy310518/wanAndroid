@@ -86,6 +86,23 @@ public class JumpUtils {
         act.startActivity(intent);
     }
 
+    public static void jump(Activity act, String action, Bundle bundle, int requestCode) {
+        Intent intent = new Intent(action);
+        if (null != bundle) {
+            intent.putExtras(bundle);
+        }
+
+        act.startActivityForResult(intent, requestCode, bundle);//原生默认
+    }
+
+    public static void jump(Activity act, Class actClass, Bundle bundle, int requestCode) {
+        Intent intent = new Intent(act, actClass);
+        if (null != bundle) {
+            intent.putExtras(bundle);
+        }
+
+        act.startActivityForResult(intent, requestCode, bundle);//原生默认
+    }
 
     /**
      * 跳转到指定 Action 的activity 带回调结果的跳转
