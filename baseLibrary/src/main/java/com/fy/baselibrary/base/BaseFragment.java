@@ -187,6 +187,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         } else {
             isUIVisible = false;
         }
+
+        L.e(TAG, "setUserVisibleHint()");
     }
 
     private void lazyLoad() {
