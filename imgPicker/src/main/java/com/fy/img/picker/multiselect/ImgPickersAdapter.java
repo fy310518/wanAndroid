@@ -3,6 +3,7 @@ package com.fy.img.picker.multiselect;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -64,10 +65,13 @@ public class ImgPickersAdapter extends MultiCommonAdapter<ImageItem> {
     public void convert(ViewHolder holder, ImageItem imgItem, int position) {
         if (position == 0 && imgItem.isShowCamera() == 0){//判断 是否显示 拍照按钮
             holder.setOnClickListener(R.id.camera, v -> {
-                String takeImgFilePath = FileUtils.getPath("/DCIM/camera/", 1);
+                String takeImgFilePath = FileUtils.getPath("/DCIM/camera/", 2);
                 File newFile = FileUtils.createFile(takeImgFilePath, "IMG_", ".png");
+
+                ImagePicker.newFilePath = newFile.getPath();
                 //拍照
-                PhotoUtils.takePicture((Activity) mContext, newFile);
+                Intent intent = PhotoUtils.takePicture((Activity) mContext, newFile);
+                ((Activity) mContext).startActivityForResult(intent, ImagePicker.Photograph);
             });
         } else {
             ImageView ivThumb = holder.getView(R.id.iv_thumb);
@@ -78,33 +82,33 @@ public class ImgPickersAdapter extends MultiCommonAdapter<ImageItem> {
             });
 
             CheckBox cbCheck = holder.getView(R.id.cb_check);
-//            if (imagePicker.getSelectLimit() == 1){
-//                cbCheck.setVisibility(View.GONE);
-//            } else {
-            if (imgItem.isSelect) {
-                cbCheck.setChecked(true);
+            if (imagePicker.getSelectLimit() == 1){
+                cbCheck.setVisibility(View.GONE);
             } else {
-                cbCheck.setChecked(false);
-            }
-
-            cbCheck.setOnClickListener(v -> {
-                int selectLimit = imagePicker.getSelectLimit();
-                if (cbCheck.isChecked() && selectedImages.size() >= selectLimit) {
-                    T.showLong(ResUtils.getReplaceStr(R.string.select_limit, selectLimit));
-                    cbCheck.setChecked(false);
+                if (imgItem.isSelect) {
+                    cbCheck.setChecked(true);
                 } else {
-                    if (cbCheck.isChecked()) {
-                        if (!selectedImages.contains(imgItem)) selectedImages.add(imgItem);
-                        imgItem.setSelect(true);//设置状态 属性为 选中
-                    } else {
-                        selectedImages.remove(imgItem);
-                        imgItem.setSelect(false);//设置状态 属性为 未选中
-                    }
+                    cbCheck.setChecked(false);
                 }
 
-                if (null != clickListener) clickListener.onClick(selectedImages.size());
-            });
-//            }
+                cbCheck.setOnClickListener(v -> {
+                    int selectLimit = imagePicker.getSelectLimit();
+                    if (cbCheck.isChecked() && selectedImages.size() >= selectLimit) {
+                        T.showLong(ResUtils.getReplaceStr(R.string.select_limit, selectLimit));
+                        cbCheck.setChecked(false);
+                    } else {
+                        if (cbCheck.isChecked()) {
+                            if (!selectedImages.contains(imgItem))selectedImages.add(imgItem);
+                            imgItem.setSelect(true);//设置状态 属性为 选中
+                        } else {
+                            selectedImages.remove(imgItem);
+                            imgItem.setSelect(false);//设置状态 属性为 未选中
+                        }
+                    }
+
+                    if (null != clickListener)clickListener.onClick(selectedImages.size());
+                });
+            }
         }
     }
 

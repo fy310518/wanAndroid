@@ -111,6 +111,7 @@ public class H5Interactive extends AppCompatActivity implements IBaseActivity {
         //辅助WebView处理图片上传操作
         webview.setWebChromeClient(new MyChromeWebClient());
         //加载地址
+//        webview.loadUrl("file:///android_asset/dist/index.html");
         webview.loadUrl(url);
     }
 

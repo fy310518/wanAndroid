@@ -345,20 +345,35 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
 //    holder.ivSelect.setOnClickListener(new View.OnClickListener() {
 //        @Override
 //        public void onClick(View view) {
-//            //实现单选方法三： RecyclerView另一种定向刷新方法：不会有白光一闪动画 也不会重复onBindVIewHolder
-//            CouponVH couponVH = (CouponVH) mRv.findViewHolderForLayoutPosition(mSelectedPos);
+            //实现单选方法三： RecyclerView另一种定向刷新方法：不会有白光一闪动画 也不会重复onBindVIewHolder
+//            ViewHolder couponVH = (ViewHolder) mRv.findViewHolderForLayoutPosition(mSelectedPos);
 //            if (couponVH != null) {//还在屏幕里
-//                couponVH.ivSelect.setSelected(false);//此处注意判空
-//            }else {//add by 2016 11 22 for 一些极端情况，holder被缓存在Recycler的cacheView里，
+//                RadioButton oldButton = couponVH.getView(R.id.cb_replace_item);
+//                oldButton.setBackgroundResource(R.color.white);
+//            }else {
+//                //add by 2016 11 22 for 一些极端情况，holder被缓存在Recycler的cacheView里，
 //                //此时拿不到ViewHolder，但是也不会回调onBindViewHolder方法。所以add一个异常处理
 //                notifyItemChanged(mSelectedPos);
 //            }
-//            mDatas.get(mSelectedPos).setSelected(false);//不管在不在屏幕里 都需要改变数据
-//            //设置新Item的勾选状态
-//            mSelectedPos = position;
-//            mDatas.get(mSelectedPos).setSelected(true);
-//            holder.ivSelect.setSelected(true);
-//        }
+//
+//            if (mSelectedPos != -1){
+//                mDatas.get(mSelectedPos).setSelected(false);//不管在不在屏幕里 都需要改变数据
+//                notifyItemChanged(mSelectedPos);
+//            }
+//
+//            if (mSelectedPos == position){//相等 取消当前选中
+//                mDatas.get(mSelectedPos).setSelected(false);
+//                RadioButton newButton = holder.getView(R.id.cb_replace_item);
+//                newButton.setBackgroundResource(R.color.white);
+//
+//                mSelectedPos = -1;
+//            } else {
+//                //设置新Item的勾选状态
+//                mSelectedPos = position;
+//                mDatas.get(mSelectedPos).setSelected(true);
+//                RadioButton newButton = holder.getView(R.id.cb_replace_item);
+//                newButton.setBackgroundResource(R.drawable.svg_cb_multi_selected);
+//            }
 //    });
 
 
