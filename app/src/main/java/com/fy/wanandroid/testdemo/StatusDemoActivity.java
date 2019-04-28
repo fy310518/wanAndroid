@@ -4,12 +4,16 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.ArrayMap;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
@@ -42,6 +46,9 @@ import com.fy.baselibrary.utils.notify.NotifyUtils;
 import com.fy.baselibrary.utils.imgload.imgprogress.ProgressInterceptor;
 import com.fy.baselibrary.utils.imgload.imgprogress.ProgressListener;
 import com.fy.wanandroid.R;
+import com.fy.wanandroid.entity.AppUpdateEntity;
+import com.fy.wanandroid.request.ApiService;
+import com.fy.wanandroid.request.NetCallBack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -147,12 +154,13 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
             case R.id.tvKing2:
                 NotifyUtils.FyBuild.init()
                         .setChannel(2, "subscribe")
-                        .setDefaults(NotificationCompat.DEFAULT_ALL)
+                        .setDefaults(NotificationCompat.DEFAULT_VIBRATE)
                         .setIcon(R.mipmap.ic_launcher, R.color.appHeadBg)
                         .setMsgTitle("收到一条订阅消息")
                         .setMsgContent("地铁沿线30万商铺抢购中！")
                         .createManager(this, null)
                         .sendNotify();
+                checkUpdate();
                 break;
         }
     }
@@ -261,10 +269,30 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
     private void initNotificationChannel() {
         String channelId = "chat";
         String channelName = "聊天消息";
-        NotifyUtils.createNotificationChannel(this, channelId, channelName, NotificationManager.IMPORTANCE_LOW);
+        NotifyUtils.createNotificationChannel(this, channelId, channelName, NotificationManager.IMPORTANCE_LOW, true, false);
 
         channelId = "subscribe";
         channelName = "订阅消息";
-        NotifyUtils.createNotificationChannel(this, channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+        NotifyUtils.createNotificationChannel(this, channelId, channelName, NotificationManager.IMPORTANCE_HIGH, true, true);
+    }
+
+    //检查更新
+    private void checkUpdate(){
+        ArrayMap<String, Object> params = new ArrayMap<>();
+        params.put("appId", 0);
+        RequestUtils.create(ApiService.class)
+                .checkUpdate(params)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxHelper.bindToLifecycle(this))
+                .subscribe(new NetCallBack<AppUpdateEntity>() {
+                    @Override
+                    protected void onSuccess(AppUpdateEntity dataList) {
+                    }
+
+                    @Override
+                    protected void updataLayout(int flag) {
+                    }
+                });
     }
 }

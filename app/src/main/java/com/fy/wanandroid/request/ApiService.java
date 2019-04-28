@@ -1,5 +1,8 @@
 package com.fy.wanandroid.request;
 
+import android.util.ArrayMap;
+
+import com.fy.wanandroid.entity.AppUpdateEntity;
 import com.fy.wanandroid.entity.ArticleBean;
 import com.fy.wanandroid.entity.BannerBean;
 import com.fy.wanandroid.entity.Bookmark;
@@ -15,10 +18,12 @@ import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 /**
  * api接口 </p>
@@ -190,5 +195,17 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("http://47.107.134.212:13201/Falcon/2.0/main/login")
     Observable<BeanModule<LoginBean>> lyLogin(@FieldMap Map<String, Object> options);
+
+
+    /**
+     * 检查应用更新
+     * @param  //http://47.107.134.212:10004/Store/1.0/appVersion
+     * @param options appId=0
+     * @return
+     */
+//    @GET("http://47.107.134.212:10004/Store/1.0/appVersion")
+    @Headers({"Content-Type:application/x-www-form-urlencoded"})
+    @GET("http://192.168.2.17:10004/Store/1.0/appVersion")
+    Observable<AppUpdateEntity> checkUpdate(@QueryMap ArrayMap<String, Object> options);
 
 }
