@@ -12,7 +12,7 @@ import android.text.TextUtils;
 
 import com.fy.baselibrary.R;
 import com.fy.baselibrary.aop.annotation.NeedPermission;
-import com.fy.baselibrary.base.BaseFragment;
+import com.fy.baselibrary.base.fragment.BaseFragment;
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.base.dialog.CommonDialog;
 import com.fy.baselibrary.base.dialog.DialogConvertListener;

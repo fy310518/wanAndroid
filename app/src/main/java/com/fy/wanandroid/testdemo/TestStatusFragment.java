@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.fy.baselibrary.base.BaseFragment;
+import com.fy.baselibrary.base.fragment.BaseFragment;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.wanandroid.R;
 

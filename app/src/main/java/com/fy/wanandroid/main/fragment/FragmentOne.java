@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
-import com.fy.baselibrary.base.BaseFragment;
+import com.fy.baselibrary.base.fragment.BaseFragment;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;

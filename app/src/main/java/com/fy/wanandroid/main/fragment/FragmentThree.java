@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 
-import com.fy.baselibrary.base.BaseFragment;
+import com.fy.baselibrary.base.fragment.BaseFragment;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.utils.Constant;

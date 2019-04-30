@@ -319,6 +319,19 @@ public class JumpUtils {
         act.startActivity(localIntent);
     }
 
+    /**
+     * 拨打电话
+     * 直接拨打电话 需要申请权限：<uses-permission android:name="android.permission.CALL_PHONE" />
+     * 手动点击拨打 不需要权限
+     * @param action  [Intent.ACTION_DIAL(手动点击拨打), Intent.ACTION_CALL(直接拨打电话)]
+     * @param phoneNum 电话号码
+     */
+    public static void callPhone(Context ctx, String action, String phoneNum) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        Uri data = Uri.parse("tel:" + phoneNum);
+        intent.setData(data);
+        ctx.startActivity(intent);
+    }
 
     /**
      * 调用系统安装器安装apk(适配 Android 7.0 在应用间共享文件)

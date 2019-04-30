@@ -5,7 +5,7 @@ import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.fy.baselibrary.base.BaseFragment;
+import com.fy.baselibrary.base.fragment.BaseFragment;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.rv.anim.FadeItemAnimator;

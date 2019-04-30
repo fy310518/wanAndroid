@@ -6,12 +6,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.fy.baselibrary.base.BaseFragment;
+import com.fy.baselibrary.base.fragment.BaseFragment;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
-import com.fy.baselibrary.retrofit.observer.IProgressDialog;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
-import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.widget.refresh.EasyPullLayout;
 import com.fy.baselibrary.widget.refresh.OnRefreshListener;
@@ -20,7 +18,6 @@ import com.fy.wanandroid.entity.TreeBean;
 import com.fy.wanandroid.hierarchy.HierarchyActivity;
 import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
-import com.fy.wanandroid.request.NetDialog;
 
 import java.util.ArrayList;
 import java.util.List;

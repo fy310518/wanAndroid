@@ -38,6 +38,7 @@ public class NotifyUtils {
 
     /**
      * 创建一个通知渠道(此方法一般在 发送通知消息前执行, 或者在 启动页 等待的时间执行)
+     * 8.0以上系统 如果需要打开/关闭 通知 震动，声音，需要删除之前的通知渠道，重新创建一个通知渠道，并更换渠道ID（本方法 channelId）
      * @param ctx
      * @param channelId     渠道id （创建通知渠道的 channelId 和 发送通知时候的渠道名称 channelName 一致）
      * @param channelName   渠道名称

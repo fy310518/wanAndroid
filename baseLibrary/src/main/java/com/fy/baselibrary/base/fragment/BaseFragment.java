@@ -1,4 +1,4 @@
-package com.fy.baselibrary.base;
+package com.fy.baselibrary.base.fragment;
 
 import android.content.Context;
 import android.os.Bundle;

@@ -3,7 +3,7 @@ package com.fy.baselibrary.base.mvp;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.fy.baselibrary.base.BaseFragment;
+import com.fy.baselibrary.base.fragment.BaseFragment;
 
 /**
  * describe： 定义 MVP 视图层 之 fragment 抽象超类
