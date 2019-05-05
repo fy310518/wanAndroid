@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.application.ioc.ConfigUtils;
+import com.fy.baselibrary.base.fragment.FragmentChangeManager;
 import com.fy.baselibrary.startactivity.StartActivity;
 import com.fy.baselibrary.statusbar.StatusBarContentColor;
 import com.fy.baselibrary.utils.AnimUtils;
@@ -47,6 +48,9 @@ import com.fy.wanandroid.main.fragment.FragmentTwo;
 import com.fy.wanandroid.search.SearchActivity;
 import com.fy.wanandroid.utils.SelectUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 
 /**
@@ -56,15 +60,7 @@ import butterknife.BindView;
 public class MainActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
 
     private AppCompatActivity mContext;
-
-    private static final String[] FRAGMENT_TAG = {"FragmentOne", "FragmentTwo", "FragmentThree"};
-    private FragmentManager fragmentManageer;
-    private Fragment mCurrentFrgment;//当前显示的fragment
-    private int currentIndex = 0;    //当前显示的fragment的下标
-
-    private FragmentOne fragmentOne;
-    private FragmentTwo fragmentTwo;
-    private FragmentThree fragmentThree;
+    private FragmentChangeManager fmManager;
 
     @BindView(R.id.radioGlayout)
     RadioGroup radioGlayout;
@@ -100,7 +96,9 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
         mContext = this;
         L.e(getTaskId() + "----> MainActivity");
         initNav();
-        if (null == savedInstanceState)initRadioGroup();
+
+        initFragment();
+        initRadioGroup();
     }
 
     @Override
@@ -168,54 +166,19 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
                     useDart = false;
                     break;
             }
-            beginTransaction(position);
+            fmManager.setFragments(position);
             StatusBarContentColor.setStatusTextColor(MainActivity.this, useDart, false);
         });
 
         rBtnOne.setChecked(true);
     }
 
-    private void beginTransaction(int position) {
-        if (null == fragmentManageer) {
-            fragmentManageer = getSupportFragmentManager();
-        }
-        FragmentTransaction fragmentTransaction = fragmentManageer.beginTransaction();
-        AnimUtils.setFragmentTransition(fragmentTransaction, currentIndex, position);
-
-        Fragment showfragment = null;
-        switch (position) {
-            case 0:
-//                fragmentOne = fragmentTransaction.
-                if (null == fragmentOne) fragmentOne = new FragmentOne();
-                showfragment = fragmentOne;
-                break;
-            case 1:
-                if (null == fragmentTwo) fragmentTwo = new FragmentTwo();
-                showfragment = fragmentTwo;
-                break;
-            case 2:
-                if (null == fragmentThree) fragmentThree = new FragmentThree();
-                showfragment = fragmentThree;
-                break;
-        }
-
-        //判断当前的Fragment是否为空，不为空则隐藏
-        if (null != mCurrentFrgment) {
-            fragmentTransaction.hide(mCurrentFrgment);
-        }
-
-        if (null == showfragment) return;
-        //判断此Fragment是否已经添加到FragmentTransaction事物中
-        if (!showfragment.isAdded()) {
-            fragmentTransaction.add(R.id.main_fragemnet_container, showfragment, FRAGMENT_TAG[position]);
-        } else {
-            fragmentTransaction.show(showfragment);
-        }
-
-        //保存当前显示的那个Fragment
-        mCurrentFrgment = showfragment;
-        currentIndex = position;
-        fragmentTransaction.commitAllowingStateLoss();
+    private void initFragment(){
+        List<Fragment> mainFragments = new ArrayList<>();
+        mainFragments.add(new FragmentOne());
+        mainFragments.add(new FragmentTwo());
+        mainFragments.add(new FragmentThree());
+        fmManager = new FragmentChangeManager(getSupportFragmentManager(), R.id.main_fragemnet_container, mainFragments);
     }
 
     @Override

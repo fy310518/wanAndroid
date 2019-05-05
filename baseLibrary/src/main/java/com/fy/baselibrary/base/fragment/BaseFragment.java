@@ -164,11 +164,13 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!isActivityShow) return;
-        if (hidden) {// 不在最前端界面显示
-            onPause();
-        } else {// 重新显示到最前端中
-            onResume();
-        }
+//        if (hidden) {// 不在最前端界面显示
+//            onPause();
+//        } else {// 重新显示到最前端中
+//            onResume();
+//        }
+
+        L.e(TAG, "onHiddenChanged()");
     }
 
 
