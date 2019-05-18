@@ -3,6 +3,7 @@ package com.fy.baselibrary.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -295,6 +296,41 @@ public class JumpUtils {
         act.startActivity(intent);
     }
 
+    /**
+     * 启动指定 url 的 应用 界面
+     * @param act
+     * @param url  如："gc://pull.gc.circle/conn/start?type=110"
+     * @param bundle 这里Intent当然也可传递参数,但是一般情况下都会放到上面的URL中进行传递
+     */
+    public static void jumpUrl(Activity act, String url, Bundle bundle){
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent();
+        intent.setData(uri);
+
+        if (null != bundle) {
+            intent.putExtras(bundle);
+        }
+
+        act.startActivity(intent);
+    }
+
+    /**
+     * 启动指定 包名 的 第三方应用
+     * @param act
+     * @param packageName
+     * @param bundle
+     */
+    public static void jumpPackage(Activity act, String packageName, Bundle bundle) {
+        PackageManager packageManager = act.getPackageManager();
+        Intent intent = packageManager.getLaunchIntentForPackage(packageName);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        if (null != bundle) {
+            intent.putExtras(bundle);
+        }
+
+        act.startActivity(intent);
+    }
 
     /**
      * 跳转到浏览器 打开指定 URL链接

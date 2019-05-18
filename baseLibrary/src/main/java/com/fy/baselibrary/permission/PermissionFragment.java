@@ -60,7 +60,7 @@ public class PermissionFragment extends BaseFragment {
 
     @Override
     protected void baseInit() {
-        mFirstRefuseMessage = getString(R.string.default_always_message);
+        mFirstRefuseMessage = ResUtils.getStr(R.string.default_always_message);
 
         Bundle bundle = getArguments();
         if (null != bundle) {

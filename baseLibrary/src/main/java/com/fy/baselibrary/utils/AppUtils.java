@@ -3,6 +3,7 @@ package com.fy.baselibrary.utils;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -229,6 +230,37 @@ public class AppUtils {
             }
         }
         return null;
+    }
+
+    /**
+     * 根据安装包路径获取包名
+     * @param context
+     * @param filePath 安装包路径
+     * @return
+     */
+    public static String getPackageName(Context context, String filePath) {
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo info = packageManager.getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES);
+        if (info != null) {
+            ApplicationInfo appInfo = info.applicationInfo;
+            return appInfo.packageName;  //得到安装包名称
+        }
+        return null;
+    }
+
+    /**
+     * 根据安装包路径获取 版本号
+     * @param context
+     * @param filePath
+     * @return
+     */
+    public static int getVersionCode(Context context, String filePath){
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo info = packageManager.getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES);
+        if (info != null) {
+            return info.versionCode;
+        }
+        return 0;
     }
 
     /**

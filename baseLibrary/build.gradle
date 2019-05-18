@@ -7,16 +7,16 @@ android {
     defaultConfig {
         minSdkVersion var.minSdkVersion
         targetSdkVersion var.targetSdkVersion
-        versionCode 47
-        versionName "1.4.7"
+        versionCode 1
+        versionName "1.0.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true//配置5.0 版本以下可以使用svg
 
-        ndk {
-            // 设置支持的SO库架构
-            abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
-        }
+        // 设置支持的SO库架构
+//        ndk {
+//            abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+//        }
     }
 
     buildTypes {

@@ -2,8 +2,13 @@ package com.fy.wanandroid.app;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.support.multidex.MultiDex;
 
+import com.fanjun.keeplive.KeepLive;
+import com.fanjun.keeplive.config.ForegroundNotification;
+import com.fanjun.keeplive.config.ForegroundNotificationClickListener;
+import com.fanjun.keeplive.config.KeepLiveService;
 import com.fy.baselibrary.application.BaseActivityLifecycleCallbacks;
 import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.statuslayout.OnStatusAdapter;
@@ -11,6 +16,7 @@ import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NightModeUtils;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
+import com.fy.baselibrary.utils.notify.T;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.app.blockcanary.AppBlockCanaryContext;
 import com.github.moduth.blockcanary.BlockCanary;
@@ -60,6 +66,8 @@ public class WanAndroidApp extends Application{
                 return R.id.tvTry;
             }
         }));
+
+        initKeepLive();
     }
 
     @Override
@@ -89,4 +97,38 @@ public class WanAndroidApp extends Application{
             "I8OoatUrvA/JHA1iYHh1edwxWLvWJF3+FEzY779nrZWUQUwFInuhY3HnaaTJmChF\n" +
             "RHNT\n" +
             "-----END CERTIFICATE-----";
+
+
+    private void initKeepLive(){
+        //定义前台服务的默认样式。即标题、描述和图标
+        ForegroundNotification foregroundNotification = new ForegroundNotification("测试","描述", R.mipmap.ic_launcher,
+                //定义前台服务的通知点击事件
+                new ForegroundNotificationClickListener() {
+                    @Override
+                    public void foregroundNotificationClick(Context context, Intent intent) {
+                    }
+                });
+        //启动保活服务
+        KeepLive.startWork(this, KeepLive.RunMode.ENERGY, foregroundNotification,
+                //你需要保活的服务，如socket连接、定时任务等，建议不用匿名内部类的方式在这里写
+                new KeepLiveService() {
+                    /**
+                     * 运行中
+                     * 由于服务可能会多次自动启动，该方法可能重复调用
+                     */
+                    @Override
+                    public void onWorking() {
+                       L.e("保活", "复活");
+                    }
+                    /**
+                     * 服务终止
+                     * 由于服务可能会被多次终止，该方法可能重复调用，需同onWorking配套使用，如注册和注销broadcast
+                     */
+                    @Override
+                    public void onStop() {
+
+                    }
+                }
+        );
+    }
 }
