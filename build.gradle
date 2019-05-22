@@ -14,9 +14,6 @@ buildscript {
         //aop
         classpath 'com.hujiang.aspectjx:gradle-android-plugin-aspectjx:2.0.4'
         classpath 'org.aspectj:aspectjtools:1.8.13'
-
-        //将Library上传到jcenter
-//        classpath 'com.novoda:bintray-release:0.8.1'
     }
 }
 
@@ -25,6 +22,11 @@ allprojects {
         jcenter()
         google()
         maven { url "https://jitpack.io" }
+//            maven本地依赖 声明路径
+//            url 'file://D:/Program Files/Android/localMaven/'
+        maven {
+            url "https://raw.githubusercontent.com/fy310518/baselibrary/master"
+        }
     }
 }
 

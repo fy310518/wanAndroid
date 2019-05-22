@@ -70,6 +70,7 @@ dependencies {
         exclude group: 'com.android.support'
     }
 
-    implementation project(':baseLibrary')
+//    implementation project(':baseLibrary')
     implementation project(':imgPicker')
+    implementation 'com.fy:baselibrary:1.0.0'
 }

@@ -81,3 +81,14 @@ dependencies {
     //aop
     api 'org.aspectj:aspectjrt:1.8.13'
 }
+
+
+apply plugin: 'maven'
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: LOCAL_REPO_URL)
+        pom.groupId = PROJ_GROUP
+        pom.artifactId = PROJ_ARTIFACTID
+        pom.version = PROJ_VERSION
+    }
+}
