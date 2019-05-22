@@ -152,7 +152,7 @@ public class AppUtils {
      * 获取 清单文件注册的 文件共享签名认证
      */
     public static String getFileProviderName() {
-        return getLocalPackageName() + ".provider";
+        return getLocalPackageName() + ".base.file.provider";
     }
 
     /**
