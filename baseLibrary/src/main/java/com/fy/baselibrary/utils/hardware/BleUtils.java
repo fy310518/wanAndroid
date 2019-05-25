@@ -1,5 +1,6 @@
-package com.fy.baselibrary.utils;
+package com.fy.baselibrary.utils.hardware;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
@@ -49,10 +50,11 @@ public class BleUtils {
      * 判断蓝牙是否打开
      * @return true表示已经开启
      */
+    @SuppressLint("MissingPermission")
     public static boolean isBluetoothOpen(Context context) {
 
         BluetoothAdapter bluetoothAdapter = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             bluetoothAdapter = getBleAdapter(context);
         }
 
@@ -63,10 +65,11 @@ public class BleUtils {
      * 强制开启当前 Android 设备的 Bluetooth
      * @return true：强制打开 Bluetooth　成功　false：强制打开 Bluetooth 失败
      */
+    @SuppressLint("MissingPermission")
     public static boolean turnOnBluetooth(Context context) {
 
         BluetoothAdapter bluetoothAdapter = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             bluetoothAdapter = getBleAdapter(context);
         }
 
@@ -81,10 +84,11 @@ public class BleUtils {
      * 强制关闭当前 Android 设备的 Bluetooth
      * @return  true：强制关闭 Bluetooth　成功　false：强制关闭 Bluetooth 失败
      */
+    @SuppressLint("MissingPermission")
     public static boolean turnOffBluetooth(Context context) {
 
         BluetoothAdapter bluetoothAdapter = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             bluetoothAdapter = getBleAdapter(context);
         }
         if (null != bluetoothAdapter) {

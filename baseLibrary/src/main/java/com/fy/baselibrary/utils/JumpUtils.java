@@ -1,6 +1,7 @@
 package com.fy.baselibrary.utils;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -325,6 +326,24 @@ public class JumpUtils {
         Intent intent = packageManager.getLaunchIntentForPackage(packageName);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
+        if (null != bundle) {
+            intent.putExtras(bundle);
+        }
+
+        act.startActivity(intent);
+    }
+
+    /**
+     * 启动指定 包名 的第三方应用 的指定 路径的 activity
+     * @param act
+     * @param packageName 目标应用 应用id
+     * @param path        目标activity路径
+     * @param bundle
+     */
+    public static void jumpPackageAct(Activity act, String packageName, String path, Bundle bundle) {
+        Intent intent = new Intent();
+        ComponentName componentName = new ComponentName(packageName, path);
+        intent.setComponent(componentName);
         if (null != bundle) {
             intent.putExtras(bundle);
         }

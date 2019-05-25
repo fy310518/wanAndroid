@@ -40,8 +40,15 @@ public class BaseAndroidJSInterface {
         this.progressDialog = progressDialog;
     }
 
-    public void setDefaultParams(ArrayMap<String, String> defaultParams) {
-        this.defaultParams = defaultParams;
+    /**
+     * 设置 请求参数
+     * @param key
+     * @param value
+     * @return
+     */
+    public BaseAndroidJSInterface setDefaultParams(String key, String value) {
+        defaultParams.put(key, value);
+        return this;
     }
 
     //定义方法 供 h5 调用

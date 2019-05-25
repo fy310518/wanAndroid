@@ -99,22 +99,7 @@ public class AppUtils {
         return info.packageName;
     }
 
-    /**
-     * 当前的包是否存在
-     * @param pckName 包名
-     * @return true/false
-     */
-    public static boolean isPackageExist(Context context, String pckName) {
-        try {
-            PackageManager packageManager = context.getPackageManager();
-            PackageInfo pckInfo = packageManager.getPackageInfo(pckName, 0);
 
-            if (null != pckInfo) return true;
-        } catch (PackageManager.NameNotFoundException e) {
-            L.e("TDvice", e.getMessage());
-        }
-        return false;
-    }
 
     private static boolean isSpace(final String s) {
         if (s == null) return true;
@@ -153,6 +138,72 @@ public class AppUtils {
      */
     public static String getFileProviderName() {
         return getLocalPackageName() + ".base.file.provider";
+    }
+
+
+    /**
+     * 根据安装包路径获取包名
+     * @param context
+     * @param filePath 安装包路径
+     * @return
+     */
+    public static String getPackageName(Context context, String filePath) {
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo info = packageManager.getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES);
+        if (info != null) {
+            ApplicationInfo appInfo = info.applicationInfo;
+            return appInfo.packageName;  //得到安装包名称
+        }
+        return null;
+    }
+
+    /**
+     * 根据安装包路径获取 版本号
+     * @param context
+     * @param filePath
+     * @return
+     */
+    public static int getVersionCode(Context context, String filePath){
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo info = packageManager.getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES);
+        if (info != null) {
+            return info.versionCode;
+        }
+        return 0;
+    }
+
+    /**
+     * 检查是否安装了某应用
+     * @param packageName
+     * @param mContext
+     * @return
+     */
+    public static boolean isAvilible(String packageName, Context mContext) {
+        final PackageManager packageManager = mContext.getPackageManager();
+        // 获取所有已安装程序的包信息
+        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);
+        for (int i = 0; i < pinfo.size(); i++) {
+            if (pinfo.get(i).packageName.equalsIgnoreCase(packageName))
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * 当前的包是否存在
+     * @param pckName 包名
+     * @return true/false
+     */
+    public static boolean isPackageExist(Context context, String pckName) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            PackageInfo pckInfo = packageManager.getPackageInfo(pckName, 0);
+
+            if (null != pckInfo) return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            L.e("TDvice", e.getMessage());
+        }
+        return false;
     }
 
     /**
@@ -232,51 +283,5 @@ public class AppUtils {
         return null;
     }
 
-    /**
-     * 根据安装包路径获取包名
-     * @param context
-     * @param filePath 安装包路径
-     * @return
-     */
-    public static String getPackageName(Context context, String filePath) {
-        PackageManager packageManager = context.getPackageManager();
-        PackageInfo info = packageManager.getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES);
-        if (info != null) {
-            ApplicationInfo appInfo = info.applicationInfo;
-            return appInfo.packageName;  //得到安装包名称
-        }
-        return null;
-    }
 
-    /**
-     * 根据安装包路径获取 版本号
-     * @param context
-     * @param filePath
-     * @return
-     */
-    public static int getVersionCode(Context context, String filePath){
-        PackageManager packageManager = context.getPackageManager();
-        PackageInfo info = packageManager.getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES);
-        if (info != null) {
-            return info.versionCode;
-        }
-        return 0;
-    }
-
-    /**
-     * 检查是否安装了某应用
-     * @param packageName
-     * @param mContext
-     * @return
-     */
-    public static boolean isAvilible(String packageName, Context mContext) {
-        final PackageManager packageManager = mContext.getPackageManager();
-        // 获取所有已安装程序的包信息
-        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);
-        for (int i = 0; i < pinfo.size(); i++) {
-            if (pinfo.get(i).packageName.equalsIgnoreCase(packageName))
-                return true;
-        }
-        return false;
-    }
 }
