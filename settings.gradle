@@ -1,1 +1,1 @@
-include ':app', ':baseLibrary', ':imgPicker' //wanAndroid
+include ':app', ':baseLibrary', ':imgPicker', ':unifiedlogin' //wanAndroid

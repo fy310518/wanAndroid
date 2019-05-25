@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <!-- 分割线颜色 -->
+    <color name="lineColor">#3a3a3a</color>
+
+    <!-- 状态栏颜色 -->
+    <color name="statusBar">#25b6ed</color>
+    <!-- 标题栏颜色 -->
+    <color name="appHeadBg">#25b6ed</color>
+    <!-- 界面背景色 -->
+    <color name="BgColor">#eeeeee</color>
+
+    <!-- 标题栏内容颜色 -->
+    <color name="titleBarCon">#fefefe</color>
+
+    <!-- 界面字体颜色 高亮 -->
+    <color name="txtHighlight">#24b6ec</color>
+
+    <!-- 界面提示字体颜色 输入正确 -->
+    <color name="colorTextCorrect">#24b6ec</color>
+    <!-- 界面提示字体颜色 输入错误 -->
+    <color name="colorHintError">#fe8382</color>
+
+
+    <!-- 统一按钮背景色  -->
+    <color name="button_normal">#bfbfbf</color>
+    <!-- 统一按钮点击效果色 -->
+    <color name="button_pressed">#41c0ef</color>
+
+    <color name="button_normal2">#FFFAF0</color>
+    <color name="button_pressed2">#cccccc</color>
+
+    <!-- 点击  背景变化 颜色 -->
+    <color name="selection">#ffffff</color>
+
+</resources>

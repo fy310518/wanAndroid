@@ -59,7 +59,7 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
                 }
             }
         } else {
-            JumpUtils.jump(this, AppUtils.getLocalPackageName() + ".login.StartUpActivity", null);
+            JumpUtils.jump(this, AppUtils.getLocalPackageName() + ".login.LoginActivity", null);
         }
     }
 

@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">UnifiedLogin</string>
+
+
+    <string name="login">登陆</string>
+
+
+    <string name="editHint">请输入警号/身份证号码</string>
+    <string name="editFail">警号/身份证有误，请重新输入</string>
+    <string name="gotoScanFace">去刷脸</string>
+    <string name="updatePhoto">更新照片</string>
+
+
+    <string name="notifyList">通知列表</string>
+</resources>

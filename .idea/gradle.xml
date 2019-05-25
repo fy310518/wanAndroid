@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/baseLibrary" />
             <option value="$PROJECT_DIR$/imgPicker" />
+            <option value="$PROJECT_DIR$/unifiedlogin" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

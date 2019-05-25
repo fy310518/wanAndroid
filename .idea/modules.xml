@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/baseLibrary/baseLibrary.iml" filepath="$PROJECT_DIR$/baseLibrary/baseLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/imgPicker/imgPicker.iml" filepath="$PROJECT_DIR$/imgPicker/imgPicker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/unifiedlogin/unifiedlogin.iml" filepath="$PROJECT_DIR$/unifiedlogin/unifiedlogin.iml" />
       <module fileurl="file://$PROJECT_DIR$/wanAndroid.iml" filepath="$PROJECT_DIR$/wanAndroid.iml" />
     </modules>
   </component>

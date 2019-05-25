@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.fy.baselibrary.widget.refresh.EasyPullLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/epl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transforTop"
+    app:max_offset_bottom="@dimen/max_offset"
+    app:max_offset_top="@dimen/max_offset"
+    app:pull_animator_top="@string/easyPullAnimatorTop"
+    app:trigger_offset_top="@dimen/refreshHeight">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvNotifyList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/BgColor"
+        app:layout_type="content" />
+
+</com.fy.baselibrary.widget.refresh.EasyPullLayout>
