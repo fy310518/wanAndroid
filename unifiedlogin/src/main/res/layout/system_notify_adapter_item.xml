@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/appNotifyBg"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="18dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:background="@color/BgColor">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/imgHead"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/default_pic_icon" />
+
+    <TextView
+        android:id="@+id/txtAppname"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginLeft="@dimen/spacing_medium_small"
+        android:singleLine="true"
+        android:gravity="center_vertical"
+        android:text="姓名"
+        android:textColor="@color/txtSuperColor"
+        android:textSize="@dimen/txt_medium"
+        android:layout_toRightOf="@+id/imgHead"/>
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/itemSplit_line"
+        android:background="#e6e6e6"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_below="@+id/imgHead"/>
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:gravity="center_vertical"
+        android:text="标题"
+        android:textColor="@color/txtSuperColor"
+        android:textSize="@dimen/txt_medium"
+        android:layout_below="@+id/line1"/>
+
+    <TextView
+        android:id="@+id/txtTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="时间"
+        android:textColor="#B3B3B3"
+        android:textSize="@dimen/txt_small_much"
+        android:layout_below="@+id/txtTitle"/>
+
+    <com.fy.baselibrary.widget.NineGridView
+        android:id="@+id/notifyGridView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtTime"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/txtContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="内容"
+        android:textColor="#B3B3B3"
+        android:textSize="@dimen/txt_small_much"
+        android:ellipsize="end"
+        android:lineSpacingExtra="3dp"
+        android:maxLines="4"
+        android:layout_below="@+id/notifyGridView"/>
+
+    <View
+        android:id="@+id/line2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/itemSplit_line"
+        android:background="#e6e6e6"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/txtContent"/>
+
+    <TextView
+        android:id="@+id/txtInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:drawableRight="@drawable/ic_link"
+        android:gravity="center_vertical"
+        android:text="详情"
+        android:paddingRight="-20dp"
+        android:textColor="#3D8BFF"
+        android:textSize="16sp"
+        android:layout_below="@+id/line2"/>
+
+</RelativeLayout>

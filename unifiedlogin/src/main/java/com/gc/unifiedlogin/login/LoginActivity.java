@@ -16,6 +16,7 @@ import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.ResUtils;
 import com.gc.unifiedlogin.R;
+import com.gc.unifiedlogin.sysnotify.SysNotifyActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -67,7 +68,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
 
                 break;
             case R.id.btnLogin://刷脸登陆
-
+                JumpUtils.jump(this, SysNotifyActivity.class, null);
                 break;
         }
     }

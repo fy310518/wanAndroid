@@ -11,6 +11,8 @@ import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
 
+import org.litepal.LitePal;
+
 /**
  * describe: 统一登陆 application
  * Created by fangs on 2019/5/24 22:01.
@@ -20,6 +22,8 @@ public class UnifiedLoginApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        LitePal.initialize(this);
 
         //初始化配置信息
         L.e("ActivityCallbacks", "Application--Create() 启动-----");

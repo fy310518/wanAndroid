@@ -7,6 +7,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 
 import com.fy.baselibrary.application.ioc.ConfigUtils;
@@ -173,13 +174,29 @@ public class AppUtils {
     }
 
     /**
+     * 获取指定 应用Id 的 应用图标 Drawable
+     * @param context
+     * @param packageName 应用id
+     */
+    public static Drawable getAppLogo(Context context, String packageName) {
+        PackageManager packageManager = null;
+        ApplicationInfo applicationInfo = null;
+        try {
+            packageManager = context.getApplicationContext().getPackageManager();
+            applicationInfo = packageManager.getApplicationInfo(packageName, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            applicationInfo = null;
+        }
+        return packageManager.getApplicationIcon(applicationInfo);
+    }
+
+    /**
      * 检查是否安装了某应用
      * @param packageName
-     * @param mContext
      * @return
      */
-    public static boolean isAvilible(String packageName, Context mContext) {
-        final PackageManager packageManager = mContext.getPackageManager();
+    public static boolean isAvailable(String packageName) {
+        final PackageManager packageManager = ConfigUtils.getAppCtx().getPackageManager();
         // 获取所有已安装程序的包信息
         List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);
         for (int i = 0; i < pinfo.size(); i++) {

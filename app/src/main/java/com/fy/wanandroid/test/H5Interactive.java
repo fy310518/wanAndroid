@@ -355,7 +355,7 @@ public class H5Interactive extends AppCompatActivity implements IBaseActivity {
     public void gotoOtherApp(@NonNull String appId) {
 //        if (isAvilible("com.gcstorage.circleapp", getContext())){
 
-        if (AppUtils.isAvilible(appId, this)) {
+        if (AppUtils.isAvailable(appId)) {
             Bundle bundle = new Bundle();
 //            bundle.putString("head_pic", GlobalUserInfo.getHeadpic(StoreApplication.instance)); //头像
 //            bundle.putString("name", GlobalUserInfo.getName(StoreApplication.instance));        //姓名

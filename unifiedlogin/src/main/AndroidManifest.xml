@@ -57,15 +57,6 @@
             android:label="@string/notifyList"
             android:screenOrientation="portrait" />
 
-        <!-- 接收门户广播 -->
-        <receiver
-            android:name=".sysnotify.SysNotifyReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.MESSAGE_ARRIVED" />
-            </intent-filter>
-        </receiver>
-
     </application>
 
 

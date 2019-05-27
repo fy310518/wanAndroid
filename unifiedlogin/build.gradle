@@ -64,4 +64,5 @@ dependencies {
 
     implementation project(':baseLibrary')
 //    implementation 'com.fy:baselibrary:1.0.0'
+    implementation 'org.litepal.android:java:3.0.0'
 }

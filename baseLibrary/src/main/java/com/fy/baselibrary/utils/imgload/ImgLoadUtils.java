@@ -133,6 +133,26 @@ public class ImgLoadUtils {
                 .into(imageView);
     }
 
+    /**
+     * 加载圆角图片
+     * @param url
+     * @param errorId
+     * @param imageView
+     */
+    public static void loadRadiusImg(String url, int errorId, ImageView imageView) {
+        //加载圆角图片 通过RequestOptions扩展功能
+        RequestOptions requestOptions = new RequestOptions()
+                .fallback(errorId)
+                .error(errorId)
+                .placeholder(errorId)
+                .transforms(new RoundedCorners(15))
+                .diskCacheStrategy(DiskCacheStrategy.ALL);
+
+        Glide.with(imageView.getContext())
+                .load(url)
+                .apply(requestOptions)
+                .into(imageView);
+    }
 
     /**
      * 预加载 （把指定URL地址的图片 的原始尺寸保存到缓存中）
