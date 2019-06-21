@@ -9,9 +9,10 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 
+import com.fy.baselibrary.utils.notify.L;
 import com.fy.img.picker.bean.ImageFolder;
 import com.fy.img.picker.bean.ImageItem;
-import com.fy.library.imgpicker.R;
+import com.fy.img.picker.R;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -119,7 +120,7 @@ public class ImageDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
             }
 
             //全部图片
-//            if (data.getCount() > 0 && allImages.size() > 0) {
+            if (data.getCount() > 0 && allImages.size() > 0) {
                 //构造所有图片的集合
                 ImageFolder allImagesFolder = new ImageFolder();
                 allImagesFolder.name = activity.getResources().getString(R.string.all_images);
@@ -127,7 +128,7 @@ public class ImageDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
                 allImagesFolder.images = allImages;
                 allImagesFolder.cover = allImages.size() > 0 ? allImages.get(0) : new ImageItem();
                 imageFolders.add(0, allImagesFolder);  //确保第一条是所有图片
-//            }
+            }
         }
 
         if (imageFolders.size() > 0)loadedListener.onImagesLoaded(imageFolders);
@@ -135,7 +136,7 @@ public class ImageDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        System.out.println("--------");
+        L.e("--------");
     }
 
     /** 所有图片加载完成的回调接口 */

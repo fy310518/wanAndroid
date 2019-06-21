@@ -143,7 +143,8 @@ public abstract class CommonPopupWindow extends PopupWindow {
             Rect rect = new Rect();
             anchor.getGlobalVisibleRect(rect);
             int h = anchor.getResources().getDisplayMetrics().heightPixels - rect.bottom;
-            setHeight(h);
+//            setHeight(h);
+            setHeight(mHeight > 0 ? DensityUtils.dp2px(mHeight) : mHeight);
         }
     }
 

@@ -14,6 +14,8 @@ import com.fy.baselibrary.retrofit.observer.RequestBaseObserver;
 import com.fy.baselibrary.utils.GsonUtils;
 import com.google.gson.Gson;
 
+import java.util.Map;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -51,35 +53,57 @@ public class BaseAndroidJSInterface {
         return this;
     }
 
-    //定义方法 供 h5 调用
-    @JavascriptInterface
-    public String httpRequest(String requestContent) {
-        H5RequestBean request = GsonUtils.fromJson(requestContent, H5RequestBean.class);
-
-        if (TextUtils.isEmpty(request.getUrl())) {
-            return "{错误提示}";//todo 返回 json格式 错误信息
-        }
-
+    //解析 H5RequestBean 获取 请求参数
+    private ArrayMap<String, String> getHttpParams(H5RequestBean request){
         ArrayMap<String, String> params = request.getParams();
+
         if (!defaultParams.isEmpty()) {
             for (String key : defaultParams.keySet()) {
                 params.put(key, defaultParams.get(key));
             }
         }
 
-        ArrayMap<String, String> headers = request.getHeader();
+        return params;
+    }
+
+    /**
+     * 定义本地网络请求方法 供 h5 调用
+     * @param hostIp          请求的主机地址 可为空，为空则表示 使用构造方法传递的 host
+     * @param requestContent  h5 传递的 网络请求 请求头，请求方法（get，post），请求参数，请求 url
+     * @return
+     */
+    @JavascriptInterface
+    public String httpRequest(String hostIp, String requestContent) {
+        H5RequestBean request = null;
+        try {
+            request = GsonUtils.fromJson(requestContent, H5RequestBean.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "{错误提示}";//todo 返回 json格式 错误信息
+        }
+
+        if (TextUtils.isEmpty(request.getUrl())) {
+            return "{错误提示}";//todo 返回 json格式 错误信息
+        }
+
         String method = request.getRequestMethod();
+        ArrayMap<String, String> headers = request.getHeader();
+        ArrayMap<String, String> params = getHttpParams(request);
+
+        String hostAddress = TextUtils.isEmpty(hostIp) ? hostIp : this.host;
 
         switch (method.toUpperCase()) {
             case "GET":
-                httpGet(headers, params, request.getUrl(), request.getJsMethod());
+                httpGet(headers, params, hostAddress + request.getUrl(), request.getJsMethod());
                 break;
             case "POST":
-                httpPost(headers, params, request.getUrl(), request.getJsMethod());
+                httpPost(headers, params, hostAddress + request.getUrl(), request.getJsMethod());
                 break;
         }
-        return null;
+
+        return "";
     }
+
 
     private void httpGet(ArrayMap<String, String> headers, ArrayMap<String, String> params, final String url, final String jsMethod) {
         RequestUtils.create(LoadService.class)

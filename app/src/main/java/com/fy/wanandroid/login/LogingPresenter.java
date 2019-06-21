@@ -2,22 +2,15 @@ package com.fy.wanandroid.login;
 
 import android.Manifest;
 import android.content.Context;
-import android.os.Bundle;
 
 import com.fy.baselibrary.aop.annotation.NeedPermission;
-import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.base.mvp.BasePresenter;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.observer.IProgressDialog;
-import com.fy.baselibrary.utils.Constant;
-import com.fy.baselibrary.utils.JumpUtils;
-import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.utils.cache.ACache;
-import com.fy.baselibrary.utils.cache.SpfAgent;
+import com.fy.baselibrary.utils.notify.L;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.entity.LoginBean;
-import com.fy.wanandroid.main.MainActivity;
 import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
 import com.fy.wanandroid.request.NetDialog;

@@ -11,7 +11,7 @@ import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.load.down.DownLoadListener;
 import com.fy.baselibrary.retrofit.load.down.DownManager;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
-import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.notify.L;
 import com.fy.wanandroid.R;
 
 import butterknife.BindView;

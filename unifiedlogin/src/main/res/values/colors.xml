@@ -8,9 +8,9 @@
     <color name="lineColor">#3a3a3a</color>
 
     <!-- 状态栏颜色 -->
-    <color name="statusBar">#25b6ed</color>
+    <color name="statusBar">#3d8bff</color>
     <!-- 标题栏颜色 -->
-    <color name="appHeadBg">#25b6ed</color>
+    <color name="appHeadBg">#3d8bff</color>
     <!-- 界面背景色 -->
     <color name="BgColor">#eeeeee</color>
 

@@ -7,7 +7,7 @@ import android.support.multidex.MultiDex;
 import com.fy.baselibrary.application.BaseActivityLifecycleCallbacks;
 import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.statuslayout.OnStatusAdapter;
-import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.notify.L;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
 

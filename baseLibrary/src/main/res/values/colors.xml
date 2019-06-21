@@ -16,6 +16,7 @@
     <color name="blue">#3ec2d9</color>
     <!-- UI设计原色之 白色 -->
     <color name="white">#ffffff</color>
+    <color name="personal_title_bg">#f5f5f5</color>
     <!-- UI设计原色之 黑色 -->
     <color name="black">#000000</color>
     <!-- 透明 -->
@@ -23,6 +24,10 @@
     <!-- 黑色半透明 -->
     <color name="alphaBlack">#80000000</color>
 
+    <!-- 状态栏颜色 -->
+    <color name="statusBar">#177ee6</color>
+    <!-- 标题栏颜色 -->
+    <color name="appHeadBg">#177ee6</color>
 
     <!-- 界面字体颜色 深色-->
     <color name="txtSuperColor">#333333</color>

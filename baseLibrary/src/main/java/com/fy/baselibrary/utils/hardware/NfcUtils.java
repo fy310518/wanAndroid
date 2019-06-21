@@ -109,7 +109,7 @@ public class NfcUtils {
         Ndef ndef = Ndef.get(tag);
         ndef.connect();
         NdefRecord ndefRecord = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             ndefRecord = NdefRecord.createTextRecord(null, data);
         }
         NdefRecord[] records = {ndefRecord};

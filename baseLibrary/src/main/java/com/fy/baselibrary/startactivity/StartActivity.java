@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.JumpUtils;
-import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.notify.L;
 
 /**
  * 不可见Activity 用于控制程序 退出(入口activity)
@@ -59,7 +59,7 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
                 }
             }
         } else {
-            JumpUtils.jump(this, AppUtils.getLocalPackageName() + ".login.LoginActivity", null);
+            JumpUtils.jump(this, AppUtils.getLocalPackageName() + ".login.StartUpActivity", null);
         }
     }
 

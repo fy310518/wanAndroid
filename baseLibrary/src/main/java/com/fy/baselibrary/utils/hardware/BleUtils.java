@@ -54,7 +54,7 @@ public class BleUtils {
     public static boolean isBluetoothOpen(Context context) {
 
         BluetoothAdapter bluetoothAdapter = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
             bluetoothAdapter = getBleAdapter(context);
         }
 
@@ -69,7 +69,7 @@ public class BleUtils {
     public static boolean turnOnBluetooth(Context context) {
 
         BluetoothAdapter bluetoothAdapter = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
             bluetoothAdapter = getBleAdapter(context);
         }
 
@@ -88,7 +88,7 @@ public class BleUtils {
     public static boolean turnOffBluetooth(Context context) {
 
         BluetoothAdapter bluetoothAdapter = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
             bluetoothAdapter = getBleAdapter(context);
         }
         if (null != bluetoothAdapter) {

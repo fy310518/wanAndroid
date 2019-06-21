@@ -45,9 +45,9 @@ public class Constant {
     public static String userId = "userid";
 
     /**
-     * 操作令牌
+     * 操作令牌 key
      */
-    public static String token = "";
+    public static String token = "user_token";
 
     /**
      * 程序是否必须登录
@@ -67,7 +67,21 @@ public class Constant {
     /**
      * 缓存用户名 key
      */
-    public static String userName = "User_Name";
+    public static final String SP_KEY_OPENID = "open_id";
+    public static final String SP_KEY_ID = "user_id";
+    public static final String SP_KEY_ALARM = "user_alarm";//超警 警号
+    public static final String SP_KEY_AppALARM = "Appuser_alarm";//门户 警号
+    public static final String userName = "User_Name";
+    public static final String SP_KEY_TOKEN = "user_token";
+    public static final String SP_KEY_HEAD_PIC = "user_head_pic";
+    public static final String SP_KEY_DEPT_NAME = "user_dept_name";
+    public static final String SP_KEY_DEPT_ID = "user_dept_id";
+    public static final String SP_KEY_SEX = "user_sex";
+    public static final String SP_KEY_AGE = "user_age";
+    public static final String SP_KEY_ID_CARD = "user_id_card";
+    public static final String SP_KEY_LOGIN = "user_login_state";
+    public static final String SP_KEY_PHONE= "user_phone";
+
 
     /**
      * APP 当前模式 （日间/夜间）

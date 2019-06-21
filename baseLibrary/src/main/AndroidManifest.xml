@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fy.baselibrary">
 
+
     <application
         android:allowBackup="true"
         android:label="@string/app_name"
@@ -9,7 +10,7 @@
         <!-- Android 7.0 在应用间共享文件 -->
         <provider
             android:name=".base.BaseFileProvider"
-            android:authorities="${applicationId}.base.file.provider"
+            android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -21,5 +22,13 @@
 
     <!-- 震动 -->
     <uses-permission android:name="android.permission.VIBRATE" />
+
+
+    <!-- 连接互联网Internet权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- GPS定位权限 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
 </manifest>

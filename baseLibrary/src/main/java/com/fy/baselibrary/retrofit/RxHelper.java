@@ -1,11 +1,12 @@
 package com.fy.baselibrary.retrofit;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 
 import com.fy.baselibrary.application.BaseActivityBean;
 import com.fy.baselibrary.utils.Constant;
-import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.notify.L;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -28,16 +29,17 @@ public class RxHelper {
     /**
      * 对结果进行预处理
      *
-     * @param <T> 泛型
+     * @param <Item> 泛型
      * @return  ObservableTransformer
      */
-    public static <T> ObservableTransformer<BaseBean<T>, T> handleResult() {
-        return new ObservableTransformer<BaseBean<T>, T>() {
+    public static <Item> ObservableTransformer<BaseBean<Item>, Item> handleResult() {
+        return new ObservableTransformer<BaseBean<Item>, Item>() {
             @Override
-            public ObservableSource<T> apply(@NonNull Observable<BaseBean<T>> upstream) {
-                return upstream.flatMap(new Function<BaseBean<T>, ObservableSource<T>>() {
+            public ObservableSource<Item> apply(@NonNull Observable<BaseBean<Item>> upstream) {
+                return upstream.flatMap(new Function<BaseBean<Item>, ObservableSource<Item>>() {
+                    @SuppressLint("CheckResult")
                     @Override
-                    public ObservableSource<T> apply(@NonNull BaseBean<T> baseBean) throws Exception {
+                    public ObservableSource<Item> apply(@NonNull BaseBean<Item> baseBean) throws Exception {
                         if (baseBean.isSuccess()) {
                             return createData(baseBean.getData());
                         } else {

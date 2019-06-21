@@ -98,8 +98,24 @@ public class ViewHolder extends RecyclerView.ViewHolder {
      * @return
      */
     public ViewHolder setOnClickListener(int viewId, View.OnClickListener listener) {
-        View view = getView(viewId);
-        view.setOnClickListener(listener);
+        if (null != listener){
+            View view = getView(viewId);
+            view.setOnClickListener(listener);
+        }
         return this;
     }
+
+    /**
+     * 设置指定 viewID 的View 的可见性
+     * @param viewId
+     * @param isVisibility
+     * @return
+     */
+    public ViewHolder setVisibility(int viewId, boolean isVisibility) {
+        View view = getView(viewId);
+        view.setVisibility(isVisibility ? View.VISIBLE : View.GONE);
+        return this;
+    }
+
+
 }

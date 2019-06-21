@@ -3,7 +3,7 @@ package com.fy.baselibrary.retrofit.interceptor.cookie;
 import android.annotation.SuppressLint;
 
 import com.fy.baselibrary.utils.Constant;
-import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.notify.L;
 import com.fy.baselibrary.utils.cache.SpfAgent;
 
 import java.io.IOException;

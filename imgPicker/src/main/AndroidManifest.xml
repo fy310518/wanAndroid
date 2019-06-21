@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fy.library.imgpicker">
+    package="com.fy.img.picker">
 
     <application
         android:allowBackup="true"
@@ -8,20 +8,20 @@
 
         <!-- 图片选择器 -->
         <activity
-            android:name="com.fy.img.picker.multiselect.ImgPickerActivity"
+            android:name=".multiselect.ImgPickerActivity"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="com.fy.img.picker.ImgPickerActivity" />
+                <action android:name="${applicationId}.picker.ImgPickerActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <!-- 图片预览 -->
         <activity
-            android:name="com.fy.img.picker.preview.PicturePreviewActivity"
+            android:name=".preview.PicturePreviewActivity"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="com.fy.img.picker.preview.PicturePreviewActivity" />
+                <action android:name="${applicationId}.preview.PicturePreviewActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

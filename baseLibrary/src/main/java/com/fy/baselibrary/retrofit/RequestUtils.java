@@ -1,7 +1,7 @@
 package com.fy.baselibrary.retrofit;
 
 import com.fy.baselibrary.application.ioc.ConfigUtils;
-import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.notify.L;
 import com.fy.baselibrary.utils.cache.ACache;
 
 import java.io.Serializable;

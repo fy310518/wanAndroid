@@ -5,6 +5,7 @@ import android.os.StatFs;
 import android.text.TextUtils;
 
 import com.fy.baselibrary.application.ioc.ConfigUtils;
+import com.fy.baselibrary.utils.notify.L;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -15,13 +16,13 @@ import java.io.FileWriter;
  */
 public class FileUtils {
 
-    public static String cache = "hjy.cache";
+    public static String cache = "fy.cache";
     /** 文件下载目录 */
-    public static String DOWN = "hjy.down";
+    public static String DOWN = "fy.down";
     /** 图片保存目录 */
-    public static String IMG = "hjy.picture";
+    public static String IMG = "fy.picture";
     /** 压缩文件目录 */
-    public static String ZIP = "hjy.zip.temp";
+    public static String ZIP = "fy.zip";
 
     private FileUtils() {
         /* cannot be instantiated */
@@ -197,6 +198,21 @@ public class FileUtils {
     }
 
     /**
+     * 判断文件是否存在
+     */
+    public static boolean fileIsExist(String strFile) {
+        try {
+            File f = new File(strFile);
+            if (!f.exists()) {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * 递归删除文件和文件夹
      *
      * @param file 要删除的根目录
@@ -244,13 +260,13 @@ public class FileUtils {
     /**
      * 根据系统时间、前缀、后缀产生一个文件
      *
-     * @param folder 目标文件所在的 文件夹（目录）
+     * @param folderPath 目标文件所在的 文件夹（目录）
      * @param prefix 目标文件的 前缀 (如：IMG_)
      * @param suffix 目标文件的 后缀名（如：.jpg）
      * @return
      */
-    public static File createFile(String folder, String prefix, String suffix) {
-        folderIsExists(folder, 0);
+    public static File createFile(String folderPath, String prefix, String suffix, int type) {
+        File folder = folderIsExists(folderPath, type);
 
         String name = TimeUtils.Long2DataString(System.currentTimeMillis(), "yyyyMMdd_HHmmss");
         String filename = prefix + name + suffix;

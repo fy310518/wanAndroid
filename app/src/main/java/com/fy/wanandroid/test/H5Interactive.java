@@ -8,12 +8,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.webkit.JavascriptInterface;
@@ -30,7 +27,7 @@ import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.JumpUtils;
-import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.notify.L;
 import com.fy.baselibrary.utils.PhotoUtils;
 import com.fy.baselibrary.utils.notify.T;
 import com.fy.img.picker.ImagePicker;
@@ -199,8 +196,7 @@ public class H5Interactive extends AppCompatActivity implements IBaseActivity {
      * 拍照
      */
     private void takePhoto() {
-        String takeImgFilePath = FileUtils.getPath("/DCIM/camera/", 2);
-        File newFile = FileUtils.createFile(takeImgFilePath, "IMG_", ".png");
+        File newFile = FileUtils.createFile("/DCIM/camera/", "IMG_", ".png", 2);
 
         Intent takePictureIntent = PhotoUtils.takePicture(this, newFile);
         imageUri = takePictureIntent.getParcelableExtra(MediaStore.EXTRA_OUTPUT);
@@ -355,7 +351,7 @@ public class H5Interactive extends AppCompatActivity implements IBaseActivity {
     public void gotoOtherApp(@NonNull String appId) {
 //        if (isAvilible("com.gcstorage.circleapp", getContext())){
 
-        if (AppUtils.isAvailable(appId)) {
+        if (AppUtils.isAvailable(this, appId)) {
             Bundle bundle = new Bundle();
 //            bundle.putString("head_pic", GlobalUserInfo.getHeadpic(StoreApplication.instance)); //头像
 //            bundle.putString("name", GlobalUserInfo.getName(StoreApplication.instance));        //姓名

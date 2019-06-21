@@ -24,7 +24,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 
-import com.fy.library.imgpicker.R;
+import com.fy.img.picker.R;
 
 import java.io.File;
 import java.io.IOException;

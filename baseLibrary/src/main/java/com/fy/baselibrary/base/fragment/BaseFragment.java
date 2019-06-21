@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.fy.baselibrary.statuslayout.LoadSirUtils;
 import com.fy.baselibrary.statuslayout.OnSetStatusView;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
-import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.notify.L;
 import com.fy.baselibrary.utils.cache.ACache;
 
 import butterknife.ButterKnife;
@@ -46,8 +46,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     protected void baseInit() {}
 
-    /** 设置懒加载数据 */
-    protected void lazyData(){}
+    /** 设置懒加载 */
+    protected void lazyData() {}
 
 
     @Override
@@ -86,10 +86,11 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             if (setContentLayout() > 0){
                 mRootView = inflater.inflate(setContentLayout(), container, false);
                 unbinder = ButterKnife.bind(this, mRootView);
-                slManager = LoadSirUtils.initStatusLayout(this, null);
+                slManager = LoadSirUtils.initStatusLayout(this);
             }
 
             baseInit();
+            isViewCreated = true;
         } else {
             ViewGroup parent = (ViewGroup) mRootView.getParent();
             if (null != parent) {
@@ -97,6 +98,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             }
         }
         L.e(TAG, "onCreateView()");
+
         return mRootView;
     }
 
@@ -164,17 +166,15 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!isActivityShow) return;
-//        if (hidden) {// 不在最前端界面显示
-//            onPause();
-//        } else {// 重新显示到最前端中
-//            onResume();
-//        }
-
-        L.e(TAG, "onHiddenChanged()");
+        if (hidden) {// 不在最前端界面显示
+            onPause();
+        } else {// 重新显示到最前端中
+            onResume();
+        }
     }
 
 
-    /** Fragment的View加载完毕的标记 todo 待测 */
+    /** Fragment的View加载完毕的标记 */
     private boolean isViewCreated;
     /** Fragment对用户可见的标记 */
     private boolean isUIVisible;
@@ -193,9 +193,9 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         L.e(TAG, "setUserVisibleHint()");
     }
 
+    // 这里进行双重标记判断,是因为setUserVisibleHint会多次回调,并且会在onCreateView执行前回调,
+    // 必须确保onCreateView加载完毕且页面可见,才加载数据
     private void lazyLoad() {
-        //这里进行双重标记判断,是因为setUserVisibleHint会多次回调,并且会在onCreateView执行前回调,
-        // 必须确保onCreateView加载完毕且页面可见,才加载数据
         if (isViewCreated && isUIVisible) {
             lazyData();
             //数据加载完毕,恢复标记,防止重复加载

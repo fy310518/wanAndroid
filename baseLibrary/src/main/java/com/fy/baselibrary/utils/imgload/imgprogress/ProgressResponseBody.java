@@ -2,7 +2,7 @@ package com.fy.baselibrary.utils.imgload.imgprogress;
 
 import android.support.annotation.Nullable;
 
-import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.notify.L;
 
 import java.io.IOException;
 
@@ -66,6 +66,7 @@ public class ProgressResponseBody extends ResponseBody {
         public long read(Buffer sink, long byteCount) throws IOException {
             long bytesRead = super.read(sink, byteCount);
             long fullLength = responseBody.contentLength();
+
             if (bytesRead == -1) {
                 totalBytesRead = fullLength;
             } else {

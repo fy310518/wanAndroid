@@ -124,8 +124,8 @@ public class ListItemDecoration extends RecyclerView.ItemDecoration {
 
         /**
          * 设置间隔 宽度
-         * （如果参数不为 0，则表示 只设置间隔；为 0，
-         *                则表示按系统配置的 listDivider 设置间隔，和绘制分割线）单位是dp;
+         * （如果参数不为 0，则表示 只设置间隔；
+         *            为 0，则表示按系统配置的 listDivider 设置间隔，和绘制分割线）单位是dp;
          */
         public int mSpace;
 

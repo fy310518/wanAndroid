@@ -88,7 +88,7 @@ public class DownLoadObserver<T> implements Observer<T> {
         downInfo.getReadLength().addAndGet(read);
 
         if (downInfo.getCountLength() <= 0) {
-            onPercent(-1);
+            onPercent(0);
         } else {
             onPercent(100d * downInfo.getReadLength().get() / downInfo.getCountLength());
         }
@@ -105,15 +105,10 @@ public class DownLoadObserver<T> implements Observer<T> {
         if (percent >= 100d) {
             percent = 100d;
             downInfo.setPercent(percent);
-            if (null != loadListener)
-                loadListener.onProgress(downInfo.getReadLength().get(),
-                        downInfo.getCountLength(),
-                        downInfo.getPercent());
-            return;
+        } else {
+            downInfo.setPercent(percent);
         }
 
-
-        downInfo.setPercent(percent);
         if (null != loadListener)
             loadListener.onProgress(downInfo.getReadLength().get(),
                 downInfo.getCountLength(),

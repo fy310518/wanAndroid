@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.retrofit.converter.file.FileConverterFactory;
-import com.fy.baselibrary.retrofit.converter.gson.DES3GsonConverterFactory;
 import com.fy.baselibrary.retrofit.interceptor.RequestHeaderInterceptor;
 import com.fy.baselibrary.retrofit.interceptor.cache.CacheNetworkInterceptor;
 import com.fy.baselibrary.retrofit.interceptor.cache.IsUseCacheInterceptor;
@@ -12,14 +11,12 @@ import com.fy.baselibrary.retrofit.interceptor.cookie.AddCookiesInterceptor;
 import com.fy.baselibrary.retrofit.interceptor.cookie.CacheCookiesInterceptor;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.FileUtils;
-import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.notify.L;
 import com.fy.baselibrary.utils.security.SSLUtil;
 import com.google.gson.GsonBuilder;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
@@ -28,12 +25,8 @@ import javax.net.ssl.SSLSocketFactory;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
-import okhttp3.HttpUrl;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
-import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import okio.Buffer;
 import retrofit2.Retrofit;

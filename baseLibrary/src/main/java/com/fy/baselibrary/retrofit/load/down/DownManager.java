@@ -9,8 +9,7 @@ import com.fy.baselibrary.retrofit.load.LoadService;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.GsonUtils;
-import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.utils.ThreadUtils;
+import com.fy.baselibrary.utils.notify.L;
 import com.fy.baselibrary.utils.TransfmtUtils;
 import com.fy.baselibrary.utils.cache.ACache;
 import com.fy.baselibrary.utils.notify.T;
@@ -24,13 +23,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
@@ -42,7 +38,7 @@ import okhttp3.ResponseBody;
 public class DownManager {
 
     /** 文件下载 默认下载线程数(目前建议是 3，以后谁知道呢 ^_^) */
-    public static final int THREAD_COUNT = 3;
+    public static final int THREAD_COUNT = 1;
 
     /** 最大并行下载量 */
 //    private final int MAX_COUNT = ThreadUtils.maximumPoolSize / THREAD_COUNT;

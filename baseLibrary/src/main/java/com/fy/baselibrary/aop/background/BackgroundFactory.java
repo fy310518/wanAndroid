@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.fy.baselibrary.R;
-import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.notify.L;
 import com.fy.baselibrary.utils.drawable.TintUtils;
 
 import java.lang.reflect.Constructor;

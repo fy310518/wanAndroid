@@ -43,7 +43,7 @@ dependencies {
 
     //PhotoView
     implementation 'com.github.chrisbanes:PhotoView:2.1.3'
-    implementation 'com.bigkoo:convenientbanner:2.0.5'
+    implementation 'com.bigkoo:ConvenientBanner:2.1.4'
 //    ViewPagerTransforms 切换动画
     implementation 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
 

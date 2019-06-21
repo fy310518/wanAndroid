@@ -1,7 +1,6 @@
 package com.fy.baselibrary.retrofit.load.up;
 
-import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.utils.TransfmtUtils;
+import com.fy.baselibrary.utils.notify.L;
 
 import java.io.File;
 import java.io.IOException;

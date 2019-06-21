@@ -1,11 +1,10 @@
 package com.fy.baselibrary.retrofit.interceptor.cache;
 
-import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.notify.L;
 
 import java.io.IOException;
 
 import okhttp3.Interceptor;
-import okhttp3.Request;
 import okhttp3.Response;
 
 /**

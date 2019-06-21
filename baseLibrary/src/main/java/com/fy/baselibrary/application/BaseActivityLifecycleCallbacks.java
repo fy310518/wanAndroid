@@ -23,9 +23,8 @@ import com.fy.baselibrary.statuslayout.OnStatusAdapter;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
-import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.notify.L;
 import com.fy.baselibrary.utils.ResUtils;
-import com.fy.baselibrary.utils.ScreenUtils;
 
 import butterknife.ButterKnife;
 import io.reactivex.subjects.BehaviorSubject;
@@ -41,7 +40,6 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 public class BaseActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
     public static final String TAG = "lifeCycle --> ";
     public static int actNum;
-
     int designWidth;
     OnStatusAdapter adapter;
 
@@ -64,11 +62,14 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 //            return;
 //        }
 
-        ScreenUtils.setCustomDensity(activity, designWidth);
+//        ScreenUtils.setCustomDensity(activity, designWidth);
 
         if (activity instanceof BaseMVPActivity) {
             ((BaseMVPActivity)activity).initPresenter();
         }
+
+        BaseActivityBean activityBean = new BaseActivityBean();
+        activityBean.setSubject(BehaviorSubject.create());
 
         IBaseActivity act = null;
         if (activity instanceof IBaseActivity) {
@@ -92,33 +93,31 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
                     activity.setContentView(act.setView());
                 }
             }
-        }
 
+            //设置 黄油刀 简化 Android 样板代码
+            activityBean.setUnbinder(ButterKnife.bind(activity));
 
-        BaseActivityBean activityBean = new BaseActivityBean();
-        //设置 黄油刀 简化 Android 样板代码
-        activityBean.setUnbinder(ButterKnife.bind(activity));
-        activityBean.setSubject(BehaviorSubject.create());
 
 //        注册屏幕旋转监听
-        if (Constant.isOrientation){
-            BaseOrientoinListener orientoinListener = new BaseOrientoinListener(activity);
-            boolean autoRotateOn = (android.provider.Settings.System.getInt(activity.getContentResolver(),
-                    Settings.System.ACCELEROMETER_ROTATION, 0) == 1);
+            if (Constant.isOrientation){
+                BaseOrientoinListener orientoinListener = new BaseOrientoinListener(activity);
+                boolean autoRotateOn = (android.provider.Settings.System.getInt(activity.getContentResolver(),
+                        Settings.System.ACCELEROMETER_ROTATION, 0) == 1);
 
-            //检查系统是否开启自动旋转
-            if (autoRotateOn) orientoinListener.enable();
-            activityBean.setOrientoinListener(orientoinListener);
+                //检查系统是否开启自动旋转
+                if (autoRotateOn) orientoinListener.enable();
+                activityBean.setOrientoinListener(orientoinListener);
+            }
+
+            //设置 activity 多状态布局
+            if (activity instanceof OnSetStatusView) {
+                StatusLayoutManager slManager = LoadSirUtils.initStatusLayout(activity);
+                activityBean.setSlManager(slManager);
+            }
         }
 
-        //设置 activity 多状态布局
-        if (activity instanceof OnSetStatusView) {
-            StatusLayoutManager slManager = LoadSirUtils.initStatusLayout(activity, adapter);
-            activityBean.setSlManager(slManager);
-        }
 
         activity.getIntent().putExtra("ActivityBean", activityBean);
-
         //基础配置 执行完成，再执行 初始化 activity 操作
         if (null != act) act.initData(activity, savedInstanceState);
     }
@@ -130,12 +129,14 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
     @Override
     public void onActivityResumed(Activity activity) {
-        L.e(TAG + activity.getClass().getSimpleName(), "--Resume()");
+        String simpleName = activity.getClass().getSimpleName();
+        L.e(TAG + simpleName, "--Resume()");
     }
 
     @Override
     public void onActivityPaused(Activity activity) {
-        L.e(TAG + activity.getClass().getSimpleName(), "--Pause()");
+        String simpleName = activity.getClass().getSimpleName();
+        L.e(TAG + simpleName, "--Pause()");
     }
 
     @Override
@@ -226,6 +227,5 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
         return isrun;
     }
-
 
 }

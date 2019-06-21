@@ -27,6 +27,9 @@ public class Validator {
      * 正则表达式：验证手机号
      */
     public static final String REGEX_MOBILE = "^((13[0-9])|(14[0-9])|(15[0-9])|(18[0-9])|(17[0-9]))\\d{8}$";
+    /** 验证 电话号码 */
+    public static final String REGEX_PHONE1 = "^[0][1-9]{2,3}-[0-9]{5,10}$";
+    public static final String REGEX_PHONE2 = "^[1-9]{1}[0-9]{5,8}$";
 
     /**
      * 正则表达式：验证邮箱
@@ -81,6 +84,15 @@ public class Validator {
      */
     public static boolean isMobile(String mobile) {
         return Pattern.matches(REGEX_MOBILE, mobile);
+    }
+
+    /**
+     * 校验电话号码
+     * @param phone
+     * @return 校验通过返回true，否则返回false
+     */
+    public static boolean isPhone(String phone) {
+        return Pattern.matches(REGEX_PHONE1, phone) || Pattern.matches(REGEX_PHONE2, phone);
     }
 
     /**

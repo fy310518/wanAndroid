@@ -1,6 +1,6 @@
 package com.fy.baselibrary.retrofit.converter.gson;
 
-import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.notify.L;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;

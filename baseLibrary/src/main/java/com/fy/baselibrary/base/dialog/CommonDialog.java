@@ -20,8 +20,11 @@ import com.fy.baselibrary.R;
 import com.fy.baselibrary.base.PopupDismissListner;
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.utils.DensityUtils;
-import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.notify.L;
 import com.fy.baselibrary.utils.ScreenUtils;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 
 /**
  * 应用 所有dialog 的父类
@@ -54,8 +57,8 @@ public abstract class CommonDialog extends DialogFragment {
     @LayoutRes
     protected int layoutId;
 
-    /** 是否拦截返回按钮 */
-    protected boolean isKeyBack = false;
+    /** 是否 不拦截返回按钮  [true 不拦截，点击返回键 dismiss dialog]*/
+    protected boolean isKeyBack = true;
     /** 点击window外的区域 是否消失 */
     protected boolean isHide = false;
     /** 灰度深浅 */
@@ -254,16 +257,29 @@ public abstract class CommonDialog extends DialogFragment {
         return this;
     }
 
-    /**
-     * 自定义show
-     * @param manager
-     */
-    public void show(FragmentManager manager) {
+    //重写 fragmentDialog show 方法
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        try {
+            Class c=Class.forName("android.support.v4.app.DialogFragment");
+            Constructor con = c.getConstructor();
+            Object obj = con.newInstance();
+            Field dismissed = c.getDeclaredField("mDismissed");
+            dismissed.setAccessible(true);
+            dismissed.set(obj,false);
+            Field shownByMe = c.getDeclaredField("mShownByMe");
+            shownByMe.setAccessible(true);
+            shownByMe.set(obj,false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         FragmentTransaction ft = manager.beginTransaction();
         if (this.isAdded()) {
-            ft.remove(this).commit();
+            ft.remove(this).commitAllowingStateLoss();
         }
-        ft.add(this, String.valueOf(System.currentTimeMillis()));
+
+        ft.add(this, tag);
         ft.commitAllowingStateLoss();
     }
 

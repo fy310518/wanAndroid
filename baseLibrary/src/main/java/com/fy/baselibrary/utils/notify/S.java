@@ -1,4 +1,4 @@
-package com.fy.baselibrary.utils;
+package com.fy.baselibrary.utils.notify;
 
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;

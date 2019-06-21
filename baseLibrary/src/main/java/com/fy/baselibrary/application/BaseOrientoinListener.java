@@ -3,10 +3,7 @@ package com.fy.baselibrary.application;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.view.OrientationEventListener;
-
-import com.fy.baselibrary.utils.L;
 
 /**
  * 监听系统 屏幕方向

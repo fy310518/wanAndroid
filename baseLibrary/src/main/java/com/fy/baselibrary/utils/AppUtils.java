@@ -2,19 +2,22 @@ package com.fy.baselibrary.utils;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 
 import com.fy.baselibrary.application.ioc.ConfigUtils;
+import com.fy.baselibrary.utils.notify.L;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -100,7 +103,22 @@ public class AppUtils {
         return info.packageName;
     }
 
+    /**
+     * 当前的包是否存在
+     * @param pckName 包名
+     * @return true/false
+     */
+    public static boolean isPackageExist(Context context, String pckName) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            PackageInfo pckInfo = packageManager.getPackageInfo(pckName, 0);
 
+            if (null != pckInfo) return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            L.e("TDvice", e.getMessage());
+        }
+        return false;
+    }
 
     private static boolean isSpace(final String s) {
         if (s == null) return true;
@@ -138,89 +156,7 @@ public class AppUtils {
      * 获取 清单文件注册的 文件共享签名认证
      */
     public static String getFileProviderName() {
-        return getLocalPackageName() + ".base.file.provider";
-    }
-
-
-    /**
-     * 根据安装包路径获取包名
-     * @param context
-     * @param filePath 安装包路径
-     * @return
-     */
-    public static String getPackageName(Context context, String filePath) {
-        PackageManager packageManager = context.getPackageManager();
-        PackageInfo info = packageManager.getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES);
-        if (info != null) {
-            ApplicationInfo appInfo = info.applicationInfo;
-            return appInfo.packageName;  //得到安装包名称
-        }
-        return null;
-    }
-
-    /**
-     * 根据安装包路径获取 版本号
-     * @param context
-     * @param filePath
-     * @return
-     */
-    public static int getVersionCode(Context context, String filePath){
-        PackageManager packageManager = context.getPackageManager();
-        PackageInfo info = packageManager.getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES);
-        if (info != null) {
-            return info.versionCode;
-        }
-        return 0;
-    }
-
-    /**
-     * 获取指定 应用Id 的 应用图标 Drawable
-     * @param context
-     * @param packageName 应用id
-     */
-    public static Drawable getAppLogo(Context context, String packageName) {
-        PackageManager packageManager = null;
-        ApplicationInfo applicationInfo = null;
-        try {
-            packageManager = context.getApplicationContext().getPackageManager();
-            applicationInfo = packageManager.getApplicationInfo(packageName, 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            applicationInfo = null;
-        }
-        return packageManager.getApplicationIcon(applicationInfo);
-    }
-
-    /**
-     * 检查是否安装了某应用
-     * @param packageName
-     * @return
-     */
-    public static boolean isAvailable(String packageName) {
-        final PackageManager packageManager = ConfigUtils.getAppCtx().getPackageManager();
-        // 获取所有已安装程序的包信息
-        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);
-        for (int i = 0; i < pinfo.size(); i++) {
-            if (pinfo.get(i).packageName.equalsIgnoreCase(packageName))
-                return true;
-        }
-        return false;
-    }
-
-    /**
-     * 当前的包是否存在
-     * @param pckName 包名
-     * @return true/false
-     */
-    public static boolean isPackageExist(Context context, String pckName) {
-        try {
-            PackageManager packageManager = context.getPackageManager();
-            PackageInfo pckInfo = packageManager.getPackageInfo(pckName, 0);
-
-            if (null != pckInfo) return true;
-        } catch (PackageManager.NameNotFoundException e) {
-            L.e("TDvice", e.getMessage());
-        }
-        return false;
+        return getLocalPackageName() + ".provider";
     }
 
     /**
@@ -300,5 +236,75 @@ public class AppUtils {
         return null;
     }
 
+    /**
+     * 获取栈顶 activity 的 ComponentName 对象
+     * @param context
+     * @return
+     */
+    public static ComponentName getTopActivity(Context context) {
+        final ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityInfo aInfo = null;
+        List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(1);
+        if (list.size() != 0) {
+            ActivityManager.RunningTaskInfo topRunningTask = list.get(0);
+            return topRunningTask.topActivity;
+        } else {
+            return null;
+        }
+    }
 
+    /**
+     * 根据安装包路径获取包名
+     * @param context
+     * @param filePath 安装包路径
+     * @return
+     */
+    public static String getPackageName(Context context, String filePath) {
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo info = packageManager.getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES);
+        if (info != null) {
+            ApplicationInfo appInfo = info.applicationInfo;
+            return appInfo.packageName;  //得到安装包名称
+        }
+        return null;
+    }
+
+    /**
+     * 根据安装包路径获取 版本号
+     * @param context
+     * @param filePath
+     * @return
+     */
+    public static int getVersionCode(Context context, String filePath){
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo info = packageManager.getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES);
+        if (info != null) {
+            return info.versionCode;
+        }
+        return 0;
+    }
+
+    /**
+     * 检查手机上是否安装了指定的软件
+     * @param context
+     * @param packageName 包名
+     * @return
+     */
+    public static boolean isAvailable(Context context, String packageName) {
+        // 获取packagemanager
+        final PackageManager packageManager = context.getPackageManager();
+        // 获取所有已安装程序的包信息
+        List<PackageInfo> packageInfos = packageManager.getInstalledPackages(0);
+        // 用于存储所有已安装程序的包名
+        List<String> packageNames = new ArrayList<>();
+        // 从pinfo中将包名字逐一取出，压入pName list中
+        if (packageInfos != null) {
+            for (int i = 0; i < packageInfos.size(); i++) {
+                String packName = packageInfos.get(i).packageName;
+                packageNames.add(packName);
+            }
+        }
+        // 判断packageNames中是否有目标程序的包名，有TRUE，没有FALSE
+        return packageNames.contains(packageName);
+    }
 }

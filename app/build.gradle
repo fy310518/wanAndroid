@@ -65,7 +65,7 @@ dependencies {
 
     annotationProcessor "com.jakewharton:butterknife-compiler:$var.butterknife"
 
-    api 'com.bigkoo:convenientbanner:2.0.5'
+    implementation 'com.bigkoo:ConvenientBanner:2.1.4'
     implementation ('com.fanjun:keeplive:1.1.10'){
         exclude group: 'com.android.support'
     }

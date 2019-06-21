@@ -4,8 +4,8 @@ import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.base.dialog.CommonDialog;
 import com.fy.baselibrary.statuslayout.OnSetStatusView;
 import com.fy.baselibrary.utils.Constant;
-import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.net.NetUtils;
+import com.fy.baselibrary.utils.notify.L;
 import com.fy.baselibrary.utils.notify.T;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializer;
@@ -45,10 +45,8 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
      * @param pDialog
      */
     public RequestBaseObserver(IProgressDialog pDialog) {
-        if (null != pDialog){
-            this.context = pDialog.obj;
-            init(pDialog);
-        }
+        this.context = pDialog.obj;
+        init(pDialog);
     }
 
     public RequestBaseObserver(Object context) {
@@ -80,7 +78,7 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
     public void onNext(V t) {
         L.e("net", "onNext()");
         onSuccess(t);
-        successUpdataLayout();
+        updataLayout(Constant.LAYOUT_CONTENT_ID);
     }
 
     @Override
@@ -158,13 +156,6 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
      * @param t 请求返回的数据
      */
     protected abstract void onSuccess(V t);
-
-    /**
-     * 设置显示 内容布局
-     */
-    private void successUpdataLayout(){
-        updataLayout(Constant.LAYOUT_CONTENT_ID);
-    }
 
     /**
      * 更新activity 界面（多状态视图）

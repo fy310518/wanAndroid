@@ -85,6 +85,4 @@
         <item name="android:windowExitAnimation">@anim/push_scale_right_out</item>
     </style>
 
-
-
 </resources>

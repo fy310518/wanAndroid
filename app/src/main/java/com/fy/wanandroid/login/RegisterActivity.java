@@ -16,7 +16,7 @@ import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.observer.IProgressDialog;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
-import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.notify.L;
 import com.fy.baselibrary.utils.cache.ACache;
 import com.fy.baselibrary.utils.cache.SpfAgent;
 import com.fy.wanandroid.R;

@@ -4,8 +4,11 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.bigkoo.convenientbanner.ConvenientBanner;
+import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
+import com.bigkoo.convenientbanner.holder.Holder;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.fy.baselibrary.base.fragment.BaseFragment;
 import com.fy.baselibrary.retrofit.RequestUtils;
@@ -15,6 +18,7 @@ import com.fy.baselibrary.utils.DensityUtils;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.widget.refresh.EasyPullLayout;
 import com.fy.baselibrary.widget.refresh.OnRefreshLoadMoreListener;
+import com.fy.img.picker.preview.PicturePreviewActivity;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.entity.ArticleBean;
 import com.fy.wanandroid.entity.BannerBean;
@@ -179,7 +183,18 @@ public class FragmentOne extends BaseFragment {
         bannerView.setLayoutParams(params);
 
         //开始自动翻页
-        bannerView.setPages(LocalImageHolderView::new, bannerBeans)
+//        bannerView.setPages(LocalImageHolderView::new, bannerBeans)
+        bannerView.setPages(new CBViewHolderCreator() {
+            @Override
+            public Holder createHolder(View itemView) {
+                return new LocalImageHolderView(itemView);
+            }
+
+            @Override
+            public int getLayoutId() {
+                return R.layout.item_fm_one_banner;
+            }
+        }, bannerBeans)
                 //设置指示器是否可见
 //                .setPointViewVisible(true)
                 //设置自动切换（同时设置了切换时间间隔）
@@ -198,9 +213,9 @@ public class FragmentOne extends BaseFragment {
                         bundle.putSerializable("Bookmark", new Bookmark(bannerBean.getTitle(), bannerBean.getUrl()));
                         JumpUtils.jump(FragmentOne.this, WebViewActivity.class, bundle);
                     }
-                })
+                });
                 //设置手动影响（设置了该项无法手动切换）
-                .setManualPageable(true);
+//                .setManualPageable(true);
 
         //设置翻页的效果，不需要翻页效果可用不设; 集成特效之后会有白屏现象，新版已经分离，如果要集成特效的例子可以看Demo的点击响应。
 //        setPageTransformer(Transformer.DefaultTransformer);

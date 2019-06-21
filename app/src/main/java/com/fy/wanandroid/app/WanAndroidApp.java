@@ -12,14 +12,10 @@ import com.fanjun.keeplive.config.KeepLiveService;
 import com.fy.baselibrary.application.BaseActivityLifecycleCallbacks;
 import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.statuslayout.OnStatusAdapter;
-import com.fy.baselibrary.utils.L;
-import com.fy.baselibrary.utils.NightModeUtils;
+import com.fy.baselibrary.utils.notify.L;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
-import com.fy.baselibrary.utils.notify.T;
 import com.fy.wanandroid.R;
-import com.fy.wanandroid.app.blockcanary.AppBlockCanaryContext;
-import com.github.moduth.blockcanary.BlockCanary;
 
 /**
  * Created by fangs on 2018/7/24 17:36.

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import com.ToxicBakery.viewpager.transforms.AccordionTransformer;
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
+import com.bigkoo.convenientbanner.holder.Holder;
+import com.bigkoo.convenientbanner.listener.OnPageChangeListener;
 import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.utils.JumpUtils;
@@ -23,7 +26,7 @@ import com.fy.img.picker.ImagePicker;
 import com.fy.img.picker.PickerConfig;
 import com.fy.img.picker.bean.ImageFolder;
 import com.fy.img.picker.bean.ImageItem;
-import com.fy.library.imgpicker.R;
+import com.fy.img.picker.R;
 
 import java.util.List;
 
@@ -89,33 +92,38 @@ public class PicturePreviewActivity extends AppCompatActivity implements IBaseAc
         tvMenu.setVisibility(View.INVISIBLE);
 
         //本地图片例子 new LocalImageHolderView(), imgFolder.images
-        viewPager.setPages(new CBViewHolderCreator<LocalImageHolderView>() {
+        viewPager.setPages(new CBViewHolderCreator() {
             @Override
-            public LocalImageHolderView createHolder() {
-                return new LocalImageHolderView(PicturePreviewActivity.this);
+            public Holder createHolder(View itemView) {
+                return new LocalImageHolderView(itemView, PicturePreviewActivity.this);
+            }
+
+            @Override
+            public int getLayoutId() {
+                return R.layout.viewpager_preview;
             }
         }, imgFolder.images)
-                .setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                    @Override
-                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                    }
+        .setOnPageChangeListener(new OnPageChangeListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
 
-                    @Override
-                    public void onPageSelected(int position) {
-                        mCurrentPosition = position;
-                        original_checkbox.setChecked(imgFolder.images.get(position).isSelect);
-                        tvTitle.setText(ResUtils.getReplaceStr(R.string.preview_image_count, position + 1, imgFolder.images.size()));
-                    }
+            }
 
-                    @Override
-                    public void onPageScrollStateChanged(int state) {
-                    }
-                })
-                .setPageTransformer(new AccordionTransformer())
-                .setcurrentitem(mCurrentPosition);
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mCurrentPosition = position;
+                original_checkbox.setChecked(imgFolder.images.get(position).isSelect);
+                tvTitle.setText(ResUtils.getReplaceStr(R.string.preview_image_count, position + 1, imgFolder.images.size()));
+            }
+        })
+                .setFirstItemPos(mCurrentPosition);
+//                .setPageTransformer(new AccordionTransformer())
     }
-
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
     /**
      * 获取传递的数据
@@ -124,8 +132,11 @@ public class PicturePreviewActivity extends AppCompatActivity implements IBaseAc
         Bundle bundle = getIntent().getExtras();
         mCurrentPosition = bundle.getInt(PickerConfig.KEY_CURRENT_POSITION, 0);
         max = bundle.getInt(PickerConfig.KEY_MAX_COUNT, -1);
+
         if (max > 0 && max == 1) {
             original_checkbox.setVisibility(View.GONE);
+        } else if(max == -1){
+            pickerBottom.setVisibility(View.GONE);
         }
 
         imgFolder = (ImageFolder) bundle.getSerializable(PickerConfig.KEY_IMG_FOLDER);
@@ -163,17 +174,17 @@ public class PicturePreviewActivity extends AppCompatActivity implements IBaseAc
     }
 
     /**
-     * 隐藏 或显示 状态栏，标题栏，底部栏
+     * 隐藏 或显示 标题栏，底部栏
      */
     public void toggleStateChange() {
         if (currentState == PickerConfig.STATE_SHOW_MENU) {
             currentState = PickerConfig.STATE_FULLSCREEN;
-            pickerBottom.setVisibility(View.GONE);
             rlHead.setVisibility(View.GONE);
+            if(max != -1)pickerBottom.setVisibility(View.GONE);
         } else {
             currentState = PickerConfig.STATE_SHOW_MENU;
-            pickerBottom.setVisibility(View.VISIBLE);
             rlHead.setVisibility(View.VISIBLE);
+            if(max != -1)pickerBottom.setVisibility(View.VISIBLE);
         }
     }
 }

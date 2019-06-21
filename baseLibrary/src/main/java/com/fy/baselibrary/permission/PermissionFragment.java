@@ -12,11 +12,11 @@ import android.text.TextUtils;
 
 import com.fy.baselibrary.R;
 import com.fy.baselibrary.aop.annotation.NeedPermission;
-import com.fy.baselibrary.base.fragment.BaseFragment;
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.base.dialog.CommonDialog;
 import com.fy.baselibrary.base.dialog.DialogConvertListener;
 import com.fy.baselibrary.base.dialog.NiceDialog;
+import com.fy.baselibrary.base.fragment.BaseFragment;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.drawable.ShapeBuilder;
 
@@ -60,7 +60,7 @@ public class PermissionFragment extends BaseFragment {
 
     @Override
     protected void baseInit() {
-        mFirstRefuseMessage = ResUtils.getStr(R.string.default_always_message);
+        mFirstRefuseMessage = getString(R.string.default_always_message);
 
         Bundle bundle = getArguments();
         if (null != bundle) {
@@ -184,7 +184,7 @@ public class PermissionFragment extends BaseFragment {
                     }
                 })
                 .setWidthPercent(CommonDialog.WidthPercent)
-                .show(getFragmentManager());
+                .show(getFragmentManager(), "PermissionFragment");
     }
 
     /**

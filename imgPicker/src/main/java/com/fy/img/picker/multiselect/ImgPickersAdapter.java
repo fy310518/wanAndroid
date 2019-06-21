@@ -22,7 +22,7 @@ import com.fy.baselibrary.utils.notify.T;
 import com.fy.img.picker.ImagePicker;
 import com.fy.img.picker.bean.ImageFolder;
 import com.fy.img.picker.bean.ImageItem;
-import com.fy.library.imgpicker.R;
+import com.fy.img.picker.R;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -65,8 +65,7 @@ public class ImgPickersAdapter extends MultiCommonAdapter<ImageItem> {
     public void convert(ViewHolder holder, ImageItem imgItem, int position) {
         if (position == 0 && imgItem.isShowCamera() == 0){//判断 是否显示 拍照按钮
             holder.setOnClickListener(R.id.camera, v -> {
-                String takeImgFilePath = FileUtils.getPath("/DCIM/camera/", 2);
-                File newFile = FileUtils.createFile(takeImgFilePath, "IMG_", ".png");
+                File newFile = FileUtils.createFile("/DCIM/camera/", "IMG_", ".png", 2);
 
                 ImagePicker.newFilePath = newFile.getPath();
                 //拍照

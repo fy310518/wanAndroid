@@ -12,7 +12,7 @@ public class ImagePicker {
     /**
      * 图片选择 请求码
      */
-    public static final int Picture_Selection = 10001;
+    public static final int Picture_Selection = 1001;
     /**
      * 图片预览 请求码
      */

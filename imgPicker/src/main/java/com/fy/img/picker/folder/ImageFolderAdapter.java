@@ -11,7 +11,7 @@ import com.fy.baselibrary.base.CommonAdapter;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.imgload.ImgLoadUtils;
 import com.fy.img.picker.bean.ImageFolder;
-import com.fy.library.imgpicker.R;
+import com.fy.img.picker.R;
 
 import java.util.List;
 

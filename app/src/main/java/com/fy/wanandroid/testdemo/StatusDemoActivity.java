@@ -4,12 +4,9 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.NotificationManager;
-import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -40,8 +37,7 @@ import com.fy.baselibrary.statuslayout.OnSetStatusView;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.Constant;
-import com.fy.baselibrary.utils.FileUtils;
-import com.fy.baselibrary.utils.L;
+import com.fy.baselibrary.utils.notify.L;
 import com.fy.baselibrary.utils.notify.NotifyUtils;
 import com.fy.baselibrary.utils.imgload.imgprogress.ProgressInterceptor;
 import com.fy.baselibrary.utils.imgload.imgprogress.ProgressListener;
@@ -50,7 +46,6 @@ import com.fy.wanandroid.entity.AppUpdateEntity;
 import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -128,7 +123,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                         .setChannel(1, "chat")
                         .setIcon(R.mipmap.ic_launcher, R.color.appHeadBg)
                         .setLayout(remoteViews)
-                        .createManager(this, null);
+                        .createManager(this);
 
                 int skip = 100;
                 Observable.interval(0, 1, TimeUnit.SECONDS)
@@ -158,7 +153,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                         .setIcon(R.mipmap.ic_launcher, R.color.appHeadBg)
                         .setMsgTitle("收到一条订阅消息")
                         .setMsgContent("地铁沿线30万商铺抢购中！")
-                        .createManager(this, null)
+                        .createManager(this)
                         .sendNotify();
                 checkUpdate();
                 break;

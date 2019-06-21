@@ -166,6 +166,14 @@ public class SpfAgent {
         return getSpf(fileName).getBoolean(key, false);
     }
 
+    /**
+     * 同上
+     * @return
+     */
+    public static boolean getBoolean(String fileName, String key, boolean def){
+        return getSpf(fileName).getBoolean(key, def);
+    }
+
 
     /**
      * 获取所有键值对

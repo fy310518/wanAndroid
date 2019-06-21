@@ -10,14 +10,14 @@
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/subImageView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <LinearLayout
         android:id="@+id/llProgress"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="#dddddd"
+        android:background="#80dddddd"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -25,6 +25,7 @@
             android:id="@+id/imgLoad"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:layout_gravity="center"
             app:srcCompat="@drawable/vector_load_success"
             tools:ignore="VectorDrawableCompat" />
 
@@ -32,9 +33,9 @@
             android:id="@+id/tvLoadProgress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_small"
             android:gravity="center"
-            android:text="ss"
+            android:padding="@dimen/spacing_small"
+            android:text=""
             android:textColor="@color/txtSecondColor"
             android:textSize="@dimen/txt_small" />
     </LinearLayout>

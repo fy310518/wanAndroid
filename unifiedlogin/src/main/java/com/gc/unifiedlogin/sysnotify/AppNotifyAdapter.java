@@ -60,7 +60,7 @@ public class AppNotifyAdapter extends RvCommonAdapter<MsgData> {
                     bundle.putString("url", pagepath);
                     JumpUtils.jump((Activity) mContext, "com.gcstrage.h5App", bundle);
                 } else {
-                    if (AppUtils.isAvailable(pagepath)) {
+                    if (AppUtils.isAvailable(mContext, pagepath)) {
                         JumpUtils.jumpUrl((Activity) mContext, getGotoAppUrl(pagepath), null);
                     } else {
                         T.showLong("应用未安装");

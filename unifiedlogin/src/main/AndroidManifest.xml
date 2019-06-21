@@ -21,7 +21,6 @@
             android:theme="@style/startUpTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="${applicationId}.startactivity.StartActivity" />
             </intent-filter>
@@ -34,6 +33,18 @@
             <intent-filter>
                 <action android:name="${applicationId}.login.LoginActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <!--URL启动配置-->
+            <intent-filter>
+                <data
+                    android:host="pull.gc.circle"
+                    android:path="/conn/start"
+                    android:scheme="gc" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
 
@@ -54,6 +65,11 @@
 
 
         <activity android:name=".sysnotify.SysNotifyActivity"
+            android:label="@string/notifyList"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".sysnotify.H5AppActivity"
             android:label="@string/notifyList"
             android:screenOrientation="portrait" />
 

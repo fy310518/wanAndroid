@@ -9,13 +9,13 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
@@ -38,16 +38,10 @@ public class NotifyUtils {
 
     /**
      * 创建一个通知渠道(此方法一般在 发送通知消息前执行, 或者在 启动页 等待的时间执行)
-     * 8.0以上系统 如果需要打开/关闭 通知 震动，声音，需要删除之前的通知渠道，重新创建一个通知渠道，并更换渠道ID（本方法 channelId）
      * @param ctx
      * @param channelId     渠道id （创建通知渠道的 channelId 和 发送通知时候的渠道名称 channelName 一致）
      * @param channelName   渠道名称
-     * @param importance    渠道重要级别 (8.0 以后版本仅需要在通知渠道处的 importance 处把重要等级调至 IMPORTANCE_HIGH 即可实现悬挂通知
-     *                      IMPORTANCE_MIN
-     *                      IMPORTANCE_LOW
-     *                      NotificationManager.IMPORTANCE_DEFAULT
-     *                      IMPORTANCE_HIGH 四种级别)
-     *
+     * @param importance    渠道重要级别 (NotificationManager.IMPORTANCE_DEFAULT)
      * @param isVibrate     是否震动
      * @param hasSound      是否有声音
      */
@@ -60,16 +54,15 @@ public class NotifyUtils {
             if (isVibrate) {
                 // 设置通知出现时的震动（如果 android 设备支持的话）
                 channel.enableVibration(true);
-                channel.setVibrationPattern(new long[]{1000, 500, 2000});
+                channel.setVibrationPattern(new long[]{100, 50, 200});
             } else {
                 // 设置通知出现时不震动
                 channel.enableVibration(false);
                 channel.setVibrationPattern(new long[]{0});
             }
+            channel.enableLights(true);//呼吸灯
             if (!hasSound)
                 channel.setSound(null, null);//没有声音
-
-            channel.enableLights(true);//呼吸灯
 
             NotificationManager notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
             assert notificationManager != null;
@@ -82,7 +75,7 @@ public class NotifyUtils {
      * @param act
      * @param channelName
      */
-    private static void manageNotificationChannel(Activity act, String channelName){
+    private static void manageNotificationChannel(Context act, String channelName){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager manager = (NotificationManager) act.getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationChannel channel = manager.getNotificationChannel(channelName);
@@ -91,44 +84,33 @@ public class NotifyUtils {
                 Bundle bundle = new Bundle();
                 bundle.putString(Settings.EXTRA_APP_PACKAGE, AppUtils.getLocalPackageName());
                 bundle.putString(Settings.EXTRA_CHANNEL_ID, channelName);
-                JumpUtils.jump(act, Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS, bundle);
+
+                Intent intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS);
+                intent.putExtras(bundle);
+                act.startActivity(intent);
 
                 T.showLong("请手动将通知打开");
             }
         }
     }
 
-    private static PendingIntent getDefaultIntent(Activity act, int flags) {
-        PendingIntent pendingIntent = PendingIntent.getActivity(act, 1, new Intent(), flags);
-        return pendingIntent;
-    }
-
     /**
      * 配置 NotificationCompat.Builder
      * @param act
-     * @param actClass       点击通知 跳转的 目标activity（可空）
      * @param fyBuild        通知关键数据 包装类
      */
-    public static NotificationCompat.Builder createNotifyBuilder(Activity act, Class actClass, FyBuild fyBuild) {
+    public static NotificationCompat.Builder createNotifyBuilder(Context act, FyBuild fyBuild) {
         manageNotificationChannel(act, fyBuild.channelName);
 
-        PendingIntent pendingIntent;
-        if (null != actClass) {
-            Intent intent = new Intent(act, actClass);
-            pendingIntent = PendingIntent.getActivity(act, 1, intent, 0);
-        } else {
-            pendingIntent = getDefaultIntent(act, Notification.FLAG_AUTO_CANCEL);
-        }
-
         NotificationCompat.Builder builder = new NotificationCompat.Builder(act, fyBuild.channelName)
-                .setContentIntent(pendingIntent) //设置通知栏点击意图
+                .setContentIntent(fyBuild.pendingIntent) //设置通知栏点击意图
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(fyBuild.icon)
                 .setLargeIcon(BitmapFactory.decodeResource(act.getResources(), fyBuild.icon))
                 .setColor(ResUtils.getColor(fyBuild.iconBgColor))
                 .setPriority(fyBuild.priority)//设置通知消息优先级
                 .setAutoCancel(true)//设置点击通知栏消息后，通知消息自动消失
-                .setSound(Uri.fromFile(new File(fyBuild.soundFilePath))) //通知栏消息提示音
+//                .setSound(Uri.fromFile(new File(fyBuild.soundFilePath))) //通知栏消息提示音
 //                .setVibrate(new long[]{0, 1000, 1000, 1000}) //通知栏消息震动
 //                .setLights(Color.GREEN, 1000, 2000) //通知栏消息闪灯(亮一秒间隔两秒再亮)
                 .setDefaults(fyBuild.defaults);
@@ -145,7 +127,7 @@ public class NotifyUtils {
             // requestCode是0的时候三星手机点击通知栏通知不起作用
             // 关联PendingIntent
             builder.setVisibility(Notification.VISIBILITY_PUBLIC)
-                    .setFullScreenIntent(pendingIntent, true);// 横幅
+                    .setFullScreenIntent(fyBuild.pendingIntent, true);// 横幅
         }
 
         return builder;
@@ -190,6 +172,8 @@ public class NotifyUtils {
         /** 自定义布局  */
         private RemoteViews remoteViews;
 
+        PendingIntent pendingIntent;
+
         private NotificationCompat.Builder mBuilder;
         private NotificationManager manager;
 
@@ -201,9 +185,17 @@ public class NotifyUtils {
         public void sendNotify(){
             assert mBuilder != null;
             Notification notification = mBuilder.build();
+            notification.contentIntent = this.pendingIntent;
             assert manager != null;
             manager.notify(channelId, notification);
         }
+
+        /** 取消通知 */
+        public void dismissNotify(){
+            assert mBuilder != null;
+            manager.cancel(channelId);
+        }
+
 
         /**
          * 刷新通知
@@ -260,15 +252,38 @@ public class NotifyUtils {
             return this;
         }
 
+        public NotificationCompat.Builder getFBuilder() {
+            return mBuilder;
+        }
+
+        /**
+         * 最后构建 NotificationCompat.Builder 和 NotificationManager
+         * @param act
+         */
+        public FyBuild createManager(Context act) {
+            this.pendingIntent = PendingIntent.getActivity(act, channelId, new Intent(), PendingIntent.FLAG_CANCEL_CURRENT);
+
+            mBuilder = NotifyUtils.createNotifyBuilder(act, this);
+            manager = (NotificationManager) act.getSystemService(Context.NOTIFICATION_SERVICE);
+            return this;
+        }
+
         /**
          * 最后构建 NotificationCompat.Builder 和 NotificationManager
          * @param act
          * @param actClass
+         * @param bundle
+         * @return
          */
-        public FyBuild createManager(Activity act, Class actClass) {
-            mBuilder = NotifyUtils.createNotifyBuilder(act, actClass, this);
+        public FyBuild createManager(Context act, @NonNull Class actClass, Bundle bundle) {
+            Intent intent = new Intent(act, actClass);
+            if (null != bundle)intent.putExtras(bundle);
+            this.pendingIntent = PendingIntent.getActivity(act, channelId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+            mBuilder = NotifyUtils.createNotifyBuilder(act, this);
             manager = (NotificationManager) act.getSystemService(Context.NOTIFICATION_SERVICE);
             return this;
         }
+
     }
 }

@@ -34,7 +34,7 @@ import com.fy.img.picker.bean.ImageItem;
 import com.fy.img.picker.folder.ImageDataSource;
 import com.fy.img.picker.folder.ImageFolderAdapter;
 import com.fy.img.picker.preview.PicturePreviewActivity;
-import com.fy.library.imgpicker.R;
+import com.fy.img.picker.R;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -60,7 +60,8 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
     private ImgPickersAdapter mImgListAdapter;
 
     private CommonPopupWindow popupWindow;//图片文件夹的 弹窗
-    private ImageFolderAdapter mImageFolderAdapter;
+    private List<ImageFolder> imageFolderArray = new ArrayList<>();
+    private int position = 0;//弹窗选中
 
 
     @Override
@@ -140,7 +141,6 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
 
     //初始化图片文件夹 相关
     private void initImgFolder(ImageFolder imageFolder) {
-        mImageFolderAdapter = new ImageFolderAdapter(this, new ArrayList<>());
         new ImageDataSource(this, null, imageFolder, new ImageDataSource.OnImagesLoadedListener() {
             @Override
             public void onImagesLoaded(List<ImageFolder> imageFolders) {
@@ -157,7 +157,12 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
                             if (folderItem.images.size() > 0){
                                 ImageItem imageItem = folderItem.images.get(0);
                                 //使 刚刚拍照的图片为选中状态
-                                if (imageItem.path.equals(ImagePicker.newFilePath)) imageItem.isSelect = true;
+                                if (imageItem.path.equals(ImagePicker.newFilePath)) {
+                                    imageItem.isSelect = true;
+                                    List<ImageItem> selectedData = mImgListAdapter.getSelectedImages();
+                                    selectedData.add(imageItem);
+                                    setViewStutas(selectedData.size());
+                                }
                                 ImagePicker.newFilePath = "";
                             }
 
@@ -168,8 +173,10 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
                     imgFolder = imageFolders.get(0);
                     mImgListAdapter.refreshData(imgFolder.images);
                 }
-                mImageFolderAdapter.setData(imageFolders);
-                mImageFolderAdapter.setSelectIndex(0, isTAKE_picture);
+
+                if (imageFolders.size() > 0){
+                    imageFolderArray.addAll(imageFolders);
+                }
             }
         });
     }
@@ -180,7 +187,7 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
         if (i == R.id.btn_dir) {//全部图片 按钮
             if (null != popupWindow && popupWindow.isShowing()) return;
             //计算popupWindow 高度（listview Item数量  * （Item高度 + 分割线高度））
-            int itemCount = mImageFolderAdapter.getCount() > 3 ? 3 : mImageFolderAdapter.getCount();
+            int itemCount = imageFolderArray.size() > 3 ? 3 : imageFolderArray.size();
             int pw_lv_height = 81 * itemCount;
 
             popupWindow = NicePopup.Builder.init()
@@ -188,6 +195,9 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
                     .setConvertListener(new NicePopup.PopupConvertListener(){
                         @Override
                         public void convertView(ViewHolder holder) {
+                            ImageFolderAdapter mImageFolderAdapter = new ImageFolderAdapter(ImgPickerActivity.this, imageFolderArray);
+                            mImageFolderAdapter.setSelectIndex(position, isTAKE_picture);
+
                             ListView lvImaFolder = holder.getView(R.id.lvImaFolder);
                             lvImaFolder.setAdapter(mImageFolderAdapter);
 
@@ -201,6 +211,8 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
 
                                         mImgListAdapter.refreshData(imgFolder.images);
                                         btn_dir.setText(imgFolder.name);
+
+                                        ImgPickerActivity.this.position = position;
                                         mImageFolderAdapter.setSelectIndex(position, isTAKE_picture);
                                     }
 

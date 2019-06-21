@@ -9,7 +9,7 @@ import com.fy.baselibrary.base.fragment.BaseFragment;
  * describe： 定义 MVP 视图层 之 fragment 抽象超类
  * Created by fangs on 2019/1/24 15:38.
  */
-public abstract class BaseMVPFragment<T extends IPresenter> extends BaseFragment  implements IView{
+public abstract class BaseMVPFragment<T extends IPresenter> extends BaseFragment implements IView{
 
     protected T mPresenter;
 

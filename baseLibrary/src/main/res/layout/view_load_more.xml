@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/load_more_max_offset"
-    android:background="@color/blue">
+    android:background="#ffffff">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/imgTurn"
@@ -27,7 +27,7 @@
         android:padding="10dp"
         android:singleLine="true"
         android:text="@string/data_loading"
-        android:textColor="@color/white"
+        android:textColor="#333333"
         android:textSize="@dimen/txt_small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/imgTurn"

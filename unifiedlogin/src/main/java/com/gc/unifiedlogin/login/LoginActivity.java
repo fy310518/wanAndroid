@@ -13,9 +13,11 @@ import com.fy.baselibrary.aop.annotation.ClickFilter;
 import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
+import com.fy.baselibrary.statusbar.StatusBarContentColor;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.ResUtils;
 import com.gc.unifiedlogin.R;
+import com.gc.unifiedlogin.sysnotify.H5AppActivity;
 import com.gc.unifiedlogin.sysnotify.SysNotifyActivity;
 
 import butterknife.BindView;
@@ -49,6 +51,8 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
     @NeedPermission({Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
     @Override
     public void initData(Activity activity, Bundle bundle) {
+        StatusBarContentColor.setStatusTextColor(this, true, false);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         toolbar.setBackgroundColor(ResUtils.getColor(R.color.BgColor));
         toolbarTitle.setTextColor(ResUtils.getColor(R.color.txtSuperColor));
@@ -65,7 +69,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.tvUpdatePhoto://更新照片
-
+                JumpUtils.jump(this, H5AppActivity.class, null);
                 break;
             case R.id.btnLogin://刷脸登陆
                 JumpUtils.jump(this, SysNotifyActivity.class, null);

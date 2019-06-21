@@ -13,6 +13,7 @@ import android.support.v4.content.FileProvider;
 
 import com.fy.baselibrary.aop.resultfilter.ActResultManager;
 import com.fy.baselibrary.aop.resultfilter.ResultCallBack;
+import com.fy.baselibrary.utils.notify.T;
 
 import java.io.File;
 
@@ -88,17 +89,14 @@ public class JumpUtils {
         act.startActivity(intent);
     }
 
+    /**
+     * 跳转到指定 Action 的activity 带回调结果的跳转
+     * @param action    要跳转到的 action
+     * @param bundle
+     * @param requestCode 请求码
+     */
     public static void jump(Activity act, String action, Bundle bundle, int requestCode) {
         Intent intent = new Intent(action);
-        if (null != bundle) {
-            intent.putExtras(bundle);
-        }
-
-        act.startActivityForResult(intent, requestCode, bundle);//原生默认
-    }
-
-    public static void jump(Activity act, Class actClass, Bundle bundle, int requestCode) {
-        Intent intent = new Intent(act, actClass);
         if (null != bundle) {
             intent.putExtras(bundle);
         }
@@ -123,6 +121,22 @@ public class JumpUtils {
                 .startActivityForResult(act, intent, requestCode, callBack);
     }
 
+
+    /**
+     * 跳转到指定 activity  带回调结果的跳转
+     * @param actClass    要跳转到的Activity
+     * @param bundle
+     * @param requestCode 请求码
+     */
+    public static void jump(Activity act, Class actClass, Bundle bundle, int requestCode) {
+        Intent intent = new Intent(act, actClass);
+        if (null != bundle) {
+            intent.putExtras(bundle);
+        }
+
+        act.startActivityForResult(intent, requestCode, bundle);//原生默认
+    }
+
     /**
      * 跳转到指定 activity  带回调结果的跳转
      * @param actClass    要跳转到的Activity
@@ -136,7 +150,6 @@ public class JumpUtils {
             intent.putExtras(bundle);
         }
 
-//        act.startActivityForResult(intent, requestCode, bundle);//原生默认
         ActResultManager.getInstance()
                 .startActivityForResult(act, intent, requestCode, callBack);
     }
@@ -151,6 +164,22 @@ public class JumpUtils {
 //  没有违反上面两种情况的前提下，可以直接在Fragment中使用startActivityForResult和onActivityResult，和在activity中使用的一样。
 //  二：使用aop 在Activity的onActivityResult() 执行之后，通过回调接口 获取返回结果
 //      使用方式同 activity 跳转到指定 activity  带回调结果的跳转
+
+    /**
+     * 从fragment 跳转到指定的 activity; 带回调结果的跳转
+     * @param fragment
+     * @param actClass
+     * @param bundle
+     * @param requestCode
+     */
+    public static void jump(Fragment fragment, Class actClass, Bundle bundle, int requestCode) {
+        Intent intent = new Intent(fragment.getContext(), actClass);
+        if (null != bundle) {
+            intent.putExtras(bundle);
+        }
+
+        fragment.startActivityForResult(intent, requestCode, bundle);//原生默认
+    }
 
     /**
      * 从fragment 跳转到指定的 activity; 带回调结果的跳转
@@ -298,7 +327,7 @@ public class JumpUtils {
     }
 
     /**
-     * 启动指定 url 的 应用 界面
+     * 启动指定 url 的 第三方应用 界面
      * @param act
      * @param url  如："gc://pull.gc.circle/conn/start?type=110"
      * @param bundle 这里Intent当然也可传递参数,但是一般情况下都会放到上面的URL中进行传递
@@ -351,6 +380,7 @@ public class JumpUtils {
         act.startActivity(intent);
     }
 
+
     /**
      * 跳转到浏览器 打开指定 URL链接
      * @param act
@@ -374,6 +404,7 @@ public class JumpUtils {
         act.startActivity(localIntent);
     }
 
+
     /**
      * 拨打电话
      * 直接拨打电话 需要申请权限：<uses-permission android:name="android.permission.CALL_PHONE" />
@@ -382,10 +413,15 @@ public class JumpUtils {
      * @param phoneNum 电话号码
      */
     public static void callPhone(Context ctx, String action, String phoneNum) {
-        Intent intent = new Intent(Intent.ACTION_DIAL);
-        Uri data = Uri.parse("tel:" + phoneNum);
-        intent.setData(data);
-        ctx.startActivity(intent);
+        if (Validator.isMobile(phoneNum) || Validator.isPhone(phoneNum)){
+            Intent intent = new Intent(action);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Uri data = Uri.parse("tel:" + phoneNum);
+            intent.setData(data);
+            ctx.startActivity(intent);
+        } else {
+            T.showLong("请使用正确的号码！");
+        }
     }
 
     /**
@@ -396,6 +432,7 @@ public class JumpUtils {
      */
     public static void installApk(Context context, File file) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Uri data;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             data = FileProvider.getUriForFile(context, AppUtils.getFileProviderName(), file);
