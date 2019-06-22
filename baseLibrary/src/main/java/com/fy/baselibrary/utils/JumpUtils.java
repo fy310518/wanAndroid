@@ -101,7 +101,7 @@ public class JumpUtils {
             intent.putExtras(bundle);
         }
 
-        act.startActivityForResult(intent, requestCode, bundle);//原生默认
+        act.startActivityForResult(intent, requestCode);//原生默认
     }
 
     /**
@@ -134,7 +134,7 @@ public class JumpUtils {
             intent.putExtras(bundle);
         }
 
-        act.startActivityForResult(intent, requestCode, bundle);//原生默认
+        act.startActivityForResult(intent, requestCode);//原生默认
     }
 
     /**
@@ -178,7 +178,7 @@ public class JumpUtils {
             intent.putExtras(bundle);
         }
 
-        fragment.startActivityForResult(intent, requestCode, bundle);//原生默认
+        fragment.startActivityForResult(intent, requestCode);//原生默认
     }
 
     /**
@@ -195,7 +195,7 @@ public class JumpUtils {
             intent.putExtras(bundle);
         }
 
-//        fragment.startActivityForResult(intent, requestCode, bundle);//原生默认
+//        fragment.startActivityForResult(intent, requestCode);//原生默认
         ActResultManager.getInstance()
                 .startActivityForResult(fragment.getActivity(), intent, requestCode, callBack);
     }
@@ -213,7 +213,7 @@ public class JumpUtils {
             intent.putExtras(bundle);
         }
 
-//        fragment.startActivityForResult(intent, requestCode, bundle);
+//        fragment.startActivityForResult(intent, requestCode);
         ActResultManager.getInstance()
                 .startActivityForResult(fragment.getActivity(), intent, requestCode, callBack);
     }

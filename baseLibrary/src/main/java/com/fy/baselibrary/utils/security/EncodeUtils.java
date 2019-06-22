@@ -2,8 +2,11 @@ package com.fy.baselibrary.utils.security;
 
 import android.os.Build;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Base64;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -81,6 +84,39 @@ public final class EncodeUtils {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    /**
+     * Base64 转码并保存成文件
+     * @param base64Code
+     * @param savePath
+     * @throws Exception
+     */
+    public static void decoderBase64File(String base64Code, String savePath)  {
+        if (TextUtils.isEmpty(base64Code)) return;
+        byte[] buffer = Base64.decode(base64Code.split(",")[1], Base64.DEFAULT);
+
+        for (int i = 0; i < buffer.length; ++i) {
+            if (buffer[i] < 0) {// 调整异常数据
+                buffer[i] += 256;
+            }
+        }
+
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(savePath);
+            out.write(buffer);
+
+            out.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != out) out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
