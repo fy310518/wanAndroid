@@ -35,19 +35,19 @@ public interface LoadService {
     /**
      * h5调用本地 请求封装 之 GET请求
      */
-    @GET("{apiUrl}")
-    Observable<String> jsInAndroidGetRequest(@Path("apiUrl") String apiUrl,
-                                             @HeaderMap ArrayMap<String, String> heads,
-                                             @QueryMap ArrayMap<String, String> params);
+    @GET
+    Observable<ResponseBody> jsInAndroidGetRequest(@Url String apiUrl,
+                                                   @HeaderMap ArrayMap<String, String> heads,
+                                                   @QueryMap ArrayMap<String, String> params);
 
     /**
      * h5调用本地 请求封装 之 POST请求
      */
     @FormUrlEncoded
-    @POST("{apiUrl}")
-    Observable<String> jsInAndroidPostRequest(@Path("apiUrl") String apiUrl,
-                                              @HeaderMap ArrayMap<String, String> heads,
-                                              @FieldMap ArrayMap<String, String> params);
+    @POST
+    Observable<ResponseBody> jsInAndroidPostRequest(@Url String apiUrl,
+                                                    @HeaderMap ArrayMap<String, String> heads,
+                                                    @FieldMap ArrayMap<String, String> params);
 
 
     /**

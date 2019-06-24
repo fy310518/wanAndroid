@@ -15,10 +15,12 @@ import com.fy.baselibrary.retrofit.observer.RequestBaseObserver;
 import com.fy.baselibrary.utils.GsonUtils;
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.Map;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 /**
  * DESCRIPTION：h5 android 交互
@@ -67,17 +69,28 @@ public class BaseAndroidJSInterface {
         return params;
     }
 
+    //添加请求头
     private ArrayMap<String, String> getHeaderParams(H5RequestBean request){
         ArrayMap<String, String> params = request.getHeader();
         if (null == params){
             params = new ArrayMap<>();
-            params.put("Content-Type", "multipart/form-data;charse=UTF-8");
-            params.put("Connection", "keep-alive");
-            params.put("Accept", "*/*");
-            params.put("app-type", "Android");
+//            params.put("Content-Type", "multipart/form-data;charse=UTF-8");
+//            params.put("Connection", "keep-alive");
+//            params.put("Accept", "*/*");
+//            params.put("app-type", "Android");
         }
 
         return params;
+    }
+
+    /**
+     * 定义本地网络请求方法 供 h5 调用
+     * @param requestContent h5 传递的 网络请求 请求头，请求方法（get，post），请求参数，请求 url
+     * @return ""
+     */
+    @JavascriptInterface
+    public String httpRequest(String requestContent) {
+        return httpRequest("", requestContent);
     }
 
     /**
@@ -101,7 +114,7 @@ public class BaseAndroidJSInterface {
         }
 
         String method = request.getRequestMethod();
-        ArrayMap<String, String> headers = request.getHeader();
+        ArrayMap<String, String> headers = getHeaderParams(request);
         ArrayMap<String, String> params = getHttpParams(request);
 
         String hostAddress = !TextUtils.isEmpty(hostIp) ? hostIp : this.host;
@@ -138,12 +151,18 @@ public class BaseAndroidJSInterface {
     }
 
     //定义网络请求 观察者，统一处理返回数据
-    private RequestBaseObserver<String> getCallObserver( final String jsMethod){
-        return new RequestBaseObserver<String>(progressDialog) {
+    private RequestBaseObserver<ResponseBody> getCallObserver( final String jsMethod){
+        return new RequestBaseObserver<ResponseBody>(progressDialog) {
             @Override
-            protected void onSuccess(String body) {
+            protected void onSuccess(ResponseBody body) {
                 //Android 调用 h5 方法
-                view.loadUrl("javascript:" + jsMethod + "(\'" + body + "\')");
+                try {
+                    String data = body.string();
+                    view.loadUrl("javascript:" + jsMethod + "(\'" + data + "\')");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    view.loadUrl("javascript:" + jsMethod + "(\'" + "" + "\')");
+                }
             }
 
             @Override
