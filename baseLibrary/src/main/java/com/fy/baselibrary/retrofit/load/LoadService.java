@@ -13,6 +13,7 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.HeaderMap;
@@ -42,7 +43,7 @@ public interface LoadService {
     /**
      * h5调用本地 请求封装 之 POST请求
      */
-    @Multipart
+    @FormUrlEncoded
     @POST("{apiUrl}")
     Observable<String> jsInAndroidPostRequest(@Path("apiUrl") String apiUrl,
                                               @HeaderMap ArrayMap<String, String> heads,

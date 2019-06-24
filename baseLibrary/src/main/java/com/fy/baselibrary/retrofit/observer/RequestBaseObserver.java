@@ -45,8 +45,10 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
      * @param pDialog
      */
     public RequestBaseObserver(IProgressDialog pDialog) {
-        this.context = pDialog.obj;
-        init(pDialog);
+        if (null != pDialog) {
+            this.context = pDialog.obj;
+            init(pDialog);
+        }
     }
 
     public RequestBaseObserver(Object context) {
@@ -56,7 +58,6 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
     private void init(IProgressDialog pDialog) {
         this.progressDialog = pDialog;
 
-        if (null == progressDialog) return;
         dialog = progressDialog.getDialog();
         if (null == dialog) return;
         dialog.setDialogList(() -> {

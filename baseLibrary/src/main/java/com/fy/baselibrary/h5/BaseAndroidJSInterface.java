@@ -1,5 +1,6 @@
 package com.fy.baselibrary.h5;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.ArrayMap;
@@ -66,6 +67,19 @@ public class BaseAndroidJSInterface {
         return params;
     }
 
+    private ArrayMap<String, String> getHeaderParams(H5RequestBean request){
+        ArrayMap<String, String> params = request.getHeader();
+        if (null == params){
+            params = new ArrayMap<>();
+            params.put("Content-Type", "multipart/form-data;charse=UTF-8");
+            params.put("Connection", "keep-alive");
+            params.put("Accept", "*/*");
+            params.put("app-type", "Android");
+        }
+
+        return params;
+    }
+
     /**
      * 定义本地网络请求方法 供 h5 调用
      * @param hostIp          请求的主机地址 可为空，为空则表示 使用构造方法传递的 host
@@ -90,7 +104,7 @@ public class BaseAndroidJSInterface {
         ArrayMap<String, String> headers = request.getHeader();
         ArrayMap<String, String> params = getHttpParams(request);
 
-        String hostAddress = TextUtils.isEmpty(hostIp) ? hostIp : this.host;
+        String hostAddress = !TextUtils.isEmpty(hostIp) ? hostIp : this.host;
 
         switch (method.toUpperCase()) {
             case "GET":
@@ -107,7 +121,7 @@ public class BaseAndroidJSInterface {
 
     private void httpGet(ArrayMap<String, String> headers, ArrayMap<String, String> params, final String url, final String jsMethod) {
         RequestUtils.create(LoadService.class)
-                .jsInAndroidGetRequest(host + url, headers, params)// todo 请求头 带测试
+                .jsInAndroidGetRequest(url, headers, params)// todo 请求头 带测试
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(RxHelper.bindToLifecycle(context))
@@ -116,7 +130,7 @@ public class BaseAndroidJSInterface {
 
     private void httpPost(ArrayMap<String, String> headers, ArrayMap<String, String> params, final String url, final String jsMethod) {
         RequestUtils.create(LoadService.class)
-                .jsInAndroidPostRequest(host + url, headers, params)// todo 请求头 带测试
+                .jsInAndroidPostRequest(url, headers, params)// todo 请求头 带测试
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(RxHelper.bindToLifecycle(context))
@@ -139,5 +153,22 @@ public class BaseAndroidJSInterface {
                 view.loadUrl("javascript:" + jsMethod + "(\'" + new Gson().toJson("") + "\')");
             }
         };
+    }
+
+
+
+    @JavascriptInterface
+    public void back() {
+        ((Activity)this.context).finish();
+    }
+
+    @JavascriptInterface
+    public void webViewback() {
+        if (this.view != null && this.view.canGoBack()) {
+            this.view.goBack();
+        } else {
+            ((Activity)this.context).finish();
+        }
+
     }
 }
