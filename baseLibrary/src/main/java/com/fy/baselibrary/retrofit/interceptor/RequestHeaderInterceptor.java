@@ -23,11 +23,11 @@ public class RequestHeaderInterceptor implements Interceptor {
         //获取request
         Request request = chain.request()
                 .newBuilder()
-                .addHeader("Content-Type", "multipart/form-data;charse=UTF-8")
+                .addHeader("Content-Type", "application/x-www-form-urlencoded;charse=UTF-8")
 //                .addHeader("Accept-Encoding", "gzip, deflate")//根据服务器要求添加（避免重复压缩乱码）
                 .addHeader("Connection", "keep-alive")
                 .addHeader("Accept", "*/*")
-                .addHeader("app-type", "Android")//TODO 测试微阅
+                .addHeader("app-type", "Android")
                 .build();
 
         //获取request的创建者builder

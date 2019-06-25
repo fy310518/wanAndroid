@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.Map;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
@@ -41,6 +42,10 @@ public class BaseAndroidJSInterface {
         this.host = host;
     }
 
+    /**
+     * 设置 加载弹窗
+     * @param progressDialog
+     */
     public void setProgressDialog(IProgressDialog progressDialog) {
         this.progressDialog = progressDialog;
     }
@@ -134,7 +139,7 @@ public class BaseAndroidJSInterface {
 
     private void httpGet(ArrayMap<String, String> headers, ArrayMap<String, String> params, final String url, final String jsMethod) {
         RequestUtils.create(LoadService.class)
-                .jsInAndroidGetRequest(url, headers, params)// todo 请求头 带测试
+                .jsInAndroidGetRequest(url, headers, params)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(RxHelper.bindToLifecycle(context))
@@ -142,34 +147,24 @@ public class BaseAndroidJSInterface {
     }
 
     private void httpPost(ArrayMap<String, String> headers, ArrayMap<String, String> params, final String url, final String jsMethod) {
-        RequestUtils.create(LoadService.class)
-                .jsInAndroidPostRequest(url, headers, params)// todo 请求头 带测试
+        Observable<Object> fromNetwork = RequestUtils.create(LoadService.class)
+                .jsInAndroidPostRequest(url, headers, params)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        RequestUtils.request(fromNetwork, url)
                 .compose(RxHelper.bindToLifecycle(context))
                 .subscribe(getCallObserver(jsMethod));
     }
 
     //定义网络请求 观察者，统一处理返回数据
-    private RequestBaseObserver<ResponseBody> getCallObserver( final String jsMethod){
-        return new RequestBaseObserver<ResponseBody>(progressDialog) {
+    private RequestBaseObserver<Object> getCallObserver(final String jsMethod){
+        return new RequestBaseObserver<Object>(progressDialog) {
             @Override
-            protected void onSuccess(ResponseBody body) {
+            protected void onSuccess(Object data) {
                 //Android 调用 h5 方法
-                try {
-                    String data = body.string();
-                    view.loadUrl("javascript:" + jsMethod + "(\'" + data + "\')");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    view.loadUrl("javascript:" + jsMethod + "(\'" + "" + "\')");
-                }
-            }
-
-            @Override
-            protected void updataLayout(int flag) {
-                super.updataLayout(flag);
-
-                view.loadUrl("javascript:" + jsMethod + "(\'" + new Gson().toJson("") + "\')");
+                String json = GsonUtils.toJson(data);
+                view.loadUrl("javascript:" + jsMethod + "(\'" + json + "\')");
             }
         };
     }
@@ -188,6 +183,6 @@ public class BaseAndroidJSInterface {
         } else {
             ((Activity)this.context).finish();
         }
-
     }
+
 }

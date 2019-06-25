@@ -17,11 +17,9 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.HeaderMap;
-import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
@@ -36,7 +34,7 @@ public interface LoadService {
      * h5调用本地 请求封装 之 GET请求
      */
     @GET
-    Observable<ResponseBody> jsInAndroidGetRequest(@Url String apiUrl,
+    Observable<Object> jsInAndroidGetRequest(@Url String apiUrl,
                                                    @HeaderMap ArrayMap<String, String> heads,
                                                    @QueryMap ArrayMap<String, String> params);
 
@@ -45,7 +43,7 @@ public interface LoadService {
      */
     @FormUrlEncoded
     @POST
-    Observable<ResponseBody> jsInAndroidPostRequest(@Url String apiUrl,
+    Observable<Object> jsInAndroidPostRequest(@Url String apiUrl,
                                                     @HeaderMap ArrayMap<String, String> heads,
                                                     @FieldMap ArrayMap<String, String> params);
 
