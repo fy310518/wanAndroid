@@ -92,8 +92,13 @@ public class RequestUtils {
             @Override
             public void accept(T result) throws Exception {
                 L.e("net doOnNext", result.toString());
+
                 ACache mCache = ACache.get(ConfigUtils.getAppCtx());
-                mCache.put(apiKey, (Serializable) result);
+                if (result instanceof Serializable){
+                    mCache.put(apiKey, (Serializable) result);
+                } else {
+                    mCache.put(apiKey, result.toString());
+                }
             }
         });
 
