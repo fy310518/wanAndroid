@@ -34,7 +34,7 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
 
     protected SparseBooleanArray mSelectedPositions;//保存多选 数据
     private RecyclerView mRv;
-    private int mSelectedPos = -1;//实现单选  保存当前选中的position
+    protected int mSelectedPos = -1;//实现单选  保存当前选中的position
 
     protected OnListener.OnitemClickListener itemClickListner;//列表条目点击事件
     protected OnListener.OnRemoveItemListener removeItemListener;
@@ -348,7 +348,7 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
     }
 
 
-//    单选 样板代码
+//    单选 样板代码 https://www.cnblogs.com/zhujiabin/p/7569224.html
 //    holder.ivSelect.setOnClickListener(new View.OnClickListener() {
 //        @Override
 //        public void onClick(View view) {

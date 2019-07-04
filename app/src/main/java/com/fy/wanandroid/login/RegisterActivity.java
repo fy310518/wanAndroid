@@ -117,8 +117,8 @@ public class RegisterActivity extends AppCompatActivity implements IBaseActivity
                     }
 
                     @Override
-                    protected void updataLayout(int flag) {
-                        L.e("net updataLayout", flag + "-----");
+                    protected void updateLayout(int flag) {
+                        L.e("net updateLayout", flag + "-----");
                     }
                 });
     }

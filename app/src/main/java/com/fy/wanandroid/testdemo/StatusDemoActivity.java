@@ -216,7 +216,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                     }
 
                     @Override
-                    protected void updataLayout(int flag) {
+                    protected void updateLayout(int flag) {
 
                     }
                 });
@@ -286,7 +286,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                     }
 
                     @Override
-                    protected void updataLayout(int flag) {
+                    protected void updateLayout(int flag) {
                     }
                 });
     }

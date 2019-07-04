@@ -1,1 +1,5 @@
-include ':app', ':baseLibrary', ':imgPicker', ':unifiedlogin' //wanAndroid
+include ':baseLibrary', ':imgPicker', //工具库 迭代中
+//        ':app', //wanAndroid
+//        ':QRCode', //todo 二维码工具库未完成
+//        ':unifiedlogin', //todo 统一登录 app 未完成
+        ':parkinggather', ':carplatedistinguish' //驻车采集 app 开发中

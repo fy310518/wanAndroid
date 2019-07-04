@@ -94,7 +94,7 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
                     }
 
                     @Override
-                    protected void updataLayout(int flag) {
+                    protected void updateLayout(int flag) {
 
                     }
                 });
@@ -117,7 +117,7 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
                     }
 
                     @Override
-                    protected void updataLayout(int flag) {
+                    protected void updateLayout(int flag) {
 
                     }
                 });
@@ -139,7 +139,7 @@ public class AdapterOne extends RvCommonAdapter<ArticleBean.DatasBean> {
                     }
 
                     @Override
-                    protected void updataLayout(int flag) {
+                    protected void updateLayout(int flag) {
 
                     }
                 });

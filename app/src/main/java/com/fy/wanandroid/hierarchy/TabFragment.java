@@ -111,7 +111,7 @@ public class TabFragment extends BaseFragment {
                     }
 
                     @Override
-                    protected void updataLayout(int flag) {
+                    protected void updateLayout(int flag) {
                         L.e("大王");
                         epl.stop();
                     }

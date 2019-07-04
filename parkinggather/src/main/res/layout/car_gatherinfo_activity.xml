@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/BgColor">
+
+    <com.bigkoo.convenientbanner.ConvenientBanner
+        android:id="@+id/bannerViewPager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/BgColor"
+        app:canLoop="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <android.support.constraint.Group
+        android:id="@+id/TopGroup"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:constraint_referenced_ids="TopBg, iv_head_pic, tv_name, tv_depart" />
+
+    <View
+        android:id="@+id/TopBg"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:background="#7f000000"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_head_pic"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/default_pic_icon"
+        android:layout_marginTop="@dimen/spacing_small"
+        android:layout_marginLeft="@dimen/spacing_medium_small"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:paddingLeft="@dimen/spacing_medium_small"
+        android:text=""
+        android:textColor="@color/white"
+        android:textSize="@dimen/txt_small"
+        app:layout_constraintLeft_toRightOf="@+id/iv_head_pic"
+        app:layout_constraintTop_toTopOf="@+id/iv_head_pic" />
+
+    <TextView
+        android:id="@+id/tv_depart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:paddingLeft="@dimen/spacing_medium_small"
+        android:text=""
+        android:textColor="@color/white"
+        android:textSize="@dimen/txt_small_much"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_head_pic"
+        app:layout_constraintLeft_toRightOf="@+id/iv_head_pic" />
+
+
+    <android.support.constraint.Group
+        android:id="@+id/bottomGroup"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:constraint_referenced_ids="bottomBg, tv_address, tv_time, tv_licence_number, tv_jump_find_car" />
+
+    <View
+        android:id="@+id/bottomBg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#7f000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_licence_number" />
+
+    <TextView
+        android:id="@+id/tv_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/icon_loaction_whrite"
+        android:drawablePadding="@dimen/spacing_medium_small"
+        android:singleLine="true"
+        android:paddingTop="@dimen/spacing_small"
+        android:paddingBottom="@dimen/spacing_small"
+        android:paddingLeft="@dimen/spacing_medium_small"
+        android:text="dafads"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/icon_time_whrite"
+        android:drawablePadding="@dimen/spacing_medium_small"
+        android:paddingLeft="@dimen/spacing_medium_small"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_address" />
+
+
+    <TextView
+        android:id="@+id/tv_licence_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/icon_car_num_whrite"
+        android:drawablePadding="@dimen/spacing_medium_small"
+        android:paddingTop="@dimen/spacing_medium_small"
+        android:paddingBottom="@dimen/spacing_small"
+        android:paddingLeft="@dimen/spacing_medium_small"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_time" />
+
+    <TextView
+        android:id="@+id/tv_jump_find_car"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:padding="@dimen/spacing_small_much"
+        android:layout_marginLeft="@dimen/spacing_medium_small"
+        android:text="一键查车"
+        android:textColor="@color/txtBlueColor"
+        android:textSize="10sp"
+        app:layout_constraintTop_toTopOf="@+id/tv_licence_number"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_licence_number"
+        app:layout_constraintLeft_toRightOf="@+id/tv_licence_number" />
+
+</android.support.constraint.ConstraintLayout>

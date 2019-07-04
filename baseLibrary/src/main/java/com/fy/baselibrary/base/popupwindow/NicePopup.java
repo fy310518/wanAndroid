@@ -24,7 +24,7 @@ public class NicePopup extends CommonPopupWindow {
 
     @Override
     public void convertView(ViewHolder holder) {
-        if (null != convertListener) convertListener.convertView(holder);
+        if (null != convertListener) convertListener.convertView(holder, this);
     }
 
 
@@ -32,7 +32,7 @@ public class NicePopup extends CommonPopupWindow {
      * 绘制 Popup UI 回调
      */
     public interface PopupConvertListener {
-        void convertView(ViewHolder holder);
+        void convertView(ViewHolder holder, CommonPopupWindow popupWindow);
     }
 
 

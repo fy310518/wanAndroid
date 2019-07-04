@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/menuLayout"
+    android:layout_width="?attr/actionBarSize"
+    android:layout_height="?attr/actionBarSize">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/rightIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/btn_comment_add"
+        android:layout_width="40dp"
+        android:layout_height="23dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="发布"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:visibility="gone"/>
+
+</FrameLayout>

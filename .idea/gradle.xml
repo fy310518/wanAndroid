@@ -8,10 +8,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/baseLibrary" />
+            <option value="$PROJECT_DIR$/carplatedistinguish" />
             <option value="$PROJECT_DIR$/imgPicker" />
-            <option value="$PROJECT_DIR$/unifiedlogin" />
+            <option value="$PROJECT_DIR$/parkinggather" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

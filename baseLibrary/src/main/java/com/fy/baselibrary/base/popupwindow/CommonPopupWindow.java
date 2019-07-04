@@ -17,7 +17,9 @@ import android.widget.PopupWindow;
 
 import com.fy.baselibrary.base.PopupDismissListner;
 import com.fy.baselibrary.base.ViewHolder;
+import com.fy.baselibrary.base.dialog.CommonDialog;
 import com.fy.baselibrary.utils.DensityUtils;
+import com.fy.baselibrary.utils.ScreenUtils;
 
 /**
  * popupWindow 封装
@@ -25,13 +27,15 @@ import com.fy.baselibrary.utils.DensityUtils;
  */
 public abstract class CommonPopupWindow extends PopupWindow {
 
-    Context mContext;
+    protected Context mContext;
     @LayoutRes
     protected int layoutId;
     View view;
 
     /** 宽度，高度 -1(ViewGroup.LayoutParams.MATCH_PARENT)：撑满；-2(ViewGroup.LayoutParams.WRAP_CONTENT)：自适应； 其他固定数值 */
     int mWidth = -2, mHeight = -2;//弹窗的宽和高
+    /** 宽度 百分比（如：屏幕宽度 的 50%）*/
+    protected int widthPercent = -1;
 
     boolean isShowAnim;
     int anim;//动画Id
@@ -89,13 +93,16 @@ public abstract class CommonPopupWindow extends PopupWindow {
     protected void initParams(View view) {
         setContentView(view);
 
-        setWidth(mWidth > 0 ?   DensityUtils.dp2px(mWidth)  : mWidth);
+        if (widthPercent > 0){
+            setWidth(ScreenUtils.getScreenWidth() * widthPercent / 100);
+        } else {
+            setWidth(mWidth > 0 ?   DensityUtils.dp2px(mWidth)  : mWidth);
+        }
         setHeight(mHeight > 0 ? DensityUtils.dp2px(mHeight) : mHeight);
 
         //设置动画
         if (isShowAnim)setAnimationStyle(anim);
         setHide(isHide);
-        bgAlpha(bgAlpha);
     }
 
     /**
@@ -146,6 +153,27 @@ public abstract class CommonPopupWindow extends PopupWindow {
 //            setHeight(h);
             setHeight(mHeight > 0 ? DensityUtils.dp2px(mHeight) : mHeight);
         }
+    }
+
+
+
+    /**
+     * 设置添加屏幕的背景透明度
+     * @return
+     */
+    public CommonPopupWindow bgAlpha() {
+        bgAlpha(bgAlpha);
+        return this;
+    }
+
+    /**
+     * 设置 弹窗宽度占屏幕百分比
+     * @param widthPercent 如：80、70
+     * @return
+     */
+    public CommonPopupWindow setWidthPercent(int widthPercent) {
+        this.widthPercent = widthPercent;
+        return this;
     }
 
     /**

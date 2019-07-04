@@ -30,38 +30,54 @@ public class FragmentChangeManager {
     }
 
     /**
-     * 界面切换控制 （解决 fragment重影）
+     * 初始化 把指定位置（mFragments 集合的下标）的fragment添加到 fragment 事物
+     * @param positions 下标数组
+     */
+    public void setLoadFragments(int... positions){
+        for (int position : positions){
+            Fragment showFragment = mFragments.get(position);
+
+            setCommitTransaction(null, showFragment, position);
+        }
+    }
+
+    /**
+     * fragment 懒加载 (界面切换控制)
      * @param position
      */
     public void setFragments(int position) {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         AnimUtils.setFragmentTransition(fragmentTransaction, currentIndex, position);
 
-        Fragment showfragment = null;
-        for (int i = 0; i < mFragments.size(); i++) {
-            Fragment fragment = mFragments.get(i);
-            if (i == position) {
-                showfragment = fragment;
-                break;
-            }
-        }
+        Fragment showFragment = mFragments.get(position);
+
+        setCommitTransaction(fragmentTransaction, showFragment, position);
+    }
+
+    /**
+     * 解决 fragment重影
+     * @param showFragment
+     * @param position
+     */
+    private void setCommitTransaction(FragmentTransaction fragmentTransaction, Fragment showFragment, int position){
+        if (null == fragmentTransaction) fragmentTransaction = mFragmentManager.beginTransaction();
 
         //判断当前的Fragment是否为空，不为空则隐藏
         if (null != mCurrentFrgment) {
             fragmentTransaction.hide(mCurrentFrgment);
         }
 
-        if (null == showfragment) return;
+        if (null == showFragment) return;
         //判断此Fragment是否已经添加到FragmentTransaction事物中
-        if (!showfragment.isAdded()) {
-            String fragmentTag = showfragment.getClass().getSimpleName();
-            fragmentTransaction.add(mContainerViewId, showfragment, fragmentTag);
+        if (!showFragment.isAdded()) {
+            String fragmentTag = showFragment.getClass().getSimpleName();
+            fragmentTransaction.add(mContainerViewId, showFragment, fragmentTag);
         } else {
-            fragmentTransaction.show(showfragment);
+            fragmentTransaction.show(showFragment);
         }
 
         //保存当前显示的那个Fragment
-        mCurrentFrgment = showfragment;
+        mCurrentFrgment = showFragment;
         currentIndex = position;
         fragmentTransaction.commitAllowingStateLoss();
     }

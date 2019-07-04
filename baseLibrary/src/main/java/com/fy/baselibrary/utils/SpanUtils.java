@@ -29,8 +29,8 @@ public class SpanUtils {
      * 获取建造者
      * @return
      */
-    public static Builder getBuilder(@NonNull CharSequence text) {
-        return new Builder(text);
+    public static Builder getBuilder() {
+        return new Builder();
     }
 
 
@@ -57,10 +57,6 @@ public class SpanUtils {
 
         public Builder() {
             init("");
-        }
-
-        private Builder(@NonNull CharSequence text) {
-            init(text);
         }
 
         private void init(@NonNull CharSequence text){

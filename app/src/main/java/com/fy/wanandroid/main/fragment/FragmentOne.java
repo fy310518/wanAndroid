@@ -169,7 +169,7 @@ public class FragmentOne extends BaseFragment {
                     }
 
                     @Override
-                    protected void updataLayout(int flag) {
+                    protected void updateLayout(int flag) {
                         epl.stop();
                     }
                 });

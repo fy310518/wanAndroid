@@ -108,8 +108,8 @@ public class FragmentTwo extends BaseFragment {
                     }
 
                     @Override
-                    protected void updataLayout(int flag) {
-                        super.updataLayout(flag);
+                    protected void updateLayout(int flag) {
+                        super.updateLayout(flag);
                         epl.stop();
                     }
                 });

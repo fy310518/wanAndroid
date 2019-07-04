@@ -13,7 +13,7 @@ import android.view.View;
 import com.fy.baselibrary.utils.ResUtils;
 
 /**
- * RecycleView GridLayoutManager 样式分割线
+ * RecycleView GridLayoutManager 样式分割线 (注意：既然使用了 GridLayoutManager 默认每一行的 item 是大于 1 的)
  * Created by fangs on 2017/12/29.
  */
 public class GridItemDecoration extends RecyclerView.ItemDecoration {
@@ -51,20 +51,24 @@ public class GridItemDecoration extends RecyclerView.ItemDecoration {
         // 获得每个Item的位置
         int itemPosition = parent.getChildAdapterPosition(view);
 
-        int top = 0, right = 0;
-        if (itemPosition / builder.column == 0) {//第一行
-            top = builder.mSpace;
-        }
+        if (builder.rvHeaderNum != 0 && itemPosition == 0) return;
 
-        if(itemPosition % builder.column == builder.column){//第一列
-            right = 0;
-        }
 
-        if (itemPosition % builder.column == builder.column - 1) {//最后一列
+        itemPosition -= builder.rvHeaderNum;
+
+        int left = 0, right = 0;
+
+        if(itemPosition % builder.column == 0){//第一列
+            left = builder.mSpace;
+        } else if (itemPosition % builder.column == builder.column - 1) {//最后一列
+            left = builder.mSpace;
             right = builder.mSpace;
+        } else {//中间若干列
+            left = builder.mSpace;
         }
 
-        outRect.set(builder.mSpace, top, right, builder.mSpace);
+        //第一行, 最后一行 不处理
+        outRect.set(left, 0, right, builder.mSpace);
     }
 
     @Override
@@ -135,19 +139,25 @@ public class GridItemDecoration extends RecyclerView.ItemDecoration {
         /**
          * 是否 绘制
          */
-        public boolean isDraw = true;
+        private boolean isDraw = true;
 
         /**
-         * 设置间隔 宽度
-         * （如果参数不为 0，则表示 只设置间隔；为 0，
-         *                则表示按系统配置的 listDivider 设置间隔，和绘制分割线）单位是dp;
+         * 设置间隔 宽度 单位是dp;
+         * （如果参数不为 0，则表示 只设置间隔；
+         * 为 0，则表示按系统配置的 listDivider 设置间隔，和绘制分割线）
          */
-        public int mSpace;
+        private int mSpace;
 
         /**
          * 网格样式 列数
          */
-        public int column = 3;
+        private int column = 3;
+
+        /**
+         * recyclerView 添加头 数量(避免 因为添加了列表头 而引起 分割线的绘制没有按照预想的 显示)
+         * 所以 请求头的 间隔 需要在布局里面设置
+         */
+        private int rvHeaderNum = 0;
 
         public Builder setDraw(boolean draw) {
             isDraw = draw;
@@ -162,6 +172,19 @@ public class GridItemDecoration extends RecyclerView.ItemDecoration {
         public Builder setColumn(int column) {
             this.column = column;
             return this;
+        }
+
+        public Builder setRvHeaderNum(int rvHeaderNum) {
+            this.rvHeaderNum = rvHeaderNum;
+            return this;
+        }
+
+        /**
+         * 入口
+         * @return
+         */
+        public static Builder init(){
+            return new Builder();
         }
 
         /**

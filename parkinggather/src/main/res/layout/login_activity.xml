@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/BgColor"
+    android:padding="@dimen/spacing_medium_small">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideLine"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4"/>
+
+   <ImageView
+       android:id="@+id/imgLogo"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:src="@mipmap/ic_launcher"
+       app:layout_constraintLeft_toLeftOf="parent"
+       app:layout_constraintRight_toRightOf="parent"
+       app:layout_constraintBottom_toTopOf="@id/guideLine"
+       app:layout_constraintTop_toTopOf="parent"
+       tools:ignore="MissingConstraints" />
+
+
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/iLayoutPass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/editHint"
+        android:theme="@style/customLineColor"
+        app:counterEnabled="true"
+        app:counterMaxLength="18"
+        app:counterOverflowTextAppearance="@style/HintErrorAppearance"
+        app:errorEnabled="true"
+        app:errorTextAppearance="@style/errorAppearance"
+        app:hintAnimationEnabled="true"
+        app:hintEnabled="true"
+        app:hintTextAppearance="@style/HintAppearance"
+        app:layout_constraintTop_toTopOf="@+id/guideLine"
+        app:layout_constraintBottom_toBottomOf="@+id/guideLine"
+        app:passwordToggleEnabled="true">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/editId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:singleLine="true" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iLayoutPass"
+        android:layout_marginLeft="@dimen/spacing_medium_large"
+        android:layout_marginRight="@dimen/spacing_medium_large"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:background="@color/statusBar"
+        android:text="@string/gotoScanFace"
+        android:textColor="@color/titleBarCon"
+        android:textSize="@dimen/txt_small"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iLayoutPass" />
+
+    <TextView
+        android:id="@+id/tvUpdatePhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_medium_small"
+        android:padding="@dimen/spacing_small"
+        android:text="@string/updatePhoto"
+        android:textColor="@color/txtHighlight"
+        android:textSize="@dimen/txt_small"
+        app:layout_constraintRight_toRightOf="@id/btnLogin"
+        app:layout_constraintTop_toBottomOf="@id/btnLogin" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_medium_small"
+        android:singleLine="true"
+        android:text="武汉市公安局&amp;武汉绿之云科技有限公司 联合研制"
+        android:textColor="@color/txtSecondColor"
+        android:textSize="@dimen/txt_small_much"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+
+</android.support.constraint.ConstraintLayout>

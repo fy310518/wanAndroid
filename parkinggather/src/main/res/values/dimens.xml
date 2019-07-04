@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 统一 列表 空白间隔 -->
+    <dimen name="rv_divider_height">4dp</dimen>
+    <!-- item 分割线宽度 -->
+    <dimen name="itemSplit_line">1dp</dimen>
+    <!-- shape 描边宽度 -->
+    <dimen name="shape_Stroke">1dp</dimen>
+    <!-- shape 圆角半径-->
+    <dimen name="shape_radius">8dp</dimen>
+    <dimen name="shape_radius2">12dp</dimen>
+
+    <!-- 统一 一个按钮单独占一行时候 的按钮高度 -->
+    <dimen name="btn_height">45dp</dimen>
+
+    <!-- 列表头像图片 宽度、高度 -->
+    <dimen name="rvImg">65dp</dimen>
+
+
+</resources>

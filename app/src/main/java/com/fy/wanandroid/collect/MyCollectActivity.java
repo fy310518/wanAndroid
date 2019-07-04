@@ -119,7 +119,7 @@ public class MyCollectActivity extends AppCompatActivity implements IBaseActivit
                     }
 
                     @Override
-                    protected void updataLayout(int flag) {
+                    protected void updateLayout(int flag) {
                         epl.stop();
                     }
                 });

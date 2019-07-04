@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_recent_pic"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_loading_image" />
+
+    <ImageView
+        android:id="@+id/xcr_head_pic"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
+        android:layout_marginLeft="@dimen/spacing_medium_small"
+        android:layout_marginTop="@dimen/spacing_medium_small"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_pic_icon" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/spacing_small"
+        android:layout_marginTop="@dimen/spacing_medium_small"
+        android:layout_toRightOf="@id/xcr_head_pic"
+        android:shadowColor="@color/txtSuperColor"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="1"
+        android:text="陈小春"
+        android:textColor="@color/white"
+        android:textSize="@dimen/txt_small_much" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_name"
+        android:layout_marginLeft="@dimen/spacing_small"
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@id/xcr_head_pic"
+        android:shadowColor="@color/txtSuperColor"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="1"
+        android:text="2017-08-18 17:20:50"
+        android:textColor="@color/white"
+        android:textSize="@dimen/txt_small_much" />
+
+
+    <TextView
+        android:id="@+id/tv_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_recent_pic"
+        android:drawableLeft="@drawable/commet_location_icon"
+        android:drawablePadding="@dimen/spacing_small"
+        android:gravity="center|left"
+        android:maxLines="2"
+        android:background="@color/white"
+        android:text="泛海国际SOHO城8栋写字楼"
+        android:textColor="@color/txtSuperColor"
+        android:textSize="@dimen/txt_small" />
+
+    <TextView
+        android:id="@+id/tv_licence_number"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_above="@id/tv_location"
+        android:background="#7f000000"
+        android:gravity="center"
+        android:text="鄂A95254"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+</RelativeLayout>
