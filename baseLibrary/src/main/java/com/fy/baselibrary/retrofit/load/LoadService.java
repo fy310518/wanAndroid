@@ -2,14 +2,12 @@ package com.fy.baselibrary.retrofit.load;
 
 import android.util.ArrayMap;
 
-import com.fy.baselibrary.retrofit.BaseBean;
 import com.fy.baselibrary.retrofit.load.up.UpLoadFileType;
 
 import java.util.List;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
@@ -47,28 +45,23 @@ public interface LoadService {
                                                     @HeaderMap ArrayMap<String, String> heads,
                                                     @FieldMap ArrayMap<String, String> params);
 
-
     /**
-     * 多图片上传 之 图文上传
+     * 通用 图文上传 (支持多图片) （参数注解：@Body；参数类型：MultipartBody）
+     * params.put("uploadFile", "fileName");
+     * params.put("filePathList", files);
+     * params.put("UploadOnSubscribe", new UploadOnSubscribe());
      *
-     * @param token
-     * @return
-     */
-    @Multipart
-    @POST("http://192.168.100.123/hfs/")
-    Observable<BaseBean<String>> uploadPostFile(@Part("token") RequestBody token,
-                                                @Part("type") RequestBody type,
-                                                @Part List<MultipartBody.Part> files);
-
-    /**
-     * 多图片上传 方式一 （参数注解：@Body；参数类型：MultipartBody）
-     *
-     * @param params
-     * @return
+     * 注意：其它 文本参数 value 必须是 字符串类型（如下 token 参数）
+     * params.put("token", "123");
      */
     @UpLoadFileType
-    @POST("http://192.168.100.123:8080/hfs/")
-    Observable<Object> uploadFile(@Body ArrayMap<String, Object> params);
+    @POST()
+    Observable<Object> uploadFile(@Url String apiUrl,
+                                  @Body ArrayMap<String, Object> params);
+
+
+
+
 
     /**
      * 多图片上传 方式二（@Multipart：方法注解；@Part：参数注解；参数类型；MultipartBody.Part）

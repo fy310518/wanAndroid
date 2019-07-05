@@ -2,7 +2,6 @@ package com.gcstorage.app.main;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -10,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
@@ -20,7 +18,6 @@ import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
-import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.Size;
@@ -32,10 +29,9 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.text.format.Time;
+import android.util.ArrayMap;
 import android.view.Display;
-import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -45,20 +41,25 @@ import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.base.dialog.CommonDialog;
 import com.fy.baselibrary.base.dialog.DialogConvertListener;
 import com.fy.baselibrary.base.dialog.NiceDialog;
+import com.fy.baselibrary.retrofit.RequestUtils;
+import com.fy.baselibrary.retrofit.RxHelper;
+import com.fy.baselibrary.retrofit.load.LoadService;
+import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
+import com.fy.baselibrary.retrofit.observer.RequestBaseObserver;
+import com.fy.baselibrary.utils.FileUtils;
+import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.camera.CameraUtils;
 import com.fy.baselibrary.utils.drawable.ShapeBuilder;
 import com.fy.baselibrary.utils.notify.T;
-import com.gcstorage.app.main.utills.FrameCapture;
+import com.fy.luban.Luban;
 import com.gcstorage.app.main.utills.Utils;
 import com.gcstorage.app.main.view.ViewfinderView;
 import com.wintone.plateid.PlateCfgParameter;
@@ -70,9 +71,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 项目名称：plate_id_sample_service 类名称：MemoryCameraActivity 类描述： 视频扫描界面 扫描车牌并识别
@@ -208,13 +217,10 @@ public class MemoryCameraActivity extends FragmentActivity implements
         filter.addAction(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         registerReceiver(mBatInfoReceiver, filter);
-
     }
-
 
     // 设置相机取景方向和扫面框
     private void setRotationAndView(int uiRot) {
-
         setScreenSize(this);
         System.out.println("屏幕宽：" + width + "     屏幕高：" + height);
         rotation = Utils.setRotation(width, height, uiRot, rotation);
@@ -224,20 +230,16 @@ public class MemoryCameraActivity extends FragmentActivity implements
             myview = new ViewfinderView(MemoryCameraActivity.this, width,
                     height, false);
             setLinearButton();
-
         } else { // 横屏状态下
             myview = new ViewfinderView(MemoryCameraActivity.this, width,
                     height, true);
             setHorizontalButton();
-
         }
     }
 
     @SuppressLint("NewApi")
     private void findiew() {
-        // TODO Auto-generated method stub
         surfaceView = findViewById(R.id.surfaceViwe_video);
-
         flash_camera = findViewById(R.id.flash_camera);
         back = findViewById(R.id.back);
         take_pic = findViewById(R.id.take_pic_btn);
@@ -253,37 +255,24 @@ public class MemoryCameraActivity extends FragmentActivity implements
         }
 
         // 竖屏状态下返回按钮
-        back.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                // TODO Auto-generated method stub\
-                closeCamera();
-                finish();
-            }
+        back.setOnClickListener(arg0 -> {
+            closeCamera();
+            finish();
         });
 
         // 闪光灯监听事件
-        flash_camera.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    CameraUtils.openFlashLight(camera);
-                    flash_camera.setText("轻触关闭");
-                } else {
-                    CameraUtils.closeFlashLight(camera);
-                    flash_camera.setText("轻触打开");
-                }
+        flash_camera.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked){
+                CameraUtils.openFlashLight(camera);
+                flash_camera.setText("轻触关闭");
+            } else {
+                CameraUtils.closeFlashLight(camera);
+                flash_camera.setText("轻触打开");
             }
         });
 
         // 拍照按钮
-        take_pic.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                // TODO Auto-generated method stub
-                isCamera = true;
-            }
-        });
+        take_pic.setOnClickListener(arg0 -> isCamera = true);
     }
 
     // 设置竖屏方向按钮布局
@@ -387,7 +376,6 @@ public class MemoryCameraActivity extends FragmentActivity implements
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-
         if (camera == null) {
             try {
                 camera = Camera.open();
@@ -427,14 +415,10 @@ public class MemoryCameraActivity extends FragmentActivity implements
     }
 
     @Override
-    public void surfaceChanged(final SurfaceHolder holder, int format,
-                               int width, int height) {
-
-    }
+    public void surfaceChanged(final SurfaceHolder holder, int format, int width, int height) {}
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-
         try {
             if (camera != null) {
                 camera.setPreviewCallback(null);
@@ -444,19 +428,9 @@ public class MemoryCameraActivity extends FragmentActivity implements
             }
         } catch (Exception e) {
         }
-
     }
 
-    @Override
-    protected void onStop() {
-        // TODO Auto-generated method stub
-        super.onStop();
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
-        re.removeView(myview);
-    }
+
 
     int nums = -1;
     int switchs = -1;
@@ -776,7 +750,6 @@ public class MemoryCameraActivity extends FragmentActivity implements
                                 }
 
                                 if (null != fieldname) {
-
                                     BitmapFactory.Options options = new BitmapFactory.Options();
                                     options.inPreferredConfig = Config.ARGB_8888;
                                     options.inPurgeable = true;
@@ -810,35 +783,33 @@ public class MemoryCameraActivity extends FragmentActivity implements
                                             .getSystemService(
                                                     Service.VIBRATOR_SERVICE);
                                     mVibrator.vibrate(100);
-                                    closeCamera();
-                                    Intent intent = new Intent(
-                                            MemoryCameraActivity.this,
-                                            MemoryResultActivity.class);
+
                                     number = fieldvalue[0];
                                     color = fieldvalue[1];
+//                                    closeCamera();
 
-                                    int left = Integer.valueOf(fieldvalue[7]);
-                                    int top = Integer.valueOf(fieldvalue[8]);
-                                    int w = Integer.valueOf(fieldvalue[9])
-                                            - Integer.valueOf(fieldvalue[7]);
-                                    int h = Integer.valueOf(fieldvalue[10])
-                                            - Integer.valueOf(fieldvalue[8]);
-                                    intent.putExtra("number", number);
-                                    intent.putExtra("color", color);
-                                    intent.putExtra("path", path);
-                                    intent.putExtra("left", left);
-                                    intent.putExtra("top", top);
-                                    intent.putExtra("width", w);
-                                    intent.putExtra("height", h);
-                                    intent.putExtra("time", fieldvalue[11]);
-                                    intent.putExtra("recogType", recogType);
-                                    new FrameCapture(intentNV21data, preWidth,
-                                            preHeight, "10");
+                                    showResultDialog(number, color);
+//                                    Intent intent = new Intent( MemoryCameraActivity.this, MemoryResultActivity.class);
+//                                    int left = Integer.valueOf(fieldvalue[7]);
+//                                    int top = Integer.valueOf(fieldvalue[8]);
+//                                    int w = Integer.valueOf(fieldvalue[9])
+//                                            - Integer.valueOf(fieldvalue[7]);
+//                                    int h = Integer.valueOf(fieldvalue[10])
+//                                            - Integer.valueOf(fieldvalue[8]);
+//                                    intent.putExtra("number", number);
+//                                    intent.putExtra("color", color);
+//                                    intent.putExtra("path", path);
+//                                    intent.putExtra("left", left);
+//                                    intent.putExtra("top", top);
+//                                    intent.putExtra("width", w);
+//                                    intent.putExtra("height", h);
+//                                    intent.putExtra("time", fieldvalue[11]);
+//                                    intent.putExtra("recogType", recogType);
+//                                    new FrameCapture(intentNV21data, preWidth,
+//                                            preHeight, "10");
 //                                    startActivity(intent);
 //                                    MemoryCameraActivity.this.finish();
-                                    showResultDialog(number, color);
                                 }
-
                             } else {
                                 String itemString = "";
 
@@ -846,10 +817,7 @@ public class MemoryCameraActivity extends FragmentActivity implements
                                         .getSystemService(
                                                 Service.VIBRATOR_SERVICE);
                                 mVibrator.vibrate(100);
-                                closeCamera();
-                                Intent intent = new Intent(
-                                        MemoryCameraActivity.this,
-                                        MemoryResultActivity.class);
+
                                 for (int i = 0; i < lenght; i++) {
 
                                     itemString = fieldvalue[0];
@@ -864,13 +832,17 @@ public class MemoryCameraActivity extends FragmentActivity implements
                                     itemString = fieldvalue[11];
                                     resultString = itemString.split(";");
                                 }
-
-                                intent.putExtra("number", number);
-                                intent.putExtra("color", color);
-                                intent.putExtra("time", resultString);
-                                intent.putExtra("recogType", recogType);
-                                MemoryCameraActivity.this.finish();
-                                startActivity(intent);
+                                showResultDialog(number, color);
+//                                closeCamera();
+//                                Intent intent = new Intent(
+//                                        MemoryCameraActivity.this,
+//                                        MemoryResultActivity.class);
+//                                intent.putExtra("number", number);
+//                                intent.putExtra("color", color);
+//                                intent.putExtra("time", resultString);
+//                                intent.putExtra("recogType", recogType);
+//                                MemoryCameraActivity.this.finish();
+//                                startActivity(intent);
                             }
                         }
                     }
@@ -880,7 +852,6 @@ public class MemoryCameraActivity extends FragmentActivity implements
                 if (!recogType) {
                     // 预览识别执行下列代码 不是预览识别 不做处理等待下一帧
                     if (picData != null) {
-
                         BitmapFactory.Options options = new BitmapFactory.Options();
                         options.inPreferredConfig = Config.ARGB_8888;
                         options.inPurgeable = true;
@@ -921,10 +892,8 @@ public class MemoryCameraActivity extends FragmentActivity implements
                             mVibrator = (Vibrator) getApplication()
                                     .getSystemService(Service.VIBRATOR_SERVICE);
                             mVibrator.vibrate(100);
-                            closeCamera();
-                            Intent intent = new Intent(
-                                    MemoryCameraActivity.this,
-                                    MemoryResultActivity.class);
+//                            closeCamera();
+
                             number = fieldvalue[0];
                             color = fieldvalue[1];
                             if (fieldvalue[0] == null) {
@@ -933,23 +902,30 @@ public class MemoryCameraActivity extends FragmentActivity implements
                             if (fieldvalue[1] == null) {
                                 color = "null";
                             }
-                            int left = prp.plateIDCfg.left;
-                            int top = prp.plateIDCfg.top;
-                            int w = prp.plateIDCfg.right - prp.plateIDCfg.left;
-                            int h = prp.plateIDCfg.bottom - prp.plateIDCfg.top;
 
-                            intent.putExtra("number", number);
-                            intent.putExtra("color", color);
-                            intent.putExtra("path", path);
-                            intent.putExtra("left", left);
-                            intent.putExtra("top", top);
-                            intent.putExtra("width", w);
-                            intent.putExtra("height", h);
-                            intent.putExtra("time", fieldvalue[11]);
-                            intent.putExtra("recogType", recogType);
-                            MemoryCameraActivity.this.finish();
-                            startActivity(intent);
-
+                            T.showLong("请拍照正确车牌!");
+                            isCamera = false;
+//                            isDiscern = false;
+//                            deletePicFile(path);
+                            camera.setPreviewCallback(MemoryCameraActivity.this);
+                            camera.startPreview();
+//                            Intent intent = new Intent( MemoryCameraActivity.this, MemoryResultActivity.class);
+//                            int left = prp.plateIDCfg.left;
+//                            int top = prp.plateIDCfg.top;
+//                            int w = prp.plateIDCfg.right - prp.plateIDCfg.left;
+//                            int h = prp.plateIDCfg.bottom - prp.plateIDCfg.top;
+//
+//                            intent.putExtra("number", number);
+//                            intent.putExtra("color", color);
+//                            intent.putExtra("path", path);
+//                            intent.putExtra("left", left);
+//                            intent.putExtra("top", top);
+//                            intent.putExtra("width", w);
+//                            intent.putExtra("height", h);
+//                            intent.putExtra("time", fieldvalue[11]);
+//                            intent.putExtra("recogType", recogType);
+//                            MemoryCameraActivity.this.finish();
+//                            startActivity(intent);
                         }
                     }
                 }
@@ -993,150 +969,6 @@ public class MemoryCameraActivity extends FragmentActivity implements
             }
 
         }
-    }
-
-    /**
-     * @param
-     * @return void 返回类型
-     * @throws
-     * @Title: closeCamera
-     * @Description: TODO(这里用一句话描述这个方法的作用) 关闭相机
-     */
-    private void closeCamera() {
-        // TODO Auto-generated method stub
-
-        synchronized (this) {
-            try {
-                if (timer != null) {
-                    timer.cancel();
-                    timer = null;
-                }
-                if (time != null) {
-                    time.cancel();
-                    time = null;
-                }
-                if (camera != null) {
-                    camera.setPreviewCallback(null);
-                    camera.stopPreview();
-                    camera.release();
-                    camera = null;
-                }
-
-            } catch (Exception e) {
-
-            }
-        }
-    }
-
-    private void feedbackWrongCode() {
-        String nretString = nRet + "";
-        if (nretString.equals("-1001")) {
-            Toast.makeText(
-                    MemoryCameraActivity.this,
-                    getString(R.string.recognize_result) + nRet + "\n"
-                            + getString(R.string.failed_readJPG_error),
-                    Toast.LENGTH_SHORT).show();
-
-        } else if (nretString.equals("-10001")) {
-            Toast.makeText(
-                    MemoryCameraActivity.this,
-                    getString(R.string.recognize_result) + nRet + "\n"
-                            + getString(R.string.failed_noInit_function),
-                    Toast.LENGTH_SHORT).show();
-
-        } else if (nretString.equals("-10003")) {
-            Toast.makeText(
-                    MemoryCameraActivity.this,
-                    getString(R.string.recognize_result) + nRet + "\n"
-                            + getString(R.string.failed_validation_faile),
-                    Toast.LENGTH_SHORT).show();
-
-        } else if (nretString.equals("-10004")) {
-            Toast.makeText(
-                    MemoryCameraActivity.this,
-                    getString(R.string.recognize_result) + nRet + "\n"
-                            + getString(R.string.failed_serial_number_null),
-                    Toast.LENGTH_SHORT).show();
-
-        } else if (nretString.equals("-10005")) {
-            Toast.makeText(
-                    MemoryCameraActivity.this,
-                    getString(R.string.recognize_result) + nRet + "\n"
-                            + getString(R.string.failed_disconnected_server),
-                    Toast.LENGTH_SHORT).show();
-
-        } else if (nretString.equals("-10006")) {
-            Toast.makeText(
-                    MemoryCameraActivity.this,
-                    getString(R.string.recognize_result) + nRet + "\n"
-                            + getString(R.string.failed_obtain_activation_code),
-                    Toast.LENGTH_SHORT).show();
-
-        } else if (nretString.equals("-10007")) {
-            Toast.makeText(
-                    MemoryCameraActivity.this,
-                    getString(R.string.recognize_result) + nRet + "\n"
-                            + getString(R.string.failed_noexist_serial_number),
-                    Toast.LENGTH_SHORT).show();
-
-        } else if (nretString.equals("-10008")) {
-            Toast.makeText(
-                    MemoryCameraActivity.this,
-                    getString(R.string.recognize_result) + nRet + "\n"
-                            + getString(R.string.failed_serial_number_used),
-                    Toast.LENGTH_SHORT).show();
-
-        } else if (nretString.equals("-10009")) {
-            Toast.makeText(
-                    MemoryCameraActivity.this,
-                    getString(R.string.recognize_result) + nRet + "\n"
-                            + getString(R.string.failed_unable_create_authfile),
-                    Toast.LENGTH_SHORT).show();
-
-        } else if (nretString.equals("-10010")) {
-            Toast.makeText(
-                    MemoryCameraActivity.this,
-                    getString(R.string.recognize_result) + nRet + "\n"
-                            + getString(R.string.failed_check_activation_code),
-                    Toast.LENGTH_SHORT).show();
-
-        } else if (nretString.equals("-10011")) {
-            Toast.makeText(
-                    MemoryCameraActivity.this,
-                    getString(R.string.recognize_result) + nRet + "\n"
-                            + getString(R.string.failed_other_errors),
-                    Toast.LENGTH_SHORT).show();
-
-        } else if (nretString.equals("-10012")) {
-            Toast.makeText(
-                    MemoryCameraActivity.this,
-                    getString(R.string.recognize_result) + nRet + "\n"
-                            + getString(R.string.failed_not_active),
-                    Toast.LENGTH_SHORT).show();
-
-        } else if (nretString.equals("-10015")) {
-            Toast.makeText(
-                    MemoryCameraActivity.this,
-                    getString(R.string.recognize_result) + nRet + "\n"
-                            + getString(R.string.failed_check_failure),
-                    Toast.LENGTH_SHORT).show();
-
-        } else {
-            Toast.makeText(MemoryCameraActivity.this,
-                    getString(R.string.recognize_result) + nRet + "\n",
-                    Toast.LENGTH_SHORT).show();
-
-        }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-            closeCamera();
-            finish();
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
     public String savePicture(Bitmap bitmap) {
@@ -1203,30 +1035,7 @@ public class MemoryCameraActivity extends FragmentActivity implements
     }
 
     /**
-     * @param mDecorView
-     *            {tags} 设定文件
-     * @return ${return_type} 返回类型
-     * @throws
-     * @Title: 沉寂模式
-     * @Description: 隐藏虚拟按键
-     */
-    // @TargetApi(19)
-    // public void hiddenVirtualButtons(View mDecorView) {
-    // if (Build.VERSION.SDK_INT >= 19) {
-    // mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-    // | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-    // | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-    // | View.SYSTEM_UI_FLAG_FULLSCREEN
-    // | View.SYSTEM_UI_FLAG_IMMERSIVE);
-    // }
-    // }
-
-    /**
-     * @param @param context 设定文件
-     * @return void 返回类型
-     * @throws
-     * @Title: setScreenSize
-     * @Description: TODO(这里用一句话描述这个方法的作用) 获取屏幕真实分辨率，不受虚拟按键影响
+     * 获取屏幕真实分辨率，不受虚拟按键影响
      */
     @SuppressLint("NewApi")
     private void setScreenSize(Context context) {
@@ -1273,33 +1082,175 @@ public class MemoryCameraActivity extends FragmentActivity implements
         }
     };
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        re.removeView(myview);
+    }
+
+    @Override
+    public void onBackPressed() {
+        closeCamera();
+        super.onBackPressed();
+    }
+
+    //关闭相机
+    private void closeCamera() {
+        synchronized (this) {
+            try {
+                if (timer != null) {
+                    timer.cancel();
+                    timer = null;
+                }
+                if (time != null) {
+                    time.cancel();
+                    time = null;
+                }
+                if (camera != null) {
+                    camera.setPreviewCallback(null);
+                    camera.stopPreview();
+                    camera.release();
+                    camera = null;
+                }
+
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    //toast 提示 识别错误码
+    private void feedbackWrongCode() {
+        String nretString = nRet + "";
+        if (nretString.equals("-1001")) {
+            T.showLong(getString(R.string.recognize_result) + nRet + "\n" + getString(R.string.failed_readJPG_error));
+        } else if (nretString.equals("-10001")) {
+            T.showLong(getString(R.string.recognize_result) + nRet + "\n" + getString(R.string.failed_noInit_function));
+        } else if (nretString.equals("-10003")) {
+            T.showLong(getString(R.string.recognize_result) + nRet + "\n" + getString(R.string.failed_validation_faile));
+        } else if (nretString.equals("-10004")) {
+            T.showLong(getString(R.string.recognize_result) + nRet + "\n" + getString(R.string.failed_serial_number_null));
+        } else if (nretString.equals("-10005")) {
+            T.showLong(getString(R.string.recognize_result) + nRet + "\n" + getString(R.string.failed_disconnected_server));
+        } else if (nretString.equals("-10006")) {
+            T.showLong(getString(R.string.recognize_result) + nRet + "\n" + getString(R.string.failed_obtain_activation_code));
+        } else if (nretString.equals("-10007")) {
+            T.showLong(getString(R.string.recognize_result) + nRet + "\n" + getString(R.string.failed_noexist_serial_number));
+        } else if (nretString.equals("-10008")) {
+            T.showLong(getString(R.string.recognize_result) + nRet + "\n" + getString(R.string.failed_serial_number_used));
+        } else if (nretString.equals("-10009")) {
+            T.showLong(getString(R.string.recognize_result) + nRet + "\n" + getString(R.string.failed_unable_create_authfile));
+        } else if (nretString.equals("-10010")) {
+            T.showLong(getString(R.string.recognize_result) + nRet + "\n" + getString(R.string.failed_check_activation_code));
+        } else if (nretString.equals("-10011")) {
+            T.showLong(getString(R.string.recognize_result) + nRet + "\n" + getString(R.string.failed_other_errors));
+        } else if (nretString.equals("-10012")) {
+            T.showLong(getString(R.string.recognize_result) + nRet + "\n" + getString(R.string.failed_not_active));
+        } else if (nretString.equals("-10015")) {
+            T.showLong(getString(R.string.recognize_result) + nRet + "\n" + getString(R.string.failed_check_failure));
+        } else {
+            T.showLong(getString(R.string.recognize_result) + nRet);
+        }
+    }
+
     //弹窗 显示识别结果
     private void showResultDialog(String number, String color){
+        camera.setPreviewCallback(null);
+        camera.stopPreview();
+
         NiceDialog.init()
                 .setLayoutId(R.layout.dialog_cofig)
                 .setDialogConvertListener(new DialogConvertListener() {
                     @Override
                     protected void convertView(ViewHolder holder, CommonDialog dialog) {
-                        Drawable bg = ShapeBuilder.create()
-                                .solid(R.color.white)
-                                .stroke(2, R.color.stroke)
-                                .radius(24)
-                                .build();
+
+                        holder.getView(R.id.rLayout)
+                                .setBackground(ShapeBuilder.create()
+                                        .solid(R.color.white)
+                                        .stroke(2, R.color.stroke)
+                                        .radius(24)
+                                        .build());
 
                         EditText et_car_num = holder.getView(R.id.et_car_num);
-                        et_car_num.setBackground(bg);
-                        EditText et_car_color = holder.getView(R.id.et_car_color);
-                        et_car_color.setBackground(bg);
+                        et_car_num.setText(number);
 
-                        holder.setOnClickListener(R.id.negativeButton, v -> dialog.dismiss());
-                        holder.setOnClickListener(R.id.positiveButton, v -> {
+                        EditText et_car_color = holder.getView(R.id.et_car_color);
+                        et_car_color.setText(color);
+
+                        holder.setOnClickListener(R.id.negativeButton, v -> {
+                            isCamera = false;
                             dialog.dismiss();
-                            T.showLong("确认上传");
+                            camera.setPreviewCallback(MemoryCameraActivity.this);
+                            camera.startPreview();
+                        });
+
+                        holder.setOnClickListener(R.id.positiveButton, v -> {
+                            isCamera = false;
+                            dialog.dismiss();
+                            camera.setPreviewCallback(MemoryCameraActivity.this);
+                            camera.startPreview();
+
+                            List<String> file = new ArrayList<>();
+                            file.add(path);
+                            uploadFiles(file);
                         });
 
                     }
                 }).setHide(true)
                 .show(getSupportFragmentManager(), "dialog_cofig");
+    }
 
+
+
+    public void uploadFiles(List<String> files) {
+        Observable.just(files)
+                .subscribeOn(Schedulers.io())
+                .map(new Function<List<String>, List<File>>() {
+                    @Override public List<File> apply(@NonNull List<String> list) throws Exception {
+                        FileUtils.recursionDeleteFile(new File(FileUtils.getPath("luban", 1)));
+                        File lubanPath = FileUtils.folderIsExists("luban", 1);
+                        // 同步方法直接返回压缩后的文件
+                        return Luban.with(MemoryCameraActivity.this)
+                                .load(list)
+                                .ignoreBy(100)
+                                .setTargetDir(lubanPath.getPath())
+                                .get();
+                    }
+                }).flatMap(new Function<List<File>, ObservableSource<Object>>() {
+            @Override
+            public ObservableSource<Object> apply(List<File> files) throws Exception {
+                ArrayMap<String, Object> params = new ArrayMap<>();
+                params.put("uploadFile", "fileName");
+                params.put("filePathList", files);
+                params.put("UploadOnSubscribe", new UploadOnSubscribe());
+                params.put("alarm", "015176"); // 警号
+                params.put("token", "123"); // token
+
+                return RequestUtils.create(LoadService.class)
+                        .uploadFile("http://47.107.134.212:13201/Falcon/2.0/tools/uploadfile_more", params)
+                        .compose(RxHelper.bindToLifecycle(MemoryCameraActivity.this))
+                        .subscribeOn(Schedulers.io())//指定的是上游发送事件的线程
+                        .observeOn(AndroidSchedulers.mainThread());
+            }
+        }).subscribe(getObserver());
+    }
+
+    //定义 网络请求 观察者
+    private RequestBaseObserver<Object> getObserver() {
+        return new RequestBaseObserver<Object>() {
+            @Override
+            protected void onSuccess(Object commentBeans) {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+            }
+        };
     }
 }

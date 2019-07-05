@@ -3,6 +3,7 @@ package com.fy.baselibrary.retrofit.converter.file;
 import android.text.TextUtils;
 import android.util.ArrayMap;
 
+import com.fy.baselibrary.h5.H5RequestBean;
 import com.fy.baselibrary.retrofit.load.up.FileProgressRequestBody;
 import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
 
@@ -42,9 +43,9 @@ public class FileRequestBodyConverter implements Converter<ArrayMap<String, Obje
         if (TextUtils.isEmpty(fileKey)) fileKey = "file";
 
         if (params.containsKey("filePathList")) {
-            return filesToMultipartBody((List<String>) params.get("filePathList"), fileKey);
+            return filesToMultipartBody((List<String>) params.get("filePathList"), fileKey, params);
         } else if (params.containsKey("files")) {
-            return filesToMultipartBody((List<File>) params.get("files"), fileKey);
+            return filesToMultipartBody((List<File>) params.get("files"), fileKey, params);
         } else {
             return null;
         }
@@ -58,9 +59,16 @@ public class FileRequestBodyConverter implements Converter<ArrayMap<String, Obje
      * @param fileKey 文件上传 表单提交，文件key (默认为 "file"，一般根据后台提供)
      * @return MultipartBody（retrofit 多文件文件上传）
      */
-    public synchronized <T> MultipartBody filesToMultipartBody(List<T> files, String fileKey) {
+    public synchronized <T> MultipartBody filesToMultipartBody(List<T> files, String fileKey, ArrayMap<String, Object> params) {
 
         MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+
+        //解析 文本参数 装载到 MultipartBody 中
+        for (String key : params.keySet()) {
+            if (!TextUtils.isEmpty(key) && !key.equals("UploadOnSubscribe") && !key.equals("uploadFile") && !key.equals("filePathList")){
+                builder.addFormDataPart(key, (String) params.get(key));
+            }
+        }
 
         long sumLeng = 0L;
         File file;

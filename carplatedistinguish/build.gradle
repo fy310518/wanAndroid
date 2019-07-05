@@ -59,4 +59,5 @@ dependencies {
     implementation "com.android.support.constraint:constraint-layout:$var.constraintLayout"
 
     implementation project(':baseLibrary')
+    implementation project(':imgPicker')
 }
