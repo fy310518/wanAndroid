@@ -1,4 +1,4 @@
-package com.gcstorage.parkinggather.main;
+package com.gcstorage.parkinggather.bean;
 
 import java.io.Serializable;
 import java.util.List;

@@ -6,6 +6,7 @@ import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.rv.adapter.RvCommonAdapter;
 import com.fy.baselibrary.utils.imgload.ImgLoadUtils;
 import com.gcstorage.parkinggather.R;
+import com.gcstorage.parkinggather.bean.ParkingInfoEntity;
 
 import java.util.List;
 

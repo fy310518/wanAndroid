@@ -29,7 +29,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"
         android:text="轻触打开"
-        android:textColor="@color/flashlight_switch_txtcolor_selector"
+        android:textColor="@color/select_txt_color"
         android:textSize="12sp"
         android:layout_centerHorizontal="true"
         android:layout_above="@+id/bottomL"/>

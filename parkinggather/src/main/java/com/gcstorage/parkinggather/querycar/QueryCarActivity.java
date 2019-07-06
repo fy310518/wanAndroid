@@ -18,6 +18,7 @@ import com.fy.baselibrary.utils.drawable.ShapeBuilder;
 import com.fy.baselibrary.utils.drawable.TintUtils;
 import com.fy.baselibrary.utils.notify.T;
 import com.gcstorage.parkinggather.R;
+import com.gcstorage.parkinggather.bean.ParkingInfoEntity;
 import com.gcstorage.parkinggather.util.PGAppUtils;
 import com.gcstorage.parkinggather.util.TimeSelector;
 import com.gcstorage.parkinggather.widget.PlateNumEditText;
@@ -68,6 +69,14 @@ public class QueryCarActivity extends AppCompatActivity implements IBaseActivity
     public void initData(Activity activity, Bundle savedInstanceState) {
         initView();
 
+        Bundle bundle = getIntent().getExtras();
+        assert bundle != null;
+        ParkingInfoEntity.DataBean parkingInfo = (ParkingInfoEntity.DataBean) bundle.getSerializable("ParkingInfo");
+        assert parkingInfo != null;
+        String carNum = parkingInfo.getCarNum();
+
+        tv_province_abbr.setText(carNum.length() > 6 ? carNum.substring(0, 1) : "");
+        et_carnum.setText(carNum.length() > 6 ? carNum.substring(1, carNum.length()) : "");
     }
 
     @OnClick({R.id.tv_province_abbr, R.id.txtEndTime, R.id.txtStartTime, R.id.btn_search})

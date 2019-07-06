@@ -28,7 +28,7 @@ public class BeanModule<T> implements BaseBean<T>, Serializable{
      */
     @Override
     public boolean isSuccess(){
-        return !TextUtils.isEmpty(resultcode) && resultcode.equals("20000");
+        return !TextUtils.isEmpty(resultcode) && (resultcode.equals("20000") || resultcode.equals("0"));
     }
 
     @Override

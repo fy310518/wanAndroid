@@ -1,6 +1,8 @@
 package com.gcstorage.parkinggather;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.fy.baselibrary.application.BaseActivityLifecycleCallbacks;
 import com.fy.baselibrary.application.ioc.ConfigUtils;
@@ -52,5 +54,12 @@ public class ParkingGatherApplication extends Application {
                 return R.id.tvTry;
             }
         }));
+    }
+
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 }

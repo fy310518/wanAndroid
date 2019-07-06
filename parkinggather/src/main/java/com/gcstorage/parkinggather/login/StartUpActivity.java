@@ -3,7 +3,6 @@ package com.gcstorage.parkinggather.login;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -15,10 +14,12 @@ import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.statusbar.StatusBarContentColor;
+import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.ResUtils;
+import com.fy.baselibrary.utils.cache.SpfAgent;
 import com.fy.baselibrary.utils.drawable.ShapeBuilder;
-import com.fy.baselibrary.utils.drawable.TintUtils;
+import com.gcstorage.parkinggather.Constant;
 import com.gcstorage.parkinggather.R;
 import com.gcstorage.parkinggather.main.MainActivity;
 
@@ -92,13 +93,15 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
     /**
      * 根据条件 判断进入登录页还是主界面
      */
-    @NeedPermission(value = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
+    @NeedPermission(value = {Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
     private void intoMainOrLogin() {
-//        if (Constant.isMustAppLogin && ! SpfAgent.getBoolean(Constant.baseSpf, Constant.isLogin)) {
-//            JumpUtils.jump(this, AppUtils.getLocalPackageName() + ".login.LoginActivity", null);
-//        } else {
+        if (!SpfAgent.getBoolean(Constant.baseSpf, Constant.isLogin)) {
+            JumpUtils.jump(this, AppUtils.getLocalPackageName() + ".login.LoginActivity", null);
+        } else {
             JumpUtils.jump(this, MainActivity.class, null);
-//        }
+        }
 
         finish();
     }

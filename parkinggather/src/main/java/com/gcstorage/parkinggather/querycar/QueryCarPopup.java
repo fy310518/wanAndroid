@@ -48,7 +48,6 @@ public class QueryCarPopup extends CommonPopupWindow {
             @Override
             public void convert(ViewHolder holder, String str, int position) {
                 CheckBox queryPopupItem = holder.getView(R.id.queryPopupItem);
-                queryPopupItem.setBackground(PGAppUtils.getSelector(R.drawable.btn_shape_white_bg, 0, R.color.button_pressed, R.color.white));
 
                 queryPopupItem.setText(str);
                 queryPopupItem.setChecked(mSelectedPos == position);

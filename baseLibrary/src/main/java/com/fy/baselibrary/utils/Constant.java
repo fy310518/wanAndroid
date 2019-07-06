@@ -60,11 +60,6 @@ public class Constant {
     public static boolean isOrientation = false;
 
     /**
-     * 用户是否登录 key
-     */
-    public static String isLogin = "is_Login";
-
-    /**
      * 缓存用户名 key
      */
     public static final String SP_KEY_OPENID = "open_id";

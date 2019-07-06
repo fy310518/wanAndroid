@@ -1,12 +1,11 @@
 package com.gcstorage.parkinggather.carinfo;
 
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.bigkoo.convenientbanner.holder.Holder;
 import com.fy.baselibrary.utils.imgload.ImgLoadUtils;
 import com.gcstorage.parkinggather.R;
-import com.gcstorage.parkinggather.main.ParkingInfoEntity;
+import com.gcstorage.parkinggather.bean.ParkingInfoEntity;
 import com.github.chrisbanes.photoview.PhotoView;
 
 /**

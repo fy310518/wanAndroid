@@ -35,11 +35,9 @@ import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -51,17 +49,20 @@ import com.fy.baselibrary.base.dialog.DialogConvertListener;
 import com.fy.baselibrary.base.dialog.NiceDialog;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
-import com.fy.baselibrary.retrofit.load.LoadService;
+import com.fy.baselibrary.retrofit.ServerException;
 import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
 import com.fy.baselibrary.retrofit.observer.RequestBaseObserver;
 import com.fy.baselibrary.utils.FileUtils;
-import com.fy.baselibrary.utils.JumpUtils;
+import com.fy.baselibrary.utils.cache.SpfAgent;
 import com.fy.baselibrary.utils.camera.CameraUtils;
 import com.fy.baselibrary.utils.drawable.ShapeBuilder;
 import com.fy.baselibrary.utils.notify.T;
 import com.fy.luban.Luban;
 import com.gcstorage.app.main.utills.Utils;
 import com.gcstorage.app.main.view.ViewfinderView;
+import com.gcstorage.parkinggather.Constant;
+import com.gcstorage.parkinggather.bean.UploadFileEntity;
+import com.gcstorage.parkinggather.request.ApiService;
 import com.wintone.plateid.PlateCfgParameter;
 import com.wintone.plateid.PlateRecognitionParameter;
 import com.wintone.plateid.RecogService;
@@ -78,7 +79,6 @@ import java.util.TimerTask;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -88,8 +88,18 @@ import io.reactivex.schedulers.Schedulers;
  * （与视频流的拍照识别同一界面） 创建人：张志朋 创建时间：2016-1-29 上午10:55:28 修改人：user 修改时间：2016-1-29
  * 上午10:55:28 修改备注：
  */
-public class MemoryCameraActivity extends FragmentActivity implements
-        SurfaceHolder.Callback, Camera.PreviewCallback {
+public class MemoryCameraActivity extends FragmentActivity implements SurfaceHolder.Callback, Camera.PreviewCallback {
+
+    private String[] fieldvalue = new String[14];
+    int[] fieldname = {R.string.plate_number, R.string.plate_color,
+            R.string.plate_color_code, R.string.plate_type_code,
+            R.string.plate_reliability, R.string.plate_brightness_reviews,
+            R.string.plate_move_orientation, R.string.plate_leftupper_pointX,
+            R.string.plate_leftupper_pointY, R.string.plate_rightdown_pointX,
+            R.string.plate_rightdown_pointY, R.string.plate_elapsed_time,
+            R.string.plate_light, R.string.plate_car_color};
+
+
     private Camera camera;
     private SurfaceView surfaceView;
     private static final String PATH = Environment
@@ -111,7 +121,7 @@ public class MemoryCameraActivity extends FragmentActivity implements
     private int imageformat = 6;// NV21 -->6
     private int bVertFlip = 0;
     private int bDwordAligned = 1;
-    private String[] fieldvalue = new String[14];
+
     private int rotation = 0;
     private static int tempUiRot = 0;
     private Bitmap bitmap, bitmap1;
@@ -492,7 +502,6 @@ public class MemoryCameraActivity extends FragmentActivity implements
                     fieldvalue = recogBinder.doRecogDetail(prp);
                     nRet = recogBinder.getnRet();
                     if (nRet != 0) {
-
                         feedbackWrongCode();
                     } else {
                         number = fieldvalue[0];
@@ -500,18 +509,17 @@ public class MemoryCameraActivity extends FragmentActivity implements
                         mVibrator = (Vibrator) getApplication()
                                 .getSystemService(Service.VIBRATOR_SERVICE);
                         mVibrator.vibrate(100);
-                        closeCamera();
+//                        closeCamera();
                         // 此模式下跳转 请到MemoryResultActivity 更改下代码 有注释注意查看
-                        Intent intent = new Intent(MemoryCameraActivity.this,
-                                MemoryResultActivity.class);
-                        intent.putExtra("number", number);
-                        intent.putExtra("color", color);
-                        intent.putExtra("path", path);
-                        // intent.putExtra("time", fieldvalue[11]);
-                        intent.putExtra("recogType", false);
+//                        Intent intent = new Intent(MemoryCameraActivity.this, MemoryResultActivity.class);
+//                        intent.putExtra("number", number);
+//                        intent.putExtra("color", color);
+//                        intent.putExtra("path", path);
+//                        // intent.putExtra("time", fieldvalue[11]);
+//                        intent.putExtra("recogType", false);
 //                        startActivity(intent);
 //                        MemoryCameraActivity.this.finish();
-                        showResultDialog(number, color);
+                        showResultDialog(number, color, fieldvalue[13]);
                     }
                 }
             } else {
@@ -657,8 +665,7 @@ public class MemoryCameraActivity extends FragmentActivity implements
                 timer.cancel();
                 timer = null;
             }
-            parameters
-                    .setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
         } else
             // 5.1系统 因对焦问题程序崩溃解决办法
             if (parameters.getSupportedFocusModes().contains(
@@ -693,16 +700,8 @@ public class MemoryCameraActivity extends FragmentActivity implements
         }
         camera.setPreviewCallback(MemoryCameraActivity.this);
         camera.startPreview();
-
     }
 
-    int[] fieldname = {R.string.plate_number, R.string.plate_color,
-            R.string.plate_color_code, R.string.plate_type_code,
-            R.string.plate_reliability, R.string.plate_brightness_reviews,
-            R.string.plate_move_orientation, R.string.plate_leftupper_pointX,
-            R.string.plate_leftupper_pointY, R.string.plate_rightdown_pointX,
-            R.string.plate_rightdown_pointY, R.string.plate_elapsed_time,
-            R.string.plate_light, R.string.plate_car_color};
 
     /**
      * @param @param fieldvalue 调用识别接口返回的数据
@@ -788,7 +787,7 @@ public class MemoryCameraActivity extends FragmentActivity implements
                                     color = fieldvalue[1];
 //                                    closeCamera();
 
-                                    showResultDialog(number, color);
+                                    showResultDialog(number, color, fieldvalue[13]);
 //                                    Intent intent = new Intent( MemoryCameraActivity.this, MemoryResultActivity.class);
 //                                    int left = Integer.valueOf(fieldvalue[7]);
 //                                    int top = Integer.valueOf(fieldvalue[8]);
@@ -832,7 +831,7 @@ public class MemoryCameraActivity extends FragmentActivity implements
                                     itemString = fieldvalue[11];
                                     resultString = itemString.split(";");
                                 }
-                                showResultDialog(number, color);
+                                showResultDialog(number, color, fieldvalue[13]);
 //                                closeCamera();
 //                                Intent intent = new Intent(
 //                                        MemoryCameraActivity.this,
@@ -1158,7 +1157,7 @@ public class MemoryCameraActivity extends FragmentActivity implements
     }
 
     //弹窗 显示识别结果
-    private void showResultDialog(String number, String color){
+    private void showResultDialog(String number, String color, String carColor){
         camera.setPreviewCallback(null);
         camera.stopPreview();
 
@@ -1196,7 +1195,7 @@ public class MemoryCameraActivity extends FragmentActivity implements
 
                             List<String> file = new ArrayList<>();
                             file.add(path);
-                            uploadFiles(file);
+                            uploadFiles(file, number, carColor);
                         });
 
                     }
@@ -1204,13 +1203,12 @@ public class MemoryCameraActivity extends FragmentActivity implements
                 .show(getSupportFragmentManager(), "dialog_cofig");
     }
 
-
-
-    public void uploadFiles(List<String> files) {
+    public void uploadFiles(List<String> files, String number, String carColor) {
         Observable.just(files)
                 .subscribeOn(Schedulers.io())
                 .map(new Function<List<String>, List<File>>() {
-                    @Override public List<File> apply(@NonNull List<String> list) throws Exception {
+                    @Override
+                    public List<File> apply(@NonNull List<String> list) throws Exception {
                         FileUtils.recursionDeleteFile(new File(FileUtils.getPath("luban", 1)));
                         File lubanPath = FileUtils.folderIsExists("luban", 1);
                         // 同步方法直接返回压缩后的文件
@@ -1220,37 +1218,55 @@ public class MemoryCameraActivity extends FragmentActivity implements
                                 .setTargetDir(lubanPath.getPath())
                                 .get();
                     }
-                }).flatMap(new Function<List<File>, ObservableSource<Object>>() {
-            @Override
-            public ObservableSource<Object> apply(List<File> files) throws Exception {
-                ArrayMap<String, Object> params = new ArrayMap<>();
-                params.put("uploadFile", "fileName");
-                params.put("filePathList", files);
-                params.put("UploadOnSubscribe", new UploadOnSubscribe());
-                params.put("alarm", "015176"); // 警号
-                params.put("token", "123"); // token
+                }).flatMap(new Function<List<File>, ObservableSource<List<UploadFileEntity>>>() {
+                    @Override
+                    public ObservableSource<List<UploadFileEntity>> apply(List<File> files) throws Exception {
+                        ArrayMap<String, Object> params = new ArrayMap<>();
+                        params.put("uploadFile", "fileName");
+                        params.put("filePathList", files);
+                        params.put("UploadOnSubscribe", new UploadOnSubscribe());
+                        params.put("alarm", "015176"); // 警号
+                        params.put("token", "123"); // token
 
-                return RequestUtils.create(LoadService.class)
-                        .uploadFile("http://47.107.134.212:13201/Falcon/2.0/tools/uploadfile_more", params)
-                        .compose(RxHelper.bindToLifecycle(MemoryCameraActivity.this))
-                        .subscribeOn(Schedulers.io())//指定的是上游发送事件的线程
-                        .observeOn(AndroidSchedulers.mainThread());
-            }
-        }).subscribe(getObserver());
+                        return RequestUtils.create(ApiService.class)
+                                .uploadFile(params)
+                                .compose(RxHelper.handleResult())
+                                .compose(RxHelper.bindToLifecycle(MemoryCameraActivity.this));
+                    }
+                }).flatMap(new Function<List<UploadFileEntity>, ObservableSource<Object>>() {
+                    @Override
+                    public ObservableSource<Object> apply(List<UploadFileEntity> uploadFileEntities) throws Exception {
+
+                        if (uploadFileEntities.isEmpty()) return Observable.error(new ServerException("图片上传失败", 10001));
+
+                        UploadFileEntity fileEntity = uploadFileEntities.get(0);
+
+                        ArrayMap<String, String> params = new ArrayMap<>();
+                        params.put("carNum", number);//车牌号
+                        params.put("carColor", carColor);//车辆颜色
+                        params.put("longitude", "100.1");//经度
+                        params.put("latitude", "99.2");//纬度
+                        params.put("address", "江旺路10号");//拍照地址
+                        params.put("carImg", fileEntity.getUrl());//车辆图片url
+                        params.put("userId", SpfAgent.getString(Constant.baseSpf, Constant.userIdCard));//警察身份证号
+                        params.put("name", SpfAgent.getString(Constant.baseSpf, Constant.userName));//警察名称
+                        params.put("pic", SpfAgent.getString(Constant.baseSpf, Constant.userImg));//警员头像
+                        return RequestUtils.create(ApiService.class)
+                                .saveParkingInfo(params)
+                                .compose(RxHelper.handleResult())
+                                .compose(RxHelper.bindToLifecycle(MemoryCameraActivity.this));
+                    }
+                }).subscribe(new RequestBaseObserver<Object>() {
+                    @Override
+                    protected void onSuccess(Object commentBeans) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                    }
+                });
     }
 
-    //定义 网络请求 观察者
-    private RequestBaseObserver<Object> getObserver() {
-        return new RequestBaseObserver<Object>() {
-            @Override
-            protected void onSuccess(Object commentBeans) {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                super.onError(e);
-            }
-        };
-    }
 }

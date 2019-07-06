@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/carplatedistinguish" />
             <option value="$PROJECT_DIR$/imgPicker" />
             <option value="$PROJECT_DIR$/parkinggather" />
+            <option value="$PROJECT_DIR$/parkingnetlibrary" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

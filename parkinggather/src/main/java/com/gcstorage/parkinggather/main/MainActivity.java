@@ -6,12 +6,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
+import android.util.ArrayMap;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,7 +18,6 @@ import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
-import com.fy.baselibrary.rv.adapter.OnListener;
 import com.fy.baselibrary.rv.anim.FadeItemAnimator;
 import com.fy.baselibrary.rv.divider.GridItemDecoration;
 import com.fy.baselibrary.startactivity.StartActivity;
@@ -31,15 +29,23 @@ import com.fy.baselibrary.widget.refresh.EasyPullLayout;
 import com.fy.baselibrary.widget.refresh.OnRefreshLoadMoreListener;
 import com.gcstorage.app.main.MemoryCameraActivity;
 import com.gcstorage.parkinggather.R;
+import com.gcstorage.parkinggather.bean.ParkingInfoEntity;
+import com.gcstorage.parkinggather.bean.WeatherEntity;
 import com.gcstorage.parkinggather.carinfo.CarGatherInfoActivity;
 import com.gcstorage.parkinggather.request.ApiService;
+import com.gcstorage.parkinggather.request.BeanModule;
 import com.gcstorage.parkinggather.request.NetCallBack;
 import com.gcstorage.parkinggather.util.PGAppUtils;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.BiFunction;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * DESCRIPTION：驻车采集 主界面
@@ -158,51 +164,74 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
     }
 
     //获取天气 头部 布局，并设置数据
-    private void setWeather(){
+    private void setWeather(WeatherEntity weatherEntity){
         View weatherView = getLayoutInflater().inflate(R.layout.parking_gather_weather_head_item, null);
         TextView txtWeather = weatherView.findViewById(R.id.txtWeather);
         TextView txtAddress = weatherView.findViewById(R.id.txtAddress);
 
-        TintUtils.setTxtIconLocal(txtWeather, TintUtils.getDrawable(PGAppUtils.getWeatherIcon("00"), 0), 1);
-        txtWeather.setText("温度");
+        //根据 天气 状态码 获取天气对应的图标
+        TintUtils.setTxtIconLocal(txtWeather, TintUtils.getDrawable(PGAppUtils.getWeatherIcon(weatherEntity.getWeather_code()), 0), 1);
+        txtWeather.setText(weatherEntity.getTemperaturescope());//设置温度 数据
 
         SpannableStringBuilder ssb = SpanUtils.getBuilder()
                 .setFgColor(R.color.txtSecondColor)
                 .setTextDpSize(R.dimen.txt_small)
-                .append("小雨" + "\n", null)
+                .append(weatherEntity.getWeather() + "\n", null)//天气
                 .setFgColor(R.color.txtLight)
                 .setTextDpSize(R.dimen.txt_small_much)
-                .append("武汉", null)
+                .append(weatherEntity.getArea(), null)// 城市
                 .create();
 
         txtAddress.setText(ssb);
 
         gatherAdapter.cleanHeader();
         gatherAdapter.addHeaderView(weatherView);
+        gatherAdapter.notifyItemRangeChanged(0, 1);
     }
 
     private void getParkingList(){
-        RequestUtils.create(ApiService.class)
-                .getParkingList("10", pageNum + "")
-                .compose(RxHelper.handleResult())
-                .compose(RxHelper.bindToLifecycle(this))
-                .subscribe(new NetCallBack<ParkingInfoEntity>() {
-                    @Override
-                    protected void onSuccess(ParkingInfoEntity parkingInfoEntity) {
 
-                        totalPage = parkingInfoEntity.getTotalPage();
+        Observable<WeatherEntity> weather = RequestUtils.create(ApiService.class)
+                .getWeather("武汉")
+                .compose(RxHelper.handleResult());
+
+        Observable<ParkingInfoEntity> parkingList = RequestUtils.create(ApiService.class)
+                .getParkingList("10", pageNum + "")
+                .compose(RxHelper.handleResult());
+
+        Observable.zip(weather, parkingList, new BiFunction<WeatherEntity, ParkingInfoEntity, ArrayMap<String, Object>>() {
+            @Override
+            public ArrayMap<String, Object> apply(WeatherEntity weather, ParkingInfoEntity parkingList) throws Exception {
+                ArrayMap<String, Object> map = new ArrayMap<>();
+                if(pageNum == 1) map.put("weather", weather);
+                map.put("parkingList", parkingList);
+                return map;
+            }
+        }).compose(RxHelper.bindToLifecycle(this))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new NetCallBack<ArrayMap<String, Object>>() {
+                    @Override
+                    protected void onSuccess(ArrayMap<String, Object> map) {
+
+                        WeatherEntity weatherEntity = (WeatherEntity) map.get("weather");
+                        ParkingInfoEntity parkingInfoEntity = (ParkingInfoEntity) map.get("parkingList");
 
                         if (pageNum == 1) {
-                            setWeather();
+                            if (null != weatherEntity) setWeather(weatherEntity);
 
-                            gatherAdapter.setmDatas(parkingInfoEntity.getData());
-                            gatherAdapter.notifyDataSetChanged();
+                            if (null != parkingInfoEntity){
+                                totalPage = parkingInfoEntity.getTotalPage();
+                                gatherAdapter.setmDatas(parkingInfoEntity.getData());
+                                gatherAdapter.notifyDataSetChanged();
+                            }
                         } else {
+                            if (null == parkingInfoEntity) return;
                             int count = gatherAdapter.getItemCount();
                             gatherAdapter.addData(parkingInfoEntity.getData());
                             gatherAdapter.notifyItemRangeChanged(count, parkingInfoEntity.getData().size());
                         }
                     }
+
                     @Override
                     protected void updateLayout(int flag) {
                         epl.stop();

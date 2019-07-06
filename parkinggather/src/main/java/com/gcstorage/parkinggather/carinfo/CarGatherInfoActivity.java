@@ -21,7 +21,7 @@ import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.drawable.ShapeBuilder;
 import com.fy.baselibrary.utils.imgload.ImgLoadUtils;
 import com.gcstorage.parkinggather.R;
-import com.gcstorage.parkinggather.main.ParkingInfoEntity;
+import com.gcstorage.parkinggather.bean.ParkingInfoEntity;
 import com.gcstorage.parkinggather.querycar.QueryCarActivity;
 
 import java.util.List;
@@ -88,6 +88,7 @@ public class CarGatherInfoActivity extends AppCompatActivity implements IBaseAct
             assert dataBean != null;
             dates = dataBean.getData();
 
+            toolbarTitle.setText(ResUtils.getReplaceStr(R.string.preview_image_count, mCurrentPosition + 1, dates.size()));
             initInfo(dates.get(mCurrentPosition));
             initViewPager();
         }
@@ -101,7 +102,12 @@ public class CarGatherInfoActivity extends AppCompatActivity implements IBaseAct
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_jump_find_car://一键查车
-                JumpUtils.jump(this, QueryCarActivity.class, null);
+                if (null == dates || dates.isEmpty()) return;
+
+                ParkingInfoEntity.DataBean parkingInfo = dates.get(mCurrentPosition);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("ParkingInfo", parkingInfo);
+                JumpUtils.jump(this, QueryCarActivity.class, bundle);
                 break;
         }
     }

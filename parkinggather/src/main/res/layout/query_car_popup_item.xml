@@ -8,7 +8,8 @@
     android:padding="@dimen/spacing_small"
     android:gravity="center"
     android:text=""
-    android:textColor="@color/flashlight_switch_txtcolor_selector"
+    android:textColor="@color/select_txt_color"
+    android:background="@drawable/select_single_check_bg"
     android:textSize="@dimen/txt_small">
 
 </CheckBox>
