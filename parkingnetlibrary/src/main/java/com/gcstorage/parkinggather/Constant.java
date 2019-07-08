@@ -12,6 +12,8 @@ public class Constant {
     public static final String isLogin = "is_Login";
 
 
+    /** 登录用户 id */
+    public static final String userId = "user_Id";
     /** 登录用户 身份证号码 */
     public static final String userIdCard = "user_Id_Card";
 
@@ -20,16 +22,22 @@ public class Constant {
     /** 登录用户 用户名 */
     public static final String userName = "user_Name";
 
-
-
     /** 登录用户 头像 url */
     public static final String userImg = "user_Head_Img";
 
     /** 登录用户 警号 */
     public static final String userAlarm = "user_Alarm";
+    /** 用户 部门 */
+    public static final String userDepart = "user_depart";
+    /** 用户 部门Id */
+    public static final String userDepartId = "user_depart_Id";
+
 
     /** 登录 返回 token */
     public static final String token = "user_token";
 
+
+    /** 其它应用跳转到 本应用的 应用id */
+    public static final String otherAppID = "otherAppID";
 
 }

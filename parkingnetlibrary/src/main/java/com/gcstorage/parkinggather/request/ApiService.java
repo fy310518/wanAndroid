@@ -5,6 +5,8 @@ import android.util.ArrayMap;
 import com.fy.baselibrary.retrofit.load.up.UpLoadFileType;
 import com.gcstorage.parkinggather.bean.LoginEntity;
 import com.gcstorage.parkinggather.bean.ParkingInfoEntity;
+import com.gcstorage.parkinggather.bean.PersonEntity;
+import com.gcstorage.parkinggather.bean.StatisticsEntity;
 import com.gcstorage.parkinggather.bean.UploadFileEntity;
 import com.gcstorage.parkinggather.bean.WeatherEntity;
 
@@ -12,6 +14,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -24,15 +27,29 @@ import retrofit2.http.Query;
  */
 public interface ApiService {
 
+    String HOST = "http://47.107.134.212";
+    String PORT = ":13201/";
+    String h5PORT = ":80/";
+
+    /** 查车界面（H5） */
+    String queryPerson = HOST + h5PORT + "queryPage/#/index";
+
+
     /** 接口地址 */
-    String urlBase2 = "http://47.107.134.212:13201/";
+    String urlBase2 = HOST + PORT;
 
     /** 多图上传接口 */
     String uploadFileMore = urlBase2 + "Falcon/2.0/tools/uploadfile_more";
     /** 登录 接口 */
     String login = urlBase2 + "Falcon/2.0/main/login";
+
+    /** 获取 门户 用户信息 */
+    String person = "https://47.107.134.212:8082" + "/totalLogin/getPersonInfo";
+
     /** 天气 */
     String weather = urlBase2 + "Micro/fireweather";
+    /** 驻车采集信息新接口 */
+    String SERVER_ADDRESS = urlBase2  + "MicroRecon/1.3/parkingcollect_0822";
 
 
     /**
@@ -43,12 +60,32 @@ public interface ApiService {
     Observable<BeanModule<List<LoginEntity>>> login(@FieldMap ArrayMap<String, String> options);
 
     /**
+     * 获取 用户基本信息
+     * @param account 身份证号
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(person)
+    Observable<BeanModule<PersonEntity>> getPersonInfo(@Field("account") String account);
+
+    /**
      * 获取天气
      * @param pageSize
      * @return
      */
     @GET(weather)
     Observable<BeanModule<WeatherEntity>> getWeather(@Query("area") String pageSize);
+
+    /**
+     * 驻车采集信息 (统计图)
+     * params.put("action","parkingcollect");
+     * params.put("alarm",GlobalUserInfo.getAlarm(context));
+     * params.put("token",GlobalUserInfo.getToken(context));
+     */
+    @GET(SERVER_ADDRESS)
+    Observable<BeanModule<StatisticsEntity>> parkingCollect(@Query("action") String action,
+                                                            @Query("alarm") String alarm,
+                                                            @Query("token") String token);
 
 
     /**
@@ -82,6 +119,20 @@ public interface ApiService {
     @POST("/query/car/saveParkingInfo")
     Observable<BeanModule<Object>> saveParkingInfo(@FieldMap ArrayMap<String, String> options);
 
+
+    /**
+     * 个人排行榜
+     * @return
+     */
+    @GET("/query/parking/dailyRanking")
+    Observable<BeanModule<String>> dailyRanking();
+
+    /**
+     * 部门排行榜
+     * @return
+     */
+    @GET("/query/parking/dailyRankOrg")
+    Observable<BeanModule<String>> dailyRankOrg();
 
 
 }

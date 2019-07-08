@@ -16,13 +16,17 @@ import com.bigkoo.convenientbanner.listener.OnPageChangeListener;
 import com.fy.baselibrary.aop.annotation.ClickFilter;
 import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
+import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.ResUtils;
+import com.fy.baselibrary.utils.cache.SpfAgent;
 import com.fy.baselibrary.utils.drawable.ShapeBuilder;
 import com.fy.baselibrary.utils.imgload.ImgLoadUtils;
+import com.gcstorage.parkinggather.Constant;
 import com.gcstorage.parkinggather.R;
 import com.gcstorage.parkinggather.bean.ParkingInfoEntity;
 import com.gcstorage.parkinggather.querycar.QueryCarActivity;
+import com.gcstorage.parkinggather.request.ApiService;
 
 import java.util.List;
 
@@ -106,8 +110,11 @@ public class CarGatherInfoActivity extends AppCompatActivity implements IBaseAct
 
                 ParkingInfoEntity.DataBean parkingInfo = dates.get(mCurrentPosition);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("ParkingInfo", parkingInfo);
-                JumpUtils.jump(this, QueryCarActivity.class, bundle);
+//                bundle.putSerializable("ParkingInfo", parkingInfo);
+//                JumpUtils.jump(this, QueryCarActivity.class, bundle);
+
+                bundle.putString("url", ApiService.queryPerson);
+                JumpUtils.jump(this, SpfAgent.getString(Constant.baseSpf, Constant.otherAppID) + ".com.gcstrage.h5App", bundle);
                 break;
         }
     }

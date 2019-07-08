@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.fy.baselibrary.widget.refresh.EasyPullLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/epl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:max_offset_bottom="@dimen/load_more_max_offset"
+    app:max_offset_top="@dimen/max_offset"
+    app:pull_animator_top="@string/easyPullAnimatorTop"
+    app:sticky_factor="0.1"
+    app:trigger_offset_bottom="@dimen/loadMoreHeight"
+    app:trigger_offset_top="@dimen/refreshHeight">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvRankingList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_type="content"
+        android:background="@color/BgColor"/>
+
+</com.fy.baselibrary.widget.refresh.EasyPullLayout>

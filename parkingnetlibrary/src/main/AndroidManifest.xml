@@ -1,2 +1,2 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gcstorage.parkinggather" />
+    package="com.gcstorage.parkinggather.library" />

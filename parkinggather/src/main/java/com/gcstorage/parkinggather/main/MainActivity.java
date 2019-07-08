@@ -2,6 +2,7 @@ package com.gcstorage.parkinggather.main;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
@@ -12,6 +13,7 @@ import android.text.SpannableStringBuilder;
 import android.util.ArrayMap;
 import android.view.Menu;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fy.baselibrary.aop.annotation.StatusBar;
@@ -21,31 +23,40 @@ import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.rv.anim.FadeItemAnimator;
 import com.fy.baselibrary.rv.divider.GridItemDecoration;
 import com.fy.baselibrary.startactivity.StartActivity;
+import com.fy.baselibrary.utils.DensityUtils;
 import com.fy.baselibrary.utils.JumpUtils;
+import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.SpanUtils;
+import com.fy.baselibrary.utils.TimeUtils;
+import com.fy.baselibrary.utils.cache.SpfAgent;
 import com.fy.baselibrary.utils.drawable.TintUtils;
 import com.fy.baselibrary.utils.notify.T;
 import com.fy.baselibrary.widget.refresh.EasyPullLayout;
 import com.fy.baselibrary.widget.refresh.OnRefreshLoadMoreListener;
 import com.gcstorage.app.main.MemoryCameraActivity;
+import com.gcstorage.parkinggather.Constant;
 import com.gcstorage.parkinggather.R;
+import com.gcstorage.parkinggather.bean.DataEntry;
 import com.gcstorage.parkinggather.bean.ParkingInfoEntity;
+import com.gcstorage.parkinggather.bean.StatisticsEntity;
 import com.gcstorage.parkinggather.bean.WeatherEntity;
 import com.gcstorage.parkinggather.carinfo.CarGatherInfoActivity;
+import com.gcstorage.parkinggather.history.CollectHistoryActivity;
+import com.gcstorage.parkinggather.ranking.RankingListActivity;
 import com.gcstorage.parkinggather.request.ApiService;
-import com.gcstorage.parkinggather.request.BeanModule;
 import com.gcstorage.parkinggather.request.NetCallBack;
 import com.gcstorage.parkinggather.util.PGAppUtils;
+import com.gcstorage.parkinggather.widget.BarGraphView;
+import com.gongwen.marqueen.MarqueeView;
 
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.BiFunction;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.functions.Function3;
 
 /**
  * DESCRIPTION：驻车采集 主界面
@@ -56,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    int listHeadNum = 1;//列表头 数目
+    int listHeadNum = 2;//列表头 数目
 
     int pageNum = 1;//当前页
     int totalPage = 1;//总页数
@@ -107,14 +118,24 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
     @OnClick({R.id.iv_collect})
     @Override
     public void onClick(View v) {
+        Bundle bundle = new Bundle();
         switch (v.getId()) {
             case R.id.menuLayout:
-                T.showLong("历史记录");
+
+                JumpUtils.jump(this, CollectHistoryActivity.class, bundle);
                 break;
             case R.id.iv_collect://拍照（驻车采集）
                 Intent cameraintent = new Intent(MainActivity.this, MemoryCameraActivity.class);
                 cameraintent.putExtra("camera", false);
                 startActivity(cameraintent);
+                break;
+            case R.id.ll_personal_rank://个人排行
+                bundle.putBoolean("type", true);
+                JumpUtils.jump(this, RankingListActivity.class, bundle);
+                break;
+            case R.id.ll_depart_rank://分局排行
+                bundle.putBoolean("type", false);
+                JumpUtils.jump(this, RankingListActivity.class, bundle);
                 break;
         }
     }
@@ -163,6 +184,68 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
         });
     }
 
+    private void setStatistics(StatisticsEntity statisticsEntity){
+        View statistics = getLayoutInflater().inflate(R.layout.parking_gather_statistics_item, null);
+        LinearLayout ll_personal_rank = statistics.findViewById(R.id.ll_personal_rank);
+        LinearLayout ll_depart_rank = statistics.findViewById(R.id.ll_depart_rank);
+        ll_personal_rank.setOnClickListener(this);
+        ll_depart_rank.setOnClickListener(this);
+
+        MarqueeView mv_person_info = statistics.findViewById(R.id.mv_person_info);
+
+        //统计图
+        BarGraphView bgh_count_use = statistics.findViewById(R.id.bgh_count_use);
+        List<StatisticsEntity.CollectInfoListBean> collectInfoList = statisticsEntity.getCollectInfoList();
+        initBarGraph(bgh_count_use, collectInfoList);
+
+        // 最新采集
+        TextView tv_count = statistics.findViewById(R.id.tv_count);
+        tv_count.setText(SpanUtils.getBuilder()
+                .setFgColor(R.color.txtSuperColor)
+                .append("最新采集\n", null)
+                .setFgColor(R.color.txtSecondColor)
+                .append("全市采集 ", null)
+                .setFgColor(R.color.txtBlueColor)
+                .append(statisticsEntity.getCityTotalCollectnum(), null)
+                .setFgColor(R.color.txtSecondColor)
+                .append(" 辆", null)
+                .create());
+
+        gatherAdapter.addHeaderView(statistics);
+        gatherAdapter.notifyItemRangeChanged(0, gatherAdapter.getHeadersCount());
+    }
+
+    // 柱状图
+    private void initBarGraph(BarGraphView bghCountUse, List<StatisticsEntity.CollectInfoListBean> collectInfoList) {
+        //配置柱状图中的参数
+        bghCountUse.setxAxisMean("时间");
+        bghCountUse.setyAxisMean("数量");
+        bghCountUse.setAxisMeanColor(Color.BLACK);
+        bghCountUse.setMeanTextSize(DensityUtils.dp2px(10));
+        bghCountUse.setAxisTextColor(ResUtils.getColor(R.color.text_color_gray_a6));
+        bghCountUse.setAxisTextSize(DensityUtils.dp2px(10));
+        bghCountUse.setValueTextSize(DensityUtils.dp2px(12));
+        bghCountUse.setAxisValueColor(Color.BLACK);
+        bghCountUse.setRectColor(ResUtils.getColor(R.color.txtBlueColor));
+
+        if (null == collectInfoList || collectInfoList.isEmpty()) return;
+
+        List<DataEntry> barGraphdata = new ArrayList<>();
+        String st = TimeUtils.Long2DataString(System.currentTimeMillis(), "yyyy-MM-dd");
+        for (StatisticsEntity.CollectInfoListBean collectInfoListBean : collectInfoList) {
+            String time = collectInfoListBean.getName();
+
+            String day = time.substring(time.lastIndexOf("-") + 1) + "日";
+
+            if (time.equals(st)) {
+                day = "今天";
+            }
+
+            barGraphdata.add(new DataEntry(day, Integer.parseInt(collectInfoListBean.getCollectnum())));
+            bghCountUse.setAxisValue(barGraphdata);
+        }
+    }
+
     //获取天气 头部 布局，并设置数据
     private void setWeather(WeatherEntity weatherEntity){
         View weatherView = getLayoutInflater().inflate(R.layout.parking_gather_weather_head_item, null);
@@ -189,22 +272,31 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
         gatherAdapter.notifyItemRangeChanged(0, 1);
     }
 
-    private void getParkingList(){
-
+    private void getParkingList() {
         Observable<WeatherEntity> weather = RequestUtils.create(ApiService.class)
                 .getWeather("武汉")
+                .compose(RxHelper.handleResult());
+
+        Observable<StatisticsEntity> parkingCollect = RequestUtils.create(ApiService.class)
+                .parkingCollect("parkingcollect",
+                        SpfAgent.getString(Constant.baseSpf, Constant.userAlarm),
+                        SpfAgent.getString(Constant.baseSpf, Constant.token))
                 .compose(RxHelper.handleResult());
 
         Observable<ParkingInfoEntity> parkingList = RequestUtils.create(ApiService.class)
                 .getParkingList("10", pageNum + "")
                 .compose(RxHelper.handleResult());
 
-        Observable.zip(weather, parkingList, new BiFunction<WeatherEntity, ParkingInfoEntity, ArrayMap<String, Object>>() {
+        Observable.zip(weather, parkingCollect, parkingList, new Function3<WeatherEntity, StatisticsEntity, ParkingInfoEntity, ArrayMap<String, Object>>() {
             @Override
-            public ArrayMap<String, Object> apply(WeatherEntity weather, ParkingInfoEntity parkingList) throws Exception {
+            public ArrayMap<String, Object> apply(WeatherEntity weatherEntity, StatisticsEntity statisticsEntity, ParkingInfoEntity parkingInfoEntity) throws Exception {
                 ArrayMap<String, Object> map = new ArrayMap<>();
-                if(pageNum == 1) map.put("weather", weather);
-                map.put("parkingList", parkingList);
+                if (pageNum == 1) {
+                    map.put("weather", weatherEntity);
+                    map.put("StatisticsEntity", statisticsEntity);
+                }
+                map.put("parkingList", parkingInfoEntity);
+
                 return map;
             }
         }).compose(RxHelper.bindToLifecycle(this))
@@ -212,14 +304,17 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
                 .subscribe(new NetCallBack<ArrayMap<String, Object>>() {
                     @Override
                     protected void onSuccess(ArrayMap<String, Object> map) {
-
                         WeatherEntity weatherEntity = (WeatherEntity) map.get("weather");
+                        StatisticsEntity statisticsEntity = (StatisticsEntity) map.get("StatisticsEntity");
                         ParkingInfoEntity parkingInfoEntity = (ParkingInfoEntity) map.get("parkingList");
 
                         if (pageNum == 1) {
-                            if (null != weatherEntity) setWeather(weatherEntity);
+                            if (null != weatherEntity && null != statisticsEntity) {
+                                setWeather(weatherEntity);
+                                setStatistics(statisticsEntity);
+                            }
 
-                            if (null != parkingInfoEntity){
+                            if (null != parkingInfoEntity) {
                                 totalPage = parkingInfoEntity.getTotalPage();
                                 gatherAdapter.setmDatas(parkingInfoEntity.getData());
                                 gatherAdapter.notifyDataSetChanged();

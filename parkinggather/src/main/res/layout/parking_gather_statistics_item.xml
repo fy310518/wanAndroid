@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.gongwen.marqueen.MarqueeView
+        android:id="@+id/mv_person_info"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/white" />
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/mv_person_info"
+        android:background="@color/lineColor" />
+
+    <FrameLayout
+        android:id="@+id/bghLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/line1"
+        android:background="@color/white"
+        android:paddingTop="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="12dp">
+
+        <com.gcstorage.parkinggather.widget.BarGraphView
+            android:id="@+id/bgh_count_use"
+            android:layout_width="match_parent"
+            android:layout_height="140dp" />
+    </FrameLayout>
+
+    <View
+        android:id="@+id/line2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/bghLayout"
+        android:background="@color/lineColor" />
+
+
+    <View
+        android:id="@+id/line3"
+        android:layout_width="1dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/line2"
+        android:layout_alignBottom="@+id/ll_personal_rank"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/lineColor" />
+
+    <LinearLayout
+        android:id="@+id/ll_personal_rank"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/line2"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/line3"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@mipmap/icon_rank_person"
+            android:drawablePadding="20dp"
+            android:gravity="center"
+            android:text="个人排行"
+            android:textColor="@color/txtBlueColor"
+            android:textSize="@dimen/txt_small" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_depart_rank"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/line2"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/line3"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@mipmap/icon_rank_depart"
+            android:drawablePadding="20dp"
+            android:gravity="center"
+            android:text="分局排行"
+            android:textColor="@color/txtBlueColor"
+            android:textSize="@dimen/txt_small" />
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/line4"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_below="@id/ll_personal_rank"
+        android:background="@color/lineColor" />
+
+    <TextView
+        android:id="@+id/tv_count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/line4"
+        android:background="@color/white"
+        android:lineSpacingExtra="4dp"
+        android:padding="@dimen/spacing_medium_small"
+        android:text="最新采集\n全市采集辆"
+        android:textSize="@dimen/txt_small" />
+
+</RelativeLayout>

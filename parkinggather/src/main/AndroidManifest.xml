@@ -57,6 +57,17 @@
             android:label=""
             android:screenOrientation="portrait"/>
 
+        <!-- 排行activity （个人排行榜、分局排行榜） -->
+        <activity android:name=".ranking.RankingListActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+
+        <!-- 采集历史 -->
+        <activity android:name=".history.CollectHistoryActivity"
+            android:label="@string/collectHistory"
+            android:screenOrientation="portrait"/>
+
+
         <activity android:name=".querycar.QueryCarActivity"
             android:label="@string/queryCar"
             android:screenOrientation="portrait"/>

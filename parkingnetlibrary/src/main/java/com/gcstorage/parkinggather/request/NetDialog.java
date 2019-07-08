@@ -10,7 +10,7 @@ import com.fy.baselibrary.base.dialog.DialogConvertListener;
 import com.fy.baselibrary.base.dialog.NiceDialog;
 import com.fy.baselibrary.retrofit.observer.IProgressDialog;
 import com.fy.baselibrary.utils.drawable.ShapeBuilder;
-import com.gcstorage.parkinggather.R;
+import com.gcstorage.parkinggather.library.R;
 
 /**
  * 根据请求框架实现 请求等待对话框

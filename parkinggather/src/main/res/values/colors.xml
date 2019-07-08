@@ -41,9 +41,12 @@
     <!-- 透明 圆角 边框 实线 颜色 -->
     <color name="frameStrokeColor">#cccccc</color>
 
+    <color name="text_color_gray_a6">#a6a6a6</color>
 
 
     <!-- 日历选择器 用到颜色 -->
     <color name="time_selector_textcolor">#FF5722</color>
+    <color name="font_gray">#808080</color>
+
 
 </resources>

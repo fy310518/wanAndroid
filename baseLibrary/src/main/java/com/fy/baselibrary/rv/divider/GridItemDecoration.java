@@ -51,7 +51,7 @@ public class GridItemDecoration extends RecyclerView.ItemDecoration {
         // 获得每个Item的位置
         int itemPosition = parent.getChildAdapterPosition(view);
 
-        if (builder.rvHeaderNum != 0 && itemPosition == 0) return;
+        if (itemPosition < builder.rvHeaderNum) return;
 
 
         itemPosition -= builder.rvHeaderNum;

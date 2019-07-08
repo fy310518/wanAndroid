@@ -65,6 +65,13 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
                 .build());
 
         hideLoadView();
+
+        Bundle bundle = getIntent().getExtras();
+        assert bundle != null;
+        String otherAppId = bundle.getString("otherAppId", "com.gcstorage.newapp");
+        new SpfAgent(Constant.baseSpf)
+                .saveString(Constant.otherAppID, otherAppId)
+                .commit(false);
     }
 
     @ClickFilter()
