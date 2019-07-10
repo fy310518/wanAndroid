@@ -67,6 +67,9 @@
             android:label="@string/collectHistory"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".history.ParkCarMapActivity"
+            android:label=""
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".querycar.QueryCarActivity"
             android:label="@string/queryCar"
@@ -76,6 +79,14 @@
         <meta-data
             android:name="rudeness_Adapter_Screen_width"
             android:value="${app_Adapter_Screen_width}" />
+
+
+        <!--<activity android:name=".MainActivity" >-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
 
     </application>
 

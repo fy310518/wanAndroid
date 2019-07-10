@@ -1204,6 +1204,11 @@ public class MemoryCameraActivity extends FragmentActivity implements SurfaceHol
     }
 
     public void uploadFiles(List<String> files, String number, String carColor) {
+
+        if (Constant.code.equals("-1")){
+            T.showLong("未获取到地理位置信息");
+            return;
+        }
         Observable.just(files)
                 .subscribeOn(Schedulers.io())
                 .map(new Function<List<String>, List<File>>() {
@@ -1244,13 +1249,14 @@ public class MemoryCameraActivity extends FragmentActivity implements SurfaceHol
                         ArrayMap<String, String> params = new ArrayMap<>();
                         params.put("carNum", number);//车牌号
                         params.put("carColor", carColor);//车辆颜色
-                        params.put("longitude", "100.1");//经度
-                        params.put("latitude", "99.2");//纬度
-                        params.put("address", "江旺路10号");//拍照地址
+                        params.put("longitude", Constant.sLongitude + "");//经度
+                        params.put("latitude", Constant.sLatitude + "");//纬度
+                        params.put("address", Constant.address);//拍照地址
                         params.put("carImg", fileEntity.getUrl());//车辆图片url
-                        params.put("userId", SpfAgent.getString(Constant.baseSpf, Constant.userIdCard));//警察身份证号
+                        params.put("userId", SpfAgent.getString(Constant.baseSpf, Constant.userId));//用户id
                         params.put("name", SpfAgent.getString(Constant.baseSpf, Constant.userName));//警察名称
                         params.put("pic", SpfAgent.getString(Constant.baseSpf, Constant.userImg));//警员头像
+                        params.put("orgId", SpfAgent.getString(Constant.baseSpf, Constant.userDepartId));//部门id
                         return RequestUtils.create(ApiService.class)
                                 .saveParkingInfo(params)
                                 .compose(RxHelper.handleResult())

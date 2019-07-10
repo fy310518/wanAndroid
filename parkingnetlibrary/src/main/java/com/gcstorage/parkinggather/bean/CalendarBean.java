@@ -3,8 +3,8 @@ package com.gcstorage.parkinggather.bean;
 import java.util.List;
 
 /**
- *
- * Created by Administrator on 2017/6/7.
+ * DESCRIPTION：日历 （采集历史 ） 实体类
+ * Created by fangs on 2019/7/9 9:36.
  */
 public class CalendarBean {
 
@@ -33,8 +33,8 @@ public class CalendarBean {
          * carnum : 1
          */
 
-        private String date;
-        private String carnum;
+        private String date = "";
+        private int carnum;
 
         public String getDate() {
             return date;
@@ -44,28 +44,14 @@ public class CalendarBean {
             this.date = date;
         }
 
-        public String getCarnum() {
+        public int getCarnum() {
             return carnum;
         }
 
-        public void setCarnum(String carnum) {
+        public void setCarnum(int carnum) {
             this.carnum = carnum;
         }
 
-        @Override
-        public String toString() {
-            return "InfoListBean{" +
-                    "date='" + date + '\'' +
-                    ", carnum='" + carnum + '\'' +
-                    '}';
-        }
     }
 
-    @Override
-    public String toString() {
-        return "CalendarBean{" +
-                "dateList=" + dateList +
-                ", infoList=" + infoList +
-                '}';
-    }
 }

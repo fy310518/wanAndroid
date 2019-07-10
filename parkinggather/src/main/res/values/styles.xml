@@ -42,6 +42,10 @@
     </style>
 
 
+    <style name="spannable_text_big_style">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/txtBlueColor</item>
+    </style>
 
     <style name="time_dialog" parent="android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>

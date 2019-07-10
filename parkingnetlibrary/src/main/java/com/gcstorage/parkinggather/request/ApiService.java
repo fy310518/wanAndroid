@@ -3,7 +3,10 @@ package com.gcstorage.parkinggather.request;
 import android.util.ArrayMap;
 
 import com.fy.baselibrary.retrofit.load.up.UpLoadFileType;
+import com.gcstorage.parkinggather.bean.CalendarBean;
+import com.gcstorage.parkinggather.bean.DailyRankingEntity;
 import com.gcstorage.parkinggather.bean.LoginEntity;
+import com.gcstorage.parkinggather.bean.ParkingInfo;
 import com.gcstorage.parkinggather.bean.ParkingInfoEntity;
 import com.gcstorage.parkinggather.bean.PersonEntity;
 import com.gcstorage.parkinggather.bean.StatisticsEntity;
@@ -48,8 +51,6 @@ public interface ApiService {
 
     /** 天气 */
     String weather = urlBase2 + "Micro/fireweather";
-    /** 驻车采集信息新接口 */
-    String SERVER_ADDRESS = urlBase2  + "MicroRecon/1.3/parkingcollect_0822";
 
 
     /**
@@ -82,10 +83,8 @@ public interface ApiService {
      * params.put("alarm",GlobalUserInfo.getAlarm(context));
      * params.put("token",GlobalUserInfo.getToken(context));
      */
-    @GET(SERVER_ADDRESS)
-    Observable<BeanModule<StatisticsEntity>> parkingCollect(@Query("action") String action,
-                                                            @Query("alarm") String alarm,
-                                                            @Query("token") String token);
+    @GET("/query/parking/serchWeekDate")
+    Observable<BeanModule<StatisticsEntity>> parkingCollect(@Query("userId") String userId);
 
 
     /**
@@ -122,17 +121,36 @@ public interface ApiService {
 
     /**
      * 个人排行榜
-     * @return
+     * @return Observable
      */
     @GET("/query/parking/dailyRanking")
-    Observable<BeanModule<String>> dailyRanking();
+    Observable<BeanModule<List<DailyRankingEntity>>> dailyRanking();
 
     /**
      * 部门排行榜
-     * @return
+     * @return Observable
      */
     @GET("/query/parking/dailyRankOrg")
-    Observable<BeanModule<String>> dailyRankOrg();
+    Observable<BeanModule<List<DailyRankingEntity>>> dailyRankOrg();
+
+    /**
+     * 根据月份查询当月每天驻车数据
+     * @return Observable
+     */
+    @GET("/query/parking/serchMonCount")
+    Observable<BeanModule<CalendarBean>> queryMonthParkingData(@Query("userId") String userId,
+                                                               @Query("data") String data);
+
+    /**
+     * 根据日期查询当天所有采集车辆数据
+     * @param userId
+     * @param data
+     * @return Observable
+     */
+    @GET("/query/parking/serchParkingBydata")
+    Observable<BeanModule<ParkingInfo>> serchParkingBydata(@Query("userId") String userId,
+                                                           @Query("data") String data);
+
 
 
 }

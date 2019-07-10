@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
+import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
@@ -16,10 +17,12 @@ import com.fy.baselibrary.rv.divider.GridItemDecoration;
 import com.fy.baselibrary.widget.refresh.EasyPullLayout;
 import com.fy.baselibrary.widget.refresh.OnRefreshListener;
 import com.gcstorage.parkinggather.R;
+import com.gcstorage.parkinggather.bean.DailyRankingEntity;
 import com.gcstorage.parkinggather.request.ApiService;
 import com.gcstorage.parkinggather.request.NetCallBack;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -50,6 +53,7 @@ public class RankingListActivity extends AppCompatActivity implements IBaseActiv
         return R.layout.ranking_list_activity;
     }
 
+    @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         Bundle bundle = getIntent().getExtras();
@@ -61,18 +65,14 @@ public class RankingListActivity extends AppCompatActivity implements IBaseActiv
     }
 
     private void initRv(){
-        adapter = new RankingListAdapter(this, new ArrayList<>());
-
+        adapter = new RankingListAdapter(this, new ArrayList<>(), type);
         rvRankingList.setLayoutManager(new LinearLayoutManager(this));
         rvRankingList.setItemAnimator(new FadeItemAnimator());
         rvRankingList.setAdapter(adapter);
 
-        epl.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (type) dailyRanking();
-                else dailyRankOrg();
-            }
+        epl.setOnRefreshListener(() -> {
+            if (type) dailyRanking();
+            else dailyRankOrg();
         });
     }
 
@@ -82,10 +82,11 @@ public class RankingListActivity extends AppCompatActivity implements IBaseActiv
                 .dailyRanking()
                 .compose(RxHelper.handleResult())
                 .compose(RxHelper.bindToLifecycle(this))
-                .subscribe(new NetCallBack<String>() {
+                .subscribe(new NetCallBack<List<DailyRankingEntity>>() {
                     @Override
-                    protected void onSuccess(String t) {
-
+                    protected void onSuccess(List<DailyRankingEntity> data) {
+                        adapter.setmDatas(data);
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -101,10 +102,11 @@ public class RankingListActivity extends AppCompatActivity implements IBaseActiv
                 .dailyRankOrg()
                 .compose(RxHelper.handleResult())
                 .compose(RxHelper.bindToLifecycle(this))
-                .subscribe(new NetCallBack<String>() {
+                .subscribe(new NetCallBack<List<DailyRankingEntity>>() {
                     @Override
-                    protected void onSuccess(String t) {
-
+                    protected void onSuccess(List<DailyRankingEntity> data) {
+                        adapter.setmDatas(data);
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override

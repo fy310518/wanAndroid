@@ -4,7 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/baseLibrary/baseLibrary.iml" filepath="$PROJECT_DIR$/baseLibrary/baseLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/carplatedistinguish/carplatedistinguish.iml" filepath="$PROJECT_DIR$/carplatedistinguish/carplatedistinguish.iml" />
+      <module fileurl="file://$PROJECT_DIR$/framework/framework.iml" filepath="$PROJECT_DIR$/framework/framework.iml" />
       <module fileurl="file://$PROJECT_DIR$/imgPicker/imgPicker.iml" filepath="$PROJECT_DIR$/imgPicker/imgPicker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/map/map.iml" filepath="$PROJECT_DIR$/map/map.iml" />
       <module fileurl="file://$PROJECT_DIR$/parkinggather/parkinggather.iml" filepath="$PROJECT_DIR$/parkinggather/parkinggather.iml" />
       <module fileurl="file://$PROJECT_DIR$/parkingnetlibrary/parkingnetlibrary.iml" filepath="$PROJECT_DIR$/parkingnetlibrary/parkingnetlibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/wanAndroid.iml" filepath="$PROJECT_DIR$/wanAndroid.iml" />

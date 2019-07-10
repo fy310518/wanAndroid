@@ -5,6 +5,14 @@ package com.gcstorage.parkinggather;
  * Created by fangs on 2019/7/6 15:31.
  */
 public class Constant {
+    public static double sLongitude = 0.0; // 经度
+    public static double sLatitude = 0.0; // 纬度
+    public static String address = "未获取到位置信息";
+    public static String code = "-1"; // - 1 表示没有获取到经纬度
+
+
+
+
     /** spf 缓存文件 名 */
     public static final String baseSpf = "spfCache";
 
@@ -40,4 +48,26 @@ public class Constant {
     /** 其它应用跳转到 本应用的 应用id */
     public static final String otherAppID = "otherAppID";
 
+
+
+
+
+    /**
+     * 聊天通知渠道 key
+     */
+    public static final String chatNumKEY = "chatNumKEY";
+
+    /**
+     * app 声音 是否打开
+     */
+    public static final String voiceKEY = "appVoiceKEY";
+    /**
+     * app 震动 是否打开
+     */
+    public static final String shockKEY = "appShockKEY";
+
+    /**
+     * app 位置共享开关 是否打开
+     */
+    public static final String addressKEY = "appaddressKEY";
 }

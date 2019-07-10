@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:paddingTop="12dp">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_title_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="名字:测试摄像头"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_mark_type"
+                    android:layout_width="60dp"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center"
+                    android:text="摄像头"
+                    android:textColor="#12b7f5"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_remarks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="-----------"
+                android:textColor="@color/txtSuperColor"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_navigation"
+            android:layout_width="80dp"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/shape_blue"
+            android:drawableLeft="@mipmap/navigation_white"
+            android:gravity="center"
+            android:paddingLeft="8dp"
+            android:text="导航"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="12dp"
+        android:background="#ececec" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="12dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_function_one"
+                android:layout_width="110dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/shape_blue"
+                android:gravity="center"
+                android:text="播放视频"
+                android:textColor="#eeeeee"
+                android:textSize="14sp" />
+
+
+            <TextView
+                android:id="@+id/tv_function_two"
+                android:layout_width="60dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/shape_blue"
+                android:gravity="center"
+                android:text="详情"
+                android:textColor="#eeeeee"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_function_three"
+                android:layout_width="60dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/shape_blue"
+                android:gravity="center"
+                android:text="删除"
+                android:textColor="#eeeeee"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

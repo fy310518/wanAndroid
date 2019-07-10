@@ -1,12 +1,14 @@
 package com.gcstorage.parkinggather.main;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.rv.adapter.RvCommonAdapter;
 import com.fy.baselibrary.utils.imgload.ImgLoadUtils;
 import com.gcstorage.parkinggather.R;
 import com.gcstorage.parkinggather.bean.ParkingInfoEntity;
+import com.gongwen.marqueen.MarqueeView;
 
 import java.util.List;
 
@@ -15,6 +17,8 @@ import java.util.List;
  * Created by fangs on 2019/7/2 9:27.
  */
 public class GatherRvAdapter extends RvCommonAdapter<ParkingInfoEntity.DataBean> {
+
+    MarqueeView mv_person_info;
 
     public GatherRvAdapter(Context context, List<ParkingInfoEntity.DataBean> dates) {
         super(context, R.layout.parking_gather_rv_item, dates);
@@ -31,9 +35,15 @@ public class GatherRvAdapter extends RvCommonAdapter<ParkingInfoEntity.DataBean>
 
         holder.setText(R.id.tv_location, dataBean.getAddress());
         holder.setText(R.id.tv_licence_number, dataBean.getCarNum());
-
-
     }
 
+    @Override
+    public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        if (null != mv_person_info)mv_person_info.startFlipping();
+    }
 
+    public void setMv_person_info(MarqueeView mv_person_info) {
+        this.mv_person_info = mv_person_info;
+    }
 }

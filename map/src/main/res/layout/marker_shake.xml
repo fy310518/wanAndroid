@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="26dp"
+    android:layout_height="26dp">
+
+
+    <ImageView
+        android:id="@+id/iv_icon"
+        android:layout_width="20dp"
+        android:layout_height="26dp"
+        android:src="@mipmap/marker_shake_red"
+        android:scaleType="centerCrop"/>
+
+
+    <TextView
+        android:id="@+id/marker_tv_val"
+        android:layout_width="20dp"
+        android:layout_height="26dp"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:gravity="center_horizontal"
+        android:paddingTop="3dp"
+        android:text="22"/>
+
+</RelativeLayout>

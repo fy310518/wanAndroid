@@ -61,11 +61,14 @@ public class ParkingInfoEntity implements Serializable {
     }
 
     public static class DataBean implements Serializable {
+
         /**
          * date : 2019-02-20
          * time : 15:15:39
          * extend : false
          * id : 9
+         * "orgId": "",
+         * "orgName": "湖北省武汉市第二看守所",
          * userId : 420115199410109818
          * name : 郑家双
          * pic : asdfasdfasdf
@@ -82,6 +85,8 @@ public class ParkingInfoEntity implements Serializable {
         private String time = "";
         private boolean extend;
         private String id= "";
+        private String orgId= "";
+        private String orgName= "";
         private String userId= "";
         private String name= "";
         private String pic= "";
@@ -203,6 +208,22 @@ public class ParkingInfoEntity implements Serializable {
 
         public void setType(String type) {
             this.type = type;
+        }
+
+        public String getOrgId() {
+            return orgId;
+        }
+
+        public void setOrgId(String orgId) {
+            this.orgId = orgId;
+        }
+
+        public String getOrgName() {
+            return orgName;
+        }
+
+        public void setOrgName(String orgName) {
+            this.orgName = orgName;
         }
 
         @Override

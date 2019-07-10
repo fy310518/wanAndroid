@@ -7,8 +7,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:paddingLeft="12dp"
         android:paddingRight="12dp">
 
@@ -22,8 +24,8 @@
 
         <ImageView
             android:id="@+id/head_pic"
-            android:layout_width="31dp"
-            android:layout_height="31dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginRight="10dp"
             android:src="@drawable/default_pic_icon" />
 
@@ -35,6 +37,7 @@
             android:ellipsize="middle"
             android:singleLine="true"
             android:text="张一凡"
+            android:padding="12dp"
             android:textColor="@color/txtSuperColor"
             android:textSize="12sp" />
 
@@ -42,7 +45,7 @@
             android:id="@+id/tv_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingRight="5dp"
+            android:paddingRight="8dp"
             android:text="12544"
             android:textColor="@color/txtSuperColor"
             android:textSize="12sp" />
@@ -58,7 +61,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="1dp"
         android:layout_marginLeft="47dp"
         android:background="@color/lineColor" />
 

@@ -9,7 +9,11 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.text.style.TextAppearanceSpan;
 import android.util.ArrayMap;
 import android.view.Menu;
 import android.view.View;
@@ -184,6 +188,8 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
         });
     }
 
+    MarqueeView mv_person_info;
+    List<SpannableString> txt;
     private void setStatistics(StatisticsEntity statisticsEntity){
         View statistics = getLayoutInflater().inflate(R.layout.parking_gather_statistics_item, null);
         LinearLayout ll_personal_rank = statistics.findViewById(R.id.ll_personal_rank);
@@ -191,7 +197,9 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
         ll_personal_rank.setOnClickListener(this);
         ll_depart_rank.setOnClickListener(this);
 
-        MarqueeView mv_person_info = statistics.findViewById(R.id.mv_person_info);
+        mv_person_info = statistics.findViewById(R.id.mv_person_info);
+        gatherAdapter.setMv_person_info(mv_person_info);
+        setUsedInfo(statisticsEntity);
 
         //统计图
         BarGraphView bgh_count_use = statistics.findViewById(R.id.bgh_count_use);
@@ -213,6 +221,41 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
 
         gatherAdapter.addHeaderView(statistics);
         gatherAdapter.notifyItemRangeChanged(0, gatherAdapter.getHeadersCount());
+    }
+
+    private void setUsedInfo(StatisticsEntity data) {
+        txt = new ArrayList<>();
+        TextMargeeAdapter marqueeFactory = new TextMargeeAdapter(this);
+        mv_person_info.setMarqueeFactory(marqueeFactory);
+
+        List<StatisticsEntity.UsedInfoBean> usedInfo = data.getUsedInfo();
+        String city = "我采集的 %s, 已被%s使用";
+        if (usedInfo.size() == 0) {
+            SpannableString spannableString = setPersonalUseCount(data.getTotalCollectnum(), data.getUsedCollectnum());
+            txt.add(spannableString);
+        }
+        for (StatisticsEntity.UsedInfoBean infoBean : usedInfo) {
+            SpannableString spannableString = setPersonalUseCount(data.getTotalCollectnum(), data.getUsedCollectnum());
+            txt.add(spannableString);
+            SpannableString perText = new SpannableString(String.format(city, infoBean.getHphm().toUpperCase(), infoBean.getName()));
+            txt.add(perText);
+        }
+        marqueeFactory.setData(txt);
+        if (txt.size() != 1) {
+            mv_person_info.startFlipping();
+        }
+    }
+
+    private SpannableString setPersonalUseCount(String totalCollectnum, String usedCollectnum) {
+        String city = "我采集了 %s 辆,有 %s 条信息被人采用了";
+        if (TextUtils.isEmpty(usedCollectnum)) {
+            usedCollectnum = "0";
+        }
+        SpannableString perText = new SpannableString(String.format(city, totalCollectnum, usedCollectnum));
+        perText.setSpan(new TextAppearanceSpan(this, R.style.spannable_text_big_style), 5, 5 + totalCollectnum.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        perText.setSpan(new TextAppearanceSpan(this, R.style.spannable_text_big_style), 5 + totalCollectnum.length() + 5
+                , 5 + totalCollectnum.length() + 5 + usedCollectnum.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return perText;
     }
 
     // 柱状图
@@ -278,9 +321,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
                 .compose(RxHelper.handleResult());
 
         Observable<StatisticsEntity> parkingCollect = RequestUtils.create(ApiService.class)
-                .parkingCollect("parkingcollect",
-                        SpfAgent.getString(Constant.baseSpf, Constant.userAlarm),
-                        SpfAgent.getString(Constant.baseSpf, Constant.token))
+                .parkingCollect(SpfAgent.getString(Constant.baseSpf, Constant.userId))
                 .compose(RxHelper.handleResult());
 
         Observable<ParkingInfoEntity> parkingList = RequestUtils.create(ApiService.class)

@@ -1,7 +1,6 @@
 package com.gcstorage.parkinggather.history;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -9,17 +8,25 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
+import com.fy.baselibrary.retrofit.RequestUtils;
+import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.utils.DensityUtils;
+import com.fy.baselibrary.utils.JumpUtils;
+import com.fy.baselibrary.utils.TimeUtils;
+import com.fy.baselibrary.utils.cache.SpfAgent;
+import com.fy.baselibrary.utils.notify.L;
+import com.gcstorage.parkinggather.Constant;
 import com.gcstorage.parkinggather.R;
 import com.gcstorage.parkinggather.bean.CalendarBean;
+import com.gcstorage.parkinggather.request.ApiService;
+import com.gcstorage.parkinggather.request.NetCallBack;
 import com.gcstorage.parkinggather.widget.datepicker.bizs.calendars.DPCManager;
 import com.gcstorage.parkinggather.widget.datepicker.bizs.decors.DPDecor;
 import com.gcstorage.parkinggather.widget.datepicker.cons.DPMode;
-import com.gcstorage.parkinggather.widget.datepicker.utils.MeasureUtil;
 import com.gcstorage.parkinggather.widget.datepicker.views.DatePicker;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -51,6 +58,7 @@ public class CollectHistoryActivity extends AppCompatActivity implements IBaseAc
         return R.layout.collect_history_activity;
     }
 
+    @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
 
@@ -58,23 +66,20 @@ public class CollectHistoryActivity extends AppCompatActivity implements IBaseAc
         instance.clearnDATE_CACHE();
 
         initView();
-        getNetData();
+        getNetData(TimeUtils.Long2DataString(System.currentTimeMillis(), "yyyy-MM"));
     }
 
-    private void getNetData() {
-//        api.getCalendarList(GlobalUserInfo.getAlarm(context), GlobalUserInfo.getToken(context), new ActionCallbackListener<CalendarBean>() {
-//            @Override
-//            public void onSuccess(CalendarBean data) throws GCSQLiteException, IOException {
-//                getDateList(data);
-//                dismiss();
-//            }
-//
-//            @Override
-//            public void onFailure(String errorEvent, String message) {
-//                ToastUtils.showToast(context,message);
-//                dismiss();
-//            }
-//        });
+    private void getNetData(String date) {
+        RequestUtils.create(ApiService.class)
+                .queryMonthParkingData(SpfAgent.getString(Constant.baseSpf, Constant.userId), date)
+                .compose(RxHelper.handleResult())
+                .compose(RxHelper.bindToLifecycle(this))
+                .subscribe(new NetCallBack<CalendarBean>() {
+                    @Override
+                    protected void onSuccess(CalendarBean calendar) {
+                        getDateList(calendar);
+                    }
+                });
     }
 
     private void getDateList(CalendarBean data) {
@@ -121,14 +126,23 @@ public class CollectHistoryActivity extends AppCompatActivity implements IBaseAc
             }
         });
 
+        dpDatePicker.setOnMonthSwitchListener(new DatePicker.OnMonthSwitchListener() {
+            @Override
+            public void onMonthPicked(int centerYear, int centerMonth) {
+                L.e("aaa", centerYear + " - " + centerMonth);
+                getNetData(centerYear + "-" + centerMonth);
+            }
+        });
+
         dpDatePicker.setOnDatePickedListener(new DatePicker.OnDatePickedListener() {
             @Override
             public void onDatePicked(String date) {
                 if(dataCount.containsKey(date)){
-//                    String reFormatDate = reFormatDate(date);
-//                    Intent intent = new Intent(CollectHistoryActivity.this, ParkCarMapActivity.class);
-//                    intent.putExtra("time",reFormatDate);
-//                    startActivity(intent);
+                    long time = TimeUtils.timeString2long(date, "yyyy-MM-dd");
+                    String timeStr = TimeUtils.Long2DataString(time, "yyyy-MM-dd");
+                    Bundle bundle = new Bundle();
+                    bundle.putString("time", timeStr);
+                    JumpUtils.jump(CollectHistoryActivity.this, ParkCarMapActivity.class, bundle);
                 }
             }
         });

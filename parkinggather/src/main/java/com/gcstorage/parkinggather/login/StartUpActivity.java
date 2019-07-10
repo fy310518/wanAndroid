@@ -19,6 +19,7 @@ import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.cache.SpfAgent;
 import com.fy.baselibrary.utils.drawable.ShapeBuilder;
+import com.gcstorage.map.HeartBeatMapService;
 import com.gcstorage.parkinggather.Constant;
 import com.gcstorage.parkinggather.R;
 import com.gcstorage.parkinggather.main.MainActivity;
@@ -72,6 +73,8 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
         new SpfAgent(Constant.baseSpf)
                 .saveString(Constant.otherAppID, otherAppId)
                 .commit(false);
+
+        HeartBeatMapService.startMapService(this);
     }
 
     @ClickFilter()

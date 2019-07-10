@@ -40,6 +40,15 @@ public class DatePicker extends LinearLayout {
 
     private OnDateSelectedListener onDateSelectedListener;// 日期多选后监听
 
+    private int centerYear, centerMonth;
+    private OnMonthSwitchListener  onMonthSwitchListener;
+
+
+    /** 月份切换监听器 */
+    public interface OnMonthSwitchListener{
+        void onMonthPicked(int centerYear, int centerMonth);
+    }
+
     /**
      * 日期单选监听器
      */
@@ -66,7 +75,7 @@ public class DatePicker extends LinearLayout {
         // 设置排列方向为竖向
         setOrientation(VERTICAL);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.DatePicker);
-        float month_view_height_scale = a.getFloat(com.gcstorage.app.main.R.styleable.DatePicker_monthViewHeight, DEFAULT_MONTH_VIEW_HEIGHT);
+        float month_view_height_scale = a.getFloat(R.styleable.DatePicker_monthViewHeight, DEFAULT_MONTH_VIEW_HEIGHT);
         a.recycle();
         LayoutParams llParams =
                 new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -93,10 +102,10 @@ public class DatePicker extends LinearLayout {
         RelativeLayout.LayoutParams lpTitle = new RelativeLayout.LayoutParams(MATCH_PARENT, MeasureUtil.dp2px(getContext(), 45));
         lpTitle.addRule(RelativeLayout.CENTER_IN_PARENT);
 
-        tvYear = (TextView) titleView.findViewById(com.gcstorage.app.main.R.id.year);
-        tvMonth = (TextView) titleView.findViewById(com.gcstorage.app.main.R.id.mouth);
-        View right = titleView.findViewById(com.gcstorage.app.main.R.id.right);
-        View left = titleView.findViewById(com.gcstorage.app.main.R.id.left);
+        tvYear = (TextView) titleView.findViewById(R.id.year);
+        tvMonth = (TextView) titleView.findViewById(R.id.mouth);
+        View right = titleView.findViewById(R.id.right);
+        View left = titleView.findViewById(R.id.left);
         right.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,11 +182,16 @@ public class DatePicker extends LinearLayout {
         monthView.setOnDateChangeListener(new MonthView.OnDateChangeListener() {
             @Override
             public void onMonthChange(int month) {
+                centerMonth = month;
+
                 DatePicker.this.tvMonth.setText(mLManager.titleMonth()[month - 1]);
+                if (null != onMonthSwitchListener)onMonthSwitchListener.onMonthPicked(centerYear, centerMonth);
             }
 
             @Override
             public void onYearChange(int year) {
+                centerYear = year;
+
                 String tmp = String.valueOf(year);
                 if (tmp.startsWith("-")) {
                     tmp = tmp.replace("-", mLManager.titleBC());
@@ -300,5 +314,13 @@ public class DatePicker extends LinearLayout {
                     "Current DPMode does not MULTIPLE! Please call setMode set DPMode to MULTIPLE!");
         }
         this.onDateSelectedListener = onDateSelectedListener;
+    }
+
+    /**
+     * 设置月份切换监听器
+     * @param onMonthSwitchListener
+     */
+    public void setOnMonthSwitchListener(OnMonthSwitchListener onMonthSwitchListener) {
+        this.onMonthSwitchListener = onMonthSwitchListener;
     }
 }
