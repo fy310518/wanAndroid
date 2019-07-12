@@ -11,10 +11,15 @@ android {
 
         applicationId "com.gcstorage"
         versionCode 1
-        versionName "1.0"
+        versionName "v0.0.1"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
+
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+        }
     }
 
     buildTypes {

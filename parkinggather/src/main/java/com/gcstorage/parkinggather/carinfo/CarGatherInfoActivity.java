@@ -108,13 +108,17 @@ public class CarGatherInfoActivity extends AppCompatActivity implements IBaseAct
             case R.id.tv_jump_find_car://一键查车
                 if (null == dates || dates.isEmpty()) return;
 
-                ParkingInfoEntity.DataBean parkingInfo = dates.get(mCurrentPosition);
-                Bundle bundle = new Bundle();
-//                bundle.putSerializable("ParkingInfo", parkingInfo);
-//                JumpUtils.jump(this, QueryCarActivity.class, bundle);
+                try {
+                    ParkingInfoEntity.DataBean parkingInfo = dates.get(mCurrentPosition);
+                    Bundle bundle = new Bundle();
+    //                bundle.putSerializable("ParkingInfo", parkingInfo);
+    //                JumpUtils.jump(this, QueryCarActivity.class, bundle);
 
-                bundle.putString("url", ApiService.queryPerson);
-                JumpUtils.jump(this, SpfAgent.getString(Constant.baseSpf, Constant.otherAppID) + ".com.gcstrage.h5App", bundle);
+                    bundle.putString("url", ApiService.queryPerson);
+                    JumpUtils.jump(this, SpfAgent.getString(Constant.baseSpf, Constant.otherAppID) + ".com.gcstrage.h5App", bundle);
+                } catch (Exception e){
+
+                }
                 break;
         }
     }

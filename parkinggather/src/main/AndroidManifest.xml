@@ -21,7 +21,15 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-                <action android:name="${applicationId}.startactivity.StartActivity" />
+
+                <!--<data-->
+                    <!--android:host="com.gcstorage"-->
+                    <!--android:path="/gc/start"-->
+                    <!--android:scheme="gc" />-->
+                <!--<action android:name="android.intent.action.VIEW" />-->
+
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+                <!--<category android:name="android.intent.category.BROWSABLE" />-->
             </intent-filter>
         </activity>
 

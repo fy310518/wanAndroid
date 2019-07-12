@@ -30,19 +30,28 @@ import retrofit2.http.Query;
  */
 public interface ApiService {
 
-    String HOST = "http://47.107.134.212";
-    String PORT = ":13201/";
-    String h5PORT = ":80/";
+    /** 接口地址 */
+//    String HOST = "http://47.107.134.212";
+//    String PORT = ":13201/";
+//    String h5PORT = ":80/";
+//    String urlBase1 = "http://120.79.194.253:8768/";
+//    String urlBase2 = HOST + PORT + "/";
+
+    /** 天门 警务通环境 */
+    String HOST = "http://20.51.3.43";
+    String PORT = ":8768/";
+    String h5PORT = ":8768/TMMHTEST/";
+    String urlBase1 = "http://20.51.3.43:8768/";
+    String urlBase2 = HOST + PORT + "/TMMHTEST/";
+
+
 
     /** 查车界面（H5） */
     String queryPerson = HOST + h5PORT + "queryPage/#/index";
 
-
-    /** 接口地址 */
-    String urlBase2 = HOST + PORT;
-
     /** 多图上传接口 */
     String uploadFileMore = urlBase2 + "Falcon/2.0/tools/uploadfile_more";
+
     /** 登录 接口 */
     String login = urlBase2 + "Falcon/2.0/main/login";
 

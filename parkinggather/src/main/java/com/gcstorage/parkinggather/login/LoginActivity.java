@@ -2,6 +2,7 @@ package com.gcstorage.parkinggather.login;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.util.ArrayMap;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.gcstorage.parkinggather.request.NetCallBack;
 
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
@@ -29,6 +31,9 @@ import butterknife.OnClick;
  * Created by fangs on 2019/7/1 16:33.
  */
 public class LoginActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
+
+    @BindView(R.id.editId)
+    TextInputEditText editId;
 
     @Override
     public boolean isShowHeadView() {
@@ -59,8 +64,11 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity, V
 
     //todo 简单的 登录操作
     private void login(){
+        String idCard = editId.getText().toString().trim().equals("") ?
+                "420621199202074539" : editId.getText().toString().trim();
+
         RequestUtils.create(ApiService.class)
-                .getPersonInfo("420621199202074539")
+                .getPersonInfo(idCard)
                 .compose(RxHelper.handleResult())
                 .compose(RxHelper.bindToLifecycle(this))
                 .subscribe(new NetCallBack<PersonEntity>() {

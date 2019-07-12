@@ -9,6 +9,7 @@ import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.statuslayout.OnStatusAdapter;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
+import com.gcstorage.parkinggather.request.ApiService;
 
 /**
  * DESCRIPTION：驻车采集 application
@@ -26,7 +27,7 @@ public class ParkingGatherApplication extends Application {
                 .setTitleCenter(true)
                 .setBackImg(R.drawable.back_white)
                 .setCer(CER)
-                .setBASE_URL("http://120.79.194.253:8768/")
+                .setBASE_URL(ApiService.urlBase1)
                 .create(this);
 
         int designWidth = (int) ResUtils.getMetaData("rudeness_Adapter_Screen_width", 0);

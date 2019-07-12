@@ -70,8 +70,25 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
         Bundle bundle = getIntent().getExtras();
         assert bundle != null;
         String otherAppId = bundle.getString("otherAppId", "com.gcstorage.newapp");
+        String head_pic = bundle.getString("head_pic", "");    //用户头像
+        String name = bundle.getString("name", "");          //用户姓名
+        String depart = bundle.getString("depart", "");        //部门
+        String deptID = bundle.getString("deptID", "");        //部门ID
+        String policenum = bundle.getString("policenum", "");  //警号
+        String idCard = bundle.getString("idCard", "");
+        String userId = bundle.getString("sp_key_id", "");//用户id
+
         new SpfAgent(Constant.baseSpf)
                 .saveString(Constant.otherAppID, otherAppId)
+//                .saveBoolean(Constant.isLogin, true)
+//                .saveString(Constant.userId, userId)
+//                .saveString(Constant.userIdCard, idCard)
+//                .saveString(Constant.userAccount, idCard)
+//                .saveString(Constant.userName, name)
+//                .saveString(Constant.userImg, head_pic)
+//                .saveString(Constant.userAlarm, policenum)
+//                .saveString(Constant.userDepart, depart)
+//                .saveString(Constant.userDepartId, deptID)
                 .commit(false);
 
         HeartBeatMapService.startMapService(this);
