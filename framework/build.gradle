@@ -1,0 +1,95 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion var.compileSdkVersion
+    buildToolsVersion var.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion var.minSdkVersion
+        targetSdkVersion var.targetSdkVersion
+
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'publicsuffixes.gz'
+    }
+    repositories {
+        flatDir {
+            dirs '../baseconfigure/libs'
+        }
+    }
+}
+
+dependencies {
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    api('com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar') {
+        exclude group: 'com.android.support'
+    }
+    //网络请求框架
+    api('com.lzy.net:okgo:3.0.4') {
+        exclude group: 'com.android.support'
+    }
+    api('com.lzy.net:okserver:2.0.5') {
+        exclude group: 'com.android.support'
+    }
+    //Json解析框架
+    api 'com.google.code.gson:gson:2.7'
+    //图片加载框架
+    api 'jp.wasabeef:glide-transformations:3.3.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+    //图片放大查看
+    api('com.bm.photoview:library:1.4.1') {
+        exclude group: 'com.android.support'
+    }
+    api('org.greenrobot:eventbus:3.1.1') {
+        exclude group: 'com.android.support'
+    }
+    api('com.google.zxing:core:3.3.0') {
+        exclude group: 'com.android.support'
+    }
+    api('com.journeyapps:zxing-android-embedded:3.5.0') {
+        exclude group: 'com.android.support'
+    }
+    api('com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34') {
+        exclude group: 'com.android.support'
+    }
+    /* api ('com.yanzhenjie:permission:2.0.0-rc12'){
+            exclude group: 'com.android.support'
+        }*/
+    implementation('com.yanzhenjie.permission:support:2.0.1') {
+        exclude group: 'com.android.support'//https://github.com/yanzhenjie/AndPermission
+    }
+    api('com.yalantis:ucrop:2.2.0') {
+        exclude group: 'com.android.support'
+    }
+    //WebSocket
+//    api project(':websocketlib')
+    api("com.jakewharton:butterknife:$var.butterknife") {
+        exclude group: 'com.android.support'
+    }
+    api('com.orhanobut:logger:2.2.0') {
+        exclude group: 'com.android.support'
+    }
+    api('com.gongwen:marqueelibrary:1.0.4') {
+        exclude group: 'com.android.support'
+    }
+//    api project(':androidemoji')
+//    api project(':baseconfigure')
+}
