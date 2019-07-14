@@ -31,18 +31,18 @@ import retrofit2.http.Query;
 public interface ApiService {
 
     /** 接口地址 */
-//    String HOST = "http://47.107.134.212";
-//    String PORT = ":13201/";
-//    String h5PORT = ":80/";
-//    String urlBase1 = "http://120.79.194.253:8768/";
-//    String urlBase2 = HOST + PORT + "/";
+    String HOST = "http://47.107.134.212";
+    String PORT = ":13201/";
+    String h5PORT = ":80/";
+    String urlBase1 = "http://120.79.194.253:8768/";
+    String urlBase2 = HOST + PORT + "/";
 
     /** 天门 警务通环境 */
-    String HOST = "http://20.51.3.43";
-    String PORT = ":8768/";
-    String h5PORT = ":8768/TMMHTEST/";
-    String urlBase1 = "http://20.51.3.43:8768/";
-    String urlBase2 = HOST + PORT + "/TMMHTEST/";
+//    String HOST = "http://20.51.3.43";
+//    String PORT = ":8768/";
+//    String h5PORT = ":8768/TMMHTEST/";
+//    String urlBase1 = "http://20.51.3.43:8768/";
+//    String urlBase2 = HOST + PORT + "/TMMHTEST/";
 
 
 

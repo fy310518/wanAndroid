@@ -1,21 +1,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/memory"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <SurfaceView
         android:id="@+id/surfaceViwe_video"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <ImageView
-        android:id="@+id/car"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="center"
-        android:src="@drawable/parking_car_modle"
-        android:layout_above="@+id/flash_camera"/>
+    <!--<ImageView-->
+        <!--android:id="@+id/car"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:scaleType="center"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:src="@drawable/parking_car_modle" />-->
 
     <CheckBox
         android:id="@+id/flash_camera"
@@ -27,7 +26,7 @@
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
         android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="10dp"
         android:text="轻触打开"
         android:textColor="@color/select_txt_color"
         android:textSize="12sp"

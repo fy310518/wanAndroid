@@ -43,6 +43,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.fy.baselibrary.base.PopupDismissListner;
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.base.dialog.CommonDialog;
 import com.fy.baselibrary.base.dialog.DialogConvertListener;
@@ -1199,7 +1200,10 @@ public class MemoryCameraActivity extends FragmentActivity implements SurfaceHol
                         });
 
                     }
-                }).setHide(true)
+                }).setDialogList(() -> {
+                    camera.setPreviewCallback(MemoryCameraActivity.this);
+                    camera.startPreview();
+                })
                 .show(getSupportFragmentManager(), "dialog_cofig");
     }
 

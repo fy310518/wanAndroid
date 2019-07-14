@@ -7,6 +7,9 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.View;
 
+import com.wintone.plateid.PlateRecognitionParameter;
+
+
 
 public final class ViewfinderView extends View {
 	private final Paint paint;
@@ -77,15 +80,15 @@ public final class ViewfinderView extends View {
 		frame = new Rect(l, t, r, b);
 		// 画阴影部分，分四部分，从屏幕上方到扫描框的上方，从屏幕左边到扫描框的左边
 		// 从扫描框右边到屏幕右边，从扫描框底部到屏幕底部
-		paint.setColor(Color.argb(0, 0, 0, 0));
+		paint.setColor(Color.argb(128, 0, 0, 0));
 		canvas.drawRect(0, 0, width, frame.top, paint);
 		canvas.drawRect(0, frame.top, frame.left, frame.bottom + 1, paint);
 		canvas.drawRect(frame.right + 1, frame.top, width, frame.bottom + 1,
 				paint);
 		canvas.drawRect(0, frame.bottom + 1, width, height, paint);
 
-		paintLine.setColor(Color.argb(0, 0, 255, 0));
-		paintLine.setStrokeWidth(4);
+		paintLine.setColor(Color.rgb(0, 0, 0));
+		paintLine.setStrokeWidth(0);
 		paintLine.setAntiAlias(true);
 		canvas.drawLine(l, t, l +50, t, paintLine);
 		canvas.drawLine(l, t, l, t + 50, paintLine);
