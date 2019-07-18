@@ -122,7 +122,6 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
             actionResponseError("数据解析错误！");
             updateLayout(Constant.REQUEST_FAIL);
         } else {
-            e.printStackTrace();
             actionResponseError("请求失败，请稍后再试...");
             updateLayout(Constant.REQUEST_FAIL);
         }

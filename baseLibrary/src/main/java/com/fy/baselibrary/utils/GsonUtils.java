@@ -61,7 +61,7 @@ public class GsonUtils {
      * @param params
      * @return
      */
-    public static String mapToJsonStr(Map<String, Object> params){
+    public static <T> String mapToJsonStr(Map<String, T> params){
         Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 
         return gson.toJson(params);

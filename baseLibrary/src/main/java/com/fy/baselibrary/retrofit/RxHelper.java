@@ -8,6 +8,8 @@ import com.fy.baselibrary.application.BaseActivityBean;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.notify.L;
 
+import java.lang.reflect.ParameterizedType;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -68,6 +70,7 @@ public class RxHelper {
             public void subscribe(@NonNull ObservableEmitter<T> subscriber) throws Exception {
                 try {
                     L.e("net", "成功 _ onNext");
+
                     if (null == data) subscriber.onNext((T) new Object());
                     else subscriber.onNext(data);
 

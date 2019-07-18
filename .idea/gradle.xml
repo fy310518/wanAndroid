@@ -8,13 +8,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/baseLibrary" />
-            <option value="$PROJECT_DIR$/carplatedistinguish" />
-            <option value="$PROJECT_DIR$/framework" />
             <option value="$PROJECT_DIR$/imgPicker" />
-            <option value="$PROJECT_DIR$/map" />
-            <option value="$PROJECT_DIR$/parkinggather" />
-            <option value="$PROJECT_DIR$/parkingnetlibrary" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
