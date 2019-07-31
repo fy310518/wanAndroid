@@ -9,6 +9,7 @@
         <!-- 图片选择器 -->
         <activity
             android:name=".multiselect.ImgPickerActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="${applicationId}.picker.ImgPickerActivity" />
@@ -19,6 +20,7 @@
         <!-- 图片预览 -->
         <activity
             android:name=".preview.PicturePreviewActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="${applicationId}.preview.PicturePreviewActivity" />

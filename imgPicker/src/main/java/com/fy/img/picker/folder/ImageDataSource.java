@@ -9,7 +9,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 
-import com.fy.baselibrary.utils.notify.L;
+import com.fy.baselibrary.utils.L;
 import com.fy.img.picker.bean.ImageFolder;
 import com.fy.img.picker.bean.ImageItem;
 import com.fy.img.picker.R;
@@ -125,7 +125,7 @@ public class ImageDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
                 ImageFolder allImagesFolder = new ImageFolder();
                 allImagesFolder.name = activity.getResources().getString(R.string.all_images);
                 allImagesFolder.path = "/";
-                allImagesFolder.images = allImages;
+                allImagesFolder.images =  allImages.size() > 100 ? allImages.subList(0, 100) : allImages;
                 allImagesFolder.cover = allImages.size() > 0 ? allImages.get(0) : new ImageItem();
                 imageFolders.add(0, allImagesFolder);  //确保第一条是所有图片
             }

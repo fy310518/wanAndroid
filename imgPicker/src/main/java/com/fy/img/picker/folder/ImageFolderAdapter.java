@@ -41,8 +41,9 @@ public class ImageFolderAdapter extends CommonAdapter<ImageFolder> {
             ImageView iv_folder_check = itemView.findViewById(R.id.iv_folder_check);
             TextView tv_folder_name = itemView.findViewById(R.id.tv_folder_name);
             TextView tv_image_count = itemView.findViewById(R.id.tv_image_count);
-            tv_image_count.setText(ResUtils.getReplaceStr(R.string.folder_image_count,
-                    isShowPicture ? item.images.size() - 1 : item.images.size()));
+			
+			int sum = isShowPicture && position == 0 ? item.images.size() - 1 : item.images.size();
+            tv_image_count.setText(ResUtils.getReplaceStr(R.string.folder_image_count, sum));
 
             tv_folder_name.setText(item.name);
             ImgLoadUtils.loadImage(item.cover.path, iv_cover);

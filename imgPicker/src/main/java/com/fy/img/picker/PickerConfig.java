@@ -8,6 +8,8 @@ public class PickerConfig {
 
     /** 要显示的图片文件夹 */
     public static final String KEY_IMG_FOLDER = "picture_imgFolder";
+    /** 文件夹路径 */
+    public static final String KEY_FOLDER_PATH = "picture_imgFolder_path";
     public static final String KEY_SELECTED = "picture_selected";
     /** 首先显示的图片 下标 */
     public static final String KEY_CURRENT_POSITION = "current_position";

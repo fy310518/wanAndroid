@@ -81,7 +81,7 @@ public class ImgPickersAdapter extends MultiCommonAdapter<ImageItem> {
             });
 
             CheckBox cbCheck = holder.getView(R.id.cb_check);
-            if (imagePicker.getSelectLimit() == 1){
+            if (imagePicker.getSelectLimit() < 1){
                 cbCheck.setVisibility(View.GONE);
             } else {
                 if (imgItem.isSelect) {

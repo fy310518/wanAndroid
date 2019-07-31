@@ -61,7 +61,7 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
 
     private CommonPopupWindow popupWindow;//图片文件夹的 弹窗
     private List<ImageFolder> imageFolderArray = new ArrayList<>();
-    private int position = 0;//弹窗选中
+    private int mPosition = 0;//弹窗选中
 
 
     @Override
@@ -103,7 +103,7 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
         tvTitle.setText(R.string.select_img);
         tvMenu.setTextColor(Color.GRAY);
         tvMenu.setText(R.string.preview);
-        if (maxCount == -1 || maxCount == 1) tvMenu.setVisibility(View.GONE);//图片选择数目 小于1 隐藏 菜单按钮
+        if (maxCount == -1) tvMenu.setVisibility(View.GONE);//图片选择数目 小于1 隐藏 菜单按钮
 
         setViewStutas(imageFolder.images.size());
     }
@@ -125,7 +125,7 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
                 .setImageFolder(imageFolder)
                 .setClickListener(num -> setViewStutas(num))
                 .setOnImageItemClickListener((imageItem, position) -> {
-                    if (isTAKE_picture) {//是否显示拍照 按钮
+                    if (isTAKE_picture && mPosition == 0) {//是否显示拍照 按钮
                         List<ImageItem> images = new ArrayList<>();
                         images.addAll(imgFolder.images);
                         images.remove(0);
@@ -194,9 +194,9 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
                     .setLayoutId(R.layout.pop_imgfolder)
                     .setConvertListener(new NicePopup.PopupConvertListener(){
                         @Override
-                        public void convertView(ViewHolder holder, CommonPopupWindow popupWindow) {
+                        public void convertView(ViewHolder holder) {
                             ImageFolderAdapter mImageFolderAdapter = new ImageFolderAdapter(ImgPickerActivity.this, imageFolderArray);
-                            mImageFolderAdapter.setSelectIndex(position, isTAKE_picture);
+                            mImageFolderAdapter.setSelectIndex(mPosition, isTAKE_picture);
 
                             ListView lvImaFolder = holder.getView(R.id.lvImaFolder);
                             lvImaFolder.setAdapter(mImageFolderAdapter);
@@ -212,7 +212,7 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
                                         mImgListAdapter.refreshData(imgFolder.images);
                                         btn_dir.setText(imgFolder.name);
 
-                                        ImgPickerActivity.this.position = position;
+                                        ImgPickerActivity.this.mPosition = position;
                                         mImageFolderAdapter.setSelectIndex(position, isTAKE_picture);
                                     }
 
@@ -232,7 +232,7 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
                     positions[0],
                     positions[1] - DensityUtils.dp2px(pw_lv_height));
 
-        } else if (i == R.id.btn_complete) {//修改成完成
+        } else if (i == R.id.btn_complete) {//完成
             if (mImgListAdapter.getSelectedImages().size() == 0) {
                 return;
             }
@@ -242,7 +242,7 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
 
             JumpUtils.jumpResult(this, bundle);
 
-        } else if (i == R.id.tvMenu) {//修改成预览
+        } else if (i == R.id.tvMenu) {//预览
             if (mImgListAdapter.getSelectedImages().size() == 0) {
                 return;
             }
@@ -284,7 +284,12 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
         Bundle bundle = new Bundle();
         bundle.putInt(PickerConfig.KEY_MAX_COUNT, maxCount);
         bundle.putInt(PickerConfig.KEY_CURRENT_POSITION, position);
-        bundle.putSerializable(PickerConfig.KEY_IMG_FOLDER, imgFolder);
+
+        if (null != imgFolder.images && imgFolder.images.size() > 100){
+            bundle.putString(PickerConfig.KEY_FOLDER_PATH, imgFolder.images.get(0).path);//此处传递 一个路径
+        } else {
+            bundle.putSerializable(PickerConfig.KEY_IMG_FOLDER, imgFolder);
+        }
         bundle.putSerializable(PickerConfig.KEY_ALREADY_SELECT, new ImageFolder(mImgListAdapter.getSelectedImages()));
 
         JumpUtils.jump(this, PicturePreviewActivity.class, bundle, ImagePicker.Picture_Preview);

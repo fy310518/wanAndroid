@@ -22,12 +22,16 @@ import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.notify.T;
+import com.fy.baselibrary.widget.timeselector.util.TextUtil;
 import com.fy.img.picker.ImagePicker;
 import com.fy.img.picker.PickerConfig;
 import com.fy.img.picker.bean.ImageFolder;
 import com.fy.img.picker.bean.ImageItem;
 import com.fy.img.picker.R;
+import com.fy.img.picker.folder.ImageDataSource;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,7 +52,7 @@ public class PicturePreviewActivity extends AppCompatActivity implements IBaseAc
     protected ImageFolder imgFolder;            //跳转进 PicturePreviewActivity 的图片文件夹
     protected List<ImageItem> selectedImages;   //所有已经选中的图片
     protected int mCurrentPosition = 0;         //跳转进PicturePreviewActivity时的序号，第几个图片; 当前显示的图片下标
-    protected int max = 12;                     //最大选择图片数目
+    protected int max = 9;                     //最大选择图片数目
 
     /**
      * 当前屏幕状态 全屏or显示菜单
@@ -85,6 +89,32 @@ public class PicturePreviewActivity extends AppCompatActivity implements IBaseAc
         original_checkbox.setOnClickListener(this);
 
         getTransmitData();
+    }
+
+    /**
+     * 获取传递的数据
+     */
+    private void getTransmitData() {
+        Bundle bundle = getIntent().getExtras();
+        mCurrentPosition = bundle.getInt(PickerConfig.KEY_CURRENT_POSITION, 0);
+        max = bundle.getInt(PickerConfig.KEY_MAX_COUNT, -1);
+        ImageFolder folder = (ImageFolder) bundle.getSerializable(PickerConfig.KEY_ALREADY_SELECT);
+        if (null != folder) selectedImages = folder.images;
+
+        if (max < 0) pickerBottom.setVisibility(View.GONE);
+        imgFolder = (ImageFolder) bundle.getSerializable(PickerConfig.KEY_IMG_FOLDER);
+        if (null == imgFolder) {
+            String imgFolderPath = bundle.getString(PickerConfig.KEY_FOLDER_PATH, "");
+            if (!TextUtil.isEmpty(imgFolderPath)){
+                File file = new File(imgFolderPath);
+                initImgFolder(file.getParent(), folder);
+            }
+        } else {
+            initPage();
+        }
+    }
+
+    private void initPage(){
         //初始化当前页面的状态
         tvTitle.setText(ResUtils.getReplaceStr(R.string.preview_image_count, mCurrentPosition + 1, imgFolder.images.size()));
         tvTitle.setTextColor(ResUtils.getColor(R.color.white));
@@ -103,46 +133,26 @@ public class PicturePreviewActivity extends AppCompatActivity implements IBaseAc
                 return R.layout.viewpager_preview;
             }
         }, imgFolder.images)
-        .setOnPageChangeListener(new OnPageChangeListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                .setOnPageChangeListener(new OnPageChangeListener() {
+                    @Override
+                    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
 
-            }
+                    }
 
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    @Override
+                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 
-            }
+                    }
 
-            @Override
-            public void onPageSelected(int position) {
-                mCurrentPosition = position;
-                original_checkbox.setChecked(imgFolder.images.get(position).isSelect);
-                tvTitle.setText(ResUtils.getReplaceStr(R.string.preview_image_count, position + 1, imgFolder.images.size()));
-            }
-        })
+                    @Override
+                    public void onPageSelected(int position) {
+                        mCurrentPosition = position;
+                        original_checkbox.setChecked(imgFolder.images.get(position).isSelect);
+                        tvTitle.setText(ResUtils.getReplaceStr(R.string.preview_image_count, position + 1, imgFolder.images.size()));
+                    }
+                })
                 .setFirstItemPos(mCurrentPosition);
 //                .setPageTransformer(new AccordionTransformer())
-    }
-
-    /**
-     * 获取传递的数据
-     */
-    private void getTransmitData() {
-        Bundle bundle = getIntent().getExtras();
-        mCurrentPosition = bundle.getInt(PickerConfig.KEY_CURRENT_POSITION, 0);
-        max = bundle.getInt(PickerConfig.KEY_MAX_COUNT, -1);
-
-        if (max > 0 && max == 1) {
-            original_checkbox.setVisibility(View.GONE);
-        } else if(max == -1){
-            pickerBottom.setVisibility(View.GONE);
-        }
-
-        imgFolder = (ImageFolder) bundle.getSerializable(PickerConfig.KEY_IMG_FOLDER);
-
-        ImageFolder folder = (ImageFolder) bundle.getSerializable(PickerConfig.KEY_ALREADY_SELECT);
-        if (null != folder) selectedImages = folder.images;
     }
 
     @SuppressLint("StringFormatMatches")
@@ -186,5 +196,20 @@ public class PicturePreviewActivity extends AppCompatActivity implements IBaseAc
             rlHead.setVisibility(View.VISIBLE);
             if(max != -1)pickerBottom.setVisibility(View.VISIBLE);
         }
+    }
+
+    //初始化图片文件夹 相关
+    private void initImgFolder(String imgFolderPath, ImageFolder folder) {
+        new ImageDataSource(this, imgFolderPath, folder, new ImageDataSource.OnImagesLoadedListener() {
+            @Override
+            public void onImagesLoaded(List<ImageFolder> imageFolders) {
+                if (imageFolders.size() > 0 ){
+                    imgFolder = imageFolders.get(0);
+                    initPage();
+                } else {
+                    T.showLong("该文件夹没有图片");
+                }
+            }
+        });
     }
 }
