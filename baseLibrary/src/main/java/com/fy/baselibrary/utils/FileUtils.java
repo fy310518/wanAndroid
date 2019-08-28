@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.utils.notify.L;
+import com.fy.baselibrary.utils.security.EncryptUtils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -292,6 +293,18 @@ public class FileUtils {
         File file = new File(folderIsExists(DOWN, 3), fileName);
 
         return FileUtils.fileIsExists(file.getPath());
+    }
+
+    /**
+     * 生成临时文件
+     * @param url
+     * @param filePath
+     * @return
+     */
+    public static File getTempFile(String url, String filePath) {
+        File parentFile = new File(filePath).getParentFile();
+        String md5 = EncryptUtils.getMD5(url);
+        return new File(parentFile.getAbsolutePath(), md5 + ".temp");
     }
 
     /***

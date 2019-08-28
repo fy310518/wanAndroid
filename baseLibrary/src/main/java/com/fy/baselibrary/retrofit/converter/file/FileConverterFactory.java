@@ -34,11 +34,16 @@ public class FileConverterFactory extends Converter.Factory {
         return null;
     }
 
-    @Nullable
     @Override
     public Converter<ResponseBody, ?> responseBodyConverter(Type type,
                                                             Annotation[] annotations,
                                                             Retrofit retrofit) {
+
+        for( Annotation annotation : annotations) {
+            if( annotation instanceof UpLoadFileType) {
+                return new FileResponseBodyConverter();
+            }
+        }
         return super.responseBodyConverter(type, annotations, retrofit);
     }
 }
