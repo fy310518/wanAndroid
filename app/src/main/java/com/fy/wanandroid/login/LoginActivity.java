@@ -123,7 +123,6 @@ public class LoginActivity extends BaseMVPActivity<LogingPresenter> implements I
         mCache.put(Constant.userName, login);
 
         new SpfAgent(Constant.baseSpf)
-                .saveBoolean(Constant.isLogin, true)
                 .saveString(Constant.userName, login.getUsername())
                 .commit(false);
 
