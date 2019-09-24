@@ -1,14 +1,16 @@
 package com.fy.baselibrary.utils.notify;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,11 +18,11 @@ import android.provider.Settings;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.RawRes;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
 import com.fy.baselibrary.utils.AppUtils;
-import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.ResUtils;
 
 import java.io.File;
@@ -47,22 +49,37 @@ public class NotifyUtils {
      */
     @TargetApi(Build.VERSION_CODES.O)
     public static void createNotificationChannel(Context ctx, String channelId, String channelName, int importance,
-                                                 boolean isVibrate, boolean hasSound) {
+                                                 boolean isVibrate, boolean hasSound, Uri sound) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
-            if (isVibrate) {
+
+            if (null != sound){
                 // 设置通知出现时的震动（如果 android 设备支持的话）
                 channel.enableVibration(true);
-                channel.setVibrationPattern(new long[]{100, 50, 200});
+                channel.setVibrationPattern(new long[]{10, 1000, 1000});
+
+                channel.setSound(sound, Notification.AUDIO_ATTRIBUTES_DEFAULT);//设置自定义声音
             } else {
-                // 设置通知出现时不震动
-                channel.enableVibration(false);
-                channel.setVibrationPattern(new long[]{0});
+                if (isVibrate) {
+                    // 设置通知出现时的震动（如果 android 设备支持的话）
+                    channel.enableVibration(true);
+                    channel.setVibrationPattern(new long[]{10, 1000, 1000});
+                } else {
+                    // 设置通知出现时不震动
+                    channel.enableVibration(false);
+                    channel.setVibrationPattern(new long[]{0});
+                }
+
+                if (!hasSound) channel.setSound(null, null);//没有声音
             }
+
+
             channel.enableLights(true);//呼吸灯
-            if (!hasSound)
-                channel.setSound(null, null);//没有声音
+            channel.setLightColor(Color.GREEN);//呼吸灯的灯光颜色
+
+            channel.setBypassDnd(true); //设置绕过免打扰模式
+            channel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);//设置在锁屏界面上显示这条通知
 
             NotificationManager notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
             assert notificationManager != null;
@@ -103,17 +120,21 @@ public class NotifyUtils {
         manageNotificationChannel(act, fyBuild.channelName);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(act, fyBuild.channelName)
-                .setContentIntent(fyBuild.pendingIntent) //设置通知栏点击意图
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(fyBuild.icon)
                 .setLargeIcon(BitmapFactory.decodeResource(act.getResources(), fyBuild.icon))
                 .setColor(ResUtils.getColor(fyBuild.iconBgColor))
                 .setPriority(fyBuild.priority)//设置通知消息优先级
-                .setAutoCancel(true)//设置点击通知栏消息后，通知消息自动消失
-//                .setSound(Uri.fromFile(new File(fyBuild.soundFilePath))) //通知栏消息提示音
-//                .setVibrate(new long[]{0, 1000, 1000, 1000}) //通知栏消息震动
-//                .setLights(Color.GREEN, 1000, 2000) //通知栏消息闪灯(亮一秒间隔两秒再亮)
-                .setDefaults(fyBuild.defaults);
+                .setAutoCancel(true);//设置点击通知栏消息后，通知消息自动消失
+
+
+        if (fyBuild.defaults == AppNotifyUtils.DEFAULT_CUSTOM) {
+            builder.setSound(fyBuild.sound) //通知栏消息提示音
+                    .setVibrate(new long[]{10, 1000, 1000}) //通知栏消息震动
+                    .setLights(Color.GREEN, 1000, 2000); //通知栏消息闪灯(亮一秒间隔两秒再亮)
+        } else {
+            builder.setDefaults(fyBuild.defaults);
+        }
 
         //判断是否显示自定义通知布局
         if (null == fyBuild.remoteViews) {
@@ -123,11 +144,14 @@ public class NotifyUtils {
             builder.setCustomContentView(fyBuild.remoteViews);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // requestCode是0的时候三星手机点击通知栏通知不起作用
-            // 关联PendingIntent
-            builder.setVisibility(Notification.VISIBILITY_PUBLIC)
-                    .setFullScreenIntent(fyBuild.pendingIntent, true);// 横幅
+        if (null != fyBuild.pendingIntent) {
+            builder.setContentIntent(fyBuild.pendingIntent); //设置通知栏点击意图
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
+                // requestCode是0的时候三星手机点击通知栏通知不起作用
+                // 关联PendingIntent
+                builder.setVisibility(Notification.VISIBILITY_PUBLIC);
+            }
         }
 
         return builder;
@@ -139,8 +163,9 @@ public class NotifyUtils {
         private int channelId;
         /** 通知渠道名称 */
         private String channelName;
-        /** 通知栏消息提示音 mp3文件路径 */
-        private String soundFilePath = "";
+        /** 通知消息提示音 Uri (默认：系统铃声管理器中的提示音效) */
+        private Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
         /**
          * 通知提示模式
          * NotificationCompat.DEFAULT_SOUND	        添加默认声音提醒
@@ -148,10 +173,15 @@ public class NotifyUtils {
          * NotificationCompat.DEFAULT_LIGHTS	    添加默认呼吸灯提醒
          * NotificationCompat.DEFAULT_ALL	        同时添加以上三种默认提醒
          * NotificationCompat.FLAG_ONLY_ALERT_ONCE	静默
+         * AppNotifyUtils.DEFAULT_CUSTOM            使用自定义的 铃声和震动
          */
         private int defaults = NotificationCompat.FLAG_ONLY_ALERT_ONCE;
 
         /**
+         * 设置通知重要性级别
+         * Android 8.0以及上，在 NotificationChannel 的构造函数中指定，总共要五个级别；
+         * Android 7.1（API 25）及以下的设备，还得调用NotificationCompat 的 setPriority方法来设置
+         *
          * Notification.PRIORITY_MAX	重要而紧急的通知，通知用户这个事件是时间上紧迫的或者需要立即处理的。
          * Notification.PRIORITY_HIGH	高优先级用于重要的通信内容，例如短消息或者聊天，这些都是对用户来说比较有兴趣的
          * Notification.PRIORITY_DEFAULT	默认优先级用于没有特殊优先级分类的通知
@@ -220,8 +250,15 @@ public class NotifyUtils {
             return this;
         }
 
+        /** 设置 文件管理器中的 提示音效 */
         public FyBuild setSoundFilePath(String soundFilePath) {
-            this.soundFilePath = soundFilePath;
+            this.sound = Uri.fromFile(new File(soundFilePath));
+            return this;
+        }
+
+        /** 设置 raw 资源中的 提示音效 */
+        public FyBuild setSoundFilePath(@RawRes int soundFilePath) {
+            this.sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + AppUtils.getLocalPackageName() + "/" + soundFilePath);
             return this;
         }
 
@@ -235,7 +272,6 @@ public class NotifyUtils {
             this.iconBgColor = iconBgColor;
             return this;
         }
-
 
         public FyBuild setMsgTitle(String msgTitle) {
             this.msgTitle = msgTitle;
@@ -257,12 +293,27 @@ public class NotifyUtils {
         }
 
         /**
+         * 修改 知道渠道 id的 渠道设置
+         * @param act
+         */
+        private void modifyChannel(Context act){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (defaults == AppNotifyUtils.DEFAULT_CUSTOM){
+                    channelName = AppNotifyUtils.initNotificationChannel(act, AppNotifyUtils.chatNumKEY, true,
+                            AppNotifyUtils.channelId, AppNotifyUtils.channelName, sound);
+                } else {
+                    channelName = AppNotifyUtils.initNotificationChannel(act, AppNotifyUtils.chatNumKEY, true,
+                            AppNotifyUtils.channelId, AppNotifyUtils.channelName, null);
+                }
+            }
+        }
+
+        /**
          * 最后构建 NotificationCompat.Builder 和 NotificationManager
          * @param act
          */
         public FyBuild createManager(Context act) {
-            this.pendingIntent = PendingIntent.getActivity(act, channelId, new Intent(), PendingIntent.FLAG_CANCEL_CURRENT);
-
+            modifyChannel(act);
             mBuilder = NotifyUtils.createNotifyBuilder(act, this);
             manager = (NotificationManager) act.getSystemService(Context.NOTIFICATION_SERVICE);
             return this;
@@ -276,12 +327,12 @@ public class NotifyUtils {
          * @return
          */
         public FyBuild createManager(Context act, @NonNull Class actClass, Bundle bundle) {
-            Intent intent = new Intent(act, actClass);
-            if (null != bundle)intent.putExtras(bundle);
-            this.pendingIntent = PendingIntent.getActivity(act, channelId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+            Intent resultIntent = new Intent(act, actClass);
+            resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (null != bundle)resultIntent.putExtras(bundle);
+            this.pendingIntent = PendingIntent.getActivity(act, AppNotifyUtils.requestCode, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            mBuilder = NotifyUtils.createNotifyBuilder(act, this);
-            manager = (NotificationManager) act.getSystemService(Context.NOTIFICATION_SERVICE);
+            createManager(act);
             return this;
         }
 
