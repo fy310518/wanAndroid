@@ -37,6 +37,7 @@ import com.fy.baselibrary.statuslayout.OnSetStatusView;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.Constant;
+import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.notify.L;
 import com.fy.baselibrary.utils.notify.NotifyUtils;
 import com.fy.baselibrary.utils.imgload.imgprogress.ProgressInterceptor;
@@ -46,6 +47,7 @@ import com.fy.wanandroid.entity.AppUpdateEntity;
 import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -104,9 +106,10 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
 //        uploadFiles(files, tvKing);
 //
-//        List<String> files1 = new ArrayList<>();
-//        files1.add(FileUtils.getSDCardPath() + "DCIM/Camera/体质健康.zip");
-//        uploadFiles(files1, tvKing2);
+        List<String> files1 = new ArrayList<>();
+        files1.add(FileUtils.getSDCardPath() + "DCIM/Camera/总分.jpg");
+        files1.add(FileUtils.getSDCardPath() + "DCIM/Camera/首页7.jpg");
+        uploadFiles(files1, tvKing2);
 //        uploadFiles();
 
         loadImage();
@@ -264,11 +267,11 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
     private void initNotificationChannel() {
         String channelId = "chat";
         String channelName = "聊天消息";
-        NotifyUtils.createNotificationChannel(this, channelId, channelName, NotificationManager.IMPORTANCE_LOW, true, false);
+        NotifyUtils.createNotificationChannel(this, channelId, channelName, NotificationManager.IMPORTANCE_LOW, true, false, null);
 
         channelId = "subscribe";
         channelName = "订阅消息";
-        NotifyUtils.createNotificationChannel(this, channelId, channelName, NotificationManager.IMPORTANCE_HIGH, true, true);
+        NotifyUtils.createNotificationChannel(this, channelId, channelName, NotificationManager.IMPORTANCE_HIGH, true, true, null);
     }
 
     //检查更新

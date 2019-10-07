@@ -18,7 +18,7 @@ import retrofit2.Converter;
  * describe: 文件下载 转换器
  * Created by fangs on 2019/8/28 22:03.
  */
-public class FileResponseBodyConverter<T> implements Converter<ResponseBody, T> {
+public class FileResponseBodyConverter implements Converter<ResponseBody, Object> {
 
     //进度发射器
     static UploadOnSubscribe uploadOnSubscribe;
@@ -27,9 +27,9 @@ public class FileResponseBodyConverter<T> implements Converter<ResponseBody, T> 
     }
 
     @Override
-    public T convert(ResponseBody value) throws IOException {
+    public Object convert(ResponseBody value) throws IOException {
         saveFile(value, "", "");
-        return null;
+        return "200";
     }
 
     private static void saveFile(final ResponseBody responseBody, String url, final String filePath) {

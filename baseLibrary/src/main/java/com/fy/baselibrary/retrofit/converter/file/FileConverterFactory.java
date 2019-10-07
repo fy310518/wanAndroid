@@ -2,6 +2,7 @@ package com.fy.baselibrary.retrofit.converter.file;
 
 import android.support.annotation.Nullable;
 
+import com.fy.baselibrary.retrofit.load.DownLoadFileType;
 import com.fy.baselibrary.retrofit.load.up.UpLoadFileType;
 
 import java.lang.annotation.Annotation;
@@ -40,10 +41,10 @@ public class FileConverterFactory extends Converter.Factory {
                                                             Retrofit retrofit) {
 
         for( Annotation annotation : annotations) {
-            if( annotation instanceof UpLoadFileType) {
+            if( annotation instanceof DownLoadFileType) {
                 return new FileResponseBodyConverter();
             }
         }
-        return super.responseBodyConverter(type, annotations, retrofit);
+        return null;
     }
 }

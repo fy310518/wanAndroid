@@ -80,7 +80,7 @@ public interface LoadService {
      * @param url
      * @return
      */
-    @UpLoadFileType
+    @DownLoadFileType
     @Streaming
     @GET
     Observable<ResponseBody> download(@Header("RANGE") String downParam, @Url String url);
