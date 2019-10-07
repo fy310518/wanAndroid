@@ -4,12 +4,15 @@ import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.fy.baselibrary.retrofit.load.DownLoadFileType;
 import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
 import com.fy.baselibrary.utils.FileUtils;
+import com.fy.baselibrary.utils.notify.L;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.lang.annotation.Annotation;
 
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
@@ -22,8 +25,13 @@ public class FileResponseBodyConverter implements Converter<ResponseBody, Object
 
     //进度发射器
     static UploadOnSubscribe uploadOnSubscribe;
+    Annotation[] annotations;
 
-    public FileResponseBodyConverter() {
+    public FileResponseBodyConverter(Annotation[] annotations) {
+        this.annotations = annotations;
+        for( Annotation annotation : annotations) {
+                L.e("文件下载", annotation.toString());
+        }
     }
 
     @Override

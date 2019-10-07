@@ -66,6 +66,7 @@ public class Constant {
     public static final String SP_KEY_ID = "user_id";
     public static final String SP_KEY_ALARM = "user_alarm";//超警 警号
     public static final String SP_KEY_AppALARM = "Appuser_alarm";//门户 警号
+    public static final String isLogin = "User_isLogin";
     public static final String userName = "User_Name";
     public static final String SP_KEY_TOKEN = "user_token";
     public static final String SP_KEY_HEAD_PIC = "user_head_pic";

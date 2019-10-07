@@ -302,9 +302,8 @@ public class FileUtils {
      * @return
      */
     public static File getTempFile(String url, String filePath) {
-        File parentFile = new File(filePath).getParentFile();
-        String md5 = EncryptUtils.getMD5(url);
-        return new File(parentFile.getAbsolutePath(), md5 + ".temp");
+        String md5 = EncryptUtils.getMD5(url) + ".temp";
+        return FileUtils.fileIsExists(filePath + "/" + md5);
     }
 
     /***

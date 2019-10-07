@@ -69,14 +69,14 @@ public interface LoadService {
      * @return
      */
     @Multipart
-    @POST("http://192.168.100.123:8080/hfs/")
+    @POST("http://192.168.0.110/testFile/")
     Observable<Object> uploadFile2(@Part List<MultipartBody.Part> files);
 
 
     /**
      * 断点下载
      *
-     * @param downParam 下载参数，传下载区间使用
+     * @param downParam 下载参数，传下载区间使用 "bytes=" + startPos + "-"
      * @param url
      * @return
      */

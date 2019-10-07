@@ -7,6 +7,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
@@ -22,7 +23,6 @@ import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.notify.T;
-import com.fy.baselibrary.widget.timeselector.util.TextUtil;
 import com.fy.img.picker.ImagePicker;
 import com.fy.img.picker.PickerConfig;
 import com.fy.img.picker.bean.ImageFolder;
@@ -105,7 +105,7 @@ public class PicturePreviewActivity extends AppCompatActivity implements IBaseAc
         imgFolder = (ImageFolder) bundle.getSerializable(PickerConfig.KEY_IMG_FOLDER);
         if (null == imgFolder) {
             String imgFolderPath = bundle.getString(PickerConfig.KEY_FOLDER_PATH, "");
-            if (!TextUtil.isEmpty(imgFolderPath)){
+            if (!TextUtils.isEmpty(imgFolderPath)){
                 File file = new File(imgFolderPath);
                 initImgFolder(file.getParent(), folder);
             }

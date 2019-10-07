@@ -106,13 +106,15 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
 //        uploadFiles(files, tvKing);
 //
-        List<String> files1 = new ArrayList<>();
-        files1.add(FileUtils.getSDCardPath() + "DCIM/Camera/总分.jpg");
-        files1.add(FileUtils.getSDCardPath() + "DCIM/Camera/首页7.jpg");
-        uploadFiles(files1, tvKing2);
+//        List<String> files1 = new ArrayList<>();
+//        files1.add(FileUtils.getSDCardPath() + "DCIM/Camera/总分.jpg");
+//        files1.add(FileUtils.getSDCardPath() + "DCIM/Camera/首页7.jpg");
+//        uploadFiles(files1, tvKing2);
+
+        downLoadFiles(tvKing2);
 //        uploadFiles();
 
-        loadImage();
+//        loadImage();
     }
 
 
@@ -185,6 +187,27 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                     @Override
                     public void accept(Long aLong) throws Exception {
                         showHideViewFlag(Constant.LAYOUT_ERROR_ID);
+                    }
+                });
+    }
+
+    public void downLoadFiles(TextView textView){
+        String filePath = FileUtils.folderIsExists("wanAndroid.down", 2).getPath();
+
+        RequestUtils.downLoadFile(this, filePath, "http://192.168.0.110/testFile/首页7.jpg", new LoadCallBack<Object>() {
+                    @Override
+                    protected void onProgress(String percent) {
+                        textView.setText(percent + "%");
+                    }
+
+                    @Override
+                    protected void onSuccess(Object t) {
+
+                    }
+
+                    @Override
+                    protected void updateLayout(int flag) {
+
                     }
                 });
     }

@@ -194,7 +194,7 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
                     .setLayoutId(R.layout.pop_imgfolder)
                     .setConvertListener(new NicePopup.PopupConvertListener(){
                         @Override
-                        public void convertView(ViewHolder holder) {
+                        public void convertView(ViewHolder holder, CommonPopupWindow popupWindow) {
                             ImageFolderAdapter mImageFolderAdapter = new ImageFolderAdapter(ImgPickerActivity.this, imageFolderArray);
                             mImageFolderAdapter.setSelectIndex(mPosition, isTAKE_picture);
 

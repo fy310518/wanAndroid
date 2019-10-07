@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 
 import com.fy.baselibrary.retrofit.load.DownLoadFileType;
 import com.fy.baselibrary.retrofit.load.up.UpLoadFileType;
+import com.fy.baselibrary.utils.notify.L;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -42,7 +43,8 @@ public class FileConverterFactory extends Converter.Factory {
 
         for( Annotation annotation : annotations) {
             if( annotation instanceof DownLoadFileType) {
-                return new FileResponseBodyConverter();
+                L.e("文件下载");
+                return new FileResponseBodyConverter(annotations);
             }
         }
         return null;

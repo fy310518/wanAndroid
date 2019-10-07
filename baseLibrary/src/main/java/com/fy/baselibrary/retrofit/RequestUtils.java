@@ -1,9 +1,15 @@
 package com.fy.baselibrary.retrofit;
 
+import android.content.Context;
+
 import com.fy.baselibrary.application.ioc.ConfigUtils;
+import com.fy.baselibrary.retrofit.load.LoadCallBack;
+import com.fy.baselibrary.retrofit.load.LoadService;
+import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.notify.L;
 import com.fy.baselibrary.utils.cache.ACache;
 
+import java.io.File;
 import java.io.Serializable;
 
 import javax.inject.Inject;
@@ -105,6 +111,19 @@ public class RequestUtils {
         return Observable.concat(fromCache, fromNetwork);
     }
 
+
+    public static void downLoadFile(Context context, String filePath, String url, LoadCallBack loadCallBack){
+
+        File tempFile = FileUtils.getTempFile(url, filePath);
+        String downParam = "bytes=" + tempFile.length() + "-";
+
+        RequestUtils.create(LoadService.class)
+                .download(downParam, url)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxHelper.bindToLifecycle(context))
+                .subscribe(loadCallBack);
+    }
 
     /**
      * 使用RxJava CompositeDisposable 控制请求队列
