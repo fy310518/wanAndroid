@@ -192,9 +192,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
     }
 
     public void downLoadFiles(TextView textView){
-        String filePath = FileUtils.folderIsExists("wanAndroid.down", 2).getPath();
-
-        RequestUtils.downLoadFile(this, filePath, "http://192.168.0.110/testFile/首页7.jpg", new LoadCallBack<Object>() {
+        RequestUtils.downLoadFile(this, "http://47.107.134.212:13201/8af7372fef2c4d849caffe524828b072.apk", new LoadCallBack<Object>() {
                     @Override
                     protected void onProgress(String percent) {
                         textView.setText(percent + "%");

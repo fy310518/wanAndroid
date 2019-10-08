@@ -1,4 +1,4 @@
-package com.fy.baselibrary.retrofit.load;
+package com.fy.baselibrary.retrofit.load.down;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

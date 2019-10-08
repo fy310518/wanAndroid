@@ -99,11 +99,6 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".loadfile.DownFileActivity"
-            android:label="@string/fileDown"
-            android:screenOrientation="portrait" />
-
-        <activity
             android:name=".animation.revealeffect.RevealEffectActivity"
             android:label="@string/revealEffect"
             android:screenOrientation="portrait"

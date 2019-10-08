@@ -112,8 +112,9 @@ public class RequestUtils {
     }
 
 
-    public static void downLoadFile(Context context, String filePath, String url, LoadCallBack loadCallBack){
+    public static void downLoadFile(Context context, String url, LoadCallBack loadCallBack){
 
+        String filePath = FileUtils.folderIsExists("wanAndroid.down", 2).getPath();
         File tempFile = FileUtils.getTempFile(url, filePath);
         String downParam = "bytes=" + tempFile.length() + "-";
 

@@ -36,7 +36,6 @@ import com.fy.baselibrary.utils.drawable.TintUtils;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.about.AboutActivity;
 import com.fy.wanandroid.collect.MyCollectActivity;
-import com.fy.wanandroid.loadfile.DownFileActivity;
 import com.fy.wanandroid.login.LoginActivity;
 import com.fy.wanandroid.main.fragment.FragmentOne;
 import com.fy.wanandroid.main.fragment.FragmentThree;
@@ -230,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
                     JumpUtils.jump(mContext, MyCollectActivity.class, null);
                     break;
                 case R.id.myDownLoad:
-                    JumpUtils.jump(mContext, DownFileActivity.class, null);
+//                    JumpUtils.jump(mContext, DownFileActivity.class, null);
                     break;
                 case R.id.atNightModel:
                     NightModeUtils.switchNightMode(mContext);

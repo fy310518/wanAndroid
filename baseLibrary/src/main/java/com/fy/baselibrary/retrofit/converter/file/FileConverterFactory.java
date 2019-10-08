@@ -2,10 +2,11 @@ package com.fy.baselibrary.retrofit.converter.file;
 
 import android.support.annotation.Nullable;
 
-import com.fy.baselibrary.retrofit.load.DownLoadFileType;
+import com.fy.baselibrary.retrofit.load.down.DownLoadFileType;
 import com.fy.baselibrary.retrofit.load.up.UpLoadFileType;
 import com.fy.baselibrary.utils.notify.L;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
@@ -27,8 +28,8 @@ public class FileConverterFactory extends Converter.Factory {
                                                           Annotation[] methodAnnotations,
                                                           Retrofit retrofit) {
         //进行条件判断，如果传进来的 methodAnnotations 不包含 UpLoadFileType，则匹配失败
-        for( Annotation annotation : methodAnnotations) {
-            if( annotation instanceof UpLoadFileType) {
+        for (Annotation annotation : methodAnnotations) {
+            if (annotation instanceof UpLoadFileType) {
                 return new FileRequestBodyConverter();
             }
         }
@@ -37,16 +38,14 @@ public class FileConverterFactory extends Converter.Factory {
     }
 
     @Override
-    public Converter<ResponseBody, ?> responseBodyConverter(Type type,
-                                                            Annotation[] annotations,
-                                                            Retrofit retrofit) {
+    public Converter<ResponseBody, File> responseBodyConverter(Type type,
+                                                               Annotation[] annotations,
+                                                               Retrofit retrofit) {
 
-        for( Annotation annotation : annotations) {
-            if( annotation instanceof DownLoadFileType) {
-                L.e("文件下载");
-                return new FileResponseBodyConverter(annotations);
-            }
+        if (type == File.class) {
+            return new FileResponseBodyConverter();
         }
+
         return null;
     }
 }

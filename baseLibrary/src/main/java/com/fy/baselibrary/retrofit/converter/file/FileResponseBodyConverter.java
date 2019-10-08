@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.fy.baselibrary.retrofit.load.DownLoadFileType;
+import com.fy.baselibrary.retrofit.load.down.FileResponseBody;
 import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.notify.L;
@@ -12,7 +12,7 @@ import com.fy.baselibrary.utils.notify.L;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
@@ -21,30 +21,48 @@ import retrofit2.Converter;
  * describe: 文件下载 转换器
  * Created by fangs on 2019/8/28 22:03.
  */
-public class FileResponseBodyConverter implements Converter<ResponseBody, Object> {
+public class FileResponseBodyConverter implements Converter<ResponseBody, File> {
 
     //进度发射器
     static UploadOnSubscribe uploadOnSubscribe;
-    Annotation[] annotations;
-
-    public FileResponseBodyConverter(Annotation[] annotations) {
-        this.annotations = annotations;
-        for( Annotation annotation : annotations) {
-                L.e("文件下载", annotation.toString());
-        }
-    }
 
     @Override
-    public Object convert(ResponseBody value) throws IOException {
-        saveFile(value, "", "");
-        return "200";
+    public File convert(ResponseBody value) throws IOException {
+        String downUrl = null;
+        try {
+            //使用反射获得我们自定义的response
+            Class aClass = value.getClass();
+            Field field = aClass.getDeclaredField("delegate");
+            field.setAccessible(true);
+            ResponseBody body = (ResponseBody) field.get(value);
+            if (body instanceof FileResponseBody) {
+                FileResponseBody prBody = ((FileResponseBody) body);
+                downUrl = prBody.getDownUrl();
+            }
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        String filePath = FileUtils.folderIsExists("wanAndroid.down", 2).getPath();
+        return saveFile(value, downUrl, filePath);
     }
 
-    private static void saveFile(final ResponseBody responseBody, String url, final String filePath) {
+    /**
+     * 根据ResponseBody 写文件
+     * @param responseBody
+     * @param url
+     * @param filePath   文件保存路径
+     * @return
+     */
+    private static File saveFile(final ResponseBody responseBody, String url, final String filePath) {
         boolean downloadSuccss = true;
         final File tempFile = FileUtils.getTempFile(url, filePath);
+
+        File file = tempFile;
         try {
-            writeFileToDisk(responseBody, tempFile.getAbsolutePath());
+            file = writeFileToDisk(responseBody, tempFile.getAbsolutePath());
         } catch (Exception e) {
             e.printStackTrace();
             downloadSuccss = false;
@@ -61,10 +79,12 @@ public class FileResponseBodyConverter implements Converter<ResponseBody, Object
                 }
             });
         }
+
+        return file;
     }
 
     @SuppressLint("DefaultLocale")
-    private static void writeFileToDisk(ResponseBody responseBody, String filePath) throws IOException {
+    private static File writeFileToDisk(ResponseBody responseBody, String filePath) throws IOException {
         long totalByte = responseBody.contentLength();
         long downloadByte = 0;
         File file = new File(filePath);
@@ -85,7 +105,10 @@ public class FileResponseBodyConverter implements Converter<ResponseBody, Object
             downloadByte += len;
             callbackProgress(tempFileLen + totalByte, tempFileLen + downloadByte);
         }
+
         randomAccessFile.close();
+
+        return file;
     }
 
     private static void callbackProgress(final long totalByte, final long downloadByte) {
@@ -93,10 +116,12 @@ public class FileResponseBodyConverter implements Converter<ResponseBody, Object
             @SuppressLint("DefaultLocale")
             @Override
             public void run() {
+                L.e("xiaz", downloadByte + "--");
                 if (null != uploadOnSubscribe) {
                     uploadOnSubscribe.onRead(downloadByte);
                 }
             }
         });
     }
+
 }
