@@ -11,6 +11,7 @@ import com.fy.baselibrary.utils.notify.L;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.lang.reflect.Field;
 
@@ -57,15 +58,16 @@ public class FileResponseBodyConverter implements Converter<ResponseBody, File> 
      * @return
      */
     private static File saveFile(final ResponseBody responseBody, String url, final String filePath) {
-        boolean downloadSuccss = true;
+        boolean downloadSuccss = false;
         final File tempFile = FileUtils.getTempFile(url, filePath);
 
-        File file = tempFile;
+        File file = null;
         try {
             file = writeFileToDisk(responseBody, tempFile.getAbsolutePath());
+            FileUtils.reNameFile(url, tempFile.getPath());
+            downloadSuccss = true;
         } catch (Exception e) {
             e.printStackTrace();
-            downloadSuccss = false;
         }
 
         if (downloadSuccss) {
@@ -86,37 +88,45 @@ public class FileResponseBodyConverter implements Converter<ResponseBody, File> 
     @SuppressLint("DefaultLocale")
     private static File writeFileToDisk(ResponseBody responseBody, String filePath) throws IOException {
         long totalByte = responseBody.contentLength();
+
+        L.e("fy_file_FileDownInterceptor", totalByte + "---" + Thread.currentThread().getName());
+
         long downloadByte = 0;
         File file = new File(filePath);
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
         }
 
-        byte[] buffer = new byte[1024 * 4];
         RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rwd");
         long tempFileLen = file.length();
         randomAccessFile.seek(tempFileLen);
+
+        byte[] buffer = new byte[1024 * 4];
+        InputStream is = responseBody.byteStream();
+
         while (true) {
-            int len = responseBody.byteStream().read(buffer);
-            if (len == -1) {
+            int len = is.read(buffer);
+            if (len == -1) {//下载完成
                 break;
             }
             randomAccessFile.write(buffer, 0, len);
             downloadByte += len;
-            callbackProgress(tempFileLen + totalByte, tempFileLen + downloadByte);
+            callbackProgress(tempFileLen + downloadByte);
         }
 
+        is.close();
         randomAccessFile.close();
 
         return file;
     }
 
-    private static void callbackProgress(final long totalByte, final long downloadByte) {
+    private static void callbackProgress(final long downloadByte) {
+        L.e("fy_file", downloadByte + "--");
+
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @SuppressLint("DefaultLocale")
             @Override
             public void run() {
-                L.e("xiaz", downloadByte + "--");
                 if (null != uploadOnSubscribe) {
                     uploadOnSubscribe.onRead(downloadByte);
                 }

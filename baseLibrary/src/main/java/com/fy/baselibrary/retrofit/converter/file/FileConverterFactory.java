@@ -41,7 +41,7 @@ public class FileConverterFactory extends Converter.Factory {
     public Converter<ResponseBody, File> responseBodyConverter(Type type,
                                                                Annotation[] annotations,
                                                                Retrofit retrofit) {
-
+        L.e("fy_file_FileConverterFactory", "文件下载---" + Thread.currentThread().getName());
         if (type == File.class) {
             return new FileResponseBodyConverter();
         }

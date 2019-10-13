@@ -73,28 +73,13 @@ public class FileResponseBody extends ResponseBody {
      */
     private Source source(Source source) {
         return new ForwardingSource(source) {
-            //当前读取字节数
             long totalBytesRead = 0L;
-
             @Override
             public long read(Buffer sink, long byteCount) throws IOException {
-                final long bytesRead = super.read(sink, byteCount);
+                long bytesRead = super.read(sink, byteCount);
                 //增加当前读取的字节数，如果读取完成了bytesRead会返回-1
                 totalBytesRead += bytesRead != -1 ? bytesRead : 0;
-                //回调，如果contentLength()不知道长度，会返回-1
-//                Observable.just(progressListener).filter(new Func1<ProgressListener, Boolean>() {
-//                    @Override
-//                    public Boolean call(ProgressListener progressResponseListener) {
-//                        return progressResponseListener != null;
-//                    }
-//                }).subscribeOn(Schedulers.io())
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe(new Action1<ProgressListener>() {
-//                            @Override
-//                            public void call(ProgressListener progressResponseListener) {
-//                                progressResponseListener.onProgress(totalBytesRead, responseBody.contentLength(), bytesRead == -1);
-//                            }
-//                        });
+//                mCallback.onLoading(mResponseBody.contentLength(), totalBytesRead);
                 return bytesRead;
             }
         };

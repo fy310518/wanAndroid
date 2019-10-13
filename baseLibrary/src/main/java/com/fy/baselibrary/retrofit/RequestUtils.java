@@ -111,7 +111,12 @@ public class RequestUtils {
         return Observable.concat(fromCache, fromNetwork);
     }
 
-
+    /**
+     * 文件下载
+     * @param context
+     * @param url
+     * @param loadCallBack
+     */
     public static void downLoadFile(Context context, String url, LoadCallBack loadCallBack){
 
         String filePath = FileUtils.folderIsExists("wanAndroid.down", 2).getPath();

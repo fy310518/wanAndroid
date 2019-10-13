@@ -306,6 +306,25 @@ public class FileUtils {
         return FileUtils.fileIsExists(filePath + "/" + md5);
     }
 
+    /**
+     * 根据 url 重命名 指定的 文件（路径）
+     * @param url
+     * @param oldPath 路径
+     */
+    public static void reNameFile(String url, String oldPath){
+        String fileName;
+
+        if (url.indexOf("?") == -1){
+            fileName = EncryptUtils.getMD5(url) + url.substring(url.lastIndexOf("."));
+        } else {
+            fileName = EncryptUtils.getMD5(url) + url.subSequence(url.lastIndexOf("."), url.indexOf("?")).toString();
+        }
+
+        File oldFile = new File(oldPath);
+
+        oldFile.renameTo(new File(oldFile.getParent(), fileName));
+    }
+
     /***
      * 获取文件类型
      *

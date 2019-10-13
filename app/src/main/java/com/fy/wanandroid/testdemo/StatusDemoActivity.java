@@ -192,7 +192,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
     }
 
     public void downLoadFiles(TextView textView){
-        RequestUtils.downLoadFile(this, "http://47.107.134.212:13201/8af7372fef2c4d849caffe524828b072.apk", new LoadCallBack<Object>() {
+        RequestUtils.downLoadFile(this, "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1570968071199&di=ce9e513303f0ae000afa8fedbe951410&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201205%2F26%2F20120526231908_KUYAX.jpeg", new LoadCallBack<Object>() {
                     @Override
                     protected void onProgress(String percent) {
                         textView.setText(percent + "%");
