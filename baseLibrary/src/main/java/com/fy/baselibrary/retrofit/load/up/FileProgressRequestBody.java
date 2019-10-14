@@ -14,7 +14,7 @@ import okio.Okio;
 import okio.Source;
 
 /**
- * 上传文件 计算上传进度 请求体
+ * describe: 上传文件 计算上传进度 请求体
  * Created by fangs on 2018/11/12.
  */
 public class FileProgressRequestBody extends RequestBody {

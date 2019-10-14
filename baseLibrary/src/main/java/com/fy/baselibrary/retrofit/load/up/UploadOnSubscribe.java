@@ -1,5 +1,7 @@
 package com.fy.baselibrary.retrofit.load.up;
 
+import com.fy.baselibrary.utils.notify.L;
+
 import java.util.concurrent.atomic.AtomicLong;
 
 import io.reactivex.ObservableEmitter;
@@ -24,6 +26,12 @@ public class UploadOnSubscribe implements ObservableOnSubscribe<Double> {
         this.mObservableEmitter = e;
     }
 
+    public void setmSumLength(long mSumLength) {
+        this.mSumLength = mSumLength;
+    }
+
+
+
     public void onRead(long read) {
         uploaded.addAndGet(read);
 
@@ -35,10 +43,11 @@ public class UploadOnSubscribe implements ObservableOnSubscribe<Double> {
     }
 
     private void onProgress(double percent) {
+        L.e("进度E", percent + "-->" + Thread.currentThread().getName());
+
         if (null == mObservableEmitter) return;
         if (percent == mPercent) return;
 
-//        L.e("进度E", (int)percent + "-->" + percent);
         mPercent = percent;
         if (percent >= 100d) {
             percent = 100;
@@ -49,9 +58,6 @@ public class UploadOnSubscribe implements ObservableOnSubscribe<Double> {
         }
     }
 
-    public void setmSumLength(long mSumLength) {
-        this.mSumLength = mSumLength;
-    }
 
     //上传完成 清理进度数据
     public void clean() {

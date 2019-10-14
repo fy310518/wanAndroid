@@ -44,8 +44,8 @@ public interface LoadService {
     @FormUrlEncoded
     @POST
     Observable<Object> jsInAndroidPostRequest(@Url String apiUrl,
-                                                    @HeaderMap ArrayMap<String, String> heads,
-                                                    @FieldMap ArrayMap<String, String> params);
+                                              @HeaderMap ArrayMap<String, String> heads,
+                                              @FieldMap ArrayMap<String, String> params);
 
     /**
      * 通用 图文上传 (支持多图片) （参数注解：@Body；参数类型：MultipartBody）
@@ -61,18 +61,18 @@ public interface LoadService {
     Observable<Object> uploadFile(@Url String apiUrl,
                                   @Body ArrayMap<String, Object> params);
 
-
-
-
-
     /**
      * 多图片上传 方式二（@Multipart：方法注解；@Part：参数注解；参数类型；MultipartBody.Part）
-     *
+     * @param apiUrl
+     * @param txtParams  文本参数，可多个 （转换方式：MultipartBody.Part.createFormData("key", "参数");）
+     * @param files  文件
      * @return
      */
     @Multipart
-    @POST("http://192.168.0.110/testFile/")
-    Observable<Object> uploadFile2(@Part List<MultipartBody.Part> files);
+    @POST
+    Observable<Object> uploadFile2(@Url String apiUrl,
+                                   @Part MultipartBody.Part txtParams,
+                                   @Part MultipartBody.Part... files);
 
 
     /**

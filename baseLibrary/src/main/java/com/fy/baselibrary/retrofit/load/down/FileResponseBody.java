@@ -1,5 +1,8 @@
 package com.fy.baselibrary.retrofit.load.down;
 
+import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
+import com.fy.baselibrary.utils.notify.L;
+
 import java.io.IOException;
 
 import okhttp3.MediaType;
@@ -11,7 +14,7 @@ import okio.Okio;
 import okio.Source;
 
 /**
- * describe: TODO </br>
+ * describe: 文件下载 ResponseBody
  * Created by fangs on 2019/10/8 21:21.
  */
 public class FileResponseBody extends ResponseBody {
@@ -20,6 +23,9 @@ public class FileResponseBody extends ResponseBody {
     private final ResponseBody responseBody;
     //包装完成的BufferedSource
     private BufferedSource bufferedSource;
+
+    //进度发射器
+    private UploadOnSubscribe uploadOnSubscribe;
 
     /**
      * 文件保存路径
@@ -32,6 +38,9 @@ public class FileResponseBody extends ResponseBody {
      */
     public FileResponseBody(ResponseBody responseBody) {
         this.responseBody = responseBody;
+
+        uploadOnSubscribe = new UploadOnSubscribe();
+        uploadOnSubscribe.setmSumLength(responseBody.contentLength());
     }
 
     /**
@@ -73,13 +82,17 @@ public class FileResponseBody extends ResponseBody {
      */
     private Source source(Source source) {
         return new ForwardingSource(source) {
-            long totalBytesRead = 0L;
             @Override
             public long read(Buffer sink, long byteCount) throws IOException {
-                long bytesRead = super.read(sink, byteCount);
                 //增加当前读取的字节数，如果读取完成了bytesRead会返回-1
-                totalBytesRead += bytesRead != -1 ? bytesRead : 0;
-//                mCallback.onLoading(mResponseBody.contentLength(), totalBytesRead);
+                long bytesRead = super.read(sink, byteCount);
+
+                if (bytesRead != -1){
+                    if (null != uploadOnSubscribe) uploadOnSubscribe.onRead(bytesRead);
+                } else {
+                    if (null != uploadOnSubscribe) uploadOnSubscribe.clean();
+                }
+
                 return bytesRead;
             }
         };

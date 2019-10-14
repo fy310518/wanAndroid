@@ -191,11 +191,13 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                 });
     }
 
-    public void downLoadFiles(TextView textView){
-        RequestUtils.downLoadFile(this, "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1570968071199&di=ce9e513303f0ae000afa8fedbe951410&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201205%2F26%2F20120526231908_KUYAX.jpeg", new LoadCallBack<Object>() {
+    public void downLoadFiles(TextView textView) {
+        RequestUtils.downLoadFile(this,
+                "http://acj3.pc6.com/pc6_soure/2018-11/com.tencent.mobileqqi_6600.apk",
+                new LoadCallBack<Object>() {
                     @Override
                     protected void onProgress(String percent) {
-                        textView.setText(percent + "%");
+//                        textView.setText(percent + "%");
                     }
 
                     @Override
@@ -217,14 +219,14 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
     public void uploadFiles(List<String> files, TextView textView) {
         UploadOnSubscribe uploadOnSubscribe = new UploadOnSubscribe();
 
-        List<MultipartBody.Part> data = FileRequestBodyConverter.filesToMultipartBodyPart(files, uploadOnSubscribe);
-//        ArrayMap<String, Object> params = new ArrayMap<>();
-//        params.put("filePathList", files);
-//        params.put("UploadOnSubscribe", uploadOnSubscribe);
-//        params.put("token", "大王叫我来巡山");
-//        params.put("type", "图文");
+//        List<MultipartBody.Part> data = FileRequestBodyConverter.filesToMultipartBodyPart(files, uploadOnSubscribe);
+        ArrayMap<String, Object> params = new ArrayMap<>();
+        params.put("filePathList", files);
+        params.put("UploadOnSubscribe", uploadOnSubscribe);
+        params.put("token", "大王叫我来巡山");
+        params.put("type", "图文");
 
-        Observable.merge(Observable.create(uploadOnSubscribe), RequestUtils.create(LoadService.class).uploadFile2(data))
+        Observable.merge(Observable.create(uploadOnSubscribe), RequestUtils.create(LoadService.class).uploadFile("http://...", params))
                 .compose(RxHelper.bindToLifecycle(this))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

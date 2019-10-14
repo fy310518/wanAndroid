@@ -24,9 +24,6 @@ import retrofit2.Converter;
  */
 public class FileResponseBodyConverter implements Converter<ResponseBody, File> {
 
-    //进度发射器
-    static UploadOnSubscribe uploadOnSubscribe;
-
     @Override
     public File convert(ResponseBody value) throws IOException {
         String downUrl = null;
@@ -57,36 +54,27 @@ public class FileResponseBodyConverter implements Converter<ResponseBody, File> 
      * @param filePath   文件保存路径
      * @return
      */
-    private static File saveFile(final ResponseBody responseBody, String url, final String filePath) {
+    private File saveFile(final ResponseBody responseBody, String url, final String filePath) {
         boolean downloadSuccss = false;
         final File tempFile = FileUtils.getTempFile(url, filePath);
 
         File file = null;
         try {
             file = writeFileToDisk(responseBody, tempFile.getAbsolutePath());
-            FileUtils.reNameFile(url, tempFile.getPath());
             downloadSuccss = true;
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         if (downloadSuccss) {
-            final boolean renameSuccess = tempFile.renameTo(new File(filePath));
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    if (null != uploadOnSubscribe && renameSuccess) {
-                        uploadOnSubscribe.clean();
-                    }
-                }
-            });
+            boolean renameSuccess = FileUtils.reNameFile(url, tempFile.getPath());
         }
 
         return file;
     }
 
     @SuppressLint("DefaultLocale")
-    private static File writeFileToDisk(ResponseBody responseBody, String filePath) throws IOException {
+    private File writeFileToDisk(ResponseBody responseBody, String filePath) throws IOException {
         long totalByte = responseBody.contentLength();
 
         L.e("fy_file_FileDownInterceptor", totalByte + "---" + Thread.currentThread().getName());
@@ -111,7 +99,6 @@ public class FileResponseBodyConverter implements Converter<ResponseBody, File> 
             }
             randomAccessFile.write(buffer, 0, len);
             downloadByte += len;
-            callbackProgress(tempFileLen + downloadByte);
         }
 
         is.close();
@@ -120,18 +107,10 @@ public class FileResponseBodyConverter implements Converter<ResponseBody, File> 
         return file;
     }
 
-    private static void callbackProgress(final long downloadByte) {
-        L.e("fy_file", downloadByte + "--");
-
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @SuppressLint("DefaultLocale")
-            @Override
-            public void run() {
-                if (null != uploadOnSubscribe) {
-                    uploadOnSubscribe.onRead(downloadByte);
-                }
-            }
-        });
+    private void callbackProgress(final long downloadByte) {
+//        new Handler(Looper.getMainLooper()).post(() -> {
+//
+//        });
     }
 
 }

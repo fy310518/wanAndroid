@@ -311,7 +311,7 @@ public class FileUtils {
      * @param url
      * @param oldPath 路径
      */
-    public static void reNameFile(String url, String oldPath){
+    public static boolean reNameFile(String url, String oldPath){
         String fileName;
 
         if (url.indexOf("?") == -1){
@@ -322,7 +322,7 @@ public class FileUtils {
 
         File oldFile = new File(oldPath);
 
-        oldFile.renameTo(new File(oldFile.getParent(), fileName));
+        return oldFile.renameTo(new File(oldFile.getParent(), fileName));
     }
 
     /***
