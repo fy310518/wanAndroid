@@ -29,16 +29,14 @@ import com.fy.baselibrary.application.BaseActivityBean;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
-import com.fy.baselibrary.retrofit.converter.file.FileRequestBodyConverter;
 import com.fy.baselibrary.retrofit.load.LoadCallBack;
+import com.fy.baselibrary.retrofit.load.LoadOnSubscribe;
 import com.fy.baselibrary.retrofit.load.LoadService;
 import com.fy.baselibrary.retrofit.load.down.DownLoadListener;
-import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
 import com.fy.baselibrary.statuslayout.OnSetStatusView;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.AppUtils;
 import com.fy.baselibrary.utils.Constant;
-import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.notify.L;
 import com.fy.baselibrary.utils.notify.NotifyUtils;
 import com.fy.baselibrary.utils.imgload.imgprogress.ProgressInterceptor;
@@ -49,7 +47,6 @@ import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -59,7 +56,6 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.MultipartBody;
 
 /**
  * 多状态布局 demo
@@ -220,16 +216,16 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
      */
     @NeedPermission(value = {Manifest.permission.WRITE_EXTERNAL_STORAGE})
     public void uploadFiles(List<String> files, TextView textView) {
-        UploadOnSubscribe uploadOnSubscribe = new UploadOnSubscribe();
+        LoadOnSubscribe loadOnSubscribe = new LoadOnSubscribe();
 
-//        List<MultipartBody.Part> data = FileRequestBodyConverter.filesToMultipartBodyPart(files, uploadOnSubscribe);
+//        List<MultipartBody.Part> data = FileRequestBodyConverter.filesToMultipartBodyPart(files, loadOnSubscribe);
         ArrayMap<String, Object> params = new ArrayMap<>();
         params.put("filePathList", files);
-        params.put("UploadOnSubscribe", uploadOnSubscribe);
+        params.put("LoadOnSubscribe", loadOnSubscribe);
         params.put("token", "大王叫我来巡山");
         params.put("type", "图文");
 
-        Observable.merge(Observable.create(uploadOnSubscribe), RequestUtils.create(LoadService.class).uploadFile("http://...", params))
+        Observable.merge(Observable.create(loadOnSubscribe), RequestUtils.create(LoadService.class).uploadFile("http://...", params))
                 .compose(RxHelper.bindToLifecycle(this))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

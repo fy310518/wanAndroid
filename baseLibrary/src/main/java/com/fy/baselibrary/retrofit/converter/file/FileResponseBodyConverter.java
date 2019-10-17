@@ -2,7 +2,7 @@ package com.fy.baselibrary.retrofit.converter.file;
 
 import android.annotation.SuppressLint;
 
-import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
+import com.fy.baselibrary.retrofit.load.LoadOnSubscribe;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.cache.SpfAgent;
@@ -28,12 +28,12 @@ public class FileResponseBodyConverter {
      * @param filePath   文件保存路径
      * @return
      */
-    public static File saveFile(UploadOnSubscribe uploadOnSubscribe, final ResponseBody responseBody, String url, final String filePath) {
+    public static File saveFile(LoadOnSubscribe loadOnSubscribe, final ResponseBody responseBody, String url, final String filePath) {
         final File tempFile = FileUtils.createTempFile(url, filePath);
 
         File file = null;
         try {
-            file = writeFileToDisk(uploadOnSubscribe, responseBody, tempFile.getAbsolutePath());
+            file = writeFileToDisk(loadOnSubscribe, responseBody, tempFile.getAbsolutePath());
 
             int FileDownStatus = SpfAgent.init("").getInt(file.getName() + Constant.FileDownStatus);
             if (FileDownStatus == 4) {
@@ -50,14 +50,14 @@ public class FileResponseBodyConverter {
 
     /**
      * 单线程 断点下载
-     * @param uploadOnSubscribe
+     * @param loadOnSubscribe
      * @param responseBody
      * @param filePath
      * @return
      * @throws IOException
      */
     @SuppressLint("DefaultLocale")
-    public static File writeFileToDisk(UploadOnSubscribe uploadOnSubscribe, ResponseBody responseBody, String filePath) throws IOException {
+    public static File writeFileToDisk(LoadOnSubscribe loadOnSubscribe, ResponseBody responseBody, String filePath) throws IOException {
         long totalByte = responseBody.contentLength();
 
         L.e("fy_file_FileDownInterceptor", totalByte + "---" + Thread.currentThread().getName());
@@ -66,8 +66,8 @@ public class FileResponseBodyConverter {
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
         } else {
-            uploadOnSubscribe.setmSumLength(file.length() + totalByte);
-            uploadOnSubscribe.onRead(file.length());
+            loadOnSubscribe.setmSumLength(file.length() + totalByte);
+            loadOnSubscribe.onRead(file.length());
         }
 
 
@@ -84,7 +84,7 @@ public class FileResponseBodyConverter {
         while (true) {
             int len = is.read(buffer);
             if (len == -1) {//下载完成
-                uploadOnSubscribe.clean();
+                loadOnSubscribe.clean();
 
                 SpfAgent.init("").saveInt(file.getName() + Constant.FileDownStatus, 4).commit(false);//下载完成
                 break;
@@ -96,7 +96,7 @@ public class FileResponseBodyConverter {
             randomAccessFile.write(buffer, 0, len);
             downloadByte += len;
 
-            uploadOnSubscribe.onRead(len);
+            loadOnSubscribe.onRead(len);
         }
 
         is.close();

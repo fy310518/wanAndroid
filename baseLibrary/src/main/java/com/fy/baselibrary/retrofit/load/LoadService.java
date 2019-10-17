@@ -47,7 +47,7 @@ public interface LoadService {
      * 通用 图文上传 (支持多图片) （参数注解：@Body；参数类型：MultipartBody）
      * params.put("uploadFile", "fileName");
      * params.put("filePathList", files);
-     * params.put("UploadOnSubscribe", new UploadOnSubscribe());
+     * params.put("LoadOnSubscribe", new LoadOnSubscribe());
      *
      * 注意：其它 文本参数 value 必须是 字符串类型（如下 token 参数）
      * params.put("token", "123");

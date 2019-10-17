@@ -3,9 +3,8 @@ package com.fy.baselibrary.retrofit.converter.file;
 import android.text.TextUtils;
 import android.util.ArrayMap;
 
-import com.fy.baselibrary.h5.H5RequestBean;
+import com.fy.baselibrary.retrofit.load.LoadOnSubscribe;
 import com.fy.baselibrary.retrofit.load.up.FileProgressRequestBody;
-import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +23,7 @@ import retrofit2.Converter;
 public class FileRequestBodyConverter implements Converter<ArrayMap<String, Object>, RequestBody> {
 
     //进度发射器
-    UploadOnSubscribe uploadOnSubscribe;
+    LoadOnSubscribe loadOnSubscribe;
 
     public FileRequestBodyConverter() {
     }
@@ -33,11 +32,11 @@ public class FileRequestBodyConverter implements Converter<ArrayMap<String, Obje
 //        ArrayMap<String, Object> params = new ArrayMap<>();
 //        params.put("uploadFile", "fileName");
 //        params.put("filePathList", files);
-//        params.put("UploadOnSubscribe", new UploadOnSubscribe());
+//        params.put("LoadOnSubscribe", new LoadOnSubscribe());
     @Override
     public RequestBody convert(ArrayMap<String, Object> params) throws IOException {
 
-        uploadOnSubscribe = (UploadOnSubscribe) params.get("UploadOnSubscribe");
+        loadOnSubscribe = (LoadOnSubscribe) params.get("LoadOnSubscribe");
         String fileKey = (String) params.get("uploadFile");
 
         if (TextUtils.isEmpty(fileKey)) fileKey = "file";
@@ -65,7 +64,7 @@ public class FileRequestBodyConverter implements Converter<ArrayMap<String, Obje
 
         //解析 文本参数 装载到 MultipartBody 中
         for (String key : params.keySet()) {
-            if (!TextUtils.isEmpty(key) && !key.equals("UploadOnSubscribe") && !key.equals("uploadFile") && !key.equals("filePathList")){
+            if (!TextUtils.isEmpty(key) && !key.equals("LoadOnSubscribe") && !key.equals("uploadFile") && !key.equals("filePathList")){
                 builder.addFormDataPart(key, (String) params.get(key));
             }
         }
@@ -80,7 +79,7 @@ public class FileRequestBodyConverter implements Converter<ArrayMap<String, Obje
             else break;
 
             sumLeng += file.length();
-            FileProgressRequestBody requestBody = new FileProgressRequestBody(file, "multipart/form-data", uploadOnSubscribe);
+            FileProgressRequestBody requestBody = new FileProgressRequestBody(file, "multipart/form-data", loadOnSubscribe);
             builder.addFormDataPart(fileKey + (i + 1), file.getName(), requestBody);
         }
 //        通用情况
@@ -91,11 +90,11 @@ public class FileRequestBodyConverter implements Converter<ArrayMap<String, Obje
 //
 //            sumLeng += file.length();
 //            // TODO 为了简单起见，没有判断file的类型
-//            FileProgressRequestBody requestBody = new FileProgressRequestBody(file, "multipart/form-data", uploadOnSubscribe);
+//            FileProgressRequestBody requestBody = new FileProgressRequestBody(file, "multipart/form-data", loadOnSubscribe);
 //            builder.addFormDataPart(fileKey, file.getName(), requestBody);
 //        }
 
-        uploadOnSubscribe.setmSumLength(sumLeng);
+        loadOnSubscribe.setmSumLength(sumLeng);
 
         return builder.build();
     }
@@ -108,7 +107,7 @@ public class FileRequestBodyConverter implements Converter<ArrayMap<String, Obje
      * @param <T>   泛型
      * @return MultipartBody.Part列表（retrofit 多文件文件上传）
      */
-    public static <T> List<MultipartBody.Part> filesToMultipartBodyPart(List<T> files, UploadOnSubscribe uploadOnSubscribe) {
+    public static <T> List<MultipartBody.Part> filesToMultipartBodyPart(List<T> files, LoadOnSubscribe loadOnSubscribe) {
         List<MultipartBody.Part> parts = new ArrayList<>();
 
         long sumLeng = 0L;
@@ -124,13 +123,13 @@ public class FileRequestBodyConverter implements Converter<ArrayMap<String, Obje
             String path = file.getPath();
             String fileStr = path.substring(path.lastIndexOf(".") + 1);
 
-            FileProgressRequestBody requestBody = new FileProgressRequestBody(file, "image/" + fileStr, uploadOnSubscribe);
+            FileProgressRequestBody requestBody = new FileProgressRequestBody(file, "image/" + fileStr, loadOnSubscribe);
 //            RequestBody requestBody = RequestBody.create(MediaType.parse("image/" + fileStr), file);
             MultipartBody.Part part = MultipartBody.Part.createFormData("files", file.getName(), requestBody);
             parts.add(part);
         }
 
-        uploadOnSubscribe.setmSumLength(sumLeng);
+        loadOnSubscribe.setmSumLength(sumLeng);
 
         return parts;
     }

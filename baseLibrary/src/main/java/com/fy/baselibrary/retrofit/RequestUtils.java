@@ -5,10 +5,10 @@ import android.content.Context;
 import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.retrofit.converter.file.FileResponseBodyConverter;
 import com.fy.baselibrary.retrofit.load.LoadCallBack;
+import com.fy.baselibrary.retrofit.load.LoadOnSubscribe;
 import com.fy.baselibrary.retrofit.load.LoadService;
 import com.fy.baselibrary.retrofit.load.down.DownLoadListener;
 import com.fy.baselibrary.retrofit.load.down.FileResponseBody;
-import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.cache.SpfAgent;
@@ -132,7 +132,7 @@ public class RequestUtils {
         final String filePath = FileUtils.folderIsExists("wanAndroid.down", 2).getPath();
         final File tempFile = FileUtils.getTempFile(url, filePath);
 
-        UploadOnSubscribe uploadOnSubscribe = new UploadOnSubscribe();
+        LoadOnSubscribe loadOnSubscribe = new LoadOnSubscribe();
 
         Observable<File> downloadObservable = Observable.just(url)
                 .map(new Function<String, String>() {
@@ -171,7 +171,7 @@ public class RequestUtils {
                             ResponseBody body = (ResponseBody) field.get(responseBody);
                             if (body instanceof FileResponseBody) {
                                 FileResponseBody prBody = ((FileResponseBody) body);
-                                return FileResponseBodyConverter.saveFile(uploadOnSubscribe, prBody, prBody.getDownUrl(), filePath);
+                                return FileResponseBodyConverter.saveFile(loadOnSubscribe, prBody, prBody.getDownUrl(), filePath);
                             }
                         } catch (NoSuchFieldException | IllegalAccessException e) {
                             e.printStackTrace();
@@ -182,7 +182,7 @@ public class RequestUtils {
                 });
 
 
-        Observable.merge(Observable.create(uploadOnSubscribe), downloadObservable)
+        Observable.merge(Observable.create(loadOnSubscribe), downloadObservable)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(RxHelper.bindToLifecycle(context))

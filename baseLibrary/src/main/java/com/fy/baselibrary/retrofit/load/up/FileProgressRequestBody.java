@@ -1,5 +1,6 @@
 package com.fy.baselibrary.retrofit.load.up;
 
+import com.fy.baselibrary.retrofit.load.LoadOnSubscribe;
 import com.fy.baselibrary.utils.notify.L;
 
 import java.io.File;
@@ -21,11 +22,11 @@ public class FileProgressRequestBody extends RequestBody {
 
     protected File file;
     protected String contentType;
-    protected UploadOnSubscribe subscribe;
+    protected LoadOnSubscribe subscribe;
 
     protected FileProgressRequestBody() {}
 
-    public FileProgressRequestBody(File file, String contentType, UploadOnSubscribe subscribe) {
+    public FileProgressRequestBody(File file, String contentType, LoadOnSubscribe subscribe) {
         this.file = file;
         this.contentType = contentType;
         this.subscribe = subscribe;

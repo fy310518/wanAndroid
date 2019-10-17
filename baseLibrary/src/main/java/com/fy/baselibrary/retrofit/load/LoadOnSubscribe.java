@@ -1,4 +1,4 @@
-package com.fy.baselibrary.retrofit.load.up;
+package com.fy.baselibrary.retrofit.load;
 
 import com.fy.baselibrary.utils.notify.L;
 
@@ -8,10 +8,10 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 
 /**
- * 文件上传 进度观察者 发射器（计算上传百分比）
+ * 文件上传，下载 进度观察者 发射器（计算上传百分比）
  * Created by fangs on 2018/5/21.
  */
-public class UploadOnSubscribe implements ObservableOnSubscribe<Object> {
+public class LoadOnSubscribe implements ObservableOnSubscribe<Object> {
 
     private ObservableEmitter<Object> mObservableEmitter;//进度观察者 发射器
     public long mSumLength = 0L;//总长度
@@ -19,7 +19,7 @@ public class UploadOnSubscribe implements ObservableOnSubscribe<Object> {
 
     private double mPercent = 0;//已经上传进度 百分比
 
-    public UploadOnSubscribe() {}
+    public LoadOnSubscribe() {}
 
     @Override
     public void subscribe(ObservableEmitter<Object> e) throws Exception {
