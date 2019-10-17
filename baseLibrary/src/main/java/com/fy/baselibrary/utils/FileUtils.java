@@ -276,34 +276,25 @@ public class FileUtils {
     }
 
     /**
-     * 根据 url 在本地生成一个文件
-     *
-     * @param url 下载 url【如：http://img5q.duitang.com/uploads/item/201505/01/20150501113308_QNmsf.jpeg】
+     * 生成临时文件
+     * @param url
+     * @param filePath
      * @return
      */
-    public static File createFile(String url) {
-        String fileName;
-
-        if (url.indexOf("?") == -1){
-            fileName = url.substring(url.lastIndexOf("/"));
-        } else {
-            fileName = url.subSequence(url.lastIndexOf("/"), url.indexOf("?")).toString();
-        }
-
-        File file = new File(folderIsExists(DOWN, 3), fileName);
-
-        return FileUtils.fileIsExists(file.getPath());
+    public static File createTempFile(String url, String filePath) {
+        String md5 = EncryptUtils.getMD5(url) + ".temp";
+        return FileUtils.fileIsExists(filePath + "/" + md5);
     }
 
     /**
-     * 生成临时文件
+     * 获取临时文件 名称
      * @param url
      * @param filePath
      * @return
      */
     public static File getTempFile(String url, String filePath) {
         String md5 = EncryptUtils.getMD5(url) + ".temp";
-        return FileUtils.fileIsExists(filePath + "/" + md5);
+        return new File(filePath + "/" + md5);
     }
 
     /**
@@ -312,6 +303,39 @@ public class FileUtils {
      * @param oldPath 路径
      */
     public static boolean reNameFile(String url, String oldPath){
+        String fileName  = getFileName(url);
+
+        File oldFile = new File(oldPath);
+
+        return oldFile.renameTo(new File(oldFile.getParent(), fileName));
+    }
+
+    /**
+     * 根据 url 和 指定的路径 在本地生成一个文件
+     * @param url 下载 url【如：http://img5q.duitang.com/uploads/item/201505/01/20150501113308_QNmsf.jpeg】
+     * @return
+     */
+    public static File createFile(String url, String path) {
+        File file = getFile(url, path);
+        return FileUtils.fileIsExists(file.getPath());
+    }
+
+    /**
+     * 根据 url 和 指定的路径，获取文件
+     * @param url
+     * @param path
+     * @return
+     */
+    public static File getFile(String url, String path) {
+        String fileName = getFileName(url);
+        return new File(path, fileName);
+    }
+
+    /**
+     * 根据 url 生成 文件名
+     * @param url
+     */
+    private static String getFileName(String url){
         String fileName;
 
         if (url.indexOf("?") == -1){
@@ -320,9 +344,7 @@ public class FileUtils {
             fileName = EncryptUtils.getMD5(url) + url.subSequence(url.lastIndexOf("."), url.indexOf("?")).toString();
         }
 
-        File oldFile = new File(oldPath);
-
-        return oldFile.renameTo(new File(oldFile.getParent(), fileName));
+        return fileName;
     }
 
     /***

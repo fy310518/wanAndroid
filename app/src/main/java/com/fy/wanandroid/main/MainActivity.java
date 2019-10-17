@@ -105,16 +105,16 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
         btnLoginOrExit = headerView.findViewById(R.id.btnLoginOrExit);
         btnLoginOrExit.setOnClickListener(this);
 
-        boolean isLogin = SpfAgent.getBoolean(Constant.baseSpf, Constant.isLogin);
+        boolean isLogin = SpfAgent.init("").getBoolean(Constant.baseSpf, Constant.isLogin);
         tvUserName.setText(isLogin ?
-                SpfAgent.getString(Constant.baseSpf, Constant.userName) :
+                SpfAgent.init("").getString(Constant.baseSpf, Constant.userName) :
                 ResUtils.getStr(R.string.notLogin));
 
         btnLoginOrExit.setText(isLogin ? R.string.exitLogin : R.string.clickLogin);
 
         MenuItem nightModel = navView.getMenu().findItem(R.id.atNightModel);
-        nightModel.setIcon(SpfAgent.getBoolean(Constant.baseSpf, NightModeUtils.isNightMode) ? R.drawable.svg_daytime_model : R.drawable.svg_at_night_model);//图标
-        int id = SpfAgent.getBoolean(Constant.baseSpf, NightModeUtils.isNightMode) ? R.string.daytimeMode : R.string.nightMode;
+        nightModel.setIcon(SpfAgent.init("").getBoolean(Constant.baseSpf, NightModeUtils.isNightMode) ? R.drawable.svg_daytime_model : R.drawable.svg_at_night_model);//图标
+        int id = SpfAgent.init("").getBoolean(Constant.baseSpf, NightModeUtils.isNightMode) ? R.string.daytimeMode : R.string.nightMode;
         nightModel.setTitle(id);
     }
 
@@ -183,14 +183,14 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity, Vi
                 JumpUtils.jump(this, SearchActivity.class, null);
                 break;
             case R.id.btnLoginOrExit://登录 or 退出登录
-                boolean isLogin = SpfAgent.getBoolean(Constant.baseSpf, Constant.isLogin);
+                boolean isLogin = SpfAgent.init(Constant.baseSpf).getBoolean(Constant.isLogin);
                 if (isLogin) {
                     tvUserName.setText(R.string.notLogin);
                     btnLoginOrExit.setText(R.string.clickLogin);
 
                     ACache mCache = ACache.get(ConfigUtils.getAppCtx());
                     mCache.clear();
-                    new SpfAgent(Constant.baseSpf).clear(false);
+                    SpfAgent.init(Constant.baseSpf).clear(false);
                 } else {
                     JumpUtils.jump(MainActivity.this, LoginActivity.class, null);
                 }

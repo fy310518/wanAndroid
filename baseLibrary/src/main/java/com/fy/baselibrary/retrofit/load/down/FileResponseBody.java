@@ -1,8 +1,5 @@
 package com.fy.baselibrary.retrofit.load.down;
 
-import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
-import com.fy.baselibrary.utils.notify.L;
-
 import java.io.IOException;
 
 import okhttp3.MediaType;
@@ -24,9 +21,6 @@ public class FileResponseBody extends ResponseBody {
     //包装完成的BufferedSource
     private BufferedSource bufferedSource;
 
-    //进度发射器
-    private UploadOnSubscribe uploadOnSubscribe;
-
     /**
      * 文件保存路径
      */
@@ -34,17 +28,16 @@ public class FileResponseBody extends ResponseBody {
 
     /**
      * 构造函数，赋值
+     *
      * @param responseBody 待包装的响应体
      */
     public FileResponseBody(ResponseBody responseBody) {
         this.responseBody = responseBody;
-
-        uploadOnSubscribe = new UploadOnSubscribe();
-        uploadOnSubscribe.setmSumLength(responseBody.contentLength());
     }
 
     /**
      * 重写调用实际的响应体的contentType
+     *
      * @return MediaType
      */
     @Override
@@ -54,6 +47,7 @@ public class FileResponseBody extends ResponseBody {
 
     /**
      * 重写调用实际的响应体的contentLength
+     *
      * @return contentLength
      * @throws IOException 异常
      */
@@ -64,6 +58,7 @@ public class FileResponseBody extends ResponseBody {
 
     /**
      * 重写进行包装source
+     *
      * @return BufferedSource
      */
     @Override
@@ -77,6 +72,7 @@ public class FileResponseBody extends ResponseBody {
 
     /**
      * 读取，回调进度接口
+     *
      * @param source Source
      * @return Source
      */
@@ -86,12 +82,6 @@ public class FileResponseBody extends ResponseBody {
             public long read(Buffer sink, long byteCount) throws IOException {
                 //增加当前读取的字节数，如果读取完成了bytesRead会返回-1
                 long bytesRead = super.read(sink, byteCount);
-
-                if (bytesRead != -1){
-                    if (null != uploadOnSubscribe) uploadOnSubscribe.onRead(bytesRead);
-                } else {
-                    if (null != uploadOnSubscribe) uploadOnSubscribe.clean();
-                }
 
                 return bytesRead;
             }
@@ -105,4 +95,5 @@ public class FileResponseBody extends ResponseBody {
     public void setDownUrl(String downUrl) {
         this.downUrl = downUrl;
     }
+
 }

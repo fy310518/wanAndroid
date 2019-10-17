@@ -63,7 +63,7 @@ public class AppNotifyUtils {
             for (NotificationChannel channel : channelList) {
                 if (channel.getId().contains(channelId)) {
                     notificationManager.deleteNotificationChannel(channel.getId());
-                    new SpfAgent(Constant.baseSpf)
+                    SpfAgent.init(Constant.baseSpf)
                             .saveLong(chatNumKEY, System.currentTimeMillis())
                             .commit(false);
                     break;
@@ -72,8 +72,8 @@ public class AppNotifyUtils {
         }
 
 
-        boolean shock = SpfAgent.getBoolean(Constant.baseSpf, AppNotifyUtils.shockKEY, true);
-        boolean voice = SpfAgent.getBoolean(Constant.baseSpf, AppNotifyUtils.voiceKEY, true);
+        boolean shock = SpfAgent.init("").getBoolean(Constant.baseSpf, AppNotifyUtils.shockKEY, true);
+        boolean voice = SpfAgent.init("").getBoolean(Constant.baseSpf, AppNotifyUtils.voiceKEY, true);
         int importance = NotificationManager.IMPORTANCE_LOW;
         if ((voice && !shock) || (!voice && shock)){
             importance = NotificationManager.IMPORTANCE_DEFAULT;
@@ -81,7 +81,7 @@ public class AppNotifyUtils {
             importance = NotificationManager.IMPORTANCE_HIGH;
         }
 
-        long channelNum = SpfAgent.getLong(Constant.baseSpf, chatNumKEY);
+        long channelNum = SpfAgent.init("").getLong(Constant.baseSpf, chatNumKEY);
         String channelIdStr = channelId + channelNum;
 
         NotifyUtils.createNotificationChannel(ctx, channelIdStr, channelName, importance,

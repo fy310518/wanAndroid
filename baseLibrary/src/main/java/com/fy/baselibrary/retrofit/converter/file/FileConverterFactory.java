@@ -2,16 +2,12 @@ package com.fy.baselibrary.retrofit.converter.file;
 
 import android.support.annotation.Nullable;
 
-import com.fy.baselibrary.retrofit.load.down.DownLoadFileType;
 import com.fy.baselibrary.retrofit.load.up.UpLoadFileType;
-import com.fy.baselibrary.utils.notify.L;
 
-import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 
@@ -37,15 +33,10 @@ public class FileConverterFactory extends Converter.Factory {
         return null;
     }
 
-    @Override
-    public Converter<ResponseBody, File> responseBodyConverter(Type type,
-                                                               Annotation[] annotations,
-                                                               Retrofit retrofit) {
-        L.e("fy_file_FileConverterFactory", "文件下载---" + Thread.currentThread().getName());
-        if (type == File.class) {
-            return new FileResponseBodyConverter();
-        }
-
-        return null;
-    }
+//    @Override
+//    public Converter<ResponseBody, File> responseBodyConverter(Type type,
+//                                                               Annotation[] annotations,
+//                                                               Retrofit retrofit) {
+//        return null;
+//    }
 }

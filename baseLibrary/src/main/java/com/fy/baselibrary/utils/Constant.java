@@ -18,9 +18,10 @@ public class Constant {
 
 
     /**
-     * 所有下载任务 缓存key
+     * 下载状态 key
+     * 1：正在下载；2：暂停；3：取消下载；4：下载完成 or 已下载
      */
-    public static final String AllDownTask = "All_Task_DownLoad";
+    public static final String FileDownStatus = "FileDownStatus";
 
     /**
      * 一个下载任务 已经下载的进度百分比 数值
@@ -40,16 +41,6 @@ public class Constant {
 
 
     /**
-     * 用户id
-     */
-    public static String userId = "userid";
-
-    /**
-     * 操作令牌 key
-     */
-    public static String token = "user_token";
-
-    /**
      * 程序是否必须登录
      */
     public static boolean isMustAppLogin = false;
@@ -62,21 +53,8 @@ public class Constant {
     /**
      * 缓存用户名 key
      */
-    public static final String SP_KEY_OPENID = "open_id";
-    public static final String SP_KEY_ID = "user_id";
-    public static final String SP_KEY_ALARM = "user_alarm";//超警 警号
-    public static final String SP_KEY_AppALARM = "Appuser_alarm";//门户 警号
     public static final String isLogin = "User_isLogin";
     public static final String userName = "User_Name";
-    public static final String SP_KEY_TOKEN = "user_token";
-    public static final String SP_KEY_HEAD_PIC = "user_head_pic";
-    public static final String SP_KEY_DEPT_NAME = "user_dept_name";
-    public static final String SP_KEY_DEPT_ID = "user_dept_id";
-    public static final String SP_KEY_SEX = "user_sex";
-    public static final String SP_KEY_AGE = "user_age";
-    public static final String SP_KEY_ID_CARD = "user_id_card";
-    public static final String SP_KEY_LOGIN = "user_login_state";
-    public static final String SP_KEY_PHONE= "user_phone";
 
 
     /**

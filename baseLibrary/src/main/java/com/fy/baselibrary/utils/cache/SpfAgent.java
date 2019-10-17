@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.fy.baselibrary.application.ioc.ConfigUtils;
 
@@ -13,17 +14,47 @@ import java.util.Map;
  * describe： SharedPreferences 代理工具类
  * Created by fangs on 2018/12/24 16:39.
  */
-public class SpfAgent {
+final public class SpfAgent {
 //    创建的Preferences文件存放位置可以在Eclipse中查看：
 //	  DDMS->File Explorer /<package name>/shared_prefs/setting.xml
 
+    private volatile static SpfAgent instance;
     SharedPreferences.Editor editor;
 
     @SuppressLint("CommitPrefEdits")
-    public SpfAgent(String fileName) {
-        SharedPreferences spf = getSpf(fileName);
+    private SpfAgent(String fileName) {
+        SharedPreferences spf = TextUtils.isEmpty(fileName) ? getSpf() : getSpf(fileName);
         this.editor = spf.edit();
     }
+
+
+    public static synchronized SpfAgent init(final String fileName) {
+        if (null == instance) {
+            synchronized (SpfAgent.class) {
+                if (null == instance) {
+                    instance = new SpfAgent(fileName);
+                }
+            }
+        }
+
+        return instance;
+    }
+
+    /**
+     * 通过 application 获取 指定名称的 SharedPreferences
+     * @param fileName 文件名称
+     * @return         SharedPreferences
+     */
+    public static SharedPreferences getSpf(String fileName){
+        Context ctx = ConfigUtils.getAppCtx();
+        return ctx.getSharedPreferences(fileName, Context.MODE_PRIVATE);
+    }
+
+    public static SharedPreferences getSpf(){
+        return getSpf("SPFDefaultName");
+    }
+
+
 
     /**
      * 向 SharedPreferences 保存String 数据
@@ -122,8 +153,12 @@ public class SpfAgent {
      * @param key key
      * @return   没有对应的key 默认返回的""
      */
-    public static String getString(String fileName, String key){
+    public String getString(String fileName, String key){
         return getSpf(fileName).getString(key, "");
+    }
+
+    public String getString(String key){
+        return getSpf().getString(key, "");
     }
 
     /**
@@ -132,8 +167,12 @@ public class SpfAgent {
      * @param key key
      * @return   没有对应的key  默认返回 -1
      */
-    public static int getInt(String fileName, String key){
+    public int getInt(String fileName, String key){
         return getSpf(fileName).getInt(key, -1);
+    }
+
+    public int getInt(String key){
+        return getSpf().getInt(key, -1);
     }
 
     /**
@@ -142,8 +181,12 @@ public class SpfAgent {
      * @param key key
      * @return   没有对应的key  默认返回 0
      */
-    public static long getLong(String fileName, String key){
+    public long getLong(String fileName, String key){
         return getSpf(fileName).getLong(key, 0);
+    }
+
+    public long getLong(String key){
+        return getSpf().getLong(key, 0);
     }
 
     /**
@@ -152,8 +195,12 @@ public class SpfAgent {
      * @param key       key
      * @return          没有对应的key 默认返回 0f
      */
-    public static float getFloat(String fileName, String key){
+    public float getFloat(String fileName, String key){
         return getSpf(fileName).getFloat(key, 0f);
+    }
+
+    public float getFloat(String key){
+        return getSpf().getFloat(key, 0f);
     }
 
     /**
@@ -162,34 +209,32 @@ public class SpfAgent {
      * @param key   key
      * @return      没有对应的key 默认返回false
      */
-    public static boolean getBoolean(String fileName, String key){
+    public boolean getBoolean(String fileName, String key){
         return getSpf(fileName).getBoolean(key, false);
+    }
+
+    public boolean getBoolean(String key){
+        return getSpf().getBoolean(key, false);
     }
 
     /**
      * 同上
      * @return
      */
-    public static boolean getBoolean(String fileName, String key, boolean def){
+    public boolean getBoolean(String fileName, String key, boolean def){
         return getSpf(fileName).getBoolean(key, def);
     }
 
+    public boolean getBoolean(String key, boolean def){
+        return getSpf().getBoolean(key, def);
+    }
 
     /**
      * 获取所有键值对
      * @return
      */
-    public static Map<String, ?> getAll(String fileName){
+    public Map<String, ?> getAll(String fileName){
         return getSpf(fileName).getAll();
     }
 
-    /**
-     * 通过 application 获取 指定名称的 SharedPreferences
-     * @param fileName 文件名称
-     * @return         SharedPreferences
-     */
-    public static SharedPreferences getSpf(String fileName){
-        Context ctx = ConfigUtils.getAppCtx();
-        return ctx.getSharedPreferences(fileName, Context.MODE_PRIVATE);
-    }
 }

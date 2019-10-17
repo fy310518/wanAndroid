@@ -122,7 +122,7 @@ public class LoginActivity extends BaseMVPActivity<LogingPresenter> implements I
         ACache mCache = ACache.get(ConfigUtils.getAppCtx());
         mCache.put(Constant.userName, login);
 
-        new SpfAgent(Constant.baseSpf)
+        SpfAgent.init(Constant.baseSpf)
                 .saveString(Constant.userName, login.getUsername())
                 .commit(false);
 

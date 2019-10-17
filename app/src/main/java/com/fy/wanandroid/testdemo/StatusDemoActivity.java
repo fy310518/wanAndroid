@@ -32,6 +32,7 @@ import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.converter.file.FileRequestBodyConverter;
 import com.fy.baselibrary.retrofit.load.LoadCallBack;
 import com.fy.baselibrary.retrofit.load.LoadService;
+import com.fy.baselibrary.retrofit.load.down.DownLoadListener;
 import com.fy.baselibrary.retrofit.load.up.UploadOnSubscribe;
 import com.fy.baselibrary.statuslayout.OnSetStatusView;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
@@ -47,6 +48,7 @@ import com.fy.wanandroid.entity.AppUpdateEntity;
 import com.fy.wanandroid.request.ApiService;
 import com.fy.wanandroid.request.NetCallBack;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -194,20 +196,21 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
     public void downLoadFiles(TextView textView) {
         RequestUtils.downLoadFile(this,
                 "http://acj3.pc6.com/pc6_soure/2018-11/com.tencent.mobileqqi_6600.apk",
-                new LoadCallBack<Object>() {
+                new DownLoadListener<File>(){
+
                     @Override
-                    protected void onProgress(String percent) {
-//                        textView.setText(percent + "%");
+                    public void onSuccess(File file) {
+                        L.e("文件地址：", file.toString());
                     }
 
                     @Override
-                    protected void onSuccess(Object t) {
+                    public void updateLayout(int flag) {
 
                     }
 
                     @Override
-                    protected void updateLayout(int flag) {
-
+                    public void onProgress(String percent) {
+                        textView.setText(percent);
                     }
                 });
     }

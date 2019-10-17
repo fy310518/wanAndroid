@@ -106,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity implements IBaseActivity
                         ACache mCache = ACache.get(ConfigUtils.getAppCtx());
                         mCache.put(Constant.userName, login);
 
-                        new SpfAgent(Constant.baseSpf)
+                        SpfAgent.init(Constant.baseSpf)
                                 .saveBoolean(Constant.isLogin, true)
                                 .saveString(Constant.userName, login.getUsername())
                                 .commit(false);
