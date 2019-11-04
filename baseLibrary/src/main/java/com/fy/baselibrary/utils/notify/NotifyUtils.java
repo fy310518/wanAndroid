@@ -302,8 +302,8 @@ public class NotifyUtils {
                     channelName = AppNotifyUtils.initNotificationChannel(act, AppNotifyUtils.chatNumKEY, true,
                             AppNotifyUtils.channelId, AppNotifyUtils.channelName, sound);
                 } else {
-                    channelName = AppNotifyUtils.initNotificationChannel(act, AppNotifyUtils.chatNumKEY, true,
-                            AppNotifyUtils.channelId, AppNotifyUtils.channelName, null);
+//                    channelName = AppNotifyUtils.initNotificationChannel(act, AppNotifyUtils.chatNumKEY, true,
+//                            AppNotifyUtils.channelId, AppNotifyUtils.channelName, null);
                 }
             }
         }

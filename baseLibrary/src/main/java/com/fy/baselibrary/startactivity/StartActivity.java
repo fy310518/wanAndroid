@@ -15,25 +15,18 @@ import com.fy.baselibrary.utils.notify.L;
  * 不可见Activity 用于控制程序 退出(入口activity)
  * Created by fangs on 2017/4/26.
  */
-public class StartActivity extends AppCompatActivity implements IBaseActivity {
-
-    private static final String FLAG_EXIT = "FLAG_EXIT_APP";
-
-    @Override
-    public boolean isShowHeadView() {
-        return false;
-    }
-
-    @Override
-    public int setView() {
-        return 0;
-    }
+public abstract class StartActivity extends AppCompatActivity implements IBaseActivity {
 
     @SuppressLint("CheckResult")
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         exitOrIn(getIntent());
     }
+
+    /**
+     * 应用 自己业务处理 方法
+     */
+    public abstract void businessJump();
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -56,10 +49,12 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
                 if (intent.hasCategory(Intent.CATEGORY_LAUNCHER) && Intent.ACTION_MAIN.equals(action)) {
                     exitApp();
                     return;
+                } else {
+                    businessJump();
                 }
             }
         } else {
-            JumpUtils.jump(this, AppUtils.getLocalPackageName() + ".login.StartUpActivity", null);
+            businessJump();
         }
     }
 
