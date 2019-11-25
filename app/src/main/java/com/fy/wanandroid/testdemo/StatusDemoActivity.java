@@ -191,7 +191,8 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
     public void downLoadFiles(TextView textView) {
         RequestUtils.downLoadFile(this,
-                "http://acj3.pc6.com/pc6_soure/2018-11/com.tencent.mobileqqi_6600.apk",
+                "http://47.107.134.212:13201/8af7372fef2c4d849caffe524828b072.apk",
+//                "http://acj3.pc6.com/pc6_soure/2018-11/com.tencent.mobileqqi_6600.apk",
                 new DownLoadListener<File>(){
 
                     @Override

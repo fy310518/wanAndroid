@@ -14,6 +14,7 @@ import com.fy.baselibrary.aop.annotation.NeedPermission;
 import com.fy.baselibrary.aop.annotation.StatusBar;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.retrofit.RxHelper;
+import com.fy.baselibrary.startactivity.StartActivity;
 import com.fy.baselibrary.statusbar.StatusBarContentColor;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.ResUtils;
@@ -33,7 +34,7 @@ import io.reactivex.schedulers.Schedulers;
  *      2、使用此欢迎页项目应用id 需要和项目包名一致
  * Created by fangs on 2017/12/12.
  */
-public class StartUpActivity extends AppCompatActivity implements IBaseActivity, View.OnClickListener {
+public class StartUpActivity extends StartActivity implements IBaseActivity, View.OnClickListener {
 
     private int skip = 3;
     TextView tvSkip;
@@ -59,6 +60,10 @@ public class StartUpActivity extends AppCompatActivity implements IBaseActivity,
         tvSkip.setText(ResUtils.getReplaceStr(R.string.skip, skip));
         tvSkip.setBackground(back);
 
+    }
+
+    @Override
+    public void businessJump() {
         hideLoadView();
     }
 

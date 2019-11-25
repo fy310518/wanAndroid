@@ -1,32 +1,29 @@
 package com.fy.baselibrary.startactivity;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.fy.baselibrary.application.IBaseActivity;
-import com.fy.baselibrary.utils.AppUtils;
-import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.notify.L;
 
 /**
  * 不可见Activity 用于控制程序 退出(入口activity)
  * Created by fangs on 2017/4/26.
  */
-public abstract class StartActivity extends AppCompatActivity implements IBaseActivity {
+public class StartActivity extends AppCompatActivity {
 
-    @SuppressLint("CheckResult")
     @Override
-    public void initData(Activity activity, Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         exitOrIn(getIntent());
     }
 
     /**
      * 应用 自己业务处理 方法
      */
-    public abstract void businessJump();
+    public void businessJump(){}
 
     @Override
     protected void onNewIntent(Intent intent) {

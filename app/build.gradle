@@ -66,9 +66,6 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:$var.butterknife"
 
     implementation 'com.bigkoo:ConvenientBanner:2.1.4'
-    implementation ('com.fanjun:keeplive:1.1.10'){
-        exclude group: 'com.android.support'
-    }
 
     implementation project(':baseLibrary')
     implementation project(':imgPicker')

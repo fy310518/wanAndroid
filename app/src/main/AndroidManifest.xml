@@ -15,26 +15,16 @@
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
         <activity
-            android:name="com.fy.baselibrary.startactivity.StartActivity"
+            android:name=".login.StartUpActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
+            android:label="@string/srartUpTitle"
             android:theme="@style/startUpTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="${applicationId}.startactivity.StartActivity" />
-            </intent-filter>
-        </activity>
-
-        <!-- 欢迎页 -->
-        <activity
-            android:name=".login.StartUpActivity"
-            android:label="@string/srartUpTitle"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="${applicationId}.login.StartUpActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 

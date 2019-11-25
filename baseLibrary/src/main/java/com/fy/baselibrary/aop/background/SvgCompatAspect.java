@@ -21,6 +21,6 @@ public class SvgCompatAspect {
     @Before("SvgCompatFilter()")
     public void activityOnCreateMethod(JoinPoint joinPoint) throws Throwable {
         Activity activity = (Activity) joinPoint.getTarget();
-        SvgCompatInject.inject(activity);
+//        SvgCompatInject.inject(activity);
     }
 }
