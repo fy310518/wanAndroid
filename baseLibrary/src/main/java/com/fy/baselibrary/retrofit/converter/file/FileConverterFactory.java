@@ -4,10 +4,12 @@ import android.support.annotation.Nullable;
 
 import com.fy.baselibrary.retrofit.load.up.UpLoadFileType;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 
@@ -33,10 +35,11 @@ public class FileConverterFactory extends Converter.Factory {
         return null;
     }
 
-//    @Override
-//    public Converter<ResponseBody, File> responseBodyConverter(Type type,
-//                                                               Annotation[] annotations,
-//                                                               Retrofit retrofit) {
-//        return null;
-//    }
+    @Override
+    public Converter<ResponseBody, File> responseBodyConverter(Type type,
+                                                               Annotation[] annotations,
+                                                               Retrofit retrofit) {
+        if (type instanceof File) return new FileResponseBodyConverter();
+        else return null;
+    }
 }

@@ -14,12 +14,22 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 
 import okhttp3.ResponseBody;
+import retrofit2.Converter;
 
 /**
  * describe: 文件下载 转换器
  * Created by fangs on 2019/8/28 22:03.
  */
-public class FileResponseBodyConverter {
+public class FileResponseBodyConverter implements  Converter<ResponseBody, File> {
+
+
+
+    @Override
+    public File convert(ResponseBody responseBody) throws IOException {
+        String filePath = FileUtils.folderIsExists("wanAndroid.down", 2).getPath();
+        return FileResponseBodyConverter.saveFile(null, responseBody, "http://47.107.134.212:13201/8af7372fef2c4d849caffe524828b072.apk", filePath);
+    }
+
 
     /**
      * 根据ResponseBody 写文件
@@ -66,8 +76,10 @@ public class FileResponseBodyConverter {
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
         } else {
-            loadOnSubscribe.setmSumLength(file.length() + totalByte);
-            loadOnSubscribe.onRead(file.length());
+            if (null != loadOnSubscribe){
+                loadOnSubscribe.setmSumLength(file.length() + totalByte);
+                loadOnSubscribe.onRead(file.length());
+            }
         }
 
 
@@ -84,7 +96,7 @@ public class FileResponseBodyConverter {
         while (true) {
             int len = is.read(buffer);
             if (len == -1) {//下载完成
-                loadOnSubscribe.clean();
+                if (null != loadOnSubscribe) loadOnSubscribe.clean();
 
                 SpfAgent.init("").saveInt(file.getName() + Constant.FileDownStatus, 4).commit(false);//下载完成
                 break;
@@ -96,7 +108,7 @@ public class FileResponseBodyConverter {
             randomAccessFile.write(buffer, 0, len);
             downloadByte += len;
 
-            loadOnSubscribe.onRead(len);
+            if (null != loadOnSubscribe) loadOnSubscribe.onRead(len);
         }
 
         is.close();

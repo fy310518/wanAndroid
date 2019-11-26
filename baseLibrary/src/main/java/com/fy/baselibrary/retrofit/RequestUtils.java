@@ -148,36 +148,15 @@ public class RequestUtils {
                         }
                     }
                 })
-                .flatMap(new Function<String, ObservableSource<ResponseBody>>() {
+                .flatMap(new Function<String, ObservableSource<File>>() {
                     @Override
-                    public ObservableSource<ResponseBody> apply(String downParam) throws Exception {
+                    public ObservableSource<File> apply(String downParam) throws Exception {
                         if (downParam.startsWith("bytes=")) {
                             return RequestUtils.create(LoadService.class).download(downParam, url);
                         } else {
                             SpfAgent.init("").saveInt(tempFile.getName() + Constant.FileDownStatus, 4).commit(false);
                             return null;
                         }
-                    }
-                })
-                .map(new Function<ResponseBody, File>() {
-                    @Override
-                    public File apply(ResponseBody responseBody) throws Exception {
-                        String filePath = FileUtils.folderIsExists("wanAndroid.down", 2).getPath();
-                        try {
-                            //使用反射获得我们自定义的response
-                            Class aClass = responseBody.getClass();
-                            Field field = aClass.getDeclaredField("delegate");
-                            field.setAccessible(true);
-                            ResponseBody body = (ResponseBody) field.get(responseBody);
-                            if (body instanceof FileResponseBody) {
-                                FileResponseBody prBody = ((FileResponseBody) body);
-                                return FileResponseBodyConverter.saveFile(loadOnSubscribe, prBody, prBody.getDownUrl(), filePath);
-                            }
-                        } catch (NoSuchFieldException | IllegalAccessException e) {
-                            e.printStackTrace();
-                        }
-
-                        return null;
                     }
                 });
 

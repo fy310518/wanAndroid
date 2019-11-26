@@ -82,7 +82,7 @@ public class RequestModule {
                 .writeTimeout(Constant.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
                 .retryOnConnectionFailure(true)//错误重连
                 .addInterceptor(new RequestHeaderInterceptor())
-                .addInterceptor(new FileDownInterceptor())
+//                .addInterceptor(new FileDownInterceptor())
                 .addNetworkInterceptor(logInterceptor)
                 .addInterceptor(new CacheCookiesInterceptor())
                 .addNetworkInterceptor(new AddCookiesInterceptor())

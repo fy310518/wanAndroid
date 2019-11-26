@@ -4,6 +4,8 @@ import android.util.ArrayMap;
 
 import com.fy.baselibrary.retrofit.load.up.UpLoadFileType;
 
+import java.io.File;
+
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
@@ -80,6 +82,6 @@ public interface LoadService {
      */
     @Streaming
     @GET
-    Observable<ResponseBody> download(@Header("RANGE") String downParam, @Url String url);
+    Observable<File> download(@Header("RANGE") String downParam, @Url String url);
 
 }
