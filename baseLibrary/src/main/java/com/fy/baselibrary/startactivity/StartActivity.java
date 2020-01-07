@@ -11,19 +11,24 @@ import com.fy.baselibrary.utils.notify.L;
  * 不可见Activity 用于控制程序 退出(入口activity)
  * Created by fangs on 2017/4/26.
  */
-public class StartActivity extends AppCompatActivity {
+public abstract class StartActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        initView();
         exitOrIn(getIntent());
     }
 
     /**
+     * 初始化布局
+     */
+    public abstract void initView();
+    /**
      * 应用 自己业务处理 方法
      */
-    public void businessJump(){}
+    public abstract void businessJump();
 
     @Override
     protected void onNewIntent(Intent intent) {

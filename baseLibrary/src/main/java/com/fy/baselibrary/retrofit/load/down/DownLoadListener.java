@@ -12,11 +12,9 @@ public interface DownLoadListener<T> {
     void onSuccess(T t);
 
     /**
-     * 更新activity 界面（多状态视图）
-     * 可根据flag 判断请求失败
-     * @param flag 请求状态flag
+     * 下载失败
      */
-    void updateLayout(int flag);
+    void onFail();
 
     /**
      * 上传、下载 需重写此方法，更新进度

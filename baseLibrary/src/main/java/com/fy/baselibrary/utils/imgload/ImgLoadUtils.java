@@ -118,11 +118,11 @@ public class ImgLoadUtils {
      * @param url
      * @param imageView
      */
-    public static void loadCircularBead(String url, ImageView imageView) {
+    public static void loadCircularBead(String url, int errorId, ImageView imageView) {
         RequestOptions options = new RequestOptions()
-                .fallback(R.mipmap.img_load_default)
-                .error(R.mipmap.img_load_error)
-                .placeholder(R.mipmap.img_loading)
+                .fallback(errorId)
+                .error(errorId)
+                .placeholder(errorId)
                 .circleCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 

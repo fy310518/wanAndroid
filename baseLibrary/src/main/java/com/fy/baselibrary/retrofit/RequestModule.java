@@ -2,6 +2,7 @@ package com.fy.baselibrary.retrofit;
 
 import android.text.TextUtils;
 
+import com.fy.baselibrary.BuildConfig;
 import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.retrofit.converter.file.FileConverterFactory;
 import com.fy.baselibrary.retrofit.interceptor.FileDownInterceptor;
@@ -12,12 +13,14 @@ import com.fy.baselibrary.retrofit.interceptor.cookie.AddCookiesInterceptor;
 import com.fy.baselibrary.retrofit.interceptor.cookie.CacheCookiesInterceptor;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.FileUtils;
+import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.notify.L;
 import com.fy.baselibrary.utils.security.SSLUtil;
 import com.google.gson.GsonBuilder;
 
 import java.io.InputStream;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
@@ -26,6 +29,7 @@ import javax.net.ssl.SSLSocketFactory;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -82,7 +86,7 @@ public class RequestModule {
                 .writeTimeout(Constant.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
                 .retryOnConnectionFailure(true)//错误重连
                 .addInterceptor(new RequestHeaderInterceptor())
-//                .addInterceptor(new FileDownInterceptor())
+                .addInterceptor(new FileDownInterceptor())
                 .addNetworkInterceptor(logInterceptor)
                 .addInterceptor(new CacheCookiesInterceptor())
                 .addNetworkInterceptor(new AddCookiesInterceptor())
@@ -94,10 +98,20 @@ public class RequestModule {
                 })
                 .protocols(Collections.singletonList(Protocol.HTTP_1_1));
 
+        List<Interceptor> interceptors = ConfigUtils.getInterceptor();
+        for (Interceptor interceptor : interceptors) {
+            builder.addInterceptor(interceptor);
+        }
 
-        InputStream is = new Buffer().writeUtf8(ConfigUtils.getCer()).inputStream();
+        InputStream is;
+        if (!TextUtils.isEmpty(ConfigUtils.getCer())){
+            is = new Buffer().writeUtf8(ConfigUtils.getCer()).inputStream();
+        } else {
+            is = ResUtils.getAssetsInputStream(ConfigUtils.getCerFileName());
+        }
+
         SSLSocketFactory sslSocketFactory = SSLUtil.getSSLSocketFactory(is);
-        if (!TextUtils.isEmpty(ConfigUtils.getCer()) && null != sslSocketFactory) {
+        if (null != sslSocketFactory) {
             builder.sslSocketFactory(sslSocketFactory);
         }
 
@@ -107,13 +121,17 @@ public class RequestModule {
     @Singleton
     @Provides
     protected HttpLoggingInterceptor getResponseIntercept() {
-        return new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
                 L.e("net 请求or响应", message);
 //                FileUtils.fileToInputContent("log", "日志.txt", message);
             }
-        }).setLevel(HttpLoggingInterceptor.Level.BODY);
+        });
+        if (ConfigUtils.isDEBUG()) loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        else loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
+
+        return loggingInterceptor;
     }
 
 }

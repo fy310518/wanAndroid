@@ -3,6 +3,7 @@ package com.fy.baselibrary.utils;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.ArrayRes;
@@ -15,6 +16,11 @@ import android.support.v4.content.ContextCompat;
 import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.utils.notify.L;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Properties;
 import java.util.Random;
 
 /**
@@ -103,11 +109,10 @@ public class ResUtils {
      * @param metaValueType 返回值类型
      * @return
      */
-    public static Object getMetaData(String metaKey, Object metaValueType) {
+    public static Object getMetaData(Context context, String metaKey, Object metaValueType) {
         Object value = null;
 
         try {
-            Context context = ConfigUtils.getAppCtx();
             ApplicationInfo ai = context.getPackageManager()
                     .getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
 
@@ -129,7 +134,62 @@ public class ResUtils {
         return value;
     }
 
+    /**
+     * 读取 assets 目录下 Json文件内容
+     * @param fileName  文件名称带后缀名
+     * @return
+     */
+    public static String getAssetsJson(String fileName) {
+        Context context = ConfigUtils.getAppCtx();
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            AssetManager assetManager = context.getAssets();
+            BufferedReader bf = new BufferedReader(new InputStreamReader(
+                    assetManager.open(fileName)));
+            String line;
+            while ((line = bf.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
+    }
 
+    /**
+     * 读取 assets 目录下指定文件名的 内容
+     * @param fileName
+     * @return Properties （使用 properties.getProperty("key") 获取 value）
+     */
+    public static Properties getProperties(String fileName) {
+        Context context = ConfigUtils.getAppCtx();
+        Properties props = new Properties();
+
+        try {
+            InputStream in = context.getAssets().open(fileName);
+            props.load(in);
+        } catch (Exception var5) {
+            var5.printStackTrace();
+        }
+
+        return props;
+    }
+
+    /**
+     * 读取 assets 目录下指定文件名的 InputStream
+     * @param fileName
+     * @return
+     */
+    public static InputStream getAssetsInputStream(String fileName){
+        Context context = ConfigUtils.getAppCtx();
+        try {
+            return context.getAssets().open(fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 
     /*****************************以下为 通过资源名称 获取资源id ***************************************/
     private static final String RES_ID = "id";

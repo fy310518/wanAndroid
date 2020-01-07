@@ -9,6 +9,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,11 +38,20 @@ public class GsonUtils {
      * 将Json字符串转换成对象
      * @param json
      * @param type
-     * @return
      */
     public static<T> T fromJson(String json, Class<T> type) {
         Gson gson = new Gson();
         return gson.fromJson(json, type);
+    }
+
+    /**
+     * 将Json字符串转换成对象
+     * @param json
+     * @param typeOfT  Type type = new TypeToken<BeanModule<CaseInfoBean>>(){}.getType();
+     */
+    public static<T> T fromJson(String json, Type typeOfT) {
+        Gson gson = new Gson();
+        return gson.fromJson(json, typeOfT);
     }
 
     /**

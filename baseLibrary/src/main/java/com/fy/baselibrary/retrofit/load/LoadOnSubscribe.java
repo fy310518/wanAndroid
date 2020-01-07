@@ -1,7 +1,5 @@
 package com.fy.baselibrary.retrofit.load;
 
-import com.fy.baselibrary.utils.notify.L;
-
 import java.util.concurrent.atomic.AtomicLong;
 
 import io.reactivex.ObservableEmitter;
@@ -41,7 +39,6 @@ public class LoadOnSubscribe implements ObservableOnSubscribe<Object> {
     }
 
     private void onProgress(double percent) {
-        L.e("文件地址：", percent + "---" + Thread.currentThread().getName());
         if (null == mObservableEmitter) return;
         if (percent == mPercent) return;
 

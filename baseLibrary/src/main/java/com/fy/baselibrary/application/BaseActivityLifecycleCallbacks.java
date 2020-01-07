@@ -23,6 +23,7 @@ import com.fy.baselibrary.statuslayout.OnStatusAdapter;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.JumpUtils;
+import com.fy.baselibrary.utils.media.PlayUtils;
 import com.fy.baselibrary.utils.notify.L;
 import com.fy.baselibrary.utils.ResUtils;
 
@@ -137,11 +138,15 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
     public void onActivityPaused(Activity activity) {
         String simpleName = activity.getClass().getSimpleName();
         L.e(TAG + simpleName, "--Pause()");
+
+        PlayUtils.getInstance().pause();
     }
 
     @Override
     public void onActivityStopped(Activity activity) {
         L.e(TAG + activity.getClass().getSimpleName(), "--Stop()");
+
+        PlayUtils.getInstance().stop();
     }
 
     @Override
@@ -152,6 +157,7 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
     @Override
     public void onActivityDestroyed(Activity activity) {
         L.e(TAG + activity.getClass().getSimpleName(), "--Destroy()");
+        PlayUtils.getInstance().release();
 
         BaseActivityBean activityBean = (BaseActivityBean) activity.getIntent()
                 .getSerializableExtra("ActivityBean");

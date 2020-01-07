@@ -2,6 +2,7 @@ package com.fy.baselibrary.retrofit.converter.file;
 
 import android.annotation.SuppressLint;
 
+import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.retrofit.load.LoadOnSubscribe;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.FileUtils;
@@ -17,17 +18,16 @@ import okhttp3.ResponseBody;
 import retrofit2.Converter;
 
 /**
- * describe: 文件下载 转换器
+ * describe: 文件下载
  * Created by fangs on 2019/8/28 22:03.
  */
-public class FileResponseBodyConverter implements  Converter<ResponseBody, File> {
-
-
+public class FileResponseBodyConverter implements Converter<ResponseBody, File> {
 
     @Override
     public File convert(ResponseBody responseBody) throws IOException {
-        String filePath = FileUtils.folderIsExists("wanAndroid.down", 2).getPath();
-        return FileResponseBodyConverter.saveFile(null, responseBody, "http://47.107.134.212:13201/8af7372fef2c4d849caffe524828b072.apk", filePath);
+        String filePath = FileUtils.folderIsExists(ConfigUtils.getFilePath()+ ".down", ConfigUtils.getType()).getPath();
+        String url = "http://acj3.pc6.com/pc6_soure/2018-11/com.tencent.mobileqqi_6600.apk";
+        return FileResponseBodyConverter.saveFile(null, responseBody, url, filePath);
     }
 
 
@@ -70,7 +70,7 @@ public class FileResponseBodyConverter implements  Converter<ResponseBody, File>
     public static File writeFileToDisk(LoadOnSubscribe loadOnSubscribe, ResponseBody responseBody, String filePath) throws IOException {
         long totalByte = responseBody.contentLength();
 
-        L.e("fy_file_FileDownInterceptor", totalByte + "---" + Thread.currentThread().getName());
+        L.e("fy_file_FileDownInterceptor", "文件下载 写数据" + "---" + Thread.currentThread().getName());
 
         File file = new File(filePath);
         if (!file.getParentFile().exists()) {

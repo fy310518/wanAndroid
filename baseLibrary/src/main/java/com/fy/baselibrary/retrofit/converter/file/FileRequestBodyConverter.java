@@ -80,7 +80,11 @@ public class FileRequestBodyConverter implements Converter<ArrayMap<String, Obje
 
             sumLeng += file.length();
             FileProgressRequestBody requestBody = new FileProgressRequestBody(file, "multipart/form-data", loadOnSubscribe);
-            builder.addFormDataPart(fileKey + (i + 1), file.getName(), requestBody);
+            if (files.size() > 1)builder.addFormDataPart(fileKey + (i + 1), file.getName(), requestBody);
+            else {
+                String name = fileKey.equals("fileName") ? fileKey + 1 : fileKey;
+                builder.addFormDataPart(name, file.getName(), requestBody);
+            }
         }
 //        通用情况
 //        for (T t : files) {

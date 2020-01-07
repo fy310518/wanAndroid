@@ -9,7 +9,11 @@ public class Constant {
     /**
      * 默认的超时时间
      */
-    public static int DEFAULT_MILLISECONDS = 60000;
+    public static int DEFAULT_MILLISECONDS = 15000;
+    /**
+     * 操作令牌 key
+     */
+    public static String token = "user_token";
 
     /**
      * 动态服务器地址
@@ -81,19 +85,18 @@ public class Constant {
 
 //  多状态视图 常量 flag
     /** 内容 flag */
-    public static final int LAYOUT_CONTENT_ID = 0;
-
+    public static final int LAYOUT_CONTENT_ID = 100;
     /** 异常 flag */
-    public static final int LAYOUT_ERROR_ID = 1;
-
+    public static final int LAYOUT_ERROR_ID = -101;
     /** 网络异常 flag */
-    public static final int LAYOUT_NETWORK_ERROR_ID = 2;
-
+    public static final int LAYOUT_NETWORK_ERROR_ID = -102;
     /** 空数据 flag */
-    public static final int LAYOUT_EMPTYDATA_ID = 3;
+    public static final int LAYOUT_EMPTYDATA_ID = -103;
 
-    /** 请求失败 标记 */
+    /** 请求失败 */
     public static final int REQUEST_FAIL = 1006;
+    /** 请求失败（HTTP 请求成功，数据访问失败） 标记 */
+    public static final int REQUEST_DATA_FAIL = 1007;
 //  多状态视图 常量 flag
 
 

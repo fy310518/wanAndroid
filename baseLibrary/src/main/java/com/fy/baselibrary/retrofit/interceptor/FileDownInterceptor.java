@@ -6,7 +6,6 @@ import com.fy.baselibrary.utils.notify.L;
 import java.io.IOException;
 
 import okhttp3.Interceptor;
-import okhttp3.Request;
 import okhttp3.Response;
 
 /**
@@ -17,16 +16,12 @@ public class FileDownInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
-
-        Request request = chain.request();
-        Response response = chain.proceed(request);
-
-        FileResponseBody fileResponseBody = new FileResponseBody(response.body());
-        fileResponseBody.setDownUrl(request.url().url().toString());
-
         L.e("fy_file_FileDownInterceptor", "文件下载---" + Thread.currentThread().getName());
-        return response.newBuilder()
-                .body(fileResponseBody)
+
+        Response originalResponse = chain.proceed(chain.request());
+
+        return originalResponse.newBuilder()
+                .body(new FileResponseBody(originalResponse.body()))
                 .build();
     }
 }

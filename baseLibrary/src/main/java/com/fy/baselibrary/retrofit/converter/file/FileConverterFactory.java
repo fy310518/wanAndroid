@@ -19,6 +19,11 @@ import retrofit2.Retrofit;
  */
 public class FileConverterFactory extends Converter.Factory {
 
+    public static FileConverterFactory create(){
+        return new FileConverterFactory();
+    }
+
+
     @Nullable
     @Override
     public Converter<?, RequestBody> requestBodyConverter(Type type,
@@ -36,10 +41,8 @@ public class FileConverterFactory extends Converter.Factory {
     }
 
     @Override
-    public Converter<ResponseBody, File> responseBodyConverter(Type type,
-                                                               Annotation[] annotations,
-                                                               Retrofit retrofit) {
-        if (type instanceof File) return new FileResponseBodyConverter();
-        else return null;
+    public Converter<ResponseBody, File> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
+//        return new FileResponseBodyConverter();
+        return null;
     }
 }

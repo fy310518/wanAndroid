@@ -8,6 +8,7 @@ import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.utils.notify.L;
 import com.fy.baselibrary.utils.security.EncryptUtils;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 
@@ -338,10 +339,16 @@ public class FileUtils {
     private static String getFileName(String url){
         String fileName;
 
+        String md5Name = EncryptUtils.getMD5(url);
         if (url.indexOf("?") == -1){
-            fileName = EncryptUtils.getMD5(url) + url.substring(url.lastIndexOf("."));
+            fileName = md5Name + url.substring(url.lastIndexOf("."));
         } else {
-            fileName = EncryptUtils.getMD5(url) + url.subSequence(url.lastIndexOf("."), url.indexOf("?")).toString();
+            String temp = url.substring(0, url.indexOf("?"));
+            if (temp.indexOf(".") == -1){
+                fileName = md5Name + ".temp";
+            } else {
+                fileName = md5Name + temp.substring(temp.lastIndexOf("."));
+            }
         }
 
         return fileName;
@@ -377,30 +384,29 @@ public class FileUtils {
      * 向指定文件写内容  (追加形式写文件)
      *
      * @param path          文件目录(如：fy.com.base)
-     * @param inputfileName 文件名（如：log.txt）
+     * @param inputFileName 文件名（如：log.txt）
      * @param content       准备写入的内容
      */
-    public static void fileToInputContent(String path, String inputfileName, String content) {
+    public static void fileToInputContent(String path, String inputFileName, String content) {
         StringBuffer sb = new StringBuffer();
         sb.append("\n").append(content).append("\n");
 
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+        // 文件目录 + 文件名 String
+        File folder = folderIsExists(path, 2);
+        File file   = fileIsExists(folder.getPath() + File.separator + inputFileName);
 
-            File dir = new File(getPath(path, 0));
-            if (!dir.exists()) {
-                dir.mkdir();
-            }
+        try {
+            // 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
+            FileWriter writer = new FileWriter(file, true);
 
-            try {
-                // 文件目录 + 文件名 String
-                String fileName = dir.toString() + File.separator + inputfileName;
-                // 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
-                FileWriter writer = new FileWriter(fileName, true);
-                writer.write(sb.toString());
-                writer.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            BufferedWriter bufWriter = new BufferedWriter(writer);
+            bufWriter.write(sb.toString());
+            bufWriter.newLine();
+            bufWriter.close();
+
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

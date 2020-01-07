@@ -226,18 +226,6 @@ public class NotifyUtils {
             manager.cancel(channelId);
         }
 
-
-        /**
-         * 刷新通知
-         * @param remoteViews 自定义通知布局
-         */
-        public void notifyData(RemoteViews remoteViews){
-            this.remoteViews = remoteViews;
-            mBuilder.setCustomContentView(remoteViews);
-            sendNotify();
-        }
-
-
         /** 以下为构建参数 */
         public FyBuild setChannel(int channelId, String channelName) {
             this.channelId = channelId;
@@ -293,19 +281,18 @@ public class NotifyUtils {
         }
 
         /**
-         * 修改 知道渠道 id的 渠道设置
-         * @param act
+         * 修改 知道渠道 id的 渠道设置【在 createManager() 方法前调用】
          */
-        private void modifyChannel(Context act){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                if (defaults == AppNotifyUtils.DEFAULT_CUSTOM){
-                    channelName = AppNotifyUtils.initNotificationChannel(act, AppNotifyUtils.chatNumKEY, true,
-                            AppNotifyUtils.channelId, AppNotifyUtils.channelName, sound);
-                } else {
-//                    channelName = AppNotifyUtils.initNotificationChannel(act, AppNotifyUtils.chatNumKEY, true,
-//                            AppNotifyUtils.channelId, AppNotifyUtils.channelName, null);
-                }
+        private FyBuild modifyChannel(Context act) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return this;
+            if (defaults == AppNotifyUtils.DEFAULT_CUSTOM) {
+                channelName = AppNotifyUtils.initNotificationChannel(act, channelId + "", true,
+                        channelId + "", channelName, sound);
+            } else {
+                channelName = AppNotifyUtils.initNotificationChannel(act, channelId + "", true,
+                        channelId + "", channelName, null);
             }
+            return this;
         }
 
         /**
@@ -313,7 +300,6 @@ public class NotifyUtils {
          * @param act
          */
         public FyBuild createManager(Context act) {
-            modifyChannel(act);
             mBuilder = NotifyUtils.createNotifyBuilder(act, this);
             manager = (NotificationManager) act.getSystemService(Context.NOTIFICATION_SERVICE);
             return this;
@@ -324,7 +310,6 @@ public class NotifyUtils {
          * @param act
          * @param actClass
          * @param bundle
-         * @return
          */
         public FyBuild createManager(Context act, @NonNull Class actClass, Bundle bundle) {
             Intent resultIntent = new Intent(act, actClass);

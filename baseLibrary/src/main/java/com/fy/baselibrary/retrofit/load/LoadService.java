@@ -33,8 +33,8 @@ public interface LoadService {
      */
     @GET
     Observable<Object> jsInAndroidGetRequest(@Url String apiUrl,
-                                                   @HeaderMap ArrayMap<String, String> heads,
-                                                   @QueryMap ArrayMap<String, String> params);
+                                                   @HeaderMap ArrayMap<String, Object> heads,
+                                                   @QueryMap ArrayMap<String, Object> params);
 
     /**
      * h5调用本地 请求封装 之 POST请求
@@ -42,8 +42,8 @@ public interface LoadService {
     @FormUrlEncoded
     @POST
     Observable<Object> jsInAndroidPostRequest(@Url String apiUrl,
-                                              @HeaderMap ArrayMap<String, String> heads,
-                                              @FieldMap ArrayMap<String, String> params);
+                                              @HeaderMap ArrayMap<String, Object> heads,
+                                              @FieldMap ArrayMap<String, Object> params);
 
     /**
      * 通用 图文上传 (支持多图片) （参数注解：@Body；参数类型：MultipartBody）
@@ -82,6 +82,6 @@ public interface LoadService {
      */
     @Streaming
     @GET
-    Observable<File> download(@Header("RANGE") String downParam, @Url String url);
+    Observable<ResponseBody> download(@Header("RANGE") String downParam, @Url String url);
 
 }

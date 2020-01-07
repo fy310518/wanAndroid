@@ -2,6 +2,7 @@ package com.fy.baselibrary.retrofit.observer;
 
 import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.base.dialog.CommonDialog;
+import com.fy.baselibrary.retrofit.ServerException;
 import com.fy.baselibrary.statuslayout.OnSetStatusView;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.net.NetUtils;
@@ -85,8 +86,8 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
     @Override
     public void onError(Throwable e) {
         L.e("net", "onError()");
-
         dismissProgress();
+        onFail();
 
         if (NetUtils.getNetworkState(ConfigUtils.getAppCtx()) < 0){
             actionResponseError("网络不可用，请检查您的网络状态，稍后重试！");
@@ -109,10 +110,10 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
             updateLayout(Constant.LAYOUT_NETWORK_ERROR_ID);
         } else if (e instanceof SSLException) {
             actionResponseError("证书验证失败！");
-            updateLayout(Constant.REQUEST_FAIL);
+            updateLayout(Constant.LAYOUT_ERROR_ID);
         } else if (e instanceof ClassCastException) {
             actionResponseError("类型转换错误！");
-            updateLayout(Constant.REQUEST_FAIL);
+            updateLayout(Constant.LAYOUT_ERROR_ID);
         } else if (e instanceof JsonParseException
                 || e instanceof JSONException
                 || e instanceof JsonSyntaxException
@@ -120,10 +121,11 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
                 || e instanceof NotSerializableException
                 || e instanceof ParseException) {
             actionResponseError("数据解析错误！");
-            updateLayout(Constant.REQUEST_FAIL);
+        } else if (e instanceof ServerException){
+            actionResponseError(e.getMessage());
+            updateLayout(((ServerException) e).code);
         } else {
             actionResponseError("请求失败，请稍后再试...");
-            updateLayout(Constant.REQUEST_FAIL);
         }
     }
 
@@ -169,6 +171,12 @@ public abstract class RequestBaseObserver<V> implements Observer<V> {
         }
     }
 
+    /**
+     * 请求失败
+     */
+    protected void onFail(){
+
+    }
 
     /**
      * 上传、下载 需重写此方法，更新进度

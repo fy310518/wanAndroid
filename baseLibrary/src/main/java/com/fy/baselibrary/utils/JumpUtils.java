@@ -8,6 +8,9 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.provider.Settings;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 
@@ -353,13 +356,17 @@ public class JumpUtils {
     public static void jumpPackage(Activity act, String packageName, Bundle bundle) {
         PackageManager packageManager = act.getPackageManager();
         Intent intent = packageManager.getLaunchIntentForPackage(packageName);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        if (null != bundle) {
-            intent.putExtras(bundle);
+        try {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (null != bundle) {
+                intent.putExtras(bundle);
+            }
+            act.startActivity(intent);
+        } catch (Exception e) {
+            T.showLong("应用未安装");
+            e.printStackTrace();
         }
-
-        act.startActivity(intent);
     }
 
     /**
@@ -377,9 +384,61 @@ public class JumpUtils {
             intent.putExtras(bundle);
         }
 
-        act.startActivity(intent);
+        try {
+            act.startActivity(intent);
+        } catch (Exception e) {
+            T.showLong("应用未安装");
+            e.printStackTrace();
+        }
     }
 
+    /**
+     * 启动指定 包名 的第三方应用 的指定 路径的 activity, 带回调结果的跳转
+     * @param act
+     * @param packageName
+     * @param path
+     * @param bundle
+     * @param requestCode
+     */
+    public static void jumpPackageAct(Activity act, String packageName, String path, Bundle bundle, int requestCode) {
+        Intent intent = new Intent();
+        ComponentName componentName = new ComponentName(packageName, path);
+        intent.setComponent(componentName);
+        if (null != bundle) {
+            intent.putExtras(bundle);
+        }
+
+        try {
+            act.startActivityForResult(intent, requestCode);
+        } catch (Exception e) {
+            T.showLong("应用未安装");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 启动指定 包名 的第三方应用 的指定 路径的 activity, 带回调结果的跳转
+     * @param fragment
+     * @param packageName
+     * @param path
+     * @param bundle
+     * @param requestCode
+     */
+    public static void jumpPackageAct(Fragment fragment, String packageName, String path, Bundle bundle, int requestCode) {
+        Intent intent = new Intent();
+        ComponentName componentName = new ComponentName(packageName, path);
+        intent.setComponent(componentName);
+        if (null != bundle) {
+            intent.putExtras(bundle);
+        }
+
+        try {
+            fragment.startActivityForResult(intent, requestCode);
+        } catch (Exception e) {
+            T.showLong("应用未安装");
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 跳转到浏览器 打开指定 URL链接
@@ -458,4 +517,78 @@ public class JumpUtils {
         }
     }
 
+
+    /**
+     * 国内手机厂商白名单跳转工具类
+     * @return
+     */
+    public static void getSettingIntent(Context context){
+        ComponentName componentName = null;
+
+        String brand = android.os.Build.BRAND;
+
+        switch (brand.toLowerCase()){
+            case "samsung":
+                componentName = new ComponentName("com.samsung.android.sm",
+                        "com.samsung.android.sm.app.dashboard.SmartManagerDashBoardActivity");
+                break;
+            case "huawei":
+                componentName = new ComponentName("com.huawei.systemmanager",
+                        "com.huawei.systemmanager.startupmgr.ui.StartupNormalAppListActivity");
+                break;
+            case "xiaomi":
+                componentName = new ComponentName("com.miui.securitycenter",
+                        "com.miui.permcenter.autostart.AutoStartManagementActivity");
+                break;
+            case "vivo":
+                componentName = new ComponentName("com.iqoo.secure",
+                        "com.iqoo.secure.ui.phoneoptimize.AddWhiteListActivity");
+                break;
+            case "oppo":
+                componentName = new ComponentName("com.coloros.oppoguardelf",
+                        "com.coloros.powermanager.fuelgaue.PowerUsageModelActivity");
+                break;
+            case "360":
+                componentName = new ComponentName("com.yulong.android.coolsafe",
+                        "com.yulong.android.coolsafe.ui.activity.autorun.AutoRunListActivity");
+                break;
+            case "meizu":
+                componentName = new ComponentName("com.meizu.safe",
+                        "com.meizu.safe.permission.SmartBGActivity");
+                break;
+            case "oneplus":
+                componentName = new ComponentName("com.oneplus.security",
+                        "com.oneplus.security.chainlaunch.view.ChainLaunchAppListActivity");
+                break;
+            default:
+                break;
+        }
+
+        Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if(componentName!=null){
+            intent.setComponent(componentName);
+        }else{
+            intent.setAction(Settings.ACTION_SETTINGS);
+        }
+
+        try {
+            context.startActivity(intent);
+        }catch (Exception e){
+            context.startActivity(new Intent(Settings.ACTION_SETTINGS));
+        }
+    }
+
+    /**
+     * 是否在白名单内
+     * @param context
+     * @return
+     */
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static boolean isSystemWhiteList(Context context) {
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        String packageName = context.getPackageName();
+        boolean isWhite = pm.isIgnoringBatteryOptimizations(packageName);
+        return isWhite;
+    }
 }

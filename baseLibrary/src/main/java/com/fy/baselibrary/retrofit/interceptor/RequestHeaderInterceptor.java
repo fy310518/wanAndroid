@@ -2,7 +2,9 @@ package com.fy.baselibrary.retrofit.interceptor;
 
 import android.text.TextUtils;
 
+import com.fy.baselibrary.application.ioc.ConfigUtils;
 import com.fy.baselibrary.utils.Constant;
+import com.fy.baselibrary.utils.cache.SpfAgent;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,7 +21,6 @@ import okhttp3.Response;
 public class RequestHeaderInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
-        Response response = null;
         //获取request
         Request request = chain.request()
                 .newBuilder()
@@ -28,6 +29,10 @@ public class RequestHeaderInterceptor implements Interceptor {
                 .addHeader("Connection", "keep-alive")
                 .addHeader("Accept", "*/*")
                 .addHeader("app-type", "Android")
+                .addHeader("Access-Control-Allow-Origin", "*")
+                .addHeader("Access-Control-Allow-Headers", "X-Requested-With")
+                .addHeader("Vary", "Accept-Encoding")
+                .header(ConfigUtils.getTokenKey(), SpfAgent.init("").getString(Constant.token))
                 .build();
 
         //获取request的创建者builder
@@ -57,17 +62,10 @@ public class RequestHeaderInterceptor implements Interceptor {
 
                 //重建这个request，通过builder.url(newFullUrl).build()；
                 //然后返回一个response至此结束修改
-                response = chain.proceed(builder.url(newFullUrl).build());
+                return chain.proceed(builder.url(newFullUrl).build());
             }
         }
 
-        if (null == response) {
-            Request.Builder requestBuilder = request.newBuilder();
-
-            Request newRequest = requestBuilder.build();
-            response = chain.proceed(newRequest);
-        }
-
-        return response;
+        return chain.proceed(request);
     }
 }

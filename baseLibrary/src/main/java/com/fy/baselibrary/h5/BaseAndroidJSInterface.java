@@ -13,15 +13,9 @@ import com.fy.baselibrary.retrofit.load.LoadService;
 import com.fy.baselibrary.retrofit.observer.IProgressDialog;
 import com.fy.baselibrary.retrofit.observer.RequestBaseObserver;
 import com.fy.baselibrary.utils.GsonUtils;
-import com.google.gson.Gson;
 
-import java.io.IOException;
-import java.util.Map;
-
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
 
 /**
  * DESCRIPTION：h5 android 交互
@@ -33,7 +27,7 @@ public class BaseAndroidJSInterface {
     protected WebView view;
     private String host;
 
-    private ArrayMap<String, String> defaultParams = new ArrayMap<>();
+    private ArrayMap<String, Object> defaultParams = new ArrayMap<>();
     private IProgressDialog progressDialog;
 
     public BaseAndroidJSInterface(Context context, WebView view, String host) {
@@ -61,9 +55,18 @@ public class BaseAndroidJSInterface {
         return this;
     }
 
+    /**
+     * 获取 指定 key 的参数
+     * @param key
+     * @param <T>
+     */
+    public <T> T getDefaultParams(String key) {
+        return (T) defaultParams.get(key);
+    }
+
     //解析 H5RequestBean 获取 请求参数
-    private ArrayMap<String, String> getHttpParams(H5RequestBean request){
-        ArrayMap<String, String> params = request.getParams();
+    private ArrayMap<String, Object> getHttpParams(H5RequestBean request){
+        ArrayMap<String, Object> params = request.getParams();
 
         if (!defaultParams.isEmpty()) {
             for (String key : defaultParams.keySet()) {
@@ -75,8 +78,8 @@ public class BaseAndroidJSInterface {
     }
 
     //添加请求头
-    private ArrayMap<String, String> getHeaderParams(H5RequestBean request){
-        ArrayMap<String, String> params = request.getHeader();
+    private ArrayMap<String, Object> getHeaderParams(H5RequestBean request){
+        ArrayMap<String, Object> params = request.getHeader();
         if (null == params){
             params = new ArrayMap<>();
 //            params.put("Content-Type", "multipart/form-data;charse=UTF-8");
@@ -119,8 +122,8 @@ public class BaseAndroidJSInterface {
         }
 
         String method = request.getRequestMethod();
-        ArrayMap<String, String> headers = getHeaderParams(request);
-        ArrayMap<String, String> params = getHttpParams(request);
+        ArrayMap<String, Object> headers = getHeaderParams(request);
+        ArrayMap<String, Object> params = getHttpParams(request);
 
         String hostAddress = !TextUtils.isEmpty(hostIp) ? hostIp : this.host;
 
@@ -137,7 +140,7 @@ public class BaseAndroidJSInterface {
     }
 
 
-    private void httpGet(ArrayMap<String, String> headers, ArrayMap<String, String> params, final String url, final String jsMethod) {
+    private void httpGet(ArrayMap<String, Object> headers, ArrayMap<String, Object> params, final String url, final String jsMethod) {
         RequestUtils.create(LoadService.class)
                 .jsInAndroidGetRequest(url, headers, params)
                 .subscribeOn(Schedulers.io())
@@ -146,13 +149,11 @@ public class BaseAndroidJSInterface {
                 .subscribe(getCallObserver(jsMethod));
     }
 
-    private void httpPost(ArrayMap<String, String> headers, ArrayMap<String, String> params, final String url, final String jsMethod) {
-        Observable<Object> fromNetwork = RequestUtils.create(LoadService.class)
+    private void httpPost(ArrayMap<String, Object> headers, ArrayMap<String, Object> params, final String url, final String jsMethod) {
+        RequestUtils.create(LoadService.class)
                 .jsInAndroidPostRequest(url, headers, params)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        RequestUtils.request(fromNetwork, url)
+                .observeOn(AndroidSchedulers.mainThread())
                 .compose(RxHelper.bindToLifecycle(context))
                 .subscribe(getCallObserver(jsMethod));
     }

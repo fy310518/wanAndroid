@@ -23,12 +23,6 @@ public class AppNotifyUtils {
     public static final int requestCode = 235;
 
 
-
-    /**
-     * 缓存的 通知渠道 key(一个项目中 可能有多个)
-     */
-    public static final String chatNumKEY = "chatNumKEY";
-
     /**
      * app 声音 是否打开
      */
@@ -38,10 +32,27 @@ public class AppNotifyUtils {
      */
     public static final String shockKEY = "appShockKEY";
 
+
+    /**
+     * 缓存的 通知渠道 key(一个项目中 可能有多个)
+     */
+    public static final String chatNumKEY = "chatNumKEY";
     //聊天 渠道 id 前缀
     public static final String channelId = "chat";
     //聊天 渠道 名称
     public static final String channelName = "聊天消息";
+
+    //webSocket 通知 渠道 Id
+    public static final int webSocketID = 4539;
+    public static final String channelKEY1 = "WebSocketKEY1";
+    //webSocket 渠道 id 前缀
+    public static final String webSocketId = "WebSocket";
+    //webSocket 渠道 名称
+    public static final String webSocketName = "WebSocket消息";
+
+    //应用更新 通知 渠道 Id
+    public static final int appUpdateID = 4538;
+
 
     /**
      * 初始化 一个 通知渠道 OR 更新一个通知渠道
@@ -63,7 +74,7 @@ public class AppNotifyUtils {
             for (NotificationChannel channel : channelList) {
                 if (channel.getId().contains(channelId)) {
                     notificationManager.deleteNotificationChannel(channel.getId());
-                    SpfAgent.init(Constant.baseSpf)
+                    SpfAgent.init("")
                             .saveLong(chatNumKEY, System.currentTimeMillis())
                             .commit(false);
                     break;
@@ -72,8 +83,8 @@ public class AppNotifyUtils {
         }
 
 
-        boolean shock = SpfAgent.init("").getBoolean(Constant.baseSpf, AppNotifyUtils.shockKEY, true);
-        boolean voice = SpfAgent.init("").getBoolean(Constant.baseSpf, AppNotifyUtils.voiceKEY, true);
+        boolean shock = SpfAgent.init("").getBoolean(AppNotifyUtils.shockKEY, true);
+        boolean voice = SpfAgent.init("").getBoolean(AppNotifyUtils.voiceKEY, true);
         int importance = NotificationManager.IMPORTANCE_LOW;
         if ((voice && !shock) || (!voice && shock)){
             importance = NotificationManager.IMPORTANCE_DEFAULT;
@@ -81,7 +92,7 @@ public class AppNotifyUtils {
             importance = NotificationManager.IMPORTANCE_HIGH;
         }
 
-        long channelNum = SpfAgent.init("").getLong(Constant.baseSpf, chatNumKEY);
+        long channelNum = SpfAgent.init("").getLong(chatNumKEY);
         String channelIdStr = channelId + channelNum;
 
         NotifyUtils.createNotificationChannel(ctx, channelIdStr, channelName, importance,

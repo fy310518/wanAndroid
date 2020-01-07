@@ -47,7 +47,7 @@ public abstract class CommonAdapter<Item> extends BaseAdapter {
 	}
 
 	@Override
-	public Object getItem(int position) {
+	public Item getItem(int position) {
         Log.d("CommonAdapter", " getItem() -> position "+position);
 		return data.get(position);
 	}

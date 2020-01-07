@@ -8,8 +8,6 @@ import com.fy.baselibrary.application.BaseActivityBean;
 import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.notify.L;
 
-import java.lang.reflect.ParameterizedType;
-
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -30,11 +28,25 @@ public class RxHelper {
 
     /**
      * 对结果进行预处理
-     *
+     * @param clazz  传递了这个参数 说明返回的数据不能是 空 或者是 Object
+     */
+    public static <Item> ObservableTransformer<BaseBean<Item>, Item> handleResult(Class<Item> clazz) {
+        return biuld(clazz);
+    }
+
+    /**
+     * 对结果进行预处理
+     */
+    public static <Item> ObservableTransformer<BaseBean<Item>, Item> handleResult() {
+        return biuld(null);
+    }
+
+    /**
+     * 对结果进行预处理
      * @param <Item> 泛型
      * @return  ObservableTransformer
      */
-    public static <Item> ObservableTransformer<BaseBean<Item>, Item> handleResult() {
+    public static <Item> ObservableTransformer<BaseBean<Item>, Item> biuld(Class<Item> clazz) {
         return new ObservableTransformer<BaseBean<Item>, Item>() {
             @Override
             public ObservableSource<Item> apply(@NonNull Observable<BaseBean<Item>> upstream) {
@@ -43,7 +55,7 @@ public class RxHelper {
                     @Override
                     public ObservableSource<Item> apply(@NonNull BaseBean<Item> baseBean) throws Exception {
                         if (baseBean.isSuccess()) {
-                            return createData(baseBean.getData());
+                            return createData(baseBean.getData(), clazz);
                         } else {
                             return Observable.error(new ServerException(baseBean.getMsg(), baseBean.getCode()));
                         }
@@ -64,15 +76,16 @@ public class RxHelper {
      * @param <T>
      * @return
      */
-    private static <T> Observable<T> createData(final T data) {
+    private static <T> Observable<T> createData(final T data, Class<T> clazz) {
         return Observable.create(new ObservableOnSubscribe<T>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<T> subscriber) throws Exception {
                 try {
                     L.e("net", "成功 _ onNext");
-
-                    if (null == data) subscriber.onNext((T) new Object());
-                    else subscriber.onNext(data);
+                    if (null == data) {
+                        if (null == clazz)subscriber.onError(new ServerException("暂无数据", -10001));
+                        else subscriber.onNext(clazz.newInstance());
+                    } else subscriber.onNext(data);
 
                     subscriber.onComplete();
                 } catch (Exception e) {

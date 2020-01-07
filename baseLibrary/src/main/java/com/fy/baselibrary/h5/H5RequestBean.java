@@ -1,5 +1,6 @@
 package com.fy.baselibrary.h5;
 
+import android.text.TextUtils;
 import android.util.ArrayMap;
 
 /**
@@ -18,56 +19,48 @@ public class H5RequestBean {
 
     private String url = "";
     private String requestMethod = "";
-    private ArrayMap<String,String> header;
-    private ArrayMap<String,String> params;
+    private ArrayMap<String,Object> header;
+    private ArrayMap<String,Object> params;
     private String jsMethod = "";
 
     public String getUrl() {
-        return url;
+        return url == null ? "" : url;
     }
 
     public void setUrl(String url) {
-        this.url = url;
+        this.url = url == null ? "" : url;
     }
 
     public String getRequestMethod() {
-        return requestMethod;
+        return requestMethod == null ? "" : requestMethod;
     }
 
     public void setRequestMethod(String requestMethod) {
-        this.requestMethod = requestMethod;
+        this.requestMethod = requestMethod == null ? "" : requestMethod;
     }
 
-    public ArrayMap<String, String> getHeader() {
-        return header;
+    public ArrayMap<String, Object> getHeader() {
+        return null == header ? new ArrayMap<>() : header;
     }
 
-    public void setHeader(ArrayMap<String, String> header) {
-        if (null == header || header.isEmpty()){
-            this.header = new ArrayMap<>();
-        } else {
-            this.header = header;
-        }
+    public void setHeader(ArrayMap<String, Object> header) {
+        this.header = header;
     }
 
-    public ArrayMap<String, String> getParams() {
-        return params;
+    public ArrayMap<String, Object> getParams() {
+        return null == params ? new ArrayMap<>() : params;
     }
 
-    public void setParams(ArrayMap<String, String> params) {
-        if (null == params || params.isEmpty()){
-            this.params = new ArrayMap<>();
-        } else {
-            this.params = params;
-        }
+    public void setParams(ArrayMap<String, Object> params) {
+        this.params = params;
     }
 
     public String getJsMethod() {
-        return jsMethod;
+        return jsMethod == null ? "" : jsMethod;
     }
 
     public void setJsMethod(String jsMethod) {
-        this.jsMethod = jsMethod;
+        this.jsMethod = jsMethod == null ? "" : jsMethod;
     }
 
     @Override

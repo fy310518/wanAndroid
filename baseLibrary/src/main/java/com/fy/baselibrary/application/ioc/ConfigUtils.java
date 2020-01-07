@@ -2,6 +2,11 @@ package com.fy.baselibrary.application.ioc;
 
 import android.content.Context;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.Interceptor;
+
 
 /**
  * 应用框架基础配置工具类 （应用启动时候初始化）
@@ -21,12 +26,31 @@ public class ConfigUtils {
         return configComponent.getContext();
     }
 
+    public static String getFilePath() {
+        return configComponent.getConfigBiuder().filePath;
+    }
+
+    public static int getType() {
+        return configComponent.getConfigBiuder().type;
+    }
+
+    public static boolean isDEBUG() {
+        return configComponent.getConfigBiuder().DEBUG;
+    }
+
     public static String getBaseUrl() {
         return configComponent.getConfigBiuder().BASE_URL;
     }
+    public static String getTokenKey(){return configComponent.getConfigBiuder().token;}
+
+    public static List<Interceptor> getInterceptor(){return configComponent.getConfigBiuder().interceptors;}
 
     public static String getCer() {
         return configComponent.getConfigBiuder().cer;
+    }
+
+    public static String getCerFileName() {
+        return configComponent.getConfigBiuder().cerFileName;
     }
 
     public static int getTitleColor(){
@@ -47,12 +71,19 @@ public class ConfigUtils {
 
 
     public static class ConfigBiuder {
-
+        /** 是否  DEBUG 环境*/
+        boolean DEBUG;
         /** 网络请求 服务器地址 url */
         String BASE_URL = "";
 
+        /** 应用 文件根目录 名称（文件夹） */
+        String filePath = "";
+        int type = 2;
+
         /** https 公钥证书字符串 */
         String cer = "";
+        /** https 公钥证书 文件字符串（放在 assets 目录下） */
+        String cerFileName = "";
 
         /** 标题栏背景色 */
         int bgColor;
@@ -64,8 +95,23 @@ public class ConfigUtils {
         /** 标题栏返回按钮 图片 */
         int backImg;
 
+        /** token key */
+        String token = "X-Access-Token";
+        /** token 拦截器 */
+        List<Interceptor> interceptors  = new ArrayList<>();
+
+        public ConfigBiuder setDEBUG(boolean DEBUG) {
+            this.DEBUG = DEBUG;
+            return this;
+        }
+
         public ConfigBiuder setBASE_URL(String BASE_URL) {
             this.BASE_URL = BASE_URL;
+            return this;
+        }
+
+        public ConfigBiuder setCerFileName(String cerFileName) {
+            this.cerFileName = cerFileName == null ? "" : cerFileName;
             return this;
         }
 
@@ -94,6 +140,21 @@ public class ConfigUtils {
             return this;
         }
 
+        public ConfigBiuder setBaseFile(String filePath, int type) {
+            this.filePath = filePath == null ? "" : filePath;
+            this.type = type;
+            return this;
+        }
+
+        public ConfigBiuder setToken(String token) {
+            this.token = token == null ? "" : token;
+            return this;
+        }
+
+        public ConfigBiuder addInterceptor(Interceptor interceptor) {
+            interceptors.add(interceptor);
+            return this;
+        }
 
         public ConfigUtils create(Context context){
             return new ConfigUtils(context, this);
