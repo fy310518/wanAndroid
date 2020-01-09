@@ -7,7 +7,6 @@
       <module fileurl="file://$PROJECT_DIR$/imgPicker/imgPicker.iml" filepath="$PROJECT_DIR$/imgPicker/imgPicker.iml" />
       <module fileurl="file://$PROJECT_DIR$/wanAndroid.iml" filepath="$PROJECT_DIR$/wanAndroid.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/wanAndroid-app.iml" filepath="$PROJECT_DIR$/app/wanAndroid-app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/baseLibrary/wanAndroid-baseLibrary.iml" filepath="$PROJECT_DIR$/baseLibrary/wanAndroid-baseLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/imgPicker/wanAndroid-imgPicker.iml" filepath="$PROJECT_DIR$/imgPicker/wanAndroid-imgPicker.iml" />
     </modules>
   </component>
