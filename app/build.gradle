@@ -67,7 +67,7 @@ dependencies {
 
     implementation 'com.bigkoo:ConvenientBanner:2.1.4'
 
-    implementation project(':baseLibrary')
     implementation project(':imgPicker')
-//    implementation 'com.fy:baselibrary:1.0.0'
+    implementation project(':baseLibrary')
+//    implementation 'com.github.fy310518:wanAndroid:1.1.0'
 }

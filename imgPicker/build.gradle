@@ -48,4 +48,5 @@ dependencies {
     implementation 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
 
     implementation project(':baseLibrary')
+//    implementation 'com.github.fy310518:wanAndroid:1.1.0'
 }
