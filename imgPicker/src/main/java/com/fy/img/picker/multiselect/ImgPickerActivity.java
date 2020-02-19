@@ -22,15 +22,18 @@ import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.base.ViewHolder;
 import com.fy.baselibrary.base.popupwindow.CommonPopupWindow;
 import com.fy.baselibrary.base.popupwindow.NicePopup;
+import com.fy.baselibrary.rv.divider.GridItemDecoration;
+import com.fy.baselibrary.utils.Constant;
 import com.fy.baselibrary.utils.DensityUtils;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.ResUtils;
+import com.fy.baselibrary.utils.cache.SpfAgent;
 import com.fy.baselibrary.utils.media.UpdateMedia;
 import com.fy.baselibrary.utils.notify.T;
+import com.fy.bean.ImageFolder;
+import com.fy.bean.ImageItem;
 import com.fy.img.picker.ImagePicker;
 import com.fy.img.picker.PickerConfig;
-import com.fy.img.picker.bean.ImageFolder;
-import com.fy.img.picker.bean.ImageItem;
 import com.fy.img.picker.folder.ImageDataSource;
 import com.fy.img.picker.folder.ImageFolderAdapter;
 import com.fy.img.picker.preview.PicturePreviewActivity;
@@ -50,6 +53,7 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
     protected TextView tvBack;
     protected TextView tvMenu;
 
+    private ImageDataSource imageDataSource;
     private int maxCount = 9;//最大选择数目
     private boolean isTAKE_picture;//是否显示拍照 按钮
     private Button btn_dir;//全部图片
@@ -116,8 +120,10 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
         //设置布局管理器
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3, OrientationHelper.VERTICAL, false);
         recycler.setLayoutManager(layoutManager);
-        //添加分割线
-//        recycler.addItemDecoration(new DividerParams().create(this));
+        recycler.addItemDecoration(
+                GridItemDecoration.Builder.init()
+                        .setColumn(3)
+                        .create(this));
 
         //设置adapter
         mImgListAdapter = new ImgPickersAdapter.Bulder()
@@ -141,10 +147,10 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
 
     //初始化图片文件夹 相关
     private void initImgFolder(ImageFolder imageFolder) {
-        new ImageDataSource(this, null, imageFolder, new ImageDataSource.OnImagesLoadedListener() {
+        imageDataSource = new ImageDataSource(this, null, imageFolder, new ImageDataSource.OnImagesLoadedListener() {
             @Override
-            public void onImagesLoaded(List<ImageFolder> imageFolders) {
-                if (imageFolders.size() == 0) {
+            public void onImagesLoaded(List<ImageFolder> imageFolders, boolean isInitLoad) {
+                if (imageFolders.size() == 0 && isInitLoad) {
                     List<ImageItem> images = new ArrayList<>();
                     if (isTAKE_picture) {
                         images.add(new ImageItem(0));
@@ -153,28 +159,40 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
                     return;
                 } else {
                     if (isTAKE_picture) {
+                        List<ImageItem> selectedData = mImgListAdapter.getSelectedImages();
                         for (ImageFolder folderItem : imageFolders) {
                             if (folderItem.images.size() > 0){
-                                ImageItem imageItem = folderItem.images.get(0);
+//                                ImageItem imageItem = folderItem.images.get(0);
                                 //使 刚刚拍照的图片为选中状态
-                                if (imageItem.path.equals(ImagePicker.newFilePath)) {
-                                    imageItem.isSelect = true;
-                                    List<ImageItem> selectedData = mImgListAdapter.getSelectedImages();
-                                    selectedData.add(imageItem);
-                                    setViewStutas(selectedData.size());
-                                }
-                                ImagePicker.newFilePath = "";
+//                                String filePath = SpfAgent.getString(Constant.baseSpf, ImagePicker.newFilePath);
+//                                if (imageItem.path.equals(filePath) && selectedData.size() < maxCount) {
+//                                    imageItem.isSelect = true;
+//                                    selectedData.add(imageItem);
+//                                    setViewStutas(selectedData.size());
+//                                }
+//                                new SpfAgent(Constant.baseSpf).remove(ImagePicker.newFilePath, false);
                             }
 
                             folderItem.images.add(0, new ImageItem(0));//添加拍照按钮
                             break;
                         }
                     }
-                    imgFolder = imageFolders.get(0);
+
+                    if (null != imgFolder){//当前显示的图片文件夹
+                        for (ImageFolder iFolder : imageFolders){
+                            if (iFolder.path.equals(imgFolder.path)){
+                                imgFolder = iFolder;
+                                break;
+                            }
+                        }
+                    } else {
+                        imgFolder = imageFolders.get(0);
+                    }
                     mImgListAdapter.refreshData(imgFolder.images);
                 }
 
                 if (imageFolders.size() > 0){
+                    imageFolderArray.clear();//图片文件夹 列表
                     imageFolderArray.addAll(imageFolders);
                 }
             }
@@ -304,7 +322,9 @@ public class ImgPickerActivity extends AppCompatActivity implements IBaseActivit
                     if (null != data) JumpUtils.jumpResult(this, data.getExtras());
                     break;
                 case ImagePicker.Photograph:
-                    UpdateMedia.scanMedia(this, Intent.ACTION_MEDIA_MOUNTED, new File(ImagePicker.newFilePath));
+                    String filePath = SpfAgent.init("").getString(ImagePicker.newFilePath);
+                    UpdateMedia.scanMedia(this, Intent.ACTION_MEDIA_MOUNTED, new File(filePath));
+                    imageDataSource.restartLoader(this, null);
                     break;
             }
         }

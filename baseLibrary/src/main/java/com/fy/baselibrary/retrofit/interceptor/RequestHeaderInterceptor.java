@@ -29,9 +29,9 @@ public class RequestHeaderInterceptor implements Interceptor {
                 .addHeader("Connection", "keep-alive")
                 .addHeader("Accept", "*/*")
                 .addHeader("app-type", "Android")
-                .addHeader("Access-Control-Allow-Origin", "*")
-                .addHeader("Access-Control-Allow-Headers", "X-Requested-With")
-                .addHeader("Vary", "Accept-Encoding")
+//                .addHeader("Access-Control-Allow-Origin", "*")
+//                .addHeader("Access-Control-Allow-Headers", "X-Requested-With")
+//                .addHeader("Vary", "Accept-Encoding")
                 .header(ConfigUtils.getTokenKey(), SpfAgent.init("").getString(Constant.token))
                 .build();
 

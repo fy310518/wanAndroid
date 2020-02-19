@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -17,11 +18,12 @@ import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.PhotoUtils;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.ScreenUtils;
+import com.fy.baselibrary.utils.cache.SpfAgent;
 import com.fy.baselibrary.utils.imgload.ImgLoadUtils;
 import com.fy.baselibrary.utils.notify.T;
+import com.fy.bean.ImageFolder;
+import com.fy.bean.ImageItem;
 import com.fy.img.picker.ImagePicker;
-import com.fy.img.picker.bean.ImageFolder;
-import com.fy.img.picker.bean.ImageItem;
 import com.fy.img.picker.R;
 
 import java.io.File;
@@ -64,10 +66,15 @@ public class ImgPickersAdapter extends MultiCommonAdapter<ImageItem> {
     @Override
     public void convert(ViewHolder holder, ImageItem imgItem, int position) {
         if (position == 0 && imgItem.isShowCamera() == 0){//判断 是否显示 拍照按钮
-            holder.setOnClickListener(R.id.camera, v -> {
-                File newFile = FileUtils.createFile("/DCIM/camera/", "IMG_", ".png", 2);
 
-                ImagePicker.newFilePath = newFile.getPath();
+            FrameLayout camera = holder.getView(R.id.camera);
+            camera.setLayoutParams(new FrameLayout.LayoutParams(mImageSize, mImageSize)); //让图片是个正方形
+            holder.setOnClickListener(R.id.camera, v -> {
+                File newFile = FileUtils.createFile("/gc/camera/", "IMG_", ".jpg", 2);
+
+                SpfAgent.init("")
+                        .saveString(ImagePicker.newFilePath, newFile.getPath())
+                        .commit(false);
                 //拍照
                 Intent intent = PhotoUtils.takePicture((Activity) mContext, newFile);
                 ((Activity) mContext).startActivityForResult(intent, ImagePicker.Photograph);
@@ -75,7 +82,7 @@ public class ImgPickersAdapter extends MultiCommonAdapter<ImageItem> {
         } else {
             ImageView ivThumb = holder.getView(R.id.iv_thumb);
             ivThumb.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mImageSize)); //让图片是个正方形
-            ImgLoadUtils.loadImage(imgItem.path, ivThumb);
+            ImgLoadUtils.loadImage(imgItem.path, R.mipmap.default_image, ivThumb);
             ivThumb.setOnClickListener(v -> {
                 if (listener != null) listener.onImageItemClick(imgItem, position);
             });

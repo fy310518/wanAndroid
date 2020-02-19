@@ -10,8 +10,8 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 
 import com.fy.baselibrary.utils.notify.L;
-import com.fy.img.picker.bean.ImageFolder;
-import com.fy.img.picker.bean.ImageItem;
+import com.fy.bean.ImageFolder;
+import com.fy.bean.ImageItem;
 import com.fy.img.picker.R;
 
 import java.io.File;
@@ -23,6 +23,8 @@ import java.util.List;
  * Created by fangs on 2017/6/30.
  */
 public class ImageDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
+    private boolean isInitLoad;
+
 
     public static final int LOADER_ALL = 0;         //加载所有图片
     public static final int LOADER_CATEGORY = 1;    //分类加载图片
@@ -62,15 +64,33 @@ public class ImageDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
         }
     }
 
+    //重启加载器
+    public void restartLoader(AppCompatActivity activity, String path){
+        LoaderManager loaderManager = activity.getSupportLoaderManager();
+        if (path == null) {
+            loaderManager.restartLoader(LOADER_ALL, null, this);
+        } else {
+            //加载指定目录的图片
+            Bundle bundle = new Bundle();
+            bundle.putString("path", path);
+            loaderManager.restartLoader(LOADER_ALL, bundle, this);
+        }
+    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         CursorLoader cursorLoader = null;
         //扫描所有图片
         if (id == LOADER_ALL)
-            cursorLoader = new CursorLoader(activity, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION, null, null, IMAGE_PROJECTION[6] + " DESC");
+            cursorLoader = new CursorLoader(activity, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION,
+                    null, null,
+                    IMAGE_PROJECTION[6] + " DESC");
         //扫描某个图片文件夹
         if (id == LOADER_CATEGORY)
-            cursorLoader = new CursorLoader(activity, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION, IMAGE_PROJECTION[1] + " like '%" + args.getString("path") + "%'", null, IMAGE_PROJECTION[6] + " DESC");
+            cursorLoader = new CursorLoader(activity, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION,
+                    IMAGE_PROJECTION[1] + " like '%" + args.getString("path") + "%'",
+                    null,
+                    IMAGE_PROJECTION[6] + " DESC");
 
         return cursorLoader;
     }
@@ -78,9 +98,9 @@ public class ImageDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         imageFolders.clear();
-        if (data != null) {
+        if (data != null && data.moveToFirst()) {
             List<ImageItem> allImages = new ArrayList<>();   //所有图片的集合,不分文件夹
-            while (data.moveToNext()) {
+            do{
                 //查询数据
                 String imageName = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[0]));
                 String imagePath = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[1]));
@@ -94,8 +114,10 @@ public class ImageDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
                 imageItem.name = imageName;
                 imageItem.path = imagePath;
                 imageItem.size = imageSize;
-                imageItem.width = imageWidth;
-                imageItem.height = imageHeight;
+
+                if (imageSize <= 0) continue;
+                imageItem.setWidth(imageWidth + "");
+                imageItem.setHeight(imageHeight + "");
                 imageItem.mimeType = imageMimeType;
                 imageItem.addTime = imageAddTime;
                 if (imageFolder.images.contains(imageItem))imageItem.isSelect = true;//已选中的图片 包含当前图片 则设置当前图片为选择状态
@@ -117,10 +139,11 @@ public class ImageDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
                 } else {
                     imageFolders.get(imageFolders.indexOf(imageFolder)).images.add(imageItem);
                 }
-            }
+            } while (data.moveToNext());
 
             //全部图片
             if (data.getCount() > 0 && allImages.size() > 0) {
+
                 //构造所有图片的集合
                 ImageFolder allImagesFolder = new ImageFolder();
                 allImagesFolder.name = activity.getResources().getString(R.string.all_images);
@@ -131,7 +154,12 @@ public class ImageDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
             }
         }
 
-        if (imageFolders.size() > 0)loadedListener.onImagesLoaded(imageFolders);
+        if (!isInitLoad) {//是否第一次 加载
+            isInitLoad = true;
+            loadedListener.onImagesLoaded(imageFolders, true);
+        } else if (imageFolders.size() > 0){
+            loadedListener.onImagesLoaded(imageFolders, false);
+        }
     }
 
     @Override
@@ -141,6 +169,6 @@ public class ImageDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
 
     /** 所有图片加载完成的回调接口 */
     public interface OnImagesLoadedListener {
-        void onImagesLoaded(List<ImageFolder> imageFolders);
+        void onImagesLoaded(List<ImageFolder> imageFolders, boolean isInitLoad);
     }
 }

@@ -12,11 +12,7 @@
         android:background="@color/white"
         android:layout_below="@+id/head"
         android:clipToPadding="false"
-        android:layout_above="@+id/btn_dir"
-        android:paddingBottom="2dp"
-        android:paddingLeft="2dp"
-        android:paddingRight="2dp"
-        android:paddingTop="2dp" />
+        android:layout_above="@+id/btn_dir" />
 
     <View
         android:layout_width="match_parent"

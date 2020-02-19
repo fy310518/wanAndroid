@@ -21,8 +21,8 @@ import com.fy.baselibrary.utils.imgload.ImgLoadUtils;
 import com.fy.baselibrary.utils.imgload.imgprogress.ProgressInterceptor;
 import com.fy.baselibrary.utils.imgload.imgprogress.ProgressListener;
 import com.fy.baselibrary.utils.notify.L;
+import com.fy.bean.ImageItem;
 import com.fy.img.picker.R;
-import com.fy.img.picker.bean.ImageItem;
 import com.github.chrisbanes.photoview.PhotoView;
 
 /**
@@ -92,7 +92,7 @@ public class LocalImageHolderView extends Holder<ImageItem> {
                     })
                     .into(imageView);
         } else {//加载本地图片
-            ImgLoadUtils.loadImage(imgData.path, imageView);
+            ImgLoadUtils.loadImage(imgData.path, R.mipmap.default_image, imageView);
         }
     }
 }

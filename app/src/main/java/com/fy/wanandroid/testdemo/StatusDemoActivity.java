@@ -139,7 +139,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                             remoteViews.setProgressBar(R.id.progress, 100, aLong.intValue(), false);
                             remoteViews.setTextViewText(R.id.txProgress, aLong.intValue() + "%");
 
-                            fyBuild.notifyData(remoteViews);
+//                            fyBuild.notifyData(remoteViews);
                         })
                         .compose(RxHelper.bindToLifecycle(this))
                         .subscribe(aLong -> {
@@ -190,26 +190,6 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
     }
 
     public void downLoadFiles(TextView textView) {
-        RequestUtils.downLoadFile(this,
-                "http://47.107.134.212:13201/8af7372fef2c4d849caffe524828b072.apk",
-//                "http://acj3.pc6.com/pc6_soure/2018-11/com.tencent.mobileqqi_6600.apk",
-                new DownLoadListener<File>(){
-
-                    @Override
-                    public void onSuccess(File file) {
-                        L.e("文件地址：", file.toString());
-                    }
-
-                    @Override
-                    public void updateLayout(int flag) {
-
-                    }
-
-                    @Override
-                    public void onProgress(String percent) {
-                        textView.setText(percent);
-                    }
-                });
     }
 
     /**
@@ -226,7 +206,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
         params.put("token", "大王叫我来巡山");
         params.put("type", "图文");
 
-        Observable.merge(Observable.create(loadOnSubscribe), RequestUtils.create(LoadService.class).uploadFile("http://...", params))
+        Observable.merge(Observable.create(loadOnSubscribe), RequestUtils.create(LoadService.class).uploadFile("http://...",null, params))
                 .compose(RxHelper.bindToLifecycle(this))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

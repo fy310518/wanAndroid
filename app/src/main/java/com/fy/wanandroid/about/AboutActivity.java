@@ -41,7 +41,7 @@ public class AboutActivity extends AppCompatActivity implements IBaseActivity, V
     @StatusBar(statusColor = R.color.statusBar, navColor = R.color.statusBar)
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
-        tvAppInformation.setText(AppUtils.getAppName() + "\n" + AppUtils.getVersionName());
+        tvAppInformation.setText(AppUtils.getAppName(this, AppUtils.getLocalPackageName()) + "\n" + AppUtils.getVersionName(this, AppUtils.getLocalPackageName()));
 
         tvAbout.setText(Html.fromHtml(ResUtils.getStr(R.string.about_content)));
         tvAbout.setMovementMethod(LinkMovementMethod.getInstance());

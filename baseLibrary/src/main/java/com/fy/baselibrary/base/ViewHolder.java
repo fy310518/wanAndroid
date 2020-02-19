@@ -1,6 +1,7 @@
 package com.fy.baselibrary.base;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -105,6 +106,14 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
+    public ViewHolder setOnLongClickListener(int viewId, View.OnLongClickListener listener) {
+        if (null != listener){
+            View view = getView(viewId);
+            view.setOnLongClickListener(listener);
+        }
+        return this;
+    }
+
     /**
      * 设置指定 viewID 的View 的可见性
      * @param viewId
@@ -117,5 +126,15 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
+    /**
+     * 设置背景
+     * @param viewId
+     * @param drawable
+     */
+    public ViewHolder setBackground(int viewId, Drawable drawable) {
+        View view = getView(viewId);
+        view.setBackground(drawable);
+        return this;
+    }
 
 }

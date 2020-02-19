@@ -57,6 +57,7 @@ public interface LoadService {
     @UpLoadFileType
     @POST()
     Observable<Object> uploadFile(@Url String apiUrl,
+                                  @HeaderMap ArrayMap<String, Object> heads,
                                   @Body ArrayMap<String, Object> params);
 
     /**

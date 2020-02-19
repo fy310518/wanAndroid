@@ -37,10 +37,10 @@ public class TestAdapter extends RvCommonAdapter<TestBean> {
 
         if (TextUtils.isEmpty(testBean.getRecommend_img_url())){
             fl.setLayoutParams(layoutParams2);
-            ImgLoadUtils.loadCircularBead(testBean.getImg_url(), img);
+            ImgLoadUtils.loadCircularBead(testBean.getImg_url(),-1, img);
         } else {
             fl.setLayoutParams(layoutParams1);
-            ImgLoadUtils.loadCircularBead(testBean.getRecommend_img_url(), img);
+            ImgLoadUtils.loadCircularBead(testBean.getRecommend_img_url(), -1, img);
         }
     }
 }

@@ -33,6 +33,7 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/rxjava.properties'
     }
+
 }
 
 dependencies {
@@ -48,5 +49,15 @@ dependencies {
     implementation 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
 
     implementation project(':baseLibrary')
-//    implementation 'com.github.fy310518:wanAndroid:1.1.0'
+    implementation 'com.google.code.gson:gson:2.7'
+
+    //    glide
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    implementation 'com.github.bumptech.glide:annotations:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+    implementation ('com.github.bumptech.glide:okhttp3-integration:4.7.1'){
+        exclude group: 'com.squareup.okhttp3'
+    }
+
+    implementation 'com.squareup.okhttp3:okhttp:3.8.1'
 }

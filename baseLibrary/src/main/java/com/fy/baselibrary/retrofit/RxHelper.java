@@ -83,7 +83,7 @@ public class RxHelper {
                 try {
                     L.e("net", "成功 _ onNext");
                     if (null == data) {
-                        if (null == clazz)subscriber.onError(new ServerException("暂无数据", -10001));
+                        if (null == clazz)subscriber.onNext((T) new Object());
                         else subscriber.onNext(clazz.newInstance());
                     } else subscriber.onNext(data);
 

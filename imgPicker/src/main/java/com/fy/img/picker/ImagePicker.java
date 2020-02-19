@@ -13,6 +13,9 @@ public class ImagePicker {
      * 图片选择 请求码
      */
     public static final int Picture_Selection = 1001;
+    public static final int Picture_Selection_suspicion = 1002;
+    public static final int Picture_Selection_clue = 1003;
+    public static final int Picture_Selection_quick = 1004;
     /**
      * 图片预览 请求码
      */
@@ -31,9 +34,9 @@ public class ImagePicker {
     public static final int Phone_Number = 11001;
 
     /**
-     * 生成 文件路径（比如拍照生成的文件）
+     * 生成 文件路径（比如拍照生成的文件） key
      */
-    public static String newFilePath = "";
+    public static final String newFilePath = "newFilePath";
 
     private int selectLimit;
 

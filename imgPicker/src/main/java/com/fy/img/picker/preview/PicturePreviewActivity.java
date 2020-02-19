@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -13,7 +12,6 @@ import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.ToxicBakery.viewpager.transforms.AccordionTransformer;
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.bigkoo.convenientbanner.holder.Holder;
@@ -23,15 +21,14 @@ import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.notify.T;
+import com.fy.bean.ImageFolder;
+import com.fy.bean.ImageItem;
 import com.fy.img.picker.ImagePicker;
 import com.fy.img.picker.PickerConfig;
-import com.fy.img.picker.bean.ImageFolder;
-import com.fy.img.picker.bean.ImageItem;
 import com.fy.img.picker.R;
 import com.fy.img.picker.folder.ImageDataSource;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -202,9 +199,15 @@ public class PicturePreviewActivity extends AppCompatActivity implements IBaseAc
     private void initImgFolder(String imgFolderPath, ImageFolder folder) {
         new ImageDataSource(this, imgFolderPath, folder, new ImageDataSource.OnImagesLoadedListener() {
             @Override
-            public void onImagesLoaded(List<ImageFolder> imageFolders) {
+            public void onImagesLoaded(List<ImageFolder> imageFolders, boolean isInitLoad) {
                 if (imageFolders.size() > 0 ){
-                    imgFolder = imageFolders.get(0);
+                    for (ImageFolder imgFolderItem : imageFolders){
+                        if (!TextUtils.isEmpty(imgFolderItem.path) && imgFolderPath.equals(imgFolderItem.path)){
+                            imgFolder = imgFolderItem;
+                            break;
+                        }
+                    }
+
                     initPage();
                 } else {
                     T.showLong("该文件夹没有图片");

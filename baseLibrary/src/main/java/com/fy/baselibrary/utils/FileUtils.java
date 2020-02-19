@@ -18,13 +18,15 @@ import java.io.FileWriter;
  */
 public class FileUtils {
 
-    public static String cache = "fy.cache";
+    public static String cache = ConfigUtils.getFilePath() + ".cache";
     /** 文件下载目录 */
-    public static String DOWN = "fy.down";
+    public static String DOWN = ConfigUtils.getFilePath() + ".down";
     /** 图片保存目录 */
-    public static String IMG = "fy.picture";
+    public static String IMG = ConfigUtils.getFilePath() + ".picture";
     /** 压缩文件目录 */
-    public static String ZIP = "fy.zip";
+    public static String ZIP = ConfigUtils.getFilePath() + ".zip";
+    /** 錄音文件目录 */
+    public static String record = ConfigUtils.getFilePath() + ".record";
 
     private FileUtils() {
         /* cannot be instantiated */
@@ -214,6 +216,11 @@ public class FileUtils {
         return true;
     }
 
+    //判断文件是否存在
+    public static boolean isFile(final File file) {
+        return file != null && file.exists() && file.isFile();
+    }
+
     /**
      * 递归删除文件和文件夹
      *
@@ -270,10 +277,18 @@ public class FileUtils {
     public static File createFile(String folderPath, String prefix, String suffix, int type) {
         File folder = folderIsExists(folderPath, type);
 
-        String name = TimeUtils.Long2DataString(System.currentTimeMillis(), "yyyyMMdd_HHmmss");
-        String filename = prefix + name + suffix;
+        String filename = createName(prefix) + suffix;
 
         return fileIsExists(new File(folder, filename).getPath());
+    }
+
+    /**
+     * 据系统时间、前缀 产生一个文件名
+     * @param prefix
+     */
+    public static String createName(String prefix){
+        String name = TimeUtils.Long2DataString(System.currentTimeMillis(), "yyyyMMdd_HHmmss");
+        return prefix + name;
     }
 
     /**

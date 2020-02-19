@@ -32,7 +32,7 @@ public class WanAndroidApp extends Application{
                 .setBASE_URL("http://www.wanandroid.com/")
                 .create(this);
 
-        int designWidth = (int) ResUtils.getMetaData("rudeness_Adapter_Screen_width", 0);
+        int designWidth = (int) ResUtils.getMetaData(this, "rudeness_Adapter_Screen_width", 0);
         ScreenUtils.setCustomDensity(this, designWidth);
 
 //        设置activity 生命周期回调

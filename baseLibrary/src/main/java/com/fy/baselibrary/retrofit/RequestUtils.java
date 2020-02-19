@@ -196,8 +196,7 @@ public class RequestUtils {
                         if (file instanceof File) {
                             loadListener.onProgress("100");
 
-                            Handler mainHandler = new Handler(Looper.getMainLooper());
-                            mainHandler.post(() -> {
+                            runUiThread(() -> {
                                 loadListener.onSuccess((File) file);//已在主线程中，可以更新UI
                             });
                         }
@@ -209,11 +208,13 @@ public class RequestUtils {
                         if (FileDownStatus == 4) {
                             File targetFile = FileUtils.getFile(url, filePath);
                             loadListener.onProgress("100");
-                            loadListener.onSuccess(targetFile);
+                            runUiThread(() -> {
+                                loadListener.onSuccess(targetFile);
+                            });
                         } else {
 //                            super.onError(e);
                             SpfAgent.init("").saveInt(tempFile.getName() + Constant.FileDownStatus, 3).commit(false);
-                            loadListener.onFail();
+                            runUiThread(loadListener::onFail);
                         }
                     }
 
@@ -229,6 +230,21 @@ public class RequestUtils {
                         }
                     }
                 });
+    }
+
+    public interface OnRunUiThreadListener{
+        void onRun();
+    }
+
+    /**
+     * 定义 回调 UI线程
+     * @param runUiThreadListener
+     */
+    public static void runUiThread(OnRunUiThreadListener runUiThreadListener){
+        Handler mainHandler = new Handler(Looper.getMainLooper());
+        mainHandler.post(() -> {
+            runUiThreadListener.onRun();
+        });
     }
 
     /**

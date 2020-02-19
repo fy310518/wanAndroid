@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.fy.baselibrary.base.CommonAdapter;
 import com.fy.baselibrary.utils.ResUtils;
 import com.fy.baselibrary.utils.imgload.ImgLoadUtils;
-import com.fy.img.picker.bean.ImageFolder;
+import com.fy.bean.ImageFolder;
 import com.fy.img.picker.R;
 
 import java.util.List;
@@ -46,7 +46,7 @@ public class ImageFolderAdapter extends CommonAdapter<ImageFolder> {
             tv_image_count.setText(ResUtils.getReplaceStr(R.string.folder_image_count, sum));
 
             tv_folder_name.setText(item.name);
-            ImgLoadUtils.loadImage(item.cover.path, iv_cover);
+            ImgLoadUtils.loadImage(item.cover.path,R.mipmap.default_image, iv_cover);
 
             if (lastSelected == position) {
                 iv_folder_check.setVisibility(View.VISIBLE);

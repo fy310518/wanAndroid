@@ -100,7 +100,7 @@ public class Constant {
 //  多状态视图 常量 flag
 
 
-// Activity life Events
+    // Activity life Events
     public static final String CREATE = "CREATE";
     public static final String START = "START";
     public static final String RESUME = "RESUME";
@@ -108,7 +108,7 @@ public class Constant {
     public static final String STOP = "STOP";
     public static final String DESTROY = "DESTROY";
 
-// Fragment life  Events
+    // Fragment life  Events
     public static final String ATTACH = "ATTACH";
     public static final String CREATE_VIEW = "CREATE_VIEW";
     public static final String DESTROY_VIEW = "DESTROY_VIEW";

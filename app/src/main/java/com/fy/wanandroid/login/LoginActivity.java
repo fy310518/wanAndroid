@@ -24,8 +24,7 @@ import com.fy.baselibrary.utils.cache.SpfAgent;
 import com.fy.wanandroid.R;
 import com.fy.wanandroid.entity.LoginBean;
 import com.fy.wanandroid.main.MainActivity;
-import com.fy.wanandroid.test.H5Interactive;
-import com.fy.wanandroid.testdemo.StatusDemoActivity;
+import com.fy.recorder.TestRecordActivity;
 import com.fy.wanandroid.utils.SelectUtils;
 
 import butterknife.BindView;
@@ -107,12 +106,13 @@ public class LoginActivity extends BaseMVPActivity<LogingPresenter> implements I
                 break;
             case R.id.tvRegister:
 //                JumpUtils.jump(mContext, RegisterActivity.class, null);
-                JumpUtils.jump(this, StatusDemoActivity.class, null);
+//                JumpUtils.jump(this, StatusDemoActivity.class, null);
 //                JumpUtils.jump(this, TestStatusFragmentActivity.class, null);
 //                JumpUtils.jump(this, RevealEffectActivity.class, null);
 //                JumpUtils.jump(this, TestActivity.class, null);
 //                JumpUtils.jump(this, TestListActivity.class, null);
 //                JumpUtils.jump(this, H5Interactive.class, null);
+                JumpUtils.jump(this, TestRecordActivity.class, null);
                 break;
         }
     }

@@ -25,7 +25,7 @@
     <color name="alphaBlack">#80000000</color>
 
     <!-- 状态栏颜色 -->
-    <color name="statusBar">#177ee6</color>
+<!--    <color name="statusBar">#177ee6</color>-->
     <!-- 标题栏颜色 -->
     <color name="appHeadBg">#177ee6</color>
 
